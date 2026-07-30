@@ -12,7 +12,7 @@ Mod manager for Super Smash Bros. Melee. Download, organize, and install charact
 
 **Discord:** [Join](https://discord.gg/JeSy7Erv)
 
-This repository is the public home for **releases, issues, and documentation**. The application source is not published here — see [Source](#source) below.
+This repository is the public home for **releases, issues, and documentation**.
 
 ## Features
 
@@ -50,12 +50,6 @@ Open an [issue](../../issues). Bug reports are much easier to act on with:
 Built with [MexManager](https://github.com/Ploaj/MexManager), [HSDRawViewer](https://github.com/Ploaj/HSDLib), and [Costume Validator](https://ssbmtextures.com/other-mod-types/costume-validator-by-ploaj/) by Ploaj
 
 Built on the [MEX system](https://github.com/akaneia/m-ex) and Dynamic Alternate Stages by UnclePunch
-
-## Source
-
-SSBM Nucleus is free to use but is **not open source**. Development happens in a private repository, and this repo carries no application code.
-
-Third-party components and their licenses are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Versions published under the MIT license before this change remain MIT for anyone who already has them.
 
 ## Not affiliated with Nintendo
 
