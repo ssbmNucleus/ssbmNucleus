@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Discord
+    url: https://discord.gg/JeSy7Erv
+    about: Quickest place for setup help, mod questions, and general chat.
+  - name: Wiki & guides
+    url: https://ssbmnucleus.net/wiki/index.html
+    about: Installation, first-run setup, and how-to documentation.
+  - name: Download the latest version
+    url: https://ssbmnucleus.net
+    about: Check whether your issue is already fixed in a newer build.

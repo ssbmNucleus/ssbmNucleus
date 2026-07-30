@@ -1,0 +1,27 @@
+name: Feature request
+description: Suggest an addition or improvement to SSBM Nucleus
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: >
+        Describe the goal rather than the solution — it often turns out there is
+        already a way, or a simpler one.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like to see?
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: How do you work around it today?
+    validations:
+      required: false

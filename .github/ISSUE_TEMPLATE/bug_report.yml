@@ -1,0 +1,74 @@
+name: Bug report
+description: Something in SSBM Nucleus is broken or behaving unexpectedly
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. The two things that make a bug fixable fastest are
+        the **app version** and the **log file** — please include both.
+
+  - type: input
+    id: version
+    attributes:
+      label: App version
+      description: Help → About, or the version in the installer filename.
+      placeholder: "0.7.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what actually occurred.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the Skin Vault
+        2. Import ...
+        3. See error
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log output
+      description: >
+        Help → Open Logs Folder. Paste the relevant part, or drag the file in.
+        This is rendered as code, so no backticks needed.
+      render: shell
+    validations:
+      required: false
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part of the app?
+      options:
+        - Skin vault / mod management
+        - Skin creator / textures
+        - CSPs, stock icons, or poses
+        - Stages
+        - Extras (effects)
+        - Building / installing an ISO
+        - First-run setup
+        - Replays
+        - Updater
+        - Something else / not sure
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: iso
+    attributes:
+      label: Setup
+      options:
+        - label: I am using an NTSC 1.02 (GALE01) Melee ISO
+          required: false
