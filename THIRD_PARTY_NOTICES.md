@@ -109,6 +109,27 @@ This project uses the following open source software:
 - **Repository**: https://github.com/filoe/cscore
 - **Note**: The `CSCore.Ffmpeg` subproject is excluded from this license grant and is **not** distributed with this software.
 
+### NVorbis
+- **Version**: 0.10.5
+- **License**: MIT
+- **Copyright**: Copyright (c) 2020 Andrew Ward
+- **Repository**: https://github.com/NVorbis/NVorbis
+- **Description**: Managed streaming decoder for Ogg Vorbis audio imports
+
+### NLayer
+- **Version**: 2.0.1
+- **License**: MIT
+- **Copyright**: Copyright (c) NLayer contributors
+- **Repository**: https://github.com/naudio/NLayer
+- **Description**: Cross-platform managed MP3 decoder
+
+### SharpJaad
+- **Version**: 0.1.1
+- **License**: MIT
+- **Copyright**: Copyright (c) SharpJaad contributors
+- **Repository**: https://github.com/jimm98y/SharpJaad
+- **Description**: Cross-platform managed MP4 demultiplexer and AAC decoder for M4A imports (`SharpJaad` and `SharpJaad.AAC` packages)
+
 ### VGAudio
 - **License**: MIT
 - **Copyright**: Copyright (c) 2016 Alex Barney
@@ -199,6 +220,10 @@ linked into the application.
 
 ## Melee Modding Community Projects
 
+### Changing Color Effects in Melee
+- **Source**: https://smashboards.com/threads/changing-color-effects-in-melee.313177/
+- **Note**: Source for the effect-color offsets used by Nucleus.
+
 ### m-ex
 - **Author**: Akaneia / UnclePunch
 - **Repository**: https://github.com/akaneia/m-ex
@@ -222,6 +247,9 @@ linked into the application.
 - **Author**: Ploaj (attributed)
 - **Note**: GameCube file-format library, distributed as a prebuilt DLL and
   referenced by mexLib/MexManager. No published repository or license was found.
+  The bundled DLL carries a reproducible local IL patch that opens source ISOs
+  read-only with shared-read access; the developer tool and instructions live in
+  `utility/MexManager/tools/GCILibPatcher`.
 
 ## Licensing status
 

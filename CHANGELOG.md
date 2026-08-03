@@ -2,6 +2,43 @@
 
 All notable changes to SSBM Nucleus are documented here.
 
+## 0.6.3
+
+### ✨ New
+- Costume drag-reorder is instant (was ~45s).
+- MP3, OGG, M4A and FLAC work in music and sound slots.
+- New animated logo and hi-res app icon.
+- Click anywhere on a costume card to open it.
+- Credits & Licenses panel in Settings.
+- **Upgrading from 0.6.2 runs first-time setup once more.** The download no
+  longer contains any Nintendo game data — Nucleus now pulls what it needs
+  (fighter data and the retail costume models used as portrait references)
+  straight from your own copy of the game. One extra setup pass, then it's
+  business as usual.
+
+### 🖼️ CSP improvements
+- Lighting retuned to match vanilla (7 characters).
+- Game & Watch gets his drop shadow back.
+- Ice Climbers portraits include Nana.
+- Bulk portrait retakes no longer come back blank.
+- Jigglypuff and Kirby stock icons use the whole body.
+
+### 🐛 Fixed
+- Imported Jigglypuff costumes keep their hats.
+- Uploaded songs loop; corrupt files rejected up front.
+- Failed sound edits roll back cleanly.
+- Accented mod names no longer break HD portraits.
+- Clearing the vault clears its database too.
+- "Skip" on a duplicate now works for stages, patches and effects, and reports
+  what it skipped.
+- Test in Game gets past Melee's save-data prompt.
+- Screenshots capture the game, not the emulator or your desktop.
+- Stuck screenshot batches stop early and say why.
+- Packaged builds show the right icon.
+- Modals no longer open under the header.
+- Assorted import fixes for custom characters, stages, sound banks and
+  playlists.
+
 ## 0.6.2
 
 - **Mr. Game & Watch color creator** — G&W can finally have custom colors:
