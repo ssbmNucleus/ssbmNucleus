@@ -2,6 +2,254 @@
 
 All notable changes to SSBM Nucleus are documented here.
 
+## Unreleased
+
+Built, but held out of 0.8.0 until each is proven end to end.
+
+### 🔒 Waiting
+- **Share a build with a friend — and play it from the message.** Pick a vault
+  Patch (an xdelta against the vanilla ISO), send it as a card, and your friend
+  hits Play: the patch lands in their Vault → Patches, the ISO is built against
+  their own vanilla copy, and Slippi launches. Also reachable as a
+  `nucleus://play?build=…` link.
+- **Sending a replay or combo to a friend.** Copy link works; handing one
+  straight to a friend in chat is held back until a delivery that goes missing
+  can explain itself.
+- **Group chats.** The rooms exist, but the presence hub could not relay a
+  message to them; fixed on the server, held here until one is seen to land.
+- **Any emoji you like** (the patron perk). The curated palette sends for
+  everyone.
+
+## 0.8.0
+
+### 🎁 Now free
+- **Everything Tracker does on your PC is free.** The Stats suite, Watch Lite,
+  and Watch with mods are no longer Patreon features — they open for everyone.
+  Nothing that runs purely on your machine asks for an account at all.
+- **Sharing a replay is free**, and no longer needs your library uploaded
+  first: hit share on any game and Nucleus uploads that one game, then hands
+  you the link. You do need to be signed in with Patreon for it — a **free
+  ($0) account is enough**.
+- What's still part of the $5 tier: **the phone app**, and the whole-library
+  sync that fills it. That sync only ever pays off on a phone, so there's no
+  longer any reason to push your whole library without one.
+
+### ✨ New
+- **Friends.** Tracker mode has a Friends tab: sign in with Discord, add
+  friends by connect code, and see who's online and who's in game — the
+  moment they're in one. Click a friend to open your conversation: preset
+  messages, emotes and play invites live in a chat that keeps its history.
+  Notifications fire for messages and friend requests only — never for someone
+  just coming online. Completely free — no Patreon required.
+- **A looking-for-games lobby.** List yourself for Singles or Doubles with a
+  region you type yourself (share as much or as little as you like — it's
+  remembered for next time). Singles listings show your Slippi rank; grab
+  anyone's connect code with one click.
+- **Put your best combo on your profile.** Pin any shared combo to your player
+  card and it plays right there for anyone who opens it — no download, and it
+  works even for people who have never seen that replay. Pinning needs the
+  vault (a free Patreon account is enough); watching is free for everyone.
+- **A heads-up before your first share link.** The first time you share a
+  replay, Nucleus says plainly what that means: the replay and its thumbnail
+  go to ssbmnucleus.net, anyone with the link can watch it without an account,
+  and the link is permanent. Confirm once and it won't ask again.
+- **Share sheet on replays and combos.** The share button mints the permanent
+  ssbmnucleus.net link and copies it — for a game or for one combo.
+
+### 🔧 Fixed
+- **Friends tells you when it can't reach the network.** A dropped connection
+  used to look exactly like being online, with nothing but an unlit dot to say
+  otherwise — so you could sit there invisible to everyone, wondering why
+  nobody was ever on. It now says so plainly, and says what to check.
+- **Connecting to the friends network on a fresh Windows install.** The
+  handshake verified against the machine certificate store, which on some
+  machines is missing the issuer it needs; presence would silently never
+  connect while everything else worked. It now trusts the same bundle the rest
+  of the app uses.
+- **Opening the Friends tab no longer flashes the signed-in-out page**, and
+  friend requests show up in seconds instead of up to a minute.
+- **Cloud combo refresh no longer restarts from scratch.** The one-time
+  cloud repair that follows a combo re-scan now remembers how far it got:
+  if a batch fails partway (bad connection, busy server), the next attempt
+  continues from that point instead of re-sending the whole library. Big
+  libraries previously re-sent everything on every retry, which could hammer
+  the sync service for hours.
+- **Texture-pack installs on a clean machine.** A hashing dependency was only
+  ever present by accident on the development PC; every other install shipped
+  without it and would have failed on the first install.
+
+## 0.7.2
+
+### ✨ New
+- **The cloud vault is live for patrons.** The feature the download page has
+  been describing finally exists in the shipped app: in Tracker mode, open
+  Settings → **Cloud vault** to pair your phone (QR code), push your replay
+  library, and browse it at tracker.ssbmnucleus.net. Link Patreon in the
+  Account section first — the card explains the rest. Automatic processing
+  (index → combos → sync) works in shipped builds too.
+- **Report bugs from Settings.** Settings → Bug Report: describe what broke
+  and hit Send — your logs come along automatically (usernames and tokens are
+  scrubbed first) and the report goes privately to the developer, not to the
+  public Discord. If you're on an old version the form asks you to update
+  first, since your bug may already be fixed.
+- **You'll know when an update drops.** The app now checks for releases in
+  the background: a gold dot appears on the Settings tab and a one-time
+  banner offers to take you to the updater — no more clicking "Check for
+  Updates" to find out.
+
+### 🔧 Fixed
+- **The Windows build pipeline broke on the frontend rename** — fixed before
+  it could bite a release.
+- The installer no longer ships source maps.
+- Large internal reorganization (backend packages, frontend service layer,
+  one release-gate table) — no user-visible changes, a much cleaner base.
+
+## 0.7.1
+
+### ✨ New
+- **Share links in Tracker mode.** Every synced replay — and every combo big
+  enough to have a public page — now has a Share button that mints its
+  permanent public link (the same pages the mobile vault shares), complete
+  with a preview thumbnail for Discord embeds. Games that haven't synced yet
+  don't show the button; sync first.
+- **The vault keeps itself fresh.** Automatic processing (index → combos →
+  sync) now runs every 10 minutes while Nucleus is open, not just at launch —
+  tonight's games are there when you switch to Tracker mode, without a
+  restart.
+
+### 🐛 Fixed
+- **Closing the app no longer truncates a saving ISO.** Exported ISOs are now
+  saved through a native "Save As" dialog with a safe copy that lands complete
+  or not at all — and quitting the app waits for any in-flight export, save,
+  or download to finish before the backend exits. Previously, closing the
+  window seconds after clicking Download could cut the 1.5 GB copy short, and
+  the partial ISO would boot to a black screen in Dolphin.
+- **Falcon costumes are neutralized again in installed builds.** The
+  install-time Falcon neutralizer (added in 0.7.0 to kill per-color Slippi
+  desyncs) looked for its reference skeleton in a folder that packaged builds
+  ship empty, so it silently skipped every install outside a dev checkout. It
+  now resolves the reference from the tables derived from your own ISO.
+- **Downloaded effect colors now actually install.** Color effects
+  downloaded from the website (lasers, side-B trails, shines and friends)
+  used to report "installed" while leaving the game untouched — the
+  downloaded file's colors were never read. Nucleus now reads the colors out
+  of the downloaded mod and installs them through the same system as effects
+  created in the app. Already-imported effects heal automatically the next
+  time you install them or export an ISO. (Image-based shines — the ones
+  with a picture inside the hexagon — are a different kind of mod and still
+  aren't supported; they now say so instead of pretending.)
+- **Effect thumbnails show up in the Upload page.** Downloaded effects'
+  preview images pointed at a folder that doesn't exist, so their cards in
+  the publish flow rendered without a picture.
+
+## 0.7.0
+
+### ✨ New
+- **SSBM Nucleus on Linux.** The whole app ships as an AppImage: vault,
+  installs, ISO export, Slippi integration, CSP rendering, HD texture packs —
+  validated end to end on real hardware. In-app auto-updates work on Linux
+  from this release forward.
+- **SSBM Nucleus on macOS.** Apple Silicon Macs get a signed DMG with the
+  same feature set: vault, installs, ISO export, Slippi integration, CSP
+  rendering and HD texture packs — validated end to end on real hardware.
+  (The build is Apple Silicon only; Intel Macs aren't supported.)
+- **Tracker mode.** Nucleus gets a sibling mode for your replays — click the
+  logo to switch. Browse and filter every Slippi replay you've ever played,
+  search every combo you've landed, and pull your bracket history from
+  start.gg — all free. Watching replays (with your installed mods, or
+  instantly in Watch Lite) and the full Stats suite are for Patreon
+  supporters: Tracker mode is the supporter project that funds Nucleus, and
+  Nucleus itself stays free, forever.
+- **Stats time machine.** The Stats tab has adjustable start and end dates,
+  so you can scope every chart to a season, a year, or last week.
+- **Sort your skins and stages.** The vault's character and stage pages have
+  a sort row: A–Z, date added, and (for skins) costume color — ascending or
+  descending. Your own drag-arranged order is the "Custom" sort and stays the
+  default; other sorts are view-only, so switching back to Custom always
+  brings your arrangement back untouched.
+- **Gecko codes.** A new **Codes** button on the Install tab manages the
+  codes in your build: apply, disable, or remove per build, then export the
+  ISO to play with them. Your code vault comes pre-loaded with the community
+  library (UCF, Better Camera, Unlock Everything, and 46 more) in collapsible
+  groups, and **+ Paste codes** takes anything — raw hex, an INI block, or a
+  loose forum copy-paste — and figures it out. One click on **Add m-ex
+  defaults** stages the full stock-MexManager code set (Skip Memcard Prompt,
+  Unlock Everything, Neutral Spawn, …) that Nucleus builds never had. The
+  manager also shows the codes your Slippi Dolphin injects at launch, so the
+  full picture of what runs in-game is finally in one place.
+
+### 🚀 Improvements
+- **First-time setup is faster — Giga Bowser now sets himself up on demand.**
+  Setup used to render his portraits, recolored costumes and stock icons before
+  it would finish, which added minutes for a character most people never open.
+  He now waits in Custom Characters as a greyed-out card; click him and he
+  builds right there, showing progress on the card, then behaves like any other
+  custom character.
+
+### 🐛 Fixed
+- **Captain Falcon skins no longer desync online.** Falcon is the one
+  character whose vanilla skeleton genuinely differs per color slot, so any
+  skin built on a non-neutral color could desync on Slippi netplay — and the
+  safety check couldn't catch it. Nucleus now normalizes every Falcon skin to
+  the neutral color as it's installed: same look, netplay-safe skeleton. Your
+  vault files are never modified — only the copy that goes into the build.
+- **Watch Lite now shows Nana.** Ice Climbers games rendered only Popo — the
+  replay parser never read the follower data Slippi records for Nana, so she
+  simply didn't exist in the in-browser player. She now fights alongside Popo
+  in every Watch Lite clip (and disappears correctly while she's KO'd), on
+  desktop and mobile.
+- **Portraits no longer come out full of holes on some imported skins.** A
+  skin that re-exports with the translucent-pass flag set on its root bone
+  had chunks cut clean out of its portrait — cape, face and tunic all
+  perforated (reported on Skull Kid Link). The low-poly meshes Nucleus hides
+  behind the visible ones stopped being safely hidden and started deleting
+  real geometry instead. Nucleus now corrects that flag while rendering the
+  portrait; your costume file and the ISO it builds are never touched.
+- **"Fix" on a Slippi-unsafe skin actually fixes it now.** Clicking Fix could
+  come back reporting success while leaving the costume byte-for-byte
+  unchanged — and a skin whose file was already correctly named was never
+  checked at all. Both are corrected, and a check that can't run now says so
+  instead of quietly labelling the skin unsafe: the old behaviour offered a Fix
+  that had nothing to fix, so clicking it did nothing and reported nothing.
+  Costumes marked unsafe by a failed check are worth retesting.
+- **Duplicate Slippi-fix code no longer piles up.** Every export quietly
+  re-added the required "Skip Slippi SSS" code instead of noticing it was
+  already there — long-lived projects had accumulated a dozen copies. New
+  exports add it once; opening the code manager and hitting Apply cleans up
+  existing duplicates.
+- **Saving texture edits on some third-party skins no longer hangs.**
+  Painting or importing textures onto certain imported models (big
+  palette-format textures with color-rich art) could freeze the 3D viewer for
+  minutes and make Save to Vault time out. The palette encoder is orders of
+  magnitude faster now, and if the viewer ever does stall, the editor says so
+  instead of silently timing out.
+- **Kirby stock icons stop wearing every copy ability at once.** Generating a
+  stock icon for a heavily-modified Kirby costume could render his stone and
+  copy-hat models stacked on top of him. The stock render now hides the same
+  prop meshes the CSP render always has.
+- **CSS and SSS backgrounds coexist.** Importing a background for one select
+  screen looked like it removed the other's — it never did, but the Install
+  page showed them sharing one "Currently in MEX" slot. Each screen now
+  tracks its own background, each vault page lists only its own kind, and a
+  pack containing both menu files extracts the one for the screen you
+  imported it from.
+- **The build title on the Install page is no longer editable in place** —
+  click the banner to edit everything in one spot instead of two.
+
+## 0.6.4
+
+### ✨ New
+- **Add many songs at once.** Stage Music and Menu Music now take a
+  multi-file selection — pick every song in one go instead of one file per
+  click. Each song shows up in the list as it converts, and if a file won't
+  convert the rest still land, with a summary naming what failed and why.
+
+### 🐛 Fixed
+- **Added songs actually play.** Adding a song to Menu Music or Stage Music
+  put "All-Star Rest Area" in the playlist instead of the uploaded track.
+  The upload itself was fine — the playlist just pointed at the wrong song.
+  Re-adding your song (or picking it from the existing list) now works.
+
 ## 0.6.3
 
 ### ✨ New

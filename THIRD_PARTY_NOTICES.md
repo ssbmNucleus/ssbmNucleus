@@ -34,6 +34,11 @@ This project uses the following open source software:
 - **Copyright**: Copyright (c) 2015 Loopline Systems
 - **Repository**: https://github.com/electron-userland/electron-builder
 
+### qrcode-generator
+- **License**: MIT
+- **Copyright**: Copyright (c) 2009 Kazuhiko Arase
+- **Repository**: https://github.com/kazuhikoarase/qrcode-generator
+
 ## Python Dependencies
 
 ### Flask
@@ -60,6 +65,11 @@ This project uses the following open source software:
 - **License**: BSD-3-Clause
 - **Copyright**: Copyright (c) 2005-2023, NumPy Developers
 - **Repository**: https://github.com/numpy/numpy
+
+### SciPy
+- **License**: BSD-3-Clause
+- **Copyright**: Copyright (c) 2001-2002 Enthought, Inc. 2003, SciPy Developers
+- **Repository**: https://github.com/scipy/scipy
 
 ### Pillow (PIL Fork)
 - **License**: HPND (Historical Permission Notice and Disclaimer)
@@ -135,16 +145,12 @@ This project uses the following open source software:
 - **Copyright**: Copyright (c) 2016 Alex Barney
 - **Repository**: https://github.com/Thealexbarney/VGAudio
 
-### DotNetZip (Ionic.Zip.Reduced)
-- **License**: Ms-PL (Microsoft Public License)
-- **Copyright**: Copyright (c) 2006-2011 Dino Chiesa
-- **Repository**: https://github.com/DinoChiesa/DotNetZip
-- **Note**: Contains managed ZLIB code derived from jzlib, under a BSD-3-Clause license.
-
-### Be.Windows.Forms.HexBox
+### Be.Windows.Forms.HexBox.Net8
 - **License**: MIT
-- **Copyright**: Copyright (c) 2011 Bernhard Elbl
-- **Repository**: https://github.com/Pkcs11Admin/Be.HexEditor
+- **Copyright**: Copyright (c) 2011-2025 Bernhard Elbl
+- **Authors**: The Melding Wars, harborsiem
+- **Repository**: https://github.com/harborsiem/Be.HexEditor
+- **Note**: .NET 8 repackaging of Be.Windows.Forms.HexBox (`Be.Windows.Forms.HexBox.Net8` 2.1.0), used by HSDRawViewer's property inspector.
 
 ### DockPanel Suite (WeifenLuo.WinFormsUI.Docking)
 - **License**: MIT
@@ -183,7 +189,10 @@ linked into the application.
 - **License**: Apache-2.0
 - **Copyright**: Copyright (c) Joshua MacDonald
 - **Repository**: https://github.com/jmacd/xdelta
-- **Note**: Version 3.1.0, distributed as an unmodified binary.
+- **Note**: Version 3.1.0, distributed as unmodified binaries and invoked as a
+  separate process. The Windows build ships at `utility/xdelta/xdelta3.exe`;
+  the Linux build at `utility/xdelta-linux/xdelta3` is compiled without source
+  modification from the upstream v3.1.0 release and statically linked.
 
 ## Slippi Ecosystem
 
