@@ -4,9 +4,138 @@ All notable changes to SSBM Nucleus are documented here.
 
 ## Unreleased
 
-Built, but held out of 0.8.0 until each is proven end to end.
+## 0.8.2 — 2026-09-06
+
+### Added
+- Test in Game lets you play with controller port 1 until you stop: characters
+  and costumes load on Battlefield, and stages load with Mario.
+- Settings groups its existing cards into vertical categories, keeping edits
+  and running operations when you switch sections. Help and updates live in
+  General, Account in Files & setup, and HD portraits in Storage & backups.
+  Tracker keeps a separate Cloud category. Cards stack without empty gaps
+  beneath shorter neighbours.
+- A mobile setup guide in Settings → Cloud vault explains Home Screen
+  installation, phone pairing and replay upload progress.
+- Paint Popo and Nana together in one preview, with labeled texture sets,
+  separate undo histories and paired saves.
+- Choose a data drive in Settings for Vault downloads, projects, build output
+  and temporary files. Nucleus copies and verifies existing data on the next
+  full launch and keeps the original folder for recovery.
+
+### Fixed
+- Settings no longer shows an empty Modding tab when AI Studio is disabled.
+  Its optional setup card lives in Files & setup.
+- Playable Test in Game waits for character select to finish initializing
+  before selecting the fighter, preventing early menu-transition writes from
+  being discarded. Loading and stage-select failures identify the failed step.
+- Update checks retry after temporary connection failures and refresh when due
+  after returning to the app or waking the computer. Manual checks and the
+  update banner stay synchronized, and stable releases supersede their previews.
+- Windows Test in Game shows a live video preview inside Nucleus, with an
+  Open Dolphin window fallback. Its render window is left alone during startup.
+- Test in Game reports Dolphin graphics startup errors promptly. Failed menu
+  navigation cannot report PASS just because game memory is still advancing.
+- Click a Vault costume or stage-variant card to edit it, without an extra
+  hover pencil. Dragging still reorders; Enter or Space opens the focused card.
+- Stats and Tourneys keep their chart layout after opening Settings; storage
+  statistics no longer override their column sizes.
+- Combos keeps its header controls in place while library details load, with
+  Retry for failed details. Short sequences explain why sharing is unavailable,
+  and invalid combo selections are rejected before starting an upload.
+- Custom-character header icons, including Giga Bowser's, load with the required
+  authentication. Repeating a completed Giga Bowser setup recognizes the installed
+  character instead of asking you to run setup again.
+- Stats shows its summary before rating history and other secondary data,
+  reduces replay aggregation work, and keeps newer filter results protected
+  from late responses. Failed loads offer Retry.
+- Tourneys shows cached results and the first history page while older sets
+  continue syncing. Brackets and replay playback load when opened, and
+  outdated account or event requests cannot replace the current view.
+- Ice Climbers animation lists include shared movement, attacks and damage
+  motions, with Nana's own special-move overrides when available.
+- Test in Game asks you to close an already-open Dolphin before building a
+  test ISO. If Dolphin opens later, the waiting screen explains the pause
+  without showing an empty preview or a stuck percentage.
+- Friends keeps a full loading layout, prepares the first visible avatars and
+  fades decoded pictures in over stable fallbacks. Profiles retain roster
+  pictures, reuse recent details and offer Retry when details fail to load.
+- The floating Import button stays anchored to the window when switching
+  between Nucleus and Tracker instead of jumping with the page animation.
+- Ice Climbers show Popo and Nana together in every costume preview, including
+  when opening Nana, with synchronized animation and preserved custom partners.
+- Viewer rendering avoids offscreen window presentation and redundant resizing
+  on Windows. Mac and Linux wait for frame deadlines with immediate command
+  wakeups, reducing polling and unnecessary delays between frames.
+- Data location uses the Settings button/path styles, wraps long folders, and
+  clearly separates pending moves, progress and errors.
+- Combos prioritizes its first page, loads playback tools when opened, and
+  avoids sorting full replay payloads before pagination. Failed loads offer
+  Retry, and outdated requests cannot replace newer filter results.
+- Fixed a preview startup error that prevented the desktop bridge from loading,
+  causing Settings verification to report Unauthorized and native controls to fail.
+- The Windows 3D preview now draws inside the app, so it clips and layers with
+  panels and dialogs. Hidden previews pause, and slow frames cannot accumulate.
+- Failed backend startup reports its actual error instead of opening every
+  screen against a guessed backend address.
+- The Windows development launcher checks dependencies and Vite readiness,
+  reports launch failures, and preserves other running applications.
+- Ice Climbers texture painting keeps separate Popo and Nana edits and saves
+  both costume files together. Existing custom Nana partners are preserved.
+- Friends no longer lets old requests overwrite newer actions or another
+  account's state. Chat history paging retains messages with identical timestamps,
+  and failed friend/profile actions report errors instead of looking successful.
+- Temporary connect-code registration failures retry, so a signed-in user does
+  not remain unfindable until restarting. Lobby Join can retry after its cooldown,
+  and failed Accept/Leave sends preserve the action for retry.
+- Patch downloads include authentication and report failed download checks with
+  a retryable error instead of silently doing nothing.
+- ISO verification distinguishes an invalid disc from a failed verification
+  request, with Retry for unavailable verification.
+- ISO export recovers missed completion events from artifact status. The exporter
+  drains both output streams and reports timeout or pipe failures instead of hanging.
+- Vault merges include effects, menu mods, and codes while preserving existing
+  items. Backups read the active catalog and reject detected changes during copying.
+- Short Vault edits preserve concurrent changes; unreadable catalogs fail without
+  replacing their contents. Costume ZIP edits publish validated replacements atomically.
+- Accepted restores recover their status after reconnecting or reopening Settings.
+  An interrupted backend reports an uncertain restore instead of silently restarting it.
+- File-serving, bundle, stage-package, and ISO output paths are confined to their
+  intended locations. Preview audio, menu images, and door exports include authentication.
+- ISO Save and Download select a specific completed export. Patch and bundle Play
+  caches distinguish different content and ignore incomplete builds.
+- Replay analysis retries failures and invalidates stale results. Tournament matching
+  reads every replay page, resumes capped synchronization, and refreshes after rescans.
+- Account token changes are validated and cancel subsequent cloud-upload work.
+- Backend startup handles split port announcements. Viewer startup and portrait
+  generation failures have bounded waits and clean up their owned workers.
+- Setup progress recovers after reconnects, and duplicate starts are rejected.
+- Costume exports retain G&W palettes; Stadium exports retain complete
+  transformation sidecars. Packaged xdelta tools resolve consistently across platforms.
+- Cold launch links wait for the renderer to accept them. Shutdown no longer uses
+  process-name kill fallbacks. Update installation keeps its selected manifest and
+  handles failed macOS opening and Linux single-instance handoff.
+- Vault replacement restores now validate the backup and prepare the database
+  before switching libraries, retaining the previous Vault for recovery.
+  Backup downloads and restore uploads now include the required authentication.
+- Restore progress accepts completion that arrives before the upload response.
+- Fixed progress-socket connections with the pinned Flask version and restored
+  token checks that a duplicate connection handler had bypassed.
+- Failed queued imports can now retry, skip to the next item, or cancel the
+  remaining queue.
+- Fixed Skin Creator exports getting stuck because an old request's timer
+  cleared a newer save or download.
+- Cloud sync now reports metadata commit timeouts and keeps affected replays
+  pending for retry instead of marking them backed up.
+- Fixed Pokemon Stadium's variant list getting stuck loading on Windows when
+  checking an existing vanilla variant. Name collisions now preserve both
+  variants and their transformation skins.
+- Fixed incremental replay rescans sometimes associating player identities
+  and characters with the wrong replay.
 
 ### 🔒 Waiting
+
+Built, but held out of 0.8.0 until each is proven end to end.
+
 - **Share a build with a friend — and play it from the message.** Pick a vault
   Patch (an xdelta against the vanilla ISO), send it as a card, and your friend
   hits Play: the patch lands in their Vault → Patches, the ISO is built against
