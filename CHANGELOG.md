@@ -4,6 +4,84 @@ All notable changes to SSBM Nucleus are documented here.
 
 ## Unreleased
 
+## 0.8.3 — 2026-09-09
+
+A cleaner editing workflow throughout Nucleus, with Stage Creator,
+non-tournament vanilla stage support, extras improvements, and Friends text
+and global chat.
+
+### Stage and skin editing
+
+- **Stage Creator:** create reskins from vanilla stages or edit an existing
+  stage skin with a live 3D preview, texture painting, recoloring, and animation
+  playback. Save the result as a new vault mod with its own preview.
+- Skin Creator and Stage Creator have a more compact workspace, resizable
+  panels, a searchable texture browser, and improved texture zoom and panning.
+- Edit material colors, opacity, shininess, and texture-blending colors.
+  Palette adjustments can affect textures, materials, or both, with controls
+  to reset your changes.
+- **More Stages:** import and install skins for all 23 non-tournament vanilla
+  stages. Replace the original stage skin, restore vanilla, or add the skin as
+  a separate stage-select entry. The six tournament stages retain their
+  alternate-stage workflow.
+
+### Simpler menus and vault screens
+
+- Costume and stage edit menus use compact actions and apply names, portraits,
+  stock icons, and screenshots directly. Slippi status and retests update in
+  place.
+- **Portraits:** choose the active portrait from one grid, manage alternates,
+  and retake portraits across characters in one batch. Retakes save both normal
+  and HD portraits. Costume installs now use the portrait you selected.
+- **Menus:** browse icon grids, backgrounds, doors, pause screens, percent
+  fonts, and Ready / Go / Game graphics from one sidebar. Create or import mods
+  directly from their category, with editing and card actions kept together.
+- Menu mods and effects use the main **Import** button. When a file has more
+  than one possible use, a compact choice dialog lets you choose its destination.
+- Sound packs open immediately after creation and can be renamed in place.
+  Vault browsing, sorting, folder actions, and Settings also receive layout
+  and consistency improvements.
+
+### Extras improvements
+
+- **Live pictograms:** click a shape to edit just that part's colors and see
+  the drawing update immediately. The game reference stays visible, with the
+  selected part highlighted where mapped. A compact selector reaches
+  overlapping parts and different phases.
+- Related effects are grouped by move and recognizable parts, including Up-B
+  startup and flight. Whole-effect recoloring and presets remain available.
+- Added Fox's Up-B charging flames and wisps, plus separate controls for the
+  rotating swirl in Samus's Screw Attack.
+- **Image shines:** import a picture for Fox or Falco's reflector, including
+  supported image shines from the website. Transparency is preserved, and
+  flash and sparkle colors can be edited separately.
+- Improved effect imports, saved-recipe editing, and Restore Vanilla behavior.
+  Effects shared across large groups now say "Shared with many characters."
+
+### Friends
+
+- Send typed private messages to friends, with offline delivery, or join the
+  global chat beside the player list.
+- Patrons get profile borders.
+- New profile privacy controls and fixes for connect codes claimed on another
+  computer.
+
+### Other improvements and fixes
+
+- **Music loops:** stage and menu music have a waveform editor for choosing
+  where the intro ends and previewing the transition into the repeating section.
+- **Test in Game:** sharper previews that fill the panel, and Stop cancels an
+  in-progress test build immediately.
+- Replace a vanilla costume directly from its Install slot while retaining
+  team assignments. Improved Falcon slot compatibility, Jigglypuff hats and
+  cloth physics, and Kirby copy-costume colors.
+- Fixed red Captain Falcon missing from Skin Creator after setup, and improved
+  viewer startup errors and material animation playback.
+- Upload now recognizes Discord sign-in.
+
+Randall and the other unreleased features remain gated. This update does not
+expand AI access.
+
 ## 0.8.2 — 2026-09-06
 
 ### Added
