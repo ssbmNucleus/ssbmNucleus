@@ -81,6 +81,13 @@ This project uses the following open source software:
 - **Copyright**: Copyright (c) 2017-2021 Ingy döt Net, Copyright (c) 2006-2016 Kirill Simonov
 - **Repository**: https://github.com/yaml/pyyaml
 
+### rarfile
+- **License**: ISC
+- **Copyright**: Copyright (c) Marko Kreen
+- **Repository**: https://github.com/markokr/rarfile
+- **Note**: Pure-Python driver that invokes the bundled UnRAR binary; it contains
+  no RAR decoder of its own.
+
 ## .NET / C# Dependencies
 
 ### HSDLib / HSDRaw / HSDRawViewer
@@ -193,6 +200,19 @@ linked into the application.
   separate process. The Windows build ships at `utility/xdelta/xdelta3.exe`;
   the Linux build at `utility/xdelta-linux/xdelta3` is compiled without source
   modification from the upstream v3.1.0 release and statically linked.
+
+### UnRAR
+- **License**: UnRAR freeware license (see `utility/unrar*/license.txt`)
+- **Copyright**: Copyright (c) 1993-2025 Alexander Roshal
+- **Source**: https://www.rarlab.com/rar_add.htm
+- **Note**: Version 7.12, distributed as unmodified official binaries and invoked
+  as a separate process to read `.rar` mod archives. Ships at
+  `utility/unrar/UnRAR.exe` (Windows), `utility/unrar-linux/unrar` and
+  `utility/unrar-mac/unrar`, each alongside the license text the author requires
+  to accompany it. The license permits free distribution of UnRAR inside other
+  software packages, and forbids using RAR/UnRAR code to re-create the RAR
+  compression algorithm — Nucleus only decompresses, and does not create RAR
+  archives.
 
 ## Slippi Ecosystem
 

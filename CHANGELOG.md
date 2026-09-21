@@ -2,7 +2,434 @@
 
 All notable changes to SSBM Nucleus are documented here.
 
-## Unreleased
+## 0.8.9 — 2026-09-21
+
+### Fixes
+
+- **Export buttons download again.** Exporting a skin or stage from the Edit
+  window, exporting a custom character or custom stage, downloading a vault
+  bundle, and every Export button on the Menus page silently did nothing. The
+  download link was missing the app's local access token.
+- **The CSS layout editor shows character icons again** instead of plain white
+  boxes (same cause). The Game & Watch colour creator's preview is fixed too.
+- **Icon packs keep custom characters' icons.** A pack of `=name.png` icons
+  dropped every non-vanilla character's icon, and a `mexSelectChr.dat` without
+  its `MxDt.dat` imported nothing. Unnamed icons are kept as "Extra Icon N" so
+  you can rename them.
+- **Giga Bowser can be set up again after you delete him.** Building him threw
+  away the files needed to rebuild him, so after a delete he could not be
+  rebuilt and Giga Bowser skins were refused. If this already happened to you,
+  re-run first-time setup from Settings once.
+- **Jigglypuff's hats stay on her head** in the skin editor and the animation
+  viewer.
+- **A failed replay recording no longer leaves replay playback stuck at 4:3.**
+
+### ACE build characters
+
+Re-scan your ACE ISO once after updating so characters you already imported
+pick up these fixes.
+
+- **ACE characters work on projects that were not made from the ACE patch.**
+  Metal Mario's side-B cape, and other clones whose specials use a vanilla
+  character's items, froze the game; the item part of m-ex's clone patch now
+  travels inside those characters' files. Raichu and Skull Kid froze while the
+  match loaded because files their code loads were never packed; they are now
+  included. Meta Knight froze on every project because our build tool dropped
+  two bones from his skeleton; that is fixed.
+- **ACE's playable Giga Bowser imports** as "Giga Bowser (ACE Build)" instead of
+  being skipped.
+- **Custom characters say the right name.** Every imported ACE character was
+  announced as one other character (usually Lucas TDX), because the install
+  reused the source build's sound number, which means something else in your
+  project. Announcer lines are now matched by the audio itself: a character
+  that uses a vanilla name points at it, its own custom line is added once
+  and shared, and a character with no line of its own says "Bonus Character"
+  (made from your own ISO's narrator clips).
+
+### Replays
+
+- **Widescreen.** Watch with mods and playlists have a "Widescreen (16:9)"
+  option that shows more of the stage instead of stretching the picture;
+  recordings are saved as 16:9 video.
+- **Playlists of whole games.** On the Replays tab, "▶ Play [N] games" queues
+  your latest games, or tick games to pick exactly which (shift-click ticks a
+  range). Ticked games play in the order you ticked them.
+- **One video per game.** Recording a playlist saves each game as its own
+  video in the folder shown in the popup, and "Compress for Discord" compresses
+  each one to fit 10 MB. Long single recordings that used to go over 10 MB now
+  fit.
+
+### Cloud sync
+
+- **Uploading your games is about 5x faster**, newest games first, so recent
+  games show up on your phone right away. Games already uploaded are not sent
+  again.
+
+## 0.8.8 — 2026-09-15
+
+- **Building an ISO works again.** 0.8.7 could not export at all: every build
+  ended in "Export failed", including a project with nothing added. 0.8.7 added
+  a final disc-padding step to the export so the game's last file read stays
+  inside the image; that step reopened the finished ISO for itself while the
+  export was still holding the file open, so it failed every time. The padding
+  now runs after the export lets go of the file, and it still does its job.
+  Nothing in your project was harmed by the failed builds -- update and rebuild.
+- **Export failures now report the actual error.** The failure above filled the
+  Export Failed box with internal debug text about portrait compression and
+  never mentioned the cause, because the app could only read an error message
+  that arrived on a single line. It now reads the whole message either way.
+
+## 0.8.7 — 2026-09-14
+
+### Any Climbers
+
+- **Dying after switching characters now costs a stock and respawns the pair
+  together.** Previously the newly controlled partner could die without losing
+  a stock, while the other fighter lingered on the respawn platform. This also
+  fixes dying again before that delayed partner returned. Rebuild your ISO to
+  apply the fix to an existing project.
+- **A pair's leader now plays exactly like the character it was built from.**
+  The leader is a copy with its own identity, and Melee's character code asks
+  "which character am I?" in about a hundred and thirty places before it lets a
+  move happen. Those checks failed for every pair: Link and Young Link could
+  never fire the hookshot in the air, Kirby's inhale could not copy an ability,
+  Captain Falcon's and Ganondorf's dives lost their flame, and the same held for
+  Fox, Falco, Marth, Roy, Pikachu, Pichu and the rest wherever the game checks.
+  The build now tells the game the leader's original character from the first
+  frame of the match, so all of those checks pass.
+- **The swap fix from 0.8.6 now reaches projects made before it.** Each export
+  only ever added the pair engine code if it was missing, so a project first
+  built on 0.8.5 kept the 0.8.5 code, and swapping to a dead partner could
+  still lock you out. Exports now replace an older copy of the engine code.
+- **Kirby can copy a pair's leader.** Inhaling and swallowing the leader used
+  to freeze the game the moment the ability was granted, because the game
+  loads copy abilities at the start of a match for the characters it finds
+  there, and a pair's leader was not one it knew. The build now loads the
+  original character's ability for a pair, so Kirby copies it exactly as he
+  would from that character.
+- **Kirby's copied specials no longer draw his Final Cutter sword in a build
+  that contains a pair.** Pairs used to bundle an extra m-ex function patch
+  whose effect hook sent every fighter's effects through the spawning
+  fighter's own effect bank, so a Kirby wearing any hat drew Kirby's effects
+  (Falcon Punch showed the sword, Warlock Punch crashed at its end). The pair
+  fixes above already cover what that patch did, so pairs no longer ship it
+  and rebuilding your ISO removes it from an existing project.
+
+### Elsewhere
+
+- **Hidden the unfinished Agent tools settings in release builds.** The panel
+  was visible even though its backend was disabled, so it displayed a 404 error.
+- **Menu files import under any name.** A character-select, stage-select,
+  pause or HUD file is now recognised by what is inside it, so a background
+  downloaded as "Halo3CSS.dat" imports from the main Import button instead of
+  failing with "unsupported file type". Only a file called MnSlChr was
+  recognised before.
+- **Giga Bowser and wireframe skins no longer create phantom characters.** A
+  bulk pack containing a Giga Bowser costume used to add a nameless "G" card
+  to the Characters grid, and wireframe costumes were filed under Young Link
+  because the file reader had the two mixed up. Giga Bowser costumes now go
+  to the built-in Giga Bowser (set him up first), wireframe costumes are
+  named correctly and refused with a message until wireframe fighters are
+  supported, and an existing phantom card is hidden from the grid.
+- **The Menus tab remembers what is installed.** The "Currently in MEX" panel
+  for backgrounds, doors, icon grids, pause screens and fonts forgot its
+  contents as soon as you left the tab and showed the default again. Installs
+  are now recorded with the project and shown when you come back.
+- **Exported discs no longer end exactly where the last file does.** Melee
+  reads files in 32-byte steps, and an image that stopped on the last byte of
+  its final file could send that last read past the end of the disc. Every
+  export now finishes with padding and on a sector boundary.
+- **The user guide was refreshed** with current screenshots and updated
+  pages for the vault, Install tab, tracker and settings.
+
+## 0.8.6 — 2026-09-13
+
+### Any Climbers
+
+- **Test in game works on a pair you have not installed yet.** Pressing it
+  straight after creating a pair failed with "Custom character archive not
+  found". A pair is stored as a recipe rather than a built fighter, and the
+  test build was the one path that never built it. It now builds the pair
+  against its own throwaway project.
+- **You can no longer swap to a partner who cannot act.** Swapping to a dead
+  character left you unable to swap back or pause, and swapping while your
+  partner was still respawning crashed the game. The D-pad press is now ignored
+  unless both fighters are in a state they can be driven from.
+- **Nana no longer appears in the partner picker** while a project is open.
+  She was listed as a broken tile and could not be chosen anyway.
+
+### Elsewhere
+
+- **Reordering skins in the ISO editor no longer opens the import dialog.**
+  Dragging a card also dragged its portrait as a file, and the app tried to
+  import its own thumbnail. Images and links can no longer start a native drag
+  anywhere in the app, and the version number in the header is no longer
+  selectable text.
+- **Bug reports from macOS and Linux are verified end to end.** Nothing was
+  broken, but until now every report had come from Windows. The build now
+  checks the report path on each platform.
+
+## 0.8.5 — 2026-09-13
+
+### Any Climbers
+
+- **Build an Ice Climbers pair out of any two fighters.** A **New Climbers**
+  card in Custom Characters opens a character select: pick a leader and a
+  partner from their icons, and Nucleus builds the two of them into one CSS
+  slot that plays the way the Climbers do — you control the leader, the partner
+  follows you. Melee already treats a character as up to two fighters, which is
+  how the Climbers and Zelda/Sheik work, so none of this is faked. The one
+  thing the stock game will not do is hand a partner Nana's follow-the-leader
+  AI, because it checks specifically for Nana; Nucleus adds the code that
+  generalises it. Combinations the engine cannot manage are shown dimmed with
+  the reason rather than hidden — the Ice Climbers cannot lead, and Zelda and
+  Sheik cannot follow. The finished pair arrives in your vault as an ordinary
+  custom character, so it installs, exports and deletes like any other.
+
+### Skins and portraits
+
+- **Skin Creator: layers.** A Layers tab beside the color palette stacks your
+  edits the way paint.net does — add, duplicate, reorder, hide, merge down, set
+  each layer's opacity and blend mode (Multiply, Screen, Overlay, Additive and
+  the rest), and paint on whichever layer is selected. Erasing on an upper layer
+  reveals the one below instead of punching a hole in the texture, and a PNG
+  import lands on the selected layer so you can dial it back instead of
+  overwriting everything. Layers last for the editing session: the game only
+  ever takes a flat texture, so saving writes the flattened result.
+
+- **Selecting an area behaves like a real editor.** The selection box can be
+  moved by dragging its middle and resized by its edges and corners, Shift
+  squares off a new one, and Ctrl+A / Ctrl+D select all and clear. Its outline
+  is now drawn a couple of pixels thick on screen instead of being scaled up
+  with the pixel grid, which made the dashes enormous when zoomed in.
+
+- **Undo no longer misses clicks.** Finishing a stroke briefly handed the canvas
+  back to the texture loader, and painting and undo are both disabled while that
+  happens — so an undo click (or the start of the next stroke) in that moment
+  did nothing at all.
+
+- **Export a portrait, stock icon or stage screenshot as an image.** Hovering
+  any of them in a costume's or stage's edit window now offers an Export button
+  along the top, opposite the buttons that replace them.
+
+- **Watching replays finds Slippi's playback build on Linux again.** Nucleus
+  only knew the netplay AppImage's filename, so on a perfectly good install it
+  reported "Slippi playback Dolphin not found" and refused to play anything.
+
+- **You choose which kind of stock icon to generate.** The icon tile in a
+  costume's edit window now offers both looks instead of picking one for you:
+  recolor the vanilla pixel icon, or render this model's head in 3D. Whichever
+  you press is what you get; if that look cannot be built for a skin, it says
+  so and points at the other one.
+
+- **Skin Creator: replace one color everywhere.** The new replace tool recolors
+  every pixel of the color you click across the whole texture, not just the
+  patch under the cursor like the bucket. A Match slider widens what counts as
+  the same color for shaded and photographic textures.
+
+- **Skin Creator: select an area to paint inside.** Drag out a selection and
+  every tool — pencil, eraser, bucket, replace — stops at its edge, so a change
+  cannot bleed into the part of the sheet next door.
+
+- **Skin Creator: work from a reference picture.** A new Reference tab holds the
+  image you are matching. Click it to eyedrop any color straight into your
+  brush, or pull out its palette and paint from those swatches.
+
+- **Skin Creator: see where a texture lands on the model.** Picking a texture
+  now flashes it on the 3D preview, so you can tell at a glance which part of
+  the character a sheet actually paints. The target button beside the texture
+  name repeats the flash. It is only a flash — your pixels go back untouched,
+  and it counts as neither an edit nor an undo step.
+
+### Friends
+
+- **A message reaches you wherever you are in the app.** Notifications used to
+  fire only while the Friends tab was the tab you were looking at — so a message
+  that arrived while you were browsing skins, editing a costume, or had the
+  window minimised mid-game never said anything. They now come from the app
+  itself: any tab, either mode, and while minimised. Nucleus mode shows how many
+  people are waiting beside the wordmark, the Friends tab carries an unread
+  count, an unfocused window flashes in the taskbar, and clicking a notification
+  brings Nucleus up on that conversation. Still messages and friend requests
+  only — nobody needs a popup because a friend came online, and a pile of
+  messages waiting for you arrives as one "12 new messages" notification rather
+  than twelve of them.
+
+- **Play invites wait for a friend who is offline.** Typed messages have been
+  held for up to 30 days since 0.8.3, but an invite sent to someone who was not
+  online was simply dropped. It now waits with the rest and arrives the next
+  time they open Nucleus.
+
+### Tracker
+
+- **The app stays responsive while your library updates.** Indexing replays and
+  finding combos now happen in a separate background process that yields to
+  whatever you are doing, instead of competing with the window for the same
+  CPU. This build re-reads every game you have to pick up the new combo timing,
+  so the pass is a long one — before, it made everything else crawl, and
+  clicking **Watch** could leave the popup sitting on "Loading…" for a long
+  time. Nothing about the passes themselves changed: they are still
+  incremental, still resumable, and the Sync panel still reports them.
+
+- **Watching a replay with a custom skin or stage works again.** Picking any
+  skin failed after about a minute with "build worker never became ready",
+  while an unmodded replay played fine. Nucleus builds the cosmetic ISO for
+  that one replay in a second, hidden copy of itself, and since 0.8.0 it could
+  no longer log in to that copy, so the build never started. Behind that sat a
+  second fault: the finished ISO was looked for under the wrong name, so a
+  build that worked would still have timed out after fifteen minutes. The
+  progress now counts up while the ISO builds, and a build that fails says why
+  instead of running to the timeout.
+
+- **Watching a modded replay no longer discards an export you have not saved
+  yet.** The hidden copy ran the startup sweep of the output folder, which is
+  where a finished ISO waits for you to press Save.
+
+## 0.8.4 — 2026-09-10
+
+Scanning a modded ISO is the centre of this release: stage previews are
+rendered without building an ISO, the results screen was redesigned, .rar
+archives import, and a build's own stock icons come across. Music gains real
+listening controls, and several editing screens keep up with what you just did.
+
+### ISO scanning and importing
+
+- Fixed ISO imports doing nothing when selected through **Import** or dragged
+  into the vault. Windows builds now test both entry points before packaging.
+
+- **.rar archives now import.** Drop one on the window or pick it with Import,
+  the same as a .zip or .7z, including .rar files found inside a container
+  archive. An archive that cannot be opened says so instead of reporting that
+  no mods were found.
+
+- Redesigned ISO scan results with content categories, image cards, clearer
+  skin selection, and separate counts for added items and skins ready to import.
+  Partial failures retain successful additions. Removed the large summary header
+  and vanilla-file counts; already-imported content shows its saved vault images.
+  Flat rectangular category tabs replace the summary cards, with simpler image captions
+  and no repeated section titles.
+  Portraits and icons use uniform sizes and preserve the full artwork.
+  Result images and names share a bordered card, without repeated “Added” badges.
+  Categories use Character skins, Stage variants, Custom characters and Custom
+  stages throughout the menu, in that order. Result columns expand to fill the window.
+
+- Simplified ISO import completion: **Import & finish** saves selected character
+  skins, plays the success sound and returns to the vault. Closing no longer waits
+  for temporary-file cleanup or silently discards a selection on an outside click.
+  Partial failures keep their cards and errors visible; refresh failures can be
+  retried without importing twice. **Done** confirms already-saved content.
+
+- **ISO scanning now keeps a build’s real stock icons.** Modded discs store
+  their icons in the m-ex table, which the scanner skipped outright — so every
+  skin imported from one arrived with a stand-in icon. Added costumes beyond
+  the vanilla slots are included.
+
+- Reduced ISO preview preparation time: rendering starts as workers become ready,
+  reuses warm workers and launches fewer renderers by default.
+
+- ISO scanning no longer requires Wiimms tools when the built-in reader is
+  available. Missed progress events and temporary connection failures recover
+  automatically; unreadable ISOs produce an error or a partial-results warning.
+
+- Fixed empty ISO scans waiting for unused thumbnail workers. Scanning now uses
+  a compact square panel with the shine animation, less text and working cancellation.
+
+- The scan card no longer looks like it crashed during the custom-content
+  step. That step runs quietly for minutes at a time, so instead of counting
+  how long nothing has happened it now says it is still working. Dropped the
+  "ISO SCAN" label above the disc name.
+
+- Redrew the import questions — the Slippi safety warning, the duplicate prompt
+  and "What is this?" — so they match the rest of the app instead of using their
+  own grey panels. Cancel now reads as the quiet option rather than looking like
+  a third choice, Escape closes them, and the Slippi warning counts correctly
+  when more than one costume in an archive is unsafe.
+
+### Stages
+
+- ISO stage variants now get rendered previews without building an ISO or
+  launching Dolphin. Rescanning fills in missing previews for older imports.
+  Fixed Pokémon Stadium's missing floor and platforms in the stage renderer.
+  Fixed ISO extraction skipping variants with ordinary names inside stage folders.
+
+- **Bulk stage screenshots are now rendered, not played.** The vault's stage
+  screenshot button draws every selected variant with the same renderer, about
+  a second each, so it no longer builds test ISOs, boots Dolphin, or needs a
+  vanilla ISO and Slippi path at all. Shots appear as they finish, you can stop
+  part-way and keep what is done, and each variant that cannot be drawn says
+  why. Stages outside the six competitive ones have no camera yet and are shown
+  as such.
+
+### Costumes and portraits
+
+- Retaking a costume’s portrait now keeps the new render on screen once you
+  accept it, instead of showing the previous portrait again until the costume
+  was reopened. Removed the caption above **Use it** / **Discard**.
+
+- Fixed **"The selected costume does not match ..."** when replacing a
+  vanilla slot with a mod whose colour that fighter never shipped — Bowser
+  has only Normal, Red, Blue and Black, so `PlKpWh` and `PlKpYe` costumes
+  were refused. Costume files are also matched regardless of their casing.
+
+### Music
+
+- Separated music listening controls from loop adjustments. Added pause/resume,
+  seeking, volume and **Use playhead**; adjusting a loop no longer stops playback.
+
+- Simplified Stage Music, Menu Music and loop-editor text.
+- Development launches now update MexCLI automatically. Release packaging tests
+  music import, preview and loop saving against the bundled helper before proceeding.
+
+### Elsewhere
+
+- Patreon status now just says **Not linked**. Replay-sharing prompts explain
+  that you need to follow or join SSBM Nucleus on Patreon for free and link your account.
+
+- Startup failures now save copyable error details with the app version and
+  system information. Windows packaging checks the bundled native runtime
+  without development tools on its search path.
+
+- Removed the separate logs ZIP button. The yellow **Report a Bug** button
+  opens the report form, which attaches logs automatically.
+
+- Foreign SMD imports preserve small weighted body parts; Melee's hidden and
+  parked mesh filter now requires an explicitly identified Melee source.
+  DAE conversion verification excludes Blender's generated bone-display mesh.
+- Artist revisions also preserve native mesh slot order and single-material
+  grouping. Reordered or missing groups are rejected before they can shift
+  costume visibility indices in-game.
+
+- Model fitting returns drafts for per-model artist assessment. New artist
+  revisions preserve authored mesh/weight changes, retain per-asset recipes and
+  regenerate animation previews without automatic refitting. Every revision
+  requires fresh independent visual review.
+
+- Model fitting now supports optional DAE conversion, more source bone naming
+  conventions, automatic orientation from named anatomy, and SMD texture
+  companions. Multi-material SMDs retain separate export groups.
+- Faster sampled animation checks preserve separate vertex weights and resolve
+  numbered/shared fighter animation names. A repeatable model corpus benchmark
+  reports latency and incomplete pose coverage separately from visual quality.
+
+- Development preview: bounded multi-character model fitting accepts models or
+  ZIPs, preserves named anatomy and material colors, compares cached poses
+  against vanilla, and exports the chosen fit without rerigging. New diagnostics
+  flag weight, head, torso and ground-reach issues; visual acceptance remains separate.
+- Model exports preserve material-animation layout and restore required neutral
+  blink tracks. Unsupported material-walk layouts report a repair requirement.
+
+- Development preview: model matching ranks vanilla characters using shape,
+  proportions and named source bones, and can propose a separate reposed working
+  mesh. Pose adjustment and rigging remain experimental and require independent
+  visual review across animation before native acceptance.
+- Model import preserves scene instances/transforms and source bone weights
+  through simplification. Corrected Zelda's vanilla model prefix.
+- Development preview: external agents can use Randall MCP for model rigging,
+  character and stage imports/installation, project builds, live editors,
+  website downloads, menu/sound/extra management and Dolphin testing. Added
+  isolated two-client netplay tests and paired replay reports. Native acceptance
+  and a compatible public installer are still pending.
+- Queued ISO exports retain the project selected when export was requested.
 
 ## 0.8.3 — 2026-09-09
 
