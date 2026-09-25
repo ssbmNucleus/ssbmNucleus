@@ -8,7 +8,7 @@ Mod manager for Super Smash Bros. Melee. Download, organize, and install charact
 
 **Download:** [ssbmnucleus.net](https://ssbmnucleus.net) — the app auto-updates after install.
 
-**Discord:** [Join](https://discord.gg/JeSy7Erv)
+**Discord:** [Join](https://discord.gg/EAjJnccxgF)
 
 This repository is the public home for **releases, issues, and documentation**.
 

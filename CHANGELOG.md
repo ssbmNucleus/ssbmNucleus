@@ -2,6 +2,26 @@
 
 All notable changes to SSBM Nucleus are documented here.
 
+## 0.8.10 — 2026-09-25
+
+### Fixes
+
+- **Export ZIP and bundle downloads really download now.** 0.8.9 fixed the
+  missing access token, but a custom character's or custom stage's Export ZIP
+  and a vault bundle download still did nothing: the app treated the click as
+  leaving the page and cancelled it.
+- **Import from ISO finds the skins a Nucleus build added.** Scanning a Nucleus
+  or m-ex build only looked at the vanilla costume file names, so the skins the
+  build added were never found and the scan said there were none.
+- **Jigglypuff headband skins no longer show grey blocks on the headband** in
+  portraits and the animation viewer. Her hats carry a low-poly copy and a metal
+  copy the game never draws, and Nucleus drew all of them. Use Retake CSP for
+  portraits made before this update.
+- **Replay sync no longer fails when the same game is in two folders.** Every
+  sync with such a pair failed and saved nothing; the game now uploads once and
+  both copies are remembered.
+- **The Discord link in the app works again** (it now uses the permanent invite).
+
 ## 0.8.9 — 2026-09-21
 
 ### Fixes
