@@ -2,6 +2,68 @@
 
 All notable changes to SSBM Nucleus are documented here.
 
+## 0.8.11 — 2026-09-28
+
+### Fixes
+
+- **Added characters no longer crash single-player.** Adventure no longer
+  crashes at the Brinstar escape cutscene with a custom or clone character
+  (projects made before this update are repaired on the next export), and
+  finishing Classic, Adventure or All-Star no longer crashes after the credits
+  when a character has no ending movie or congratulations images: Nucleus uses
+  a stand-in instead.
+- **Free space no longer breaks single-player or the title screen.** It used
+  to delete every movie, so finishing Classic, Adventure or All-Star crashed
+  after the credits and the title screen crashed after a minute idle. It now
+  replaces the vanilla movies with short stand-ins (about 790 MB still freed)
+  and never touches added characters' movies. Builds that already lost their
+  movies get them back as stand-ins on the next export.
+- **Custom music loops cleanly in game.** Songs you add or give a new loop
+  point no longer click every second or so, or glitch at the loop, when played
+  in Melee. Music added before this update is fixed when you save its loop
+  again or re-add it.
+- **Playlist recordings keep their audio.** Recording a replay playlist no
+  longer leaves a 0-byte mp4 and a silent video when the playback window
+  resizes mid-recording; every game is saved in full, with sound.
+- **"Currently in MEX" shows what is really in your project.** Nucleus now
+  reads the project's files for the HUD (pause screen, percent font,
+  Ready / Go / Game), the character select icon grid, doors and background,
+  and the stage select background. Ready / Go / Game packs no longer show up
+  under Percent Font (older projects are fixed automatically), a failed icon
+  grid install is no longer shown as installed, a project made from an
+  already-modded ISO shows "Custom (unknown)" instead of Vanilla, and the panel
+  refreshes when you switch projects.
+- **Switching percent fonts or Ready / Go / Game packs leaves nothing behind.**
+  Installing one now clears the previous one first, and both pages have a
+  Restore Vanilla button.
+- **Character extras show the right "Current" reading.** The card reads effects
+  where installs actually write them, so it no longer shows another effect's
+  colors or calls untouched effects "Custom". It says "Unknown" or "Can't
+  detect" when it can't tell, shows installed image shines and move parts, and
+  names the vault mod that's installed. Installing into a rebuilt effect file
+  could recolor the wrong particle colors; that's fixed too.
+- **Selections stay correct after deleting.** Removing a stage skin no longer
+  leaves it selected ("0 removed, 1 failed"), and deleting or dragging a
+  costume no longer moves your selection onto a neighbouring skin, so
+  "Delete Selected" removes exactly what you picked.
+- **Custom CSS backgrounds are less likely to freeze the character select
+  screen:** portraits are compressed a little earlier when a custom background
+  needs the memory.
+
+### Changes
+
+- **Restore the vanilla CSS background.** The Character Select > Background
+  page has a "Restore Vanilla Background" button that puts the original
+  background back into your project without touching your characters, stages,
+  music or other menu mods.
+- **Skip Slippi SSS can be turned off.** It is still on by default, and turning
+  it off breaks the ISO on Slippi Dolphin (it crashes at the stage select).
+  Only untick it in the Codes menu for a Slippi Nintendont (console) build that
+  crashes at stage select; later exports leave it off.
+- **Mobile replays: rewind 5 seconds and change playback speed.** The phone
+  replay player has back and forward 5-second buttons and a speed picker from
+  0.25x to 2x, in both the game view and the combo theater.
+
 ## 0.8.10 — 2026-09-25
 
 ### Fixes
