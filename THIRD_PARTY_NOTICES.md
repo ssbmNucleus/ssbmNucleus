@@ -39,6 +39,16 @@ This project uses the following open source software:
 - **Copyright**: Copyright (c) 2009 Kazuhiko Arase
 - **Repository**: https://github.com/kazuhikoarase/qrcode-generator
 
+### unicode-emoji-json (emoji names and groups in the Friends emoji picker)
+- **License**: MIT
+- **Copyright**: Copyright (c) 2019 Mu-An Chiou
+- **Repository**: https://github.com/muan/unicode-emoji-json
+
+### emojilib (emoji search keywords in the Friends emoji picker)
+- **License**: MIT
+- **Copyright**: Copyright (c) 2014 Mu-An Chiou
+- **Repository**: https://github.com/muan/emojilib
+
 ## Python Dependencies
 
 ### Flask
@@ -88,6 +98,30 @@ This project uses the following open source software:
 - **Note**: Pure-Python driver that invokes the bundled UnRAR binary; it contains
   no RAR decoder of its own.
 
+### trimesh
+- **License**: MIT
+- **Copyright**: Copyright (c) 2023 Michael Dawson-Haggerty
+- **Repository**: https://github.com/mikedh/trimesh
+
+### pyfqmr
+- **License**: MIT
+- **Copyright**: Copyright (c) 2020 Kramer84
+- **Repository**: https://github.com/Kramer84/pyfqmr-Fast-Quadric-Mesh-Reduction
+
+### windows-capture
+- **License**: MIT
+- **Copyright**: Copyright (c) 2023 NiiightmareXD
+- **Repository**: https://github.com/NiiightmareXD/windows-capture
+
+### OpenCV (opencv-python)
+- **License**: Apache-2.0 (the OpenCV library); MIT (the opencv-python packaging)
+- **Copyright**: OpenCV contributors; Copyright (c) Olli-Pekka Heinisuo (packaging)
+- **Repository**: https://github.com/opencv/opencv-python
+- **Note**: Bundled in the Windows build because windows-capture imports it.
+  The opencv-python wheel also redistributes FFmpeg (LGPL-2.1) as a separate,
+  unmodified DLL (`opencv_videoio_ffmpeg*.dll`); the full license texts are
+  in that project's `LICENSE-3RD-PARTY.txt`.
+
 ## .NET / C# Dependencies
 
 ### HSDLib / HSDRaw / HSDRawViewer
@@ -95,7 +129,9 @@ This project uses the following open source software:
 - **Copyright**: Copyright (c) 2021 Ploaj
 - **Repository**: https://github.com/Ploaj/HSDLib
 - **Description**: Library for working with HAL DAT files
-- **Note**: Used for CSP generation and model/texture work via HSDRawViewer
+- **Note**: Used for CSP generation and model/texture work via HSDRawViewer.
+  We distribute a prebuilt, modified build of our fork, https://github.com/sc00ppp/ssbmNucleus-hsdlib
+  (release tag pinned in `utility/hsdlib.manifest.json`; the complete source is in that repository).
 
 ### Avalonia UI (MexManager GUI)
 - **License**: MIT
@@ -185,12 +221,58 @@ This project uses the following open source software:
 These are shipped alongside the application and run as subprocesses. They are not
 linked into the application.
 
-### wit (Wiimms ISO Tools)
-- **License**: GPL-2.0
-- **Copyright**: Copyright (c) Dirk Clemens (Wiimm)
-- **Source**: https://wit.wiimm.de/
-- **Note**: Distributed as an unmodified binary and invoked as a separate process.
-  Full license text: `tools/gpl-2.0.txt`. Source is available from the URL above.
+### Blender
+- **License**: GPL-2.0-or-later (Blender's own code; the distributed binary as a
+  whole is under GPL-3.0-or-later terms, because it includes libraries licensed
+  GPL-3.0-compatible-only — see Blender's `copyright.txt` and `license/license.md`)
+- **Copyright**: Copyright (c) Blender Foundation and the Blender Developers
+- **Repository**: https://projects.blender.org/blender/blender
+- **Source**: https://download.blender.org/source/ — the corresponding source for
+  this exact release is `blender-4.2.23.tar.xz` in that directory.
+- **Note**: Version 4.2.23 LTS, the official portable Windows x64 build
+  (`blender-4.2.23-windows-x64.zip`, sha256
+  `82e791475779a7342424a480bdde9a20b43710da9264c60346125aa16cd910cb`),
+  distributed unmodified and invoked as a separate process with
+  `--background --factory-startup --disable-autoexec`. It is never linked into
+  the application. Ships at `utility/blender/` and is used by the model-import
+  pipeline for bone-heat skin weighting, Collada normalization and the shaded
+  fit-review renders. Debug symbols, UI translations and the Cycles renderer's
+  script tree are deleted from the shipped copy; no file is patched. Full
+  license texts ship beside the binary: `utility/blender/copyright.txt`,
+  `utility/blender/license/spdx/GPL-2.0-or-later.txt`,
+  `utility/blender/license/spdx/GPL-3.0-or-later.txt`, and
+  `utility/blender/license/license.md` for Blender's own bundled dependencies.
+
+### FFmpeg
+- **License**: GPL-3.0-or-later. FFmpeg is configured with `--enable-gpl
+  --enable-version3` and statically linked with GPL libraries — x264, x265,
+  Xvid, davs2, xavs2, vid.stab, Rubber Band, libdvdread, libdvdnav, libdvdcss
+  and FFTW (all GPL-2.0-or-later) — and with libraries that require the
+  version 3 terms: GMP and aribb24 (LGPL-3.0-or-later) and OpenCORE AMR
+  (Apache-2.0). It is also compiled against the AviSynth+ and frei0r plugin
+  headers; those two are loaded at run time only if the user has installed
+  them, and neither ships with this application.
+- **Copyright**: Copyright (c) the FFmpeg developers and the authors of the
+  libraries above; Windows build by BtbN's FFmpeg-Builds
+- **Repository**: https://github.com/FFmpeg/FFmpeg
+- **Build recipe**: https://github.com/BtbN/FFmpeg-Builds at commit
+  `6c9aec5fc9a72ec3abedd1fa84db141fa18cf52b` (release
+  `autobuild-2026-09-30-13-08`), built with `./build.sh win64 gpl 9.0` from
+  FFmpeg commit `2a571b606854520cf89804d8030c8b328e621689` (branch
+  `release/9.0`).
+- **Source**: https://github.com/FFmpeg/FFmpeg/commit/2a571b606854520cf89804d8030c8b328e621689
+  for FFmpeg itself. The source of every library linked into the binary is
+  pinned, by upstream URL and commit, in the build recipe above
+  (`scripts.d/` at that commit), which rebuilds this exact binary.
+- **Note**: Version 9.0.2 (`ffmpeg version n9.0.2-17-g2a571b6068-20260930`),
+  the static Windows x64 GPL build
+  (`ffmpeg-n9.0.2-17-g2a571b6068-win64-gpl-9.0.zip`, sha256
+  `a0e45723c72141975f51d8666302e614711745f3102b704ca3f82c897a58d278`),
+  distributed unmodified and invoked as a separate process to encode game
+  recordings. It is never linked into the application. Ships at
+  `utility/ffmpeg/bin/ffmpeg.exe`; ffplay, ffprobe, the docs and presets are
+  deleted from the shipped copy and no file is patched. The GPL-3.0 license
+  text ships beside the binary: `utility/ffmpeg/LICENSE.txt`.
 
 ### xdelta3
 - **License**: Apache-2.0
@@ -262,7 +344,9 @@ linked into the application.
 ### MexManager / MexCLI
 - **Author**: Ploaj
 - **Repository**: https://github.com/Ploaj/MexManager
-- **Note**: No license is published by the upstream project.
+- **Note**: No license is published by the upstream project. We distribute a prebuilt build of our
+  fork, https://github.com/sc00ppp/ssbmNucleus-mex (release tag pinned in `utility/mex.manifest.json`;
+  the source is in that repository).
 
 ### MeleeMedia
 - **Author**: Ploaj
@@ -278,7 +362,7 @@ linked into the application.
   referenced by mexLib/MexManager. No published repository or license was found.
   The bundled DLL carries a reproducible local IL patch that opens source ISOs
   read-only with shared-read access; the developer tool and instructions live in
-  `utility/MexManager/tools/GCILibPatcher`.
+  `tools/GCILibPatcher` in the ssbmNucleus-mex fork repository.
 
 ## Licensing status
 

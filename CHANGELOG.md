@@ -2,6 +2,96 @@
 
 All notable changes to SSBM Nucleus are documented here.
 
+## 0.8.12 — 2026-10-17
+
+### New
+
+- **Emoji in Friends chats.** A smiley button beside Send in Global Chat, friend
+  chats and group chats opens a Discord-style picker with search, category tabs
+  and your recently used emoji. Emoji typed with Win+. or pasted work too, and a
+  message of only a few emoji shows large. A Melee tab adds every character's
+  stock icon as a custom emoji (`:fox:`), drawn from each player's own copy of
+  the game. A full lobby's room chat gets the same button.
+- **Friends is one list.** Your friends come first, then a new **Also on
+  Nucleus** section lists everyone else online, with their code, in-game status
+  and an Add button. Adding someone moves them into your sent requests, then into
+  your friends once they accept. A friend's chat opens beside the list and a full
+  lobby's room chat sits under the room, so Global Chat keeps the middle of the
+  page. The friends list stays visible while you're in a lobby.
+- **Global Chat is readable before you sign in.** Signing in with Discord is only
+  needed to post.
+- **L alternates on the character select screen.** In the CSS layout editor, give
+  a fighter a list of alternates (or add them from each fighter's row in the icon
+  list), then tap L in game to scroll through them (Luigi, Luigi & Boo, Dr.
+  Luigi...). The portrait switches right away, and the alternates need no icon of
+  their own on the grid. The idea comes from the ACE Build's L-press fighters.
+- **No music option for watching and recording replays.** The Watch popup and the
+  playlist popup (Replays and Combos tabs) have a "No music" checkbox next to
+  Widescreen. It mutes the stage and menu music; sound effects, voices and the
+  announcer stay.
+- **Falco's Spooky Phantasm side-B imports.** Its DATs import as afterimage
+  models. Installing one preserves other fighter edits, and choosing a color extra
+  or Restore Vanilla brings the original afterimage back. Imported models can be
+  renamed or deleted.
+- **Large-roster warning.** Projects with more than 63 fighter entries (including
+  hidden fighters and partners) show a Slippi desync advisory in the project, Add
+  Characters and export views, based on reported desyncs. It is a warning, not a
+  character limit, and it does not mean smaller rosters are safe.
+- **Recordings work out of the box on Windows.** ffmpeg now ships with the
+  installer. Before, recording a replay without ffmpeg on your PATH saved a huge
+  silent video.
+- **Skin Creator sorts textures** into Model, Low-poly model and Animated
+  sections, so you can tell which model each texture belongs to.
+- **The Windows installer is signed** (Ottawa Studios, LLC), so Windows no
+  longer warns that it comes from an unknown publisher.
+
+### Fixes
+
+- **Cloud sync no longer stops silently.** Signing out of Patreon, or an expired
+  link, stopped background uploads until Settings → Cloud was opened again. Sync
+  now resumes as soon as you link again, and being offline while that card is
+  open no longer turns it off. While a sync runs, the card shows "Checking what
+  your vault already has" with a count before uploads start, and says when
+  progress stops. New games upload before the slower refresh of games already
+  synced.
+- **The Friends tab no longer reloads every time you open it.** It shows what it
+  had right away and refreshes in the background, and a brief reconnect no longer
+  shows an error in Global Chat.
+- **Custom characters scanned from other builds keep their Classic intro and
+  ending.** Missing files could crash Classic for fighters such as ACE Wolf.
+  Rescanning the source build fills in older vault packages; characters already
+  installed in a project need the repaired package installed again.
+- **Skin Creator keeps full texture detail.** It loads the original pixels for
+  painting and PNG export instead of a downscaled copy, including when switching
+  between Popo and Nana.
+- **Failed replay recordings say so.** Missing audio or a failed encode is
+  reported instead of saving a silent video as a successful recording, and
+  partial MP4 files are removed.
+- **Test in Game starts much faster.** The vanilla test project is built once and
+  reused, instead of spending about 3 minutes on "Building... 6%" for every test,
+  and the progress bar shows real progress.
+- **Replay stats from rollback games** keep correct timestamps, times no longer
+  show as "0:60.0", and one unreadable replay no longer stops a scan.
+- **Duplicate and deleted costumes behave.** Costumes imported at the same time
+  keep separate identities and files, deleting an older duplicate removes its
+  stale cards, and a deleted costume no longer comes back selected.
+- **Portraits and stock icons** for costumes with paletted (CI4/CI8) textures use
+  the right colors.
+- **Music previews** regenerate outdated or incomplete audio, and changing a song
+  while a preview is open no longer fails on Windows.
+- **Removing a fighter from a project no longer deletes Captain Falcon's icon.**
+- A successful batch character install no longer shows an error.
+- A corrupt or encrypted .rar says it can't be opened instead of "could not
+  detect mod type".
+- Settings → Cloud shows a plain message when the vault is offline instead of an
+  error page.
+- Files held by antivirus or Windows indexing are retried instead of failing the
+  save or install.
+- Temporary backup and mod-export ZIPs are cleaned up after the download finishes
+  or is cancelled.
+- Every mod import goes through one hardened archive extractor, and the app's
+  local server only answers requests addressed to your own PC.
+
 ## 0.8.11 — 2026-09-28
 
 ### Fixes
