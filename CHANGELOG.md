@@ -2,6 +2,60 @@
 
 All notable changes to SSBM Nucleus are documented here.
 
+## 0.8.13
+
+### New
+
+- **Watch Lite draws every vanilla stage.** Stages come from the game's own
+  collision, moving parts included: Yoshi's Story's cloud, Fountain of Dreams'
+  platforms, Pokémon Stadium's transformations, Mute City's track, Rainbow
+  Cruise, Venom's Great Fox, Brinstar's breakable supports, Corneria's cannon,
+  Poké Floats and the rest.
+  Stages that used to be missing (Kongo Jungle, Mute City, Rainbow Cruise,
+  Brinstar Depths, Big Blue, Icicle Mountain) now show up, and every stage has
+  its real shape. The camera keeps the platforms in view, in small clip cards
+  too. When a replay doesn't record enough to place a moving part exactly,
+  Watch Lite draws the stage's base instead of guessing.
+- **Watch Lite draws shine, projectiles, items and stage objects.** Fox and
+  Falco's shine, Fire Fox and Fire Bird flames, shields tilting with the stick
+  and the respawn platform all show as they do in game. Lasers, fireballs,
+  PK Thunder, Din's Fire, arrows, needles, bombs and the rest have their real
+  shape and size, as do items and Pokémon.
+  Stage objects show as they do in game: Shy Guys, Birdo, Tingle, Onett's and
+  Mute City's cars, Banzai Bill and the Flat Zone tools.
+- **Now Playing in new projects.** New projects show the current song's name in
+  the top-left for five seconds at the start of each match. It is an ordinary
+  code in the project's code list, so you can switch it off there. Existing
+  projects are unchanged, and ACE-based builds, which have their own song
+  display, are skipped.
+
+### Fixes
+
+- **Watch Lite plays netplay replays smoothly.** Rolled-back frames are no
+  longer shown, so fighters stop jumping backwards and the clock matches the
+  real game time.
+- **Watch Lite draws fighters correctly.** Fighters no longer vanish for a
+  moment (Game & Watch standing still, entrances) or turn into a dot in
+  throws, shields, crouches, being carried or rarer moves, and a KO'd fighter
+  no longer leaves a dot at the blast zone. A fighter the game hides (in a
+  barrel, swallowed, mid-teleport) is hidden too. Fox and Falco lasers fly at
+  their real angle, including reflected and aerial shots.
+- **Replays: months load reliably.** Opening a month sometimes showed nothing,
+  and its page buttons stayed stuck, while opponents' Slippi ranks were still
+  being looked up. Rank lookups now go out one at a time, and never twice for
+  the same player.
+- **Mac: Nucleus says when macOS is blocking your ISO.** If macOS privacy
+  settings keep Nucleus out of the folder your ISO is in (Documents, Downloads,
+  Desktop or an external drive), setup now says so and where to allow it,
+  instead of reporting that no vanilla ISO was found or that it isn't vanilla.
+  The macOS permission prompt now also explains why Nucleus is asking.
+- **A rejected ISO says why.** Setup and Settings name the problem: a
+  compressed image (RVZ, GCZ, CISO), an NKit image, another region or revision
+  of Melee, a trimmed dump, or a 1.02 disc whose contents were modified or
+  scrubbed, with what to do about it.
+- **Mac builds are back.** Mac skipped 0.8.12 while Apple's notarization was
+  blocked; 0.8.13 brings the Mac up to date.
+
 ## 0.8.12 — 2026-10-17
 
 ### New
