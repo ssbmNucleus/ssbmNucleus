@@ -2,7 +2,7 @@
 
 All notable changes to SSBM Nucleus are documented here.
 
-## 0.8.13
+## 0.8.13 — 2026-10-21
 
 ### New
 
