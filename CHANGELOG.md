@@ -2,6 +2,43 @@
 
 All notable changes to SSBM Nucleus are documented here.
 
+## 0.8.14 — 2026-10-22
+
+### New
+
+- **Watch Lite shows much more of the game.** Hit sparks by element (fire, electric, slash,
+  darkness, ice) at the game's own size, the hit's shake, shield hits that tear the
+  bubble, tech rays and rings, dust from dashes, turns, jumps and landings, KO blasts at
+  the screen's edge, star and screen KOs, sword trails (Marth, Roy, Link, Young Link and
+  the Beam Sword), missed-tech bounces and shield breaks. A fighter that gets hit flashes
+  with the hit's element, and invincible fighters get a steady outline (on the respawn
+  platform and after it, on the ledge, after a wall tech).
+- **Watch Lite plays doubles and free-for-alls.** Every game with two or more players gets
+  the Lite button, including games you watched rather than played. Team games are drawn
+  in team colours and titled by team (the combo banner and timeline stay 1v1).
+- **Settings > Cloud explains itself.** The Cloud card says what the $5 tier gets you (your
+  replays on your phone), shows the phone app, and links Patreon right there. The Cloud
+  library card is shorter and easier to read. Paying for the first time turns on
+  processing and syncing new replays, unless you turned them off yourself.
+- **A cleaner codes manager.** One list of what's in the build, a search box, the Slippi
+  Dolphin codes folded into one line, and a fixed size that doesn't jump when you open a
+  category. **Now Playing** (the song name at match start) is in the code list under
+  **Quality of life**, so builds made before it existed can add it too.
+- **Watch and Watch Lite popups scale with the window.** Watch Lite's stage, side panel
+  and timeline grow together; the full Watch popup plays the game inside it, with
+  Dolphin's own windows kept behind the app until you press **Pop out window**.
+
+### Fixes
+
+- **Watch Lite items look like themselves.** Items, projectiles and Randall's cloud are
+  drawn by Watch Lite at the game's sizes. Link's bombs and boomerang, Yoshi's egg (thrown
+  and as his shield), Bowser's fire breath, Din's Fire and PK Fire no longer show as dots,
+  an exploded bomb no longer leaves one, and a held item stays in the fighter's hand until
+  it's thrown instead of floating where it was pulled.
+- **Watch Lite on Yoshi's Story.** Shy Guys that get hit show their hit spark and tumble
+  off, and fighters standing on Randall no longer sink into the cloud.
+- **Test in Game's Open Dolphin window** comes to the front reliably.
+
 ## 0.8.13 — 2026-10-21
 
 ### New
