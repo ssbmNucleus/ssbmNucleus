@@ -2,6 +2,23 @@
 
 All notable changes to SSBM Nucleus are documented here.
 
+## 0.8.15 — 2026-10-23
+
+### Security
+
+- **Safer mod imports.** The bundled Brotli decoder is updated: a crafted .7z mod could
+  corrupt the app's memory while it was being imported (CVE-2026-111497).
+- **Compromised certificates are no longer trusted.** The app drops the eMudhra/emSign
+  certificate authorities whose keys were exposed this week, so the connections it makes
+  for downloads and cloud features can't be intercepted with certificates from them.
+- **Image library update.** Pillow 13 fixes two image-file vulnerabilities
+  (CVE-2026-112900, CVE-2026-112398). Neither was reachable in a standard install, but
+  both are patched.
+- **Patched Python runtime.** The app's bundled Python is now 3.13.17 on Windows and
+  3.12.15 on macOS and Linux. Among other fixes, a crafted zip mod can no longer exhaust
+  memory while it is unpacked (CVE-2026-15310), and a TLS crash is fixed (CVE-2026-19445).
+- **Electron 44.9.3.** The app shell picks up Electron's latest security fixes.
+
 ## 0.8.14 — 2026-10-22
 
 ### New
