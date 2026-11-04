@@ -2,6 +2,146 @@
 
 All notable changes to SSBM Nucleus are documented here.
 
+## 0.8.16 — 2026-11-04
+
+- Friends has been removed. The Friends tab, messages, lobbies and the "open Friends when Slippi
+  opens" startup option are gone; if you had that option on, Nucleus no longer starts with
+  Windows. Discord sign-in stays in Settings for publishing and bug reports. The share button
+  now just copies the link.
+
+### Security
+
+- Electron 44.10.2 (Node 24.22.2 and the latest Chromium fixes).
+- Nucleus no longer reads file types from `mime.types` files on Windows, which any
+  user on the PC could create (CVE-2024-3220).
+- Updated filelock, which the bundled libraries use for lock files.
+
+### Changes and fixes
+
+- Fixed: removing a custom fighter no longer unpairs or re-pairs the fighters
+  around it in the roster (Any Climbers pairs and other sub-fighters).
+
+- Fixed: after a custom fighter is removed, Nucleus no longer sees leftover copies of
+  the roster's last fighters (in Any Climbers, the CSS icon check and Randall's project
+  tools).
+
+- Fixed: interrupted texture matching restores Dolphin’s previous texture-dumping
+  setting and removes unfinished copies on restart.
+
+- Fixed: bulk stage renders recover progress and previews after reconnecting, and
+  interrupted renders clean up on restart. Stop keeps the previews already drawn.
+
+- Fixed: bulk portrait retakes recover progress and previews after a connection drop,
+  and interrupted retakes clean up on restart.
+
+- Fixed: built-in character setup reconnects to its progress and reports interrupted
+  builds after restart, with temporary recolors cleaned up.
+
+- Fixed: cancelled or interrupted ISO scans clean up their temporary files, and the
+  next start reports an interrupted scan.
+
+- Fixed: after in-game tests or screenshot captures, loading or reconnecting the window
+  no longer downloads every screenshot they took again.
+
+- Fixed: Settings → Cloud now shows what the cloud sync and the automatic processing are
+  really doing. A sync that fails or stops making progress says so instead of reading
+  "Syncing…" until a restart, and failed uploads stay listed after the combo details are
+  sent. Signing out of Patreon while Nucleus can't reach its backend now finishes the next
+  time Nucleus opens, linking a different Patreon account clears the previous account's
+  phones and pairing code, and replays whose file changed are uploaded again. Replays,
+  Combos and the Stats panel no longer stay on "scanning" until a restart when a scan
+  fails; they show what went wrong.
+
+- Fixed: first-time setup keeps going if you leave the setup screen while your ISO is
+  being checked, and only shows "Get Started" once setup has really finished. If Nucleus
+  closes during setup or an in-game test, the next start cleans up and tells you once.
+  In-game screenshot captures no longer get stuck after a connection drop or a failed
+  start, and a test's Dolphin window can no longer stay open after its test ends.
+
+- Fixed: if Nucleus stopped unexpectedly during an export, a patch or first-time setup,
+  the tool doing the work kept running in the background and could still be writing files
+  after Nucleus restarted. It now stops with Nucleus.
+
+- Exports, patch builds and bundle installs now show a failure instead of hanging, and a
+  failed bundle reinstall no longer breaks the copy you already had. A bundle install that
+  could not turn on HD textures now says so, and failed exports and bundles no longer
+  leave temporary files behind. If Save stopped partway, saving the same ISO again now
+  works.
+
+- Watch with mods now picks up a watch that is already running when you reopen its popup,
+  and Stop only stops the watch it was opened for. Recording settings (frame and audio
+  dumping, aspect ratio, Gecko codes) are put back even if Nucleus closed mid-recording,
+  and a Dolphin that crashes mid-watch now shows an error instead of looking finished.
+  Watch Lite now draws a character downloaded after it first looked, and one failed
+  request no longer leaves every later clip as dots.
+
+- Fixed: after a costume check in game, Nucleus could mark the Dolphin slot free a moment
+  before the check had really finished with it. Each in-game test also leaked a small
+  Windows handle until Nucleus closed.
+
+- Linux: after an update relaunched Nucleus, a data move you had scheduled was skipped
+  and moving data stayed unavailable until the next restart; it now runs. When Nucleus
+  cannot replace itself (not started from an AppImage), the downloaded update it tells
+  you to install by hand is now kept instead of deleted.
+
+- Fixed: a 3D viewer whose connection dropped (in Skin Lab, the model lab or a stage
+  preview) could keep showing its last picture while Nucleus thought it was fine; it
+  now reopens. The animation timeline also stops counting when its viewer disconnects.
+
+- Fixed: a Vault merge that failed partway (a full disk, say) left some of its files
+  behind, so the next merge skipped those items as already there. Clear Storage now waits
+  until a running restore finishes, and a quick backup's success message no longer wipes
+  out a later error.
+
+- Discord sign-in is steadier: a second Sign in click, or a slow answer from an earlier
+  try, can no longer sign you in as the wrong account or mark the new try failed, and a
+  dropped connection while you sign in no longer hides the Discord row.
+
+- Leaving Settings while an update downloads no longer loses track of it: coming back
+  shows the download still running instead of an Update button that fails.
+
+- Automatic replay processing and cloud upload now start even when Nucleus could not
+  read their settings right at launch; before, they stayed off until the next restart.
+
+- Signing out of Discord in Settings now signs the Upload tab out at once. If the
+  Discord sign-in cannot start because another program is using its port, Settings
+  says so instead of waiting forever.
+
+- Fixed: Test in game could report Dolphin as busy until restart when Windows
+  briefly held the lock file as the previous test ended.
+
+- Fixed: after a failed first-run setup, Try Again with the Melee ISO Nucleus found
+  on its own asked you to pick an ISO instead of starting setup again.
+
+- If Nucleus closes in the middle of a Vault restore, the next start cleans up after it:
+  the uploaded backup and the half-built copy are removed, your old vault is put back if
+  the new one had not gone live yet, and a notice says what happened.
+
+- Switching projects can no longer send an edit meant for the old project into the new
+  one: a request made for a project that is no longer open is refused, and the screen
+  reloads for the new project. A project that fails to open now leaves the old one open,
+  and Close and Switch Project wait while costume moves are still saving.
+
+- If Nucleus's backend (the part that does the work) stops while the app is open, the
+  window now says so and offers Restart. Before, every screen failed or kept loading
+  with no explanation.
+
+- **Any Climbers:** a pair now shows its own stock icon in a match, and the icon follows
+  D-pad switching. Pairs used to show the stock of the character the leader was copied
+  from. Both fighters also start apart, as the Ice Climbers do, at the start of a match
+  and on the respawn platforms, and Test In Game builds now include what makes a partner
+  follow. Rebuild your ISO to apply these.
+
+- **Any Climbers:** adding a character no longer moves a pair onto the wrong partner, and
+  the partner of a pair can now be a character that was itself built as a pair.
+
+- Removing costumes now keeps a character's team colours on the right costumes. They used
+  to keep pointing at the old slots, which could show the wrong art in team battles.
+
+- Fixed: watching a playlist (Watch 25 combos, or several games from Replays) shrank
+  Dolphin to a dot in the corner of the popup since 0.8.14. The playlist popup now shows
+  the game the way Watch replay does, sized to the window, with Pop out and Stop.
+
 ## 0.8.15 — 2026-10-23
 
 ### Security

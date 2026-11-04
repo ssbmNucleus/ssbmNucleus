@@ -39,16 +39,6 @@ This project uses the following open source software:
 - **Copyright**: Copyright (c) 2009 Kazuhiko Arase
 - **Repository**: https://github.com/kazuhikoarase/qrcode-generator
 
-### unicode-emoji-json (emoji names and groups in the Friends emoji picker)
-- **License**: MIT
-- **Copyright**: Copyright (c) 2019 Mu-An Chiou
-- **Repository**: https://github.com/muan/unicode-emoji-json
-
-### emojilib (emoji search keywords in the Friends emoji picker)
-- **License**: MIT
-- **Copyright**: Copyright (c) 2014 Mu-An Chiou
-- **Repository**: https://github.com/muan/emojilib
-
 ## Python Dependencies
 
 ### Flask
@@ -97,30 +87,6 @@ This project uses the following open source software:
 - **Repository**: https://github.com/markokr/rarfile
 - **Note**: Pure-Python driver that invokes the bundled UnRAR binary; it contains
   no RAR decoder of its own.
-
-### trimesh
-- **License**: MIT
-- **Copyright**: Copyright (c) 2023 Michael Dawson-Haggerty
-- **Repository**: https://github.com/mikedh/trimesh
-
-### pyfqmr
-- **License**: MIT
-- **Copyright**: Copyright (c) 2020 Kramer84
-- **Repository**: https://github.com/Kramer84/pyfqmr-Fast-Quadric-Mesh-Reduction
-
-### windows-capture
-- **License**: MIT
-- **Copyright**: Copyright (c) 2023 NiiightmareXD
-- **Repository**: https://github.com/NiiightmareXD/windows-capture
-
-### OpenCV (opencv-python)
-- **License**: Apache-2.0 (the OpenCV library); MIT (the opencv-python packaging)
-- **Copyright**: OpenCV contributors; Copyright (c) Olli-Pekka Heinisuo (packaging)
-- **Repository**: https://github.com/opencv/opencv-python
-- **Note**: Bundled in the Windows build because windows-capture imports it.
-  The opencv-python wheel also redistributes FFmpeg (LGPL-2.1) as a separate,
-  unmodified DLL (`opencv_videoio_ffmpeg*.dll`); the full license texts are
-  in that project's `LICENSE-3RD-PARTY.txt`.
 
 ## .NET / C# Dependencies
 
@@ -228,20 +194,34 @@ linked into the application.
 - **Copyright**: Copyright (c) Blender Foundation and the Blender Developers
 - **Repository**: https://projects.blender.org/blender/blender
 - **Source**: https://download.blender.org/source/ — the corresponding source for
-  this exact release is `blender-4.2.23.tar.xz` in that directory.
-- **Note**: Version 4.2.23 LTS, the official portable Windows x64 build
-  (`blender-4.2.23-windows-x64.zip`, sha256
-  `82e791475779a7342424a480bdde9a20b43710da9264c60346125aa16cd910cb`),
+  this exact release is `blender-4.3.2.tar.xz` in that directory.
+- **Note**: Version 4.3.2, the official portable Windows x64 build
+  (`blender-4.3.2-windows-x64.zip`, sha256
+  `933a62a770c941e316535f893629ff106ddd2aa5a956f0081ec557439073d4f6`),
   distributed unmodified and invoked as a separate process with
   `--background --factory-startup --disable-autoexec`. It is never linked into
-  the application. Ships at `utility/blender/` and is used by the model-import
-  pipeline for bone-heat skin weighting, Collada normalization and the shaded
-  fit-review renders. Debug symbols, UI translations and the Cycles renderer's
+  the application. Ships at `utility/blender/` and is used by the model
+  importer (rigswap) for its Collada conversion. Debug symbols, UI translations and the Cycles renderer's
   script tree are deleted from the shipped copy; no file is patched. Full
   license texts ship beside the binary: `utility/blender/copyright.txt`,
   `utility/blender/license/spdx/GPL-2.0-or-later.txt`,
   `utility/blender/license/spdx/GPL-3.0-or-later.txt`, and
   `utility/blender/license/license.md` for Blender's own bundled dependencies.
+
+### The model importer's Python (rigswap's runtime)
+- **What**: the official embeddable CPython 3.13.17 for Windows x64
+  (`python-3.13.17-embed-amd64.zip` from python.org, PSF-2.0) with these
+  unmodified wheels from PyPI, each pinned by version and sha256 in
+  `utility/rigswap.requirements.txt`: bpy 5.2.2 (Blender as a Python module,
+  GPL-3.0-or-later; source at https://download.blender.org/source/), NumPy
+  2.5.3 (BSD-3-Clause), Pillow 12.3.0 (MIT-CMU), requests 2.34.2 (Apache-2.0),
+  urllib3 2.8.0 (MIT), idna 3.20 (BSD-3-Clause), certifi 2026.7.22 (MPL-2.0),
+  charset-normalizer 3.5.2 (MIT), attrs 26.1.0 (MIT), cattrs 26.2.1 (MIT),
+  Cython 3.3.0 (Apache-2.0), zstandard 0.25.0 (BSD-3-Clause) and
+  typing-extensions 4.16.0 (PSF-2.0).
+- **Note**: Ships at `utility/rigswap/python/` and runs only as the model
+  importer's own process, started by the app. Each package's license text
+  ships inside its `*.dist-info` folder.
 
 ### FFmpeg
 - **License**: GPL-3.0-or-later. FFmpeg is configured with `--enable-gpl
