@@ -66,11 +66,6 @@ This project uses the following open source software:
 - **Copyright**: Copyright (c) 2005-2023, NumPy Developers
 - **Repository**: https://github.com/numpy/numpy
 
-### SciPy
-- **License**: BSD-3-Clause
-- **Copyright**: Copyright (c) 2001-2002 Enthought, Inc. 2003, SciPy Developers
-- **Repository**: https://github.com/scipy/scipy
-
 ### Pillow (PIL Fork)
 - **License**: HPND (Historical Permission Notice and Disclaimer)
 - **Copyright**: Copyright © 1997-2011 by Secret Labs AB, Copyright © 1995-2011 by Fredrik Lundh

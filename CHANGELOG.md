@@ -2,6 +2,55 @@
 
 All notable changes to SSBM Nucleus are documented here.
 
+## 0.8.17 — 2026-11-09
+
+- Fixed: a Fox or Falco gun model made from skinned meshes crashed the game as soon as
+  the fighter used it (Falco's neutral-B froze after the audience gasp). Gun models now
+  keep what they need to draw. Uploading a costume file such as `PlFcNr.dat` as a gun now
+  says to upload `PlFc.dat`, which carries the gun, instead of failing with no message.
+  And the × on an installed gun puts the vanilla blaster back from your vanilla ISO.
+
+- Fixed: adding a second gun model to the vault no longer overwrites the first one's
+  textures. Each gun now keeps its files in a folder of its own, and deleting a gun removes
+  them. A gun added before this update keeps working as it is.
+
+- Fixed: Tracker no longer counts a connect code as yours for good just because it was once
+  the Slippi login on your computer, for example when a friend signed in to play. Only your
+  current login is locked on the Replays page. An earlier login has an × like any other
+  code; once removed it stays removed unless it becomes the login again. A code removed or
+  added on the desktop now reaches your phone too. Before, a cloud sync put a removed code
+  back and dropped a code you had added.
+
+- Fixed: a long error message no longer pushes its OK button off the screen. The message
+  scrolls inside the box, and Escape closes any notice or confirmation. Before, a long error
+  could leave no way out but restarting Nucleus.
+
+- Fixed: adding characters to a build you opened from its own folder (such as the ACE
+  build, whose project file is `ace.mexproj`) failed with "No such file or directory:
+  project.mexproj".
+
+- Fixed: reordering a fighter's costumes keeps each team colour (red, blue, green) on the
+  costume it named. Before, dragging a costume to a new slot could make it the fighter's
+  team-battle costume in place of the one set for that team.
+
+- The installer carries about 120 fewer program files. SciPy is gone (the few image steps
+  that used it are now built in), and of the encryption library 7z import needs, only the
+  four files it uses are kept. Fewer files is also fewer that Windows' Smart App Control
+  has to vouch for.
+
+- Windows: when Smart App Control blocks a file that comes with Nucleus, Nucleus now says
+  so and names the file, instead of showing Windows error 0x800711C7. This is what made
+  project creation fail for some Windows 11 users.
+
+- Linux and macOS: Stage Creator now works. The 3D viewer that comes with Nucleus there
+  draws stages as well as characters, so Create New Mod and Edit Textures on a stage's page
+  open the stage with its animations and lights, as on Windows. Before, it failed with a
+  message asking you to update Nucleus.
+
+- Closing the window now quits Nucleus. The "keep running in the background" option, its tray
+  icon, the close prompt and the Closing setting are gone; they only existed so Friends could stay
+  online, and Friends was removed.
+
 ## 0.8.16 — 2026-11-04
 
 - Friends has been removed. The Friends tab, messages, lobbies and the "open Friends when Slippi
