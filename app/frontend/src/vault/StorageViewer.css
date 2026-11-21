@@ -1,0 +1,347 @@
+/* ============================================
+   STORAGE VIEWER - Character & Stage Gallery
+   ============================================ */
+
+/* ─────────────────────────────────────────
+   MAIN CONTAINER
+   ───────────────────────────────────────── */
+
+.storage-viewer {
+  width: min(100%, var(--page-shell-max-width));
+  margin: 0 auto;
+  min-height: 100%;
+  padding: var(--page-block-padding) var(--page-inline-padding) calc(var(--page-block-padding) + var(--space-4));
+  animation: fadeIn var(--duration-normal) var(--ease-out);
+}
+
+/* ─────────────────────────────────────────
+   MODE HOME CENTERING
+   The four mode homes (Characters / Stages /
+   Menus / Patches) center their grid in the
+   leftover space so they all sit on the same
+   line when switching modes.
+   ───────────────────────────────────────── */
+
+.storage-viewer--home {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.storage-viewer--home > .grid-wrapper,
+.storage-viewer--home > .patches-section {
+  flex: 1 0 auto;
+  justify-content: center;
+  /* Bias the centering upward a touch - dead center reads too low */
+  padding-bottom: var(--space-16);
+}
+
+.storage-viewer--home > .grid-wrapper {
+  padding-top: 0;
+}
+
+.storage-viewer--home > .patches-section {
+  display: flex;
+  flex-direction: column;
+}
+
+/* The Stages bulk-capture tool floats up beside the mode switcher so it
+   doesn't push the stage honeycomb off the shared center line. */
+.storage-viewer--home .bulk-capture-row {
+  position: absolute;
+  top: var(--page-block-padding);
+  right: var(--page-inline-padding);
+}
+
+/* ─────────────────────────────────────────
+   MODE SWITCHER (Characters / Stages)
+   ───────────────────────────────────────── */
+
+.mode-switcher {
+  display: flex;
+  gap: var(--space-1);
+  justify-content: center;
+  margin-bottom: var(--space-8);
+  padding: var(--space-1);
+  background: var(--color-bg-deep);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-subtle);
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mode-btn {
+  background: transparent;
+  color: var(--color-text-tertiary);
+  border: none;
+  padding: var(--space-3) var(--space-8);
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: var(--font-semibold);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.mode-btn:hover:not(.active) {
+  color: var(--color-text-primary);
+  background: var(--color-bg-surface);
+}
+
+.mode-btn:active:not(.active) {
+  transform: scale(0.98);
+}
+
+.mode-btn.active {
+  background: var(--gradient-gold);
+  color: var(--color-bg-deep);
+  box-shadow:
+    var(--glow-gold-sm),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+
+/* ─────────────────────────────────────────
+   STATS DISPLAY
+   ───────────────────────────────────────── */
+
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: var(--font-extrabold);
+  background: var(--gradient-cyan);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-2);
+  line-height: var(--leading-none);
+}
+
+.stat-label {
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  font-weight: var(--font-semibold);
+}
+
+/* ─────────────────────────────────────────
+   IMPORT ACTIONS
+   ───────────────────────────────────────── */
+
+.intake-import-btn {
+  background: var(--gradient-cyan);
+  color: var(--color-bg-deep);
+  border: none;
+  padding: var(--space-3) var(--space-8);
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: var(--font-bold);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    filter var(--transition-fast);
+  box-shadow: var(--shadow-md), 0 0 15px rgba(125, 211, 232, 0.2);
+}
+
+.intake-import-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg), 0 0 25px rgba(125, 211, 232, 0.4);
+  filter: brightness(1.1);
+}
+
+.intake-import-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.intake-import-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.3);
+}
+
+.import-message {
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  text-align: center;
+  animation: slideUp var(--duration-normal) var(--ease-out);
+}
+
+.import-message.success {
+  background: var(--color-success-muted);
+  color: var(--color-success);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.import-message.error {
+  background: var(--color-danger-muted);
+  color: var(--color-danger);
+  border: 1px solid rgba(255, 71, 87, 0.3);
+}
+
+/* ─────────────────────────────────────────
+   HOME GRID WRAPPER
+   ───────────────────────────────────────── */
+
+.grid-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: var(--panel-block-padding) 0 0;
+}
+
+.context-menu {
+  position: fixed;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-cyan);
+  border-radius: var(--radius-md);
+  padding: var(--space-1);
+  z-index: var(--z-dropdown);
+  box-shadow: var(--shadow-lg), var(--glow-cyan-sm);
+  min-width: 150px;
+  animation: scaleIn var(--duration-fast) var(--ease-out);
+}
+
+.context-menu button {
+  width: 100%;
+  padding: var(--space-2) var(--space-4);
+  background: transparent;
+  border: none;
+  color: var(--color-text-primary);
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+}
+
+.context-menu button:hover {
+  background: var(--color-cyan-muted);
+  color: var(--color-cyan);
+}
+
+/* ─────────────────────────────────────────
+   RESPONSIVE BREAKPOINTS
+   ───────────────────────────────────────── */
+
+/* Large screens (1200p+) */
+
+/* Responsive overrides (shredded from the StorageViewer.css breakpoint blocks 2026-08-22) */
+@media (max-width: 968px) {
+  .storage-viewer {
+    padding: var(--space-4);
+    padding-bottom: calc(var(--space-4) + var(--space-2));
+  }
+
+  .grid-wrapper {
+    padding-top: var(--space-3);
+  }
+
+  .intake-import-btn {
+    font-size: var(--text-sm);
+    padding: var(--space-3) var(--space-6);
+  }
+
+  .mode-btn {
+    padding: var(--space-2) var(--space-6);
+    font-size: var(--text-sm);
+  }
+}
+
+@media (max-width: 640px) {
+  .grid-wrapper {
+    padding-top: var(--space-2);
+  }
+
+  .stat-value {
+    font-size: var(--text-3xl);
+  }
+
+  .mode-switcher {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .mode-btn {
+    flex: 1;
+    padding: var(--space-2) var(--space-3);
+  }
+}
+
+/* ─────────────────────────────────────────
+   SKELETON LOADING
+   ───────────────────────────────────────── */
+
+.skeleton-card {
+  pointer-events: none;
+}
+
+.skeleton-card .skeleton-image {
+  width: 100%;
+  height: 180px;
+  border-radius: var(--radius-md);
+}
+
+.skeleton-card .skeleton-text {
+  height: 16px;
+  border-radius: var(--radius-sm);
+}
+
+/* ─────────────────────────────────────────
+   PATCHES SECTION
+   ───────────────────────────────────────── */
+
+/* Edit Textures button in edit modal */
+.edit-modal-skincreator-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  margin-top: var(--space-2);
+  background: var(--color-accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.edit-modal-skincreator-btn:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+}
+
+.edit-modal-skincreator-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Menus vault — shared view styles
+   The menus section (icon grid / backgrounds / doors / pause) reuses the
+   characters/stages design language: elevated cards, subtle borders, token
+   spacing. Nothing here should hardcode colors or pixel margins.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Disabled state for the floating import button */
+.intake-import-btn.disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}

@@ -1,0 +1,72 @@
+/* Credits modal — follows the BuildInfoModal overlay conventions. */
+/* The overlay/card/title/footer chrome lives in shared/CreditsModalChrome.css. */
+
+/* ── body (scrolls; the modal itself does not) ── */
+
+.credits-body {
+  flex: 1;
+  min-height: 240px;
+  overflow-y: auto;
+  padding-right: var(--space-2);
+}
+
+.credits-author {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.credits-author-label {
+  color: var(--color-text-tertiary);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.credits-author-name {
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+}
+
+.credits-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.credits-entry {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.credits-name {
+  align-self: flex-start;
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--color-accent);
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  text-align: left;
+}
+
+.credits-name:hover {
+  text-decoration: underline;
+  filter: brightness(1.15);
+}
+
+.credits-work {
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+}

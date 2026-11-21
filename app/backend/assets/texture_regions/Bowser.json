@@ -1,0 +1,24 @@
+{
+  "character": "Bowser",
+  "basis": {"costumeCode": "PlKpNr", "textureCount": 50},
+  "regions": {
+    "skin": [3, 4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 20, 27, 33, 36, 37, 38, 41, 43],
+    "shell": [1, 10, 21, 29, 34, 42],
+    "fur": [18, 23, 24, 25, 31],
+    "armor": [0, 48, 49],
+    "eyes": [17],
+    "face_detail": [28]
+  },
+  "protected": [17, 28],
+  "liveHints": [],
+  "maskHints": {},
+  "notes": {
+    "skin": "yellow-gold body scales, cream belly plates (6), face (8); 27/36/37/38/41/43 hidden low-poly",
+    "shell": "green spiked shell (1 = main, huge back coverage) + green head (21/29); 34/42 hidden low-poly",
+    "fur": "orange-red mane + eyebrows; 23/24 hidden low-poly",
+    "armor": "white spikes/horns/claws sheet (0) + black spiked armbands/collar (48/49)",
+    "17": "eye (green lid + red iris) - protected",
+    "28": "small face detail (88x88) - protected",
+    "unmapped": "2/9/19/22/26/30/32/35/39/40/44/45/46/47 gray shading overlays or unused - leave untouched"
+  }
+}

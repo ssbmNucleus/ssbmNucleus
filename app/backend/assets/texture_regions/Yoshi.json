@@ -1,0 +1,24 @@
+{
+  "character": "Yoshi",
+  "basis": {"costumeCode": "PlYsNr", "textureCount": 19},
+  "regions": {
+    "skin": [0, 8, 9, 11, 14],
+    "belly": [1, 10, 13],
+    "shell": [2, 5, 6, 7],
+    "armor": [3, 4],
+    "eyes": [18],
+    "face_detail": [12]
+  },
+  "protected": [12, 18],
+  "liveHints": [],
+  "maskHints": {},
+  "notes": {
+    "skin": "green body (0 = main, huge), legs/tail/arms (8/9/11/14)",
+    "belly": "white belly + cheeks (1/10/13)",
+    "shell": "red shell (2) + white ribbed rim (6) + red spine crest (5/7)",
+    "armor": "orange-brown boots (3/4)",
+    "eyes": "18 - protected",
+    "12": "nose/snout ball - protected from composite",
+    "unmapped": "15/16/17 are egg prop textures - leave untouched"
+  }
+}

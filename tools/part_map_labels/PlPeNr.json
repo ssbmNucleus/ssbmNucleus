@@ -1,0 +1,75 @@
+{
+ "character": "Peach",
+ "source": "PlPeNr",
+ "verified": true,
+ "notes": "eyes (7 and 12 = the two eyes; 48-52 are 7's blink frames) cover the upper face incl. brows and surrounding skin. upper arms = 18 + 21: BOTH paint the same bare band between puff sleeve and glove (layered material), so recolour them together. skin = 8 lower face, 9 neck, 10 ear, 23 legs (legs 23 and shoes 24 are under the skirt: verified only from a low camera looking up). crown gems: 5 front, 6 side gems. 26 = earrings; 37 brooch frame, 36 brooch gem, 38 finger ring. Unlabelled: 53-58 (unmapped eye frames, not linked as matanim variants; never render in probes), 11 (open-mouth texture, hidden in idle), 27 (low-poly face), and 22, 25, 28, 29, 30, 34, 35, 39-47 - none paints anything in front, back or from-below probes (LOD / alt-skirt / item textures).",
+ "groups": {
+  "dress": [
+   0,
+   3,
+   31,
+   33
+  ],
+  "collar": [
+   1
+  ],
+  "waist trim": [
+   2
+  ],
+  "puff sleeves": [
+   20
+  ],
+  "upper arms": [
+   18,
+   21
+  ],
+  "gloves": [
+   19,
+   32
+  ],
+  "brooch": [
+   37
+  ],
+  "brooch gem": [
+   36
+  ],
+  "ring": [
+   38
+  ],
+  "crown": [
+   4
+  ],
+  "skin": [
+   8,
+   9,
+   10,
+   23
+  ],
+  "eyes": [
+   7,
+   12,
+   48,
+   49,
+   50,
+   51,
+   52
+  ],
+  "hair": [
+   13,
+   14,
+   15,
+   16,
+   17
+  ],
+  "shoes": [
+   24
+  ],
+  "crown gems": [
+   5,
+   6
+  ],
+  "earrings": [
+   26
+  ]
+ }
+}

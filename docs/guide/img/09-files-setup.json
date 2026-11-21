@@ -1,0 +1,11 @@
+{
+  "viewport": {
+    "w": 1601,
+    "h": 901,
+    "dpr": 2
+  },
+  "marks": [],
+  "crop": null,
+  "captured": "2026-09-08",
+  "source": "capture-settings.mjs; real isolated app, signed out"
+}

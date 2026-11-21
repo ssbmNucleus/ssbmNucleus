@@ -1,0 +1,75 @@
+<!-- Declared in the document, not just the HTTP header: a share artifact is
+     opened from Files, a chat app, or file:// where there is no header at all,
+     and the parser would otherwise fall back to windows-1252 and mangle every
+     ·, —, and … in the page. -->
+<meta charset="utf-8">
+<title>Nucleus share</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#06150c">
+<style>
+  * { box-sizing: border-box; margin: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { background: #06150c; height: 100%; }
+  body {
+    color: #f5f5f5; display: flex; flex-direction: column;
+    font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+  }
+  header {
+    padding: calc(10px + env(safe-area-inset-top, 0px)) 14px 10px;
+    border-bottom: 1px solid #203c2a;
+  }
+  #title { font-size: 15px; font-weight: 700; }
+  #subtitle { font-size: 11px; color: #87958c; margin-top: 2px; }
+  #stage { flex: 1 1 auto; min-height: 0; width: 100%; background: #0a0c12; }
+  .transport {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+  .transport input[type="range"] {
+    flex: 1 1 auto; min-width: 0; height: 36px;
+    -webkit-appearance: none; appearance: none; background: transparent;
+  }
+  .transport input[type="range"]::-webkit-slider-runnable-track {
+    height: 5px; border-radius: 3px;
+    background: linear-gradient(to right, #38e07c var(--p, 0%), #2b4d38 var(--p, 0%));
+  }
+  .transport input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 17px; height: 17px; margin-top: -6px;
+    border-radius: 99px; background: #fff; border: none;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, .55);
+  }
+  .transport input[type="range"]::-moz-range-track {
+    height: 5px; border-radius: 3px; background: #2b4d38;
+  }
+  .transport input[type="range"]::-moz-range-progress {
+    height: 5px; border-radius: 3px; background: #38e07c;
+  }
+  .transport input[type="range"]::-moz-range-thumb {
+    width: 17px; height: 17px; border-radius: 99px; background: #fff;
+    border: none; box-shadow: 0 1px 5px rgba(0, 0, 0, .55);
+  }
+  #play {
+    min-width: 52px; min-height: 40px; cursor: pointer; color: #38e07c;
+    background: #12271a; border: 1px solid #203c2a; border-radius: 12px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  #play svg { display: block; }
+  #pstatus { font-family: ui-monospace, monospace; font-size: 11px; color: #87958c; padding: 0 14px 6px; }
+  footer {
+    font-size: 10px; color: #5c6b62; text-align: center;
+    padding: 0 0 calc(8px + env(safe-area-inset-bottom, 0px));
+  }
+  footer a { color: #38e07c; text-decoration: none; }
+</style>
+<header>
+  <div id="title">Shared replay</div>
+  <div id="subtitle"></div>
+</header>
+<canvas id="stage"></canvas>
+<div class="transport">
+  <button id="play" aria-label="Play"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.54.84l10-6.5a1 1 0 0 0 0-1.68l-10-6.5A1 1 0 0 0 8 5.5z"/></svg></button>
+  <input id="seek" type="range" min="0" max="1" value="0" step="1" aria-label="Scrub">
+</div>
+<p id="pstatus">opening…</p>
+<footer>shared from <a href="https://ssbmnucleus.net">SSBM Nucleus</a></footer>
+<script>window.__SHARE_B64 = "__SHARE_B64__";</script>
+<script>__SHARE_RUNTIME__</script>

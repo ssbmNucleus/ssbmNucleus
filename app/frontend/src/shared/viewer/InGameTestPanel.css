@@ -1,0 +1,46 @@
+/* In-game test: centred while building, one compact row + full-size embed once
+   Dolphin is up. Used inside the edit page overlay (fill) and the custom views. */
+.ingame-running {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  text-align: center;
+}
+
+.ingame-running--embed { justify-content: flex-start; gap: var(--space-2); }
+
+.ingame-row {
+  flex: 0 0 auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  min-height: 34px;
+}
+
+.ingame-heading {
+  font-family: var(--font-display);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.ingame-heading--big { font-size: var(--text-lg); margin-top: var(--space-2); }
+
+.ingame-status {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  min-height: 1em;
+}
+
+.ingame-stop { flex: 0 0 auto; }
+
+.ingame-error { margin: 0; color: var(--color-error, #e74c3c); font-size: var(--text-sm); }

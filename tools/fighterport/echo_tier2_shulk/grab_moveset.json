@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "skeleton": "model/body/c00/model.nusktb",
+  "landmarks": "ultimate_landmarks.json",
+  "allow_unbound": [
+    "S_Hip_hit"
+  ],
+  "attachments": [
+    {
+      "source": "SwordR",
+      "source_anchor": "HandR",
+      "target": "JOBJ_75",
+      "target_anchor": "JOBJ_73"
+    },
+    {
+      "source": "Throw",
+      "source_anchor": "Trans",
+      "target": "JOBJ_88",
+      "target_anchor": "JOBJ_3"
+    }
+  ],
+  "clips": [
+    {
+      "id": "grab",
+      "category": "grab",
+      "target_motion": "Catch",
+      "source": "motion/body/c00/e00catch.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "dashgrab",
+      "category": "grab",
+      "target_motion": "CatchDash",
+      "source": "motion/body/c00/e00catchdash.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "root_policy_note": "Remove body Trans; preserve native JOBJ_1 trajectory and Throw attachment. CatchDash action 243 must enable 0x80000000 so native dash-grab physics consumes TransN. Recompile install metadata; pre-v22 receipts omit engine_root. For an existing v25 bank use dashgrab_root.patch_dashgrab_root on a verified private Pl candidate."
+    },
+    {
+      "id": "pummel",
+      "category": "grab",
+      "target_motion": "CatchAttack",
+      "source": "motion/body/c00/e00catchattack.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "catchwait",
+      "category": "native_supplement",
+      "target_motion": "CatchWait",
+      "source": "motion/body/c00/e00catchwait.nuanmb",
+      "body_scale": "rigid",
+      "root_motion_joint": "Trans"
+    },
+    {
+      "id": "catchcut",
+      "category": "native_supplement",
+      "target_motion": "CatchCut",
+      "source": "motion/body/c00/e00catchcut.nuanmb",
+      "body_scale": "rigid",
+      "root_motion_joint": "Trans"
+    }
+  ]
+}

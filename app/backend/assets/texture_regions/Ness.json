@@ -1,0 +1,24 @@
+{
+  "character": "Ness",
+  "basis": {"costumeCode": "PlNsNr", "textureCount": 33},
+  "regions": {
+    "cloth": [0, 1, 21],
+    "hat": [2, 9],
+    "shorts": [10, 24],
+    "skin": [4, 6, 8, 11, 22, 23],
+    "fur": [5, 7],
+    "armor": [13, 15, 16, 17, 19, 25, 27, 30, 32]
+  },
+  "protected": [6, 8],
+  "liveHints": [],
+  "maskHints": {},
+  "notes": {
+    "cloth": "blue+yellow striped shirt (0 = main)",
+    "hat": "red cap (2 = main, back-heavy; 9 hidden low-poly)",
+    "shorts": "blue shorts (24 front, 10 back)",
+    "skin": "face (6/8 - painted eyes, protected), arms/legs (4/11); 22/23 hidden low-poly",
+    "fur": "dark hair (7 back-heavy, 5 front fringe)",
+    "armor": "red sneakers (15), white socks (13/16), brown backpack + straps (17/19/25/27/30/32)",
+    "unmapped": "3/12/14/18/20/26/28/29/31 shading overlays/leftovers"
+  }
+}

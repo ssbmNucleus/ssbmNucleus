@@ -1,0 +1,22 @@
+{
+  "viewport": {
+    "w": 1600,
+    "h": 900,
+    "dpr": 1
+  },
+  "marks": [
+    {
+      "kind": "ring",
+      "box": {
+        "x": 675.359375,
+        "y": 109,
+        "w": 249.265625,
+        "h": 39.203125
+      },
+      "pad": 12
+    }
+  ],
+  "crop": null,
+  "captured": "2026-09-14",
+  "source": "https://ssbmnucleus.net/download"
+}

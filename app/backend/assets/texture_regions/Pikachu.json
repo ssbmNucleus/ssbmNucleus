@@ -1,0 +1,17 @@
+{
+  "character": "Pikachu",
+  "basis": {"costumeCode": "PlPkNr", "textureCount": 10},
+  "regions": {
+    "fur": [0, 1, 2, 6, 7, 8],
+    "eyes": [4, 9],
+    "face_detail": [3, 5]
+  },
+  "protected": [3, 4, 5, 9],
+  "liveHints": [],
+  "maskHints": {},
+  "notes": {
+    "fur": "0 = 8x8 flat body yellow, 1 = brown back stripes, 2 = ear tips, 6 = body shading, 7/8 = small details",
+    "eyes": "4 front eye, 9 back/other eye - protected",
+    "face_detail": "3 = red cheeks, 5 = mouth - composite-protected, tint allowed"
+  }
+}

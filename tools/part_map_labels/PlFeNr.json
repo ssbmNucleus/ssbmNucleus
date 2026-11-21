@@ -1,0 +1,98 @@
+{
+ "character": "Roy",
+ "source": "PlFeNr",
+ "verified": true,
+ "notes": "Verified by probe (front/back plus a scratch 90-degree side view). Tunic: 11 skirt, 12 torso/back, 5 upper chest under the scarf. 10 gold front stripe = tunic trim. Collar: 7 left + 50 right neck pieces under the scarf. Sleeves: 6 dark-red short sleeves, 8 their blue cuff band. Armor: 13 chest plate, 15 lower plate, 47/58 pauldrons, 48 armor underside. 45 = the outer cape (purple on the back) AND the scarf around the neck (same texture; recolours both); 46 = cape inner lining (dark red). Belt: 3 strap, 2 lion buckle, 40/51 small belt bits (40 hanging strap, 51 buckle side). 19 headband. Hair 17/18/22. Skin: 9 arms, 21 face, 25 nose/mouth, 26 ears, 34 fingertips. Eyes 23/24 + blink frames 60-69 (each includes the eyebrow). Gloves 32 back, 33 fingers/cuff (33 is also the arm cuff band). Pants 38/39. Boots: 36 shaft, 35 top band, 30 foot, 31 buckle ring. 52 = sheathed scabbard at the left hip (sticks out forward past the right hand; the gold 'sword' visible in the pose is this scabbard). 53 = its hilt. 41-44 LOD. Unlabelled (painted, nothing changed in any view): 0/1, 14, 16, 20, 49, 57 (likely grayscale/secondary layers of 13, 15, 19, 48, 47), 4, 29 (small belt/buckle bits), 27 (open mouth), 28 (hair lock), 37 (boot bit), 54/55/56/59 (drawn-sword blade, gem, guard: the sword is not drawn in this pose). NOTE: 45 painted-flat also paints the scarf, so a 'cape' recolour changes the scarf too - this is one texture, not a mislabel.",
+ "groups": {
+  "tunic": [
+   5,
+   11,
+   12
+  ],
+  "tunic trim": [
+   10
+  ],
+  "collar": [
+   7,
+   50
+  ],
+  "sleeves": [
+   6,
+   8
+  ],
+  "armor": [
+   13,
+   15,
+   47,
+   48,
+   58
+  ],
+  "cape": [
+   45
+  ],
+  "cape lining": [
+   46
+  ],
+  "belt": [
+   2,
+   3,
+   40,
+   51
+  ],
+  "headband": [
+   19
+  ],
+  "hair": [
+   17,
+   18,
+   22
+  ],
+  "skin": [
+   9,
+   21,
+   25,
+   26,
+   34
+  ],
+  "eyes": [
+   23,
+   24,
+   60,
+   61,
+   62,
+   63,
+   64,
+   65,
+   66,
+   67,
+   68,
+   69
+  ],
+  "gloves": [
+   32,
+   33
+  ],
+  "pants": [
+   38,
+   39
+  ],
+  "boots": [
+   30,
+   31,
+   35,
+   36
+  ],
+  "scabbard": [
+   52
+  ],
+  "sword hilt": [
+   53
+  ],
+  "low detail": [
+   41,
+   42,
+   43,
+   44
+  ]
+ }
+}

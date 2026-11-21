@@ -1,0 +1,26 @@
+{
+  "character": "Roy",
+  "basis": {"costumeCode": "PlFeNr", "textureCount": 60},
+  "regions": {
+    "cape": [45, 46],
+    "cloth": [0, 5, 7, 11, 12, 13, 15, 19, 47, 48],
+    "pants": [2, 38, 39],
+    "fur": [6, 8, 17, 18, 22],
+    "skin": [9, 21, 23, 24, 25, 26, 28, 34, 35],
+    "armor": [3, 10, 32, 36, 37, 42, 43, 50, 52, 53, 54, 55, 56, 58],
+    "eyes": [33, 41, 44]
+  },
+  "protected": [33, 41, 44],
+  "liveHints": [],
+  "maskHints": {},
+  "notes": {
+    "cape": "purple outer with dragon emblem (45, dominates the back) + maroon-red inner (46, front-visible)",
+    "cloth": "blue tunic with gold filigree (13/47 = main sheets, 11 = torso)",
+    "pants": "white pants (38 = main)",
+    "fur": "red hair (18 = main, 17, 22 = back)",
+    "skin": "arms (9), face sheets (23/24 = 164x164), hands",
+    "armor": "gold scabbard (52) + buckles (53-56), sword grip (58), blue gloves+boots (36/37), headband/collar (32), leather belt (3/10)",
+    "eyes": "33 (blue eyes pair) + 41/44 low-poly - protected",
+    "unmapped": "1/14/16/20/29/30/31/40/49/51/57/59 grays/overlays"
+  }
+}

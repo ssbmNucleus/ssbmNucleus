@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Checks mexLib's single-player build guards (SinglePlayerGuard) against the
+    built mexLib.dll. Pass -p:MexBin=<dir holding mexLib.dll + HSDRaw.dll>, e.g.
+    utility/mex/win-x64 (the fetched prebuilt MexCLI). Run by
+    tests/backend/test_single_player_guard.py.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mexLib"><HintPath>$(MexBin)\mexLib.dll</HintPath></Reference>
+    <Reference Include="HSDRaw"><HintPath>$(MexBin)\HSDRaw.dll</HintPath></Reference>
+  </ItemGroup>
+</Project>

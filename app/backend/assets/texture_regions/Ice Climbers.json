@@ -1,0 +1,22 @@
+{
+  "character": "Ice Climbers",
+  "basis": {"costumeCode": "PlPpNr", "textureCount": 25},
+  "regions": {
+    "cloth": [3, 4, 8, 12, 17, 18, 20, 21],
+    "trim": [5, 7, 9, 11, 14, 15, 19],
+    "skin": [0, 13],
+    "armor": [6, 10, 16, 22, 23, 24],
+    "face_detail": [1, 2]
+  },
+  "protected": [0, 1, 2],
+  "liveHints": [],
+  "maskHints": {},
+  "notes": {
+    "cloth": "the parka: torso (3), hood back (4, huge), sleeves/panels (8/12/17/18/20)",
+    "trim": "white fur fluff on hood + cuffs + hem (grays)",
+    "skin": "0 = face sheet with painted eyes+blush (protected)",
+    "armor": "tan leather gear: mittens (6), boot soles (10), straps (16/22/23/24)",
+    "face_detail": "mouth interior (1) + lips (2) - protected",
+    "layout": "Popo and Nana share this exact 25-texture layout (colors differ)"
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "stage": "battlefield",
+  "code": "GrNBa",
+  "basis": {
+    "textureCount": 49
+  },
+  "regions": {
+    "background": [
+      0,
+      1,
+      2,
+      4
+    ],
+    "clouds": [
+      5,
+      6,
+      7
+    ],
+    "deck": [
+      12,
+      15,
+      21,
+      22,
+      23
+    ],
+    "platforms": [
+      16,
+      18,
+      20,
+      30,
+      37,
+      44
+    ],
+    "underside": [
+      24,
+      25,
+      32,
+      33,
+      39,
+      40,
+      46,
+      47
+    ],
+    "details": [
+      10,
+      11,
+      13,
+      17,
+      19,
+      26,
+      27,
+      28,
+      31,
+      34,
+      35,
+      41,
+      42,
+      45,
+      48
+    ]
+  },
+  "protected": [
+    3,
+    8,
+    9,
+    14,
+    29,
+    36,
+    43
+  ],
+  "notes": {
+    "background": "4 = the big 256x256 orange/blue nebula, 1 = aurora gradient, 2 = star sparkles",
+    "clouds": "the blue swirling cloud layer below the stage (6/7 identical pair)",
+    "deck": "purple metal main-platform top + side plates",
+    "platforms": "circuit-pattern floating platform tops/sides (4 copies)",
+    "underside": "dark etched art under the stage (I4 grayscale)",
+    "protected": "3 = star grid mask, 8 = glowing center orb, 9/14/29/36/43 = rainbow edge-light strips (tint ok, composite would smear)"
+  },
+  "materialHints": {
+    "background": {
+      "mode": "fit",
+      "quality": true
+    }
+  }
+}

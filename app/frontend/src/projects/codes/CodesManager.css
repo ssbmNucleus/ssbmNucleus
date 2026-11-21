@@ -1,0 +1,22 @@
+/* Row text of the codes manager (CodesManagerModal). Split from StorageViewer.css
+   2026-08-22; the paste-modal rules live in CodesPasteModal.css and .codes-empty /
+   .codes-summary-text (used by both) in GeckoCodes.css. 2026-10-22: one name line
+   and one readable meta line per row (creator, or the code's first description
+   line); the badges and the uppercase category titles are gone. */
+
+.codes-row-name {
+  overflow: hidden;
+  color: var(--color-text-primary);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.codes-row-meta {
+  overflow: hidden;
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

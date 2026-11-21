@@ -1,0 +1,92 @@
+{
+  "_README": [
+    "The pinned ffmpeg that ships in the Windows installer, so game recordings",
+    "(Tracker > record) come out as a compressed mp4 with sound on a PC with",
+    "nothing installed, instead of a huge silent raw AVI.",
+    "",
+    "This file is TRACKED; the unpack it describes (utility/ffmpeg/) is NOT --",
+    ".gitignore excludes it. Any build machine reproduces the unpack with:",
+    "",
+    "    python tools/build/fetch_ffmpeg.py",
+    "",
+    "which downloads `url` (BtbN's release asset), refuses anything whose",
+    "sha256 is not `sha256`, unpacks it, applies `trim`, and writes",
+    "utility/ffmpeg/.fetch-receipt.json.",
+    "",
+    "WHY A GPL BUILD: recordings encode with libx264 (backend/tracker/replays/",
+    "watch_mods.py, backend/tracker/video/combo_video/), which only GPL builds",
+    "carry. Mac and Linux do not bundle one yet -- there",
+    "backend/core/media_tools.py falls back to PATH.",
+    "",
+    "WHY BtbN: every input of this build is public and pinned by one commit of",
+    "github.com/BtbN/FFmpeg-Builds, so its complete source is available",
+    "upstream (the recipe pins each library's source and commit in scripts.d).",
+    "THIRD_PARTY_NOTICES.md links that, the same way it links Blender's source."
+  ],
+
+  "version": "9.0.2",
+  "build": "n9.0.2-17-g2a571b6068-20260930",
+  "build_id": "n9.0.2-17-g2a571b6068-btbn-6c9aec5",
+  "platform": "windows-x64",
+  "url": "https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2026-09-30-13-08/ffmpeg-n9.0.2-17-g2a571b6068-win64-gpl-9.0.zip",
+  "sha256": "a0e45723c72141975f51d8666302e614711745f3102b704ca3f82c897a58d278",
+  "checksums_url": "https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2026-09-30-13-08/checksums.sha256",
+  "archive_root": "ffmpeg-n9.0.2-17-g2a571b6068-win64-gpl-9.0",
+  "unpack_to": "utility/ffmpeg",
+  "entrypoint": "bin/ffmpeg.exe",
+
+  "license": {
+    "spdx": "GPL-3.0-or-later",
+    "holder": "the FFmpeg developers and the authors of the libraries linked into it; Windows build by BtbN's FFmpeg-Builds",
+    "license_file": "LICENSE.txt (FFmpeg's COPYING.GPLv3, which the recipe copies for gpl variants)",
+    "ffmpeg_commit": "2a571b606854520cf89804d8030c8b328e621689",
+    "ffmpeg_source": "https://github.com/FFmpeg/FFmpeg/commit/2a571b606854520cf89804d8030c8b328e621689",
+    "recipe": {
+      "repo": "https://github.com/BtbN/FFmpeg-Builds",
+      "commit": "6c9aec5fc9a72ec3abedd1fa84db141fa18cf52b",
+      "release": "autobuild-2026-09-30-13-08",
+      "published_utc": "2026-09-30T13:09:24Z",
+      "command": "./build.sh win64 gpl 9.0"
+    },
+    "toolchain": {
+      "crosstool_ng_commit": "b1a94f65c5187d99037a4e2f57aefbdf995a9677",
+      "rust": "1.98.1",
+      "rustc_commit": "48a229ceaefd4985c50990b14116b6d856af0985"
+    },
+    "source_offer": [
+      "Like Blender: the notice links the upstream source. FFmpeg at",
+      "`ffmpeg_source`; every library linked into the binary is pinned by",
+      "source URL and commit in the recipe's scripts.d at `recipe.commit`,",
+      "which rebuilds this exact binary with `recipe.command`."
+    ],
+    "notice": "THIRD_PARTY_NOTICES.md",
+    "shipped_license_texts": ["LICENSE.txt"],
+    "why_unmodified": [
+      "ffmpeg ships as an UNMODIFIED upstream binary invoked as a separate",
+      "process. Mere aggregation, same posture as the bundled Blender and wit.",
+      "Trimming below deletes whole files; it never patches a binary."
+    ]
+  },
+
+  "trim": {
+    "_README": [
+      "ffplay is a player nothing calls. Nothing calls ffprobe either: a",
+      "recording's length comes from the game or its audio dump",
+      "(tracker/replays/recording.py). Each is a ~165 MB static exe.",
+      "doc/ is HTML documentation and presets/ libvpx presets nothing uses."
+    ],
+    "files": [
+      "bin/ffplay.exe",
+      "bin/ffprobe.exe"
+    ],
+    "dirs": [
+      "doc",
+      "presets"
+    ]
+  },
+
+  "verify_after_unpack": [
+    "bin/ffmpeg.exe",
+    "LICENSE.txt"
+  ]
+}

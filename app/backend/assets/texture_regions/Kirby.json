@@ -1,0 +1,16 @@
+{
+  "character": "Kirby",
+  "basis": {"costumeCode": "PlKbNr", "textureCount": 17},
+  "regions": {
+    "fur": [0, 2],
+    "feet": [1, 3]
+  },
+  "protected": [0],
+  "liveHints": [],
+  "maskHints": {},
+  "notes": {
+    "fur": "0 = THE body+face sheet (painted eyes+blush, composite-protected; tint recolors all of Kirby and keeps the face readable), 2 = 8x8 flat body pink",
+    "feet": "1/3 = the red feet",
+    "unmapped": "4-16 are hidden swallow/ability prop textures (100t weight, water, inhale cheeks) - leave untouched"
+  }
+}

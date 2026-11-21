@@ -1,0 +1,116 @@
+{
+ "character": "Marth",
+ "source": "PlMsNr",
+ "verified": true,
+ "notes": "Verified by probe. Tunic = light-blue cloth: 7 chest, 5 short sleeves, 8 shoulders under the pauldrons, 9 high collar, 16 skirt. Tunic trim = 15 gold front stripe, 17 hanging gold sash strips. Armor = 1/2/3 dark-blue filigree chest plate + pauldrons (2 is the cream band). 47 cape outer, 49 cape inner (sheet shows it dark red), 48 = cape emblem layer drawn over the whole outer cape (flat-painting it tints the cape). 19 cape brooch. Belt: 14 strap, 10 buckle, 11/4 buckle sides. 0/12 are small leather strap bits at the right armpit (baldric). 6 fingerless gloves, 18 forearm gauntlets. Skin: 13 arms+fingers, 20 neck, 24 lower face, 22 ears. Eyes 21/25 + blink frames (each covers eye + eyebrow). Hair: 26 bangs, 27 bangs highlight layer, 28 fringe underside, 29 back hair, 30 = 29's grayscale layer (same mesh bounds; not separately visible). 31 gold choker on the collar. Tiara 57 band, 56 gem. Pants 32 legs, 33 crotch. Boots 36 shaft, 37 cuff, 34 shoe, 35/38 straps. Sword 58 blade, 54 guard, 55 grip/pommel. Scabbard 50-53 at the left hip (mostly hidden by the cape). 39-46 LOD, invisible. Unlabelled: 23 (open-mouth texture, never visible in the rest pose). NOTE: part_map_verify's new auto-centre still cropped Marth's legs; feet were checked with a scratch copy aiming the camera at y=6 (scale 0.6).",
+ "groups": {
+  "tunic": [
+   5,
+   7,
+   8,
+   9,
+   16
+  ],
+  "tunic trim": [
+   15,
+   17
+  ],
+  "armor": [
+   1,
+   2,
+   3
+  ],
+  "cape": [
+   47
+  ],
+  "cape lining": [
+   49
+  ],
+  "cape emblem": [
+   48
+  ],
+  "brooch": [
+   19
+  ],
+  "belt": [
+   4,
+   10,
+   11,
+   14
+  ],
+  "baldric": [
+   0,
+   12
+  ],
+  "gloves": [
+   6
+  ],
+  "gauntlets": [
+   18
+  ],
+  "skin": [
+   13,
+   20,
+   22,
+   24
+  ],
+  "eyes": [
+   21,
+   25,
+   59,
+   60,
+   61,
+   62,
+   63,
+   64,
+   65,
+   66
+  ],
+  "hair": [
+   26,
+   27,
+   28,
+   29,
+   30
+  ],
+  "collar trim": [
+   31
+  ],
+  "tiara": [
+   56,
+   57
+  ],
+  "pants": [
+   32,
+   33
+  ],
+  "boots": [
+   34,
+   35,
+   36,
+   37,
+   38
+  ],
+  "sword": [
+   54,
+   55,
+   58
+  ],
+  "scabbard": [
+   50,
+   51,
+   52,
+   53
+  ],
+  "low detail": [
+   39,
+   40,
+   41,
+   42,
+   43,
+   44,
+   45,
+   46
+  ]
+ }
+}

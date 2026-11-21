@@ -1,0 +1,1035 @@
+/* Custom character + custom stage detail views (top bar, CTAs, costumes, CSP/banner, info strip, audio, playlist, series, team colors, base-skin + default-pose pickers) — split from StorageViewer.css 2026-08-22 (phase 3) */
+/* Rules copied verbatim; loaded right after StorageViewer.css from StorageViewer.jsx so the cascade order is unchanged. */
+
+.custom-stage-actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+/* ─────────────────────────────────────────
+   DETAIL PAGE TOP BAR + TEST-IN-GAME CTA
+   ───────────────────────────────────────── */
+
+.detail-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.detail-top-bar .back-button {
+  margin: 0;
+}
+
+.detail-top-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.manage-poses-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-5);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  letter-spacing: 0.04em;
+  color: var(--color-cyan);
+  background: rgba(125, 211, 232, 0.08);
+  border: 1px solid var(--color-cyan);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.manage-poses-cta:hover {
+  background: rgba(125, 211, 232, 0.16);
+  box-shadow: 0 0 14px rgba(125, 211, 232, 0.25);
+}
+
+.manage-poses-cta:active {
+  transform: scale(0.98);
+}
+
+.ingame-test-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-6);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  letter-spacing: 0.04em;
+  color: var(--color-bg-deep);
+  background: linear-gradient(135deg, var(--color-cyan) 0%, #4aa8c7 100%);
+  border: 1px solid var(--color-cyan);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(125, 211, 232, 0.25);
+  transition:
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast),
+    filter var(--transition-fast);
+}
+
+.ingame-test-cta:hover {
+  box-shadow: 0 0 20px rgba(125, 211, 232, 0.45);
+  filter: brightness(1.08);
+}
+
+.ingame-test-cta:active {
+  transform: scale(0.98);
+}
+
+.ingame-test-stage {
+  margin-bottom: var(--space-4);
+  padding: var(--space-3);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+}
+
+/* ─────────────────────────────────────────
+   CUSTOM CHARACTER COSTUME GALLERY
+   ───────────────────────────────────────── */
+
+.custom-char-costumes {
+  margin-bottom: var(--space-4);
+}
+
+.custom-char-costume-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--space-3);
+}
+
+.custom-char-costume-card {
+  position: relative;   /* anchors team dots + edit button overlays */
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  text-align: center;
+}
+
+.custom-char-csp {
+  width: 100%;
+  aspect-ratio: 136 / 188;
+  object-fit: contain;
+  image-rendering: pixelated;
+  background: var(--color-bg-base);
+}
+
+.custom-char-csp-placeholder {
+  width: 100%;
+  aspect-ratio: 136 / 188;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-text-muted);
+  background: var(--color-bg-base);
+}
+
+.custom-char-costume-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2);
+}
+
+.custom-char-stock {
+  width: 24px;
+  height: 24px;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+
+.custom-char-costume-name {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.custom-char-section-title {
+  margin: 0 0 var(--space-3);
+  color: var(--color-text-primary);
+}
+
+/* ─────────────────────────────────────────
+   CUSTOM CHARACTER DETAIL — HEADER + INFO GRID
+   ───────────────────────────────────────── */
+
+.custom-char-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.custom-char-icon-wrap {
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  transition: border-color var(--transition-fast);
+}
+
+.custom-char-icon-wrap:hover {
+  border-color: var(--color-cyan);
+}
+
+.custom-char-icon {
+  display: block;
+  width: 96px;
+  height: 84px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  background: var(--color-bg-deep);
+}
+
+.custom-char-icon-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 84px;
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-text-muted);
+  background: var(--color-bg-deep);
+}
+
+.custom-char-icon-edit {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xs);
+  color: var(--color-text-primary);
+  background: rgba(0, 0, 0, 0.65);
+  border-radius: var(--radius-sm);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  pointer-events: none;
+}
+
+.custom-char-icon-wrap:hover .custom-char-icon-edit,
+.custom-char-banner-wrap:hover .custom-char-icon-edit {
+  opacity: 1;
+}
+
+.custom-char-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.custom-char-name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-xl);
+  color: var(--color-text-primary);
+}
+
+.custom-char-name-edit {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.custom-char-franchise {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+}
+
+.custom-char-fsm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  padding: 2px var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: 999px;
+  width: fit-content;
+  white-space: nowrap;
+  cursor: help;
+}
+
+.custom-char-banner-wrap {
+  position: relative;
+  flex-shrink: 0;
+  align-self: center;
+  cursor: pointer;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2);
+  background: var(--color-bg-deep);
+  transition: border-color var(--transition-fast);
+}
+
+.custom-char-banner-wrap:hover {
+  border-color: var(--color-cyan);
+}
+
+.custom-char-banner-img {
+  display: block;
+  height: 28px;
+  width: auto;
+  image-rendering: pixelated;
+}
+
+.char-info-grid,
+.char-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.char-edit-grid {
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+/* Compact read-only facts strip */
+.char-info-strip {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--space-4);
+  row-gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-4);
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.char-info-pair {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+
+.char-strip-label {
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.char-strip-value {
+  color: var(--color-text-secondary, var(--color-text-primary));
+}
+
+/* Audio preview controls */
+.char-audio-row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.char-audio-btn {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--gradient-cyan);
+  color: var(--color-bg-deep);
+  font-size: 11px;
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.char-audio-btn:hover {
+  transform: scale(1.1);
+  box-shadow: var(--glow-cyan-sm);
+}
+
+.char-audio-btn.playing {
+  box-shadow: var(--glow-cyan-sm);
+}
+
+.char-audio-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Custom stage playlist */
+.stage-playlist {
+  margin-bottom: var(--space-4);
+}
+
+.stage-playlist-tracks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  max-width: 28rem;
+}
+
+.stage-playlist-track {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  min-width: 0;
+}
+
+.stage-track-chance {
+  margin-left: auto;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.char-info-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.char-info-label {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.char-info-value {
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.char-info-toggle {
+  align-self: flex-start;
+  padding: 2px 10px;
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-full, 999px);
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.char-info-toggle.on {
+  color: var(--color-cyan);
+  border-color: var(--color-cyan);
+}
+
+.char-info-toggle:hover {
+  border-color: var(--color-cyan);
+}
+
+.char-info-banner {
+  cursor: pointer;
+}
+
+.char-info-banner img {
+  height: 24px;
+  width: auto;
+  image-rendering: pixelated;
+}
+
+.custom-char-costume-name.editable {
+  cursor: pointer;
+}
+
+.custom-char-costume-name.editable:hover {
+  color: var(--color-cyan);
+}
+
+.costume-name-input {
+  width: 100%;
+  min-width: 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-primary);
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-cyan);
+  border-radius: var(--radius-sm);
+  padding: 2px 4px;
+}
+
+.custom-char-section-hint {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+}
+
+/* Hover-reveal remove button on costume/skin cards */
+.custom-char-costume-card {
+  position: relative;
+}
+
+/* Hover-reveal edit pencil — same floating button as canonical skin cards */
+.costume-edit-btn {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--gradient-cyan);
+  color: var(--color-bg-deep);
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: var(--z-above);
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+}
+
+.custom-char-costume-card:hover .costume-edit-btn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.costume-edit-btn:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-lg), var(--glow-cyan-sm);
+}
+
+.costume-edit-btn:active {
+  transform: scale(0.95);
+}
+
+/* Custom Skins section doubles as a drop zone for bundled costumes */
+.custom-skin-dropzone {
+  border: 1px dashed transparent;
+  border-radius: var(--radius-md);
+  padding: var(--space-2);
+  margin: calc(-1 * var(--space-2));
+  margin-bottom: calc(var(--space-4) - var(--space-2));
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.custom-skin-dropzone.drop-ready {
+  border-color: var(--color-border-subtle);
+}
+
+.custom-skin-dropzone.drop-active {
+  border-color: var(--color-cyan);
+  background: rgba(125, 211, 232, 0.06);
+}
+
+.custom-char-costume-card.dragging {
+  opacity: 0.6;
+}
+
+.custom-char-costume-card[draggable="true"] {
+  cursor: grab;
+}
+
+/* Dashed gateway card for importing a custom skin */
+.custom-skin-add-card {
+  border-style: dashed;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+
+.custom-skin-add-card:hover {
+  border-color: var(--color-cyan);
+}
+
+.custom-skin-add-card .custom-char-csp-placeholder {
+  color: var(--color-text-tertiary);
+}
+
+/* Franchise / series row + picker */
+
+.series-emblem {
+  height: 22px;
+  width: auto;
+  image-rendering: pixelated;
+}
+
+.series-change-btn {
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-tertiary);
+  font-size: var(--text-xs);
+  line-height: 1;
+  padding: 2px 6px;
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.series-change-btn:hover {
+  color: var(--color-cyan);
+  border-color: var(--color-cyan);
+}
+
+.series-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.series-pick {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+
+.series-pick:hover {
+  border-color: var(--color-cyan);
+}
+
+.series-pick.active {
+  border-color: var(--color-cyan);
+  box-shadow: 0 0 0 1px var(--color-cyan);
+}
+
+.series-pick img {
+  height: 28px;
+  width: auto;
+  image-rendering: pixelated;
+}
+
+.series-pick-noicon {
+  height: 28px;
+  display: flex;
+  align-items: center;
+  color: var(--color-text-muted);
+}
+
+.series-pick-name {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  text-align: center;
+}
+
+.series-pick--custom {
+  border-style: solid;
+  border-color: var(--color-gold, #d4af37);
+}
+
+.series-pick--upload {
+  border-style: dashed;
+}
+
+/* ── Team color assignment (custom character detail) ──
+   Tokens + badges reuse the install page's classes (MexPanel.css);
+   only the storage-view-specific bits live here. */
+.custom-char-section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  margin-bottom: var(--space-3);
+}
+
+.custom-char-section-header .custom-char-section-title {
+  margin: 0;
+}
+
+.custom-char-section-header .team-color-tokens {
+  margin-left: 0;
+}
+
+.custom-skin-section-header {
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.base-skin-copy-controls {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+  max-width: 100%;
+}
+
+.base-skin-menu-btn {
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  padding: 6px 10px;
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.base-skin-menu-btn:hover:not(:disabled),
+.base-skin-menu-btn.active {
+  border-color: var(--color-cyan);
+  color: var(--color-cyan);
+}
+
+.base-skin-menu-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.base-skin-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 40;
+  width: min(520px, calc(100vw - 48px));
+  max-height: min(560px, 72vh);
+  overflow: auto;
+  padding: var(--space-3);
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border-strong, var(--color-border-subtle));
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xl, 0 18px 42px rgba(0, 0, 0, 0.4));
+}
+
+.base-skin-popover-title {
+  margin: 0 0 var(--space-2);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+}
+
+.base-skin-popover-state {
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.base-skin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: var(--space-2);
+}
+
+.base-skin-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.base-skin-card:hover:not(:disabled) {
+  border-color: var(--color-cyan);
+  transform: translateY(-1px);
+}
+
+.base-skin-card:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.base-skin-card-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 136 / 188;
+  background: var(--color-bg-base);
+  color: var(--color-text-tertiary);
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+}
+
+.base-skin-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.base-skin-card-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  padding: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+}
+
+.base-skin-card-info span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.base-skin-stock {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+}
+
+@media (max-width: 640px) {
+  .base-skin-copy-controls {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .base-skin-menu-btn {
+    width: 100%;
+  }
+
+  .base-skin-popover {
+    left: 0;
+    right: auto;
+    width: min(100%, calc(100vw - 32px));
+  }
+
+  .base-skin-grid {
+    grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  }
+}
+
+.default-pose-picker {
+  position: relative;
+  display: inline-flex;
+}
+
+.default-pose-menu-btn {
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: var(--color-bg-elevated, rgba(6, 12, 20, 0.8));
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  padding: 4px 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.default-pose-menu-btn:hover:not(:disabled),
+.default-pose-menu-btn.active {
+  border-color: var(--color-cyan);
+  color: var(--color-cyan);
+}
+
+.default-pose-menu-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.default-pose-menu-btn.is-applying:disabled {
+  cursor: wait;
+}
+
+.default-pose-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 45;
+  width: min(420px, calc(100vw - 48px));
+  max-height: min(520px, 72vh);
+  overflow: auto;
+  padding: var(--space-3);
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border-strong, var(--color-border-subtle));
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xl, 0 18px 42px rgba(0, 0, 0, 0.4));
+}
+
+.default-pose-popover-title {
+  margin: 0 0 var(--space-2);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+}
+
+.default-pose-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: var(--space-2);
+}
+
+.default-pose-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.default-pose-card:hover:not(:disabled),
+.default-pose-card.active {
+  border-color: var(--color-cyan);
+}
+
+.default-pose-card:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.default-pose-card:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.default-pose-card-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  background: var(--color-bg-base);
+  color: var(--color-text-tertiary);
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+}
+
+.default-pose-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+}
+
+.default-pose-card-name {
+  padding: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .detail-top-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .default-pose-picker {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .default-pose-menu-btn {
+    max-width: 100%;
+  }
+
+  .default-pose-popover {
+    right: 0;
+    width: min(100%, calc(100vw - 32px));
+  }
+}
+
+/* Reorder feedback: insert-before line indicator + dragged-card dim */
+.custom-char-costume-card.drop-before {
+  box-shadow: inset 3px 0 0 0 var(--color-gold), 0 0 8px rgba(255, 200, 60, 0.35);
+}
+
+.custom-char-costume-card.dragging {
+  opacity: 0.45;
+}
+
+/* Promote a custom skin up into Costumes (drag a skin onto the Costumes area) */
+.custom-costume-dropzone.promote-ready {
+  outline: 2px dashed var(--color-border-strong, #4a5568);
+  outline-offset: -4px;
+  border-radius: var(--radius-md);
+}
+
+.custom-costume-dropzone.promote-active {
+  outline: 2px dashed var(--color-gold);
+  outline-offset: -4px;
+  background: rgba(255, 200, 60, 0.06);
+  border-radius: var(--radius-md);
+}
+
+.custom-char-costume-card.team-assignable {
+  border-color: var(--color-gold);
+  cursor: pointer;
+}
+
+.custom-char-costume-card.team-assignable:hover {
+  box-shadow: var(--glow-gold);
+  transform: scale(1.02);
+}

@@ -1,0 +1,63 @@
+/* Replace-slot stages (every versus stage that is not one of the six DAS
+   stages): their rows in the Stages list and the SlotPanel. Shares the
+   costume-card/section classes with the rest of the MEX panel. */
+
+/* SSS icons are 64x56 thumbnails -- keep them pixel-sharp in the list. */
+.stage-list-icon--pixel {
+  image-rendering: pixelated;
+}
+
+.fighter-info .slot-state--installed {
+  color: var(--color-accent);
+}
+
+.fighter-info .slot-state--modified {
+  color: var(--color-warning);
+}
+
+.slot-dual-note {
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  color: var(--color-text-tertiary);
+}
+
+/* Slot lists hold one (or a few) cards: don't let them grow and push the
+   "Added as Separate Stages" block to the bottom of the column. */
+.slot-list {
+  flex: 0 0 auto;
+  overflow: visible;
+}
+
+.slot-card__tag {
+  position: absolute;
+  left: var(--space-2);
+  top: var(--space-2);
+  padding: 1px var(--space-2);
+  border-radius: 999px;
+  font-size: var(--text-xs);
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.slot-card__tag--installed {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.slot-card--modified .costume-info h4,
+.slot-card--unknown .costume-info h4,
+.slot-card--missing .costume-info h4 {
+  color: var(--color-warning);
+}
+
+.slot-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.slot-card-actions button {
+  font-size: var(--text-xs);
+}

@@ -1,0 +1,77 @@
+/* ---- reference image panel ---------------------------------------------- */
+.skin-creator-reference {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.reference-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.reference-title { font-size: 0.8125rem; color: var(--color-text-secondary); }
+.reference-actions { display: flex; gap: var(--space-1); }
+
+.reference-actions button {
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.reference-actions button:hover { border-color: var(--color-cyan); }
+
+.reference-empty {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--color-text-tertiary);
+}
+
+.reference-image-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: repeating-conic-gradient(var(--color-bg-elevated) 0% 25%, var(--color-bg-deep) 0% 50%) 50% / 16px 16px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.reference-image-wrap img {
+  max-width: 100%;
+  max-height: 220px;
+  cursor: crosshair;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.reference-palette-bar { display: flex; align-items: center; gap: var(--space-2); }
+.reference-error { font-size: 0.75rem; color: var(--color-red, #f87171); }
+
+.reference-swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(28px, 1fr));
+  gap: 4px;
+}
+
+.reference-swatch {
+  aspect-ratio: 1;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0;
+  cursor: pointer;
+}
+
+.reference-swatch:hover { border-color: var(--color-cyan); }
+.reference-swatch.selected { border-color: var(--color-cyan); box-shadow: var(--glow-cyan-sm); }

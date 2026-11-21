@@ -1,0 +1,15 @@
+{
+  "character": "Jigglypuff",
+  "basis": {"costumeCode": "PlPrNr", "textureCount": 7},
+  "regions": {
+    "fur": [0, 1, 3, 6],
+    "eyes": [2, 4, 5]
+  },
+  "protected": [2, 4, 5],
+  "liveHints": [],
+  "maskHints": {},
+  "notes": {
+    "fur": "0 = the 4x4 flat body pink (covers nearly everything), 1 = ear, 3/6 = pink details",
+    "eyes": "2 = main face/eye texture, 4/5 = hidden low-poly eye duplicates - protected"
+  }
+}

@@ -1,0 +1,11 @@
+{
+ "character": "Kirby",
+ "source": "PlKbNr",
+ "verified": true,
+ "notes": "0 is the whole pink body with the eyes and blush BAKED IN (17-20 are its blink/expression matanim frames); 2 is the arms (same pink). 1 is the open mouth. 4-16 (100t weight, Thwomp face, stone slab, stone-Kirby textures, gradients) are Stone-form / effect textures that never appear in the idle render, so left unlabelled.",
+ "groups": {
+  "body": [0, 2, 17, 18, 19, 20],
+  "mouth": [1],
+  "feet": [3]
+ }
+}

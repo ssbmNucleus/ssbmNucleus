@@ -1,0 +1,209 @@
+{
+  "schema": 1,
+  "skeleton": "model/body/c00/model.nusktb",
+  "landmarks": "ultimate_landmarks.json",
+  "allow_unbound": [
+    "S_Hip_hit"
+  ],
+  "attachments": [
+    {
+      "source": "SwordR",
+      "source_anchor": "HandR",
+      "target": "JOBJ_75",
+      "target_anchor": "JOBJ_73"
+    }
+  ],
+  "clips": [
+    {
+      "id": "dashattack",
+      "category": "normal",
+      "target_motion": "AttackDash",
+      "source": "motion/body/c00/c00attackdash.nuanmb",
+      "last_frame": 40,
+      "timing_reference": "dashattack",
+      "timing_status": "raw-frame trim/hold; actual state timing and scripts still require verification",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "root_policy_note": "Engine TransN owns grounded action travel; walking/running travel is supplied by locomotion physics."
+    },
+    {
+      "id": "walk_slow",
+      "category": "locomotion",
+      "target_motion": "WalkSlow",
+      "source": "motion/body/c00/a01walkslow.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "root_policy_note": "Engine TransN owns grounded action travel; walking/running travel is supplied by locomotion physics."
+    },
+    {
+      "id": "walk_middle",
+      "category": "locomotion",
+      "target_motion": "WalkMiddle",
+      "source": "motion/body/c00/a01walkmiddle.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "root_policy_note": "Engine TransN owns grounded action travel; walking/running travel is supplied by locomotion physics."
+    },
+    {
+      "id": "walk_fast",
+      "category": "locomotion",
+      "target_motion": "WalkFast",
+      "source": "motion/body/c00/a01walkfast.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "root_policy_note": "Engine TransN owns grounded action travel; walking/running travel is supplied by locomotion physics."
+    },
+    {
+      "id": "turn",
+      "category": "locomotion",
+      "target_motion": "Turn",
+      "source": "motion/body/c00/a01turn.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "root_policy_note": "Engine TransN owns grounded action travel; walking/running travel is supplied by locomotion physics."
+    },
+    {
+      "id": "turn_run",
+      "category": "locomotion",
+      "target_motion": "TurnRun",
+      "source": "motion/body/c00/a02turnrun.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "root_policy_note": "Engine TransN owns grounded action travel; walking/running travel is supplied by locomotion physics."
+    },
+    {
+      "id": "dash",
+      "category": "locomotion",
+      "target_motion": "Dash",
+      "source": "motion/body/c00/a02dash.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "root_policy_note": "Engine TransN owns grounded action travel; walking/running travel is supplied by locomotion physics."
+    },
+    {
+      "id": "run",
+      "category": "locomotion",
+      "target_motion": "Run",
+      "source": "motion/body/c00/a02run.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "root_policy_note": "Engine TransN owns grounded action travel; walking/running travel is supplied by locomotion physics."
+    },
+    {
+      "id": "run_brake",
+      "category": "locomotion",
+      "target_motion": "RunBrake",
+      "source": "motion/body/c00/a02runbrakel.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "root_policy_note": "Engine TransN owns grounded action travel; walking/running travel is supplied by locomotion physics."
+    },
+    {
+      "id": "roll_f",
+      "category": "defense",
+      "target_motion": "EscapeF",
+      "source": "motion/body/c00/b02escapef.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "root_policy_note": "Engine TransN owns grounded action travel; walking/running travel is supplied by locomotion physics."
+    },
+    {
+      "id": "roll_b",
+      "category": "defense",
+      "target_motion": "EscapeB",
+      "source": "motion/body/c00/b02escapeb.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "root_policy_note": "Engine TransN owns grounded action travel; walking/running travel is supplied by locomotion physics."
+    },
+    {
+      "id": "dashgrab",
+      "category": "grab",
+      "target_motion": "CatchDash",
+      "source": "motion/body/c00/e00catchdash.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "root_policy_note": "Remove body Trans; preserve native JOBJ_1 trajectory and Throw attachment. CatchDash action 243 must enable 0x80000000 so native dash-grab physics consumes TransN. Recompile install metadata; pre-v22 receipts omit engine_root. For an existing v25 bank use dashgrab_root.patch_dashgrab_root on a verified private Pl candidate."
+    }
+  ]
+}

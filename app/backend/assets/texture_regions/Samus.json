@@ -1,0 +1,23 @@
+{
+  "character": "Samus",
+  "basis": {"costumeCode": "PlSsNr", "textureCount": 51},
+  "regions": {
+    "armor": [5, 6, 11, 13, 16, 18, 20, 21, 24, 25, 26, 28, 30, 31, 35, 37, 38, 39, 40, 41, 42],
+    "accents": [10, 15, 33, 34, 36],
+    "helmet": [0, 3, 4, 9, 14, 27, 29, 32],
+    "cannon": [46, 47, 48, 49, 50],
+    "gear": [1, 2, 7, 8, 12, 17, 19, 22, 23, 45],
+    "eyes": [43, 44]
+  },
+  "protected": [43, 44],
+  "liveHints": [],
+  "maskHints": {},
+  "notes": {
+    "armor": "the orange power-suit body (16/26/38 = biggest panels)",
+    "accents": "yellow joints/lights (suit highlights)",
+    "helmet": "red helmet + chest plate",
+    "cannon": "olive-green arm cannon",
+    "gear": "gray/dark details: thrusters (12/17), metal bands (7), highlights (8/23/45)",
+    "eyes": "the green visor (44) + dark visor base (43) - protected"
+  }
+}

@@ -1,0 +1,19 @@
+{
+ "character": "Sheik",
+ "source": "PlSkNr",
+ "verified": true,
+ "notes": "15/16 are the two eye+face-skin textures (28-32 / 33-37 their blink frames); face skin lives in them, 20 is the hands. 10 is the cowl/scarf over the mouth. 17/18 are the head wrap (17 crown, 18 band). 3 is the chest bandage wrap (texture also has a blue strip), 4 the arm wraps, 21 the finger wraps, 9 a tiny grey wrap bit on the lower leg (probe: barely visible). 14 is the tabard with the Sheikah eye, 13 its white shoulder cloth, 12 its white waist flap, 2 its ragged fringe. Bodysuit: 7 legs, 6 arms/shoulders, 1 crotch, 11 waist. Boots: 5 shin/foot, 8 ankle band with white stripe, 0 toe/sole. 22 is the wrist guards. 23-27 are low-poly composites that never appear in the render.",
+ "groups": {
+  "eyes": [15, 16, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37],
+  "skin": [20],
+  "hair": [19],
+  "scarf": [10],
+  "head wrap": [17, 18],
+  "wraps": [3, 4, 9, 21],
+  "tabard": [2, 12, 13, 14],
+  "bodysuit": [1, 6, 7, 11],
+  "wrist guards": [22],
+  "boots": [0, 5, 8],
+  "low detail": [23, 24, 25, 26, 27]
+ }
+}

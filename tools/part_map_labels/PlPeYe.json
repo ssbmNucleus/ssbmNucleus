@@ -1,0 +1,85 @@
+{
+ "character": "Peach",
+ "source": "PlPeYe",
+ "verified": true,
+ "notes": "Indices do NOT line up with PlPeNr - labelled from its own probes. In the viewer this slot renders as a short yellow top + SHORTS (18) with bare legs; the long-skirt textures (28, and 27/29/30 like Nr's skirt set) never paint in any probe, so they are unlabelled. bodice = 21 front + 0 patches + 2 back (2 hidden under hair). 31 = bare arms (skin). 36 is shared: brooch gem AND the earring centres ('gems'); 49 = earring petals. crown = 3 front + 23 back/inside; 4 = front flower, 5 = side gems. eyes (6, 7 + their frames 50-59) cover the upper face incl. brows. Unlabelled: 47 (N64-logo texture) paints a small octagon at the brooch/hand - unclear what it is, so not guessed; 39 (not the finger ring - the ring stays gold), 11 (open mouth), 24 (low-poly face), 25, 26, 34, 40-46, 48 - nothing in probes.",
+ "groups": {
+  "bodice": [
+   0,
+   2,
+   21
+  ],
+  "shorts": [
+   18
+  ],
+  "waist band": [
+   1
+  ],
+  "collar": [
+   22
+  ],
+  "puff sleeves": [
+   17
+  ],
+  "sleeve cuffs": [
+   38
+  ],
+  "gloves": [
+   33,
+   35
+  ],
+  "glove cuffs": [
+   32
+  ],
+  "brooch": [
+   37
+  ],
+  "gems": [
+   36
+  ],
+  "earrings": [
+   49
+  ],
+  "crown": [
+   3,
+   23
+  ],
+  "crown flower": [
+   4
+  ],
+  "crown gems": [
+   5
+  ],
+  "skin": [
+   8,
+   9,
+   10,
+   20,
+   31
+  ],
+  "eyes": [
+   6,
+   7,
+   50,
+   51,
+   52,
+   53,
+   54,
+   55,
+   56,
+   57,
+   58,
+   59
+  ],
+  "hair": [
+   12,
+   13,
+   14,
+   15,
+   16
+  ],
+  "shoes": [
+   19
+  ]
+ }
+}

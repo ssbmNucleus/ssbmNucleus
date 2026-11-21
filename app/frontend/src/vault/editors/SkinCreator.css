@@ -1,0 +1,1762 @@
+/* Skin Creator Modal */
+.skin-creator-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--color-bg-base);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Select step ("New Costume" starting-point picker): render as a normal in-app
+   page instead of a fullscreen overlay. It's absolutely positioned within
+   .app-content (position: relative), so it fills the content area *below* the
+   app header — which App keeps visible for this step. The edit step keeps the
+   fixed fullscreen overlay above. */
+.skin-creator-overlay--select {
+  position: absolute;
+}
+
+.skin-creator-modal {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Header */
+.skin-creator-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-bg-deep);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.skin-creator-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.skin-creator-title h1 {
+  font-size: 1.25rem;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.skin-creator-pose-select {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+  margin-right: var(--space-3);
+  color: var(--color-text-tertiary);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.skin-creator-pose-select select {
+  min-width: 180px;
+  max-width: 260px;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.skin-creator-pose-select select:focus {
+  outline: none;
+  border-color: var(--color-cyan);
+}
+
+.skin-creator-character {
+  color: var(--color-cyan);
+  font-size: 0.875rem;
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-sm);
+}
+
+.skin-creator-close {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.skin-creator-close:hover {
+  border-color: var(--color-red);
+  color: var(--color-red);
+  background: rgba(255, 100, 100, 0.1);
+}
+
+.skin-creator-close span {
+  font-size: 0.875rem;
+}
+
+/* Body - new layout: main area (canvas + toolbar) | right panel (3D + tools), bottom texture strip */
+.skin-creator-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.skin-creator-main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.skin-creator-panel-header {
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-deep);
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-tertiary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Refresh button in panel header */
+.refresh-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background 0.15s;
+}
+
+.refresh-btn:hover:not(:disabled) {
+  color: var(--color-text-primary);
+  background: var(--color-bg-tertiary);
+}
+
+.refresh-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Connection failed state */
+.viewer-placeholder.connection-failed {
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.reconnect-btn {
+  padding: 8px 16px;
+  background: var(--color-accent);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background 0.15s, filter 0.15s;
+}
+
+.reconnect-btn:hover {
+  filter: brightness(1.1);
+}
+
+/* Bottom Panel - Texture Strip (horizontal, 2 rows) */
+.skin-creator-texture-strip {
+  min-height: 100px;
+  max-height: 500px;
+  background: var(--color-bg-surface);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.skin-creator-texture-strip .skin-creator-panel-header {
+  padding: var(--space-1) var(--space-3);
+  flex-shrink: 0;
+}
+
+.skin-creator-texture-list {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: auto;
+  padding: var(--space-2);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-content: flex-start;
+}
+
+.skin-creator-texture-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-1);
+  background: var(--color-bg-deep);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.skin-creator-texture-item:hover {
+  border-color: var(--color-text-tertiary);
+}
+
+.skin-creator-texture-item.selected {
+  border-color: var(--color-cyan);
+  background: rgba(0, 255, 255, 0.05);
+}
+
+.texture-thumbnail {
+  /* Fixed square box, image shows aspect ratio inside */
+  width: 48px;
+  height: 48px;
+  background: var(--color-bg-base);
+  border-radius: var(--radius-xs);
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.texture-thumbnail img {
+  /* Fit within box using aspect-ratio from inline style */
+  max-width: 48px;
+  max-height: 48px;
+  image-rendering: pixelated;
+}
+
+.texture-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  min-width: 0;
+}
+
+.texture-name {
+  font-size: 0.65rem;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60px;
+  text-align: center;
+}
+
+.texture-size {
+  font-size: 0.6rem;
+  color: var(--color-text-tertiary);
+}
+
+.texture-loading {
+  padding: var(--space-4);
+  color: var(--color-text-tertiary);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+/* Center - Canvas Area */
+.skin-creator-canvas-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+}
+
+.skin-creator-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-deep);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.toolbar-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition: all 0.15s;
+}
+
+.toolbar-btn:hover:not(:disabled) {
+  border-color: var(--color-text-tertiary);
+  color: var(--color-text-primary);
+}
+
+.toolbar-btn.active {
+  border-color: var(--color-cyan);
+  background: rgba(0, 255, 255, 0.1);
+  color: var(--color-cyan);
+}
+
+.toolbar-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.toolbar-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.tool-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all var(--transition-fast);
+}
+
+.tool-btn:hover {
+  border-color: var(--color-text-tertiary);
+}
+
+.tool-btn.active {
+  border-color: var(--color-cyan);
+  background: rgba(0, 255, 255, 0.1);
+}
+
+.toolbar-separator {
+  width: 1px;
+  height: 24px;
+  background: var(--color-border);
+  margin: 0 var(--space-1);
+}
+
+.color-picker-wrapper {
+  position: relative;
+}
+
+.color-picker {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: none;
+}
+
+.color-picker:hover {
+  border-color: var(--color-text-tertiary);
+}
+
+.color-picker::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+
+.color-picker::-webkit-color-swatch {
+  border-radius: 2px;
+  border: none;
+}
+
+.toolbar-label {
+  font-size: 0.7rem;
+  color: var(--color-text-tertiary);
+  margin-left: var(--space-1);
+}
+
+.brush-size-slider {
+  width: 80px;
+  height: 4px;
+  accent-color: var(--color-cyan);
+}
+
+.brush-size-value {
+  font-size: 0.7rem;
+  color: var(--color-text-secondary);
+  width: 20px;
+  text-align: center;
+  font-family: monospace;
+}
+
+.skin-creator-canvas {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-base);
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-drag: none;
+  position: relative;
+}
+
+.canvas-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-tertiary);
+  gap: var(--space-2);
+}
+
+.canvas-placeholder span {
+  font-size: 1.5rem;
+}
+
+.canvas-placeholder p {
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.paint-canvas {
+  image-rendering: pixelated;
+  cursor: crosshair;
+  background: repeating-conic-gradient(#333 0% 25%, #222 0% 50%) 50% / 16px 16px;
+  user-select: none;
+  -webkit-user-drag: none;
+  touch-action: none;
+  /* Display size is set dynamically via JS using CSS transform */
+}
+
+/* Tool-specific cursors */
+.skin-creator-canvas.tool-pencil { cursor: crosshair; }
+.skin-creator-canvas.tool-eraser { cursor: cell; }
+.skin-creator-canvas.tool-fill { cursor: cell; }
+.skin-creator-canvas.tool-eyedropper { cursor: crosshair; }
+
+/* Floating import/export buttons */
+.canvas-floating-actions {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+}
+
+button.canvas-float-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: rgba(26, 26, 26, 0.95);
+  border: 1px solid #555;
+  border-radius: 4px;
+  color: #ccc;
+  font-size: 12px;
+  font-family: inherit;
+  padding: 6px 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: all 0.15s ease;
+}
+
+button.canvas-float-btn:hover {
+  background: rgba(50, 50, 50, 0.95);
+  border-color: #777;
+  color: #fff;
+}
+
+button.canvas-float-btn:active {
+  transform: translateY(1px);
+}
+
+button.canvas-float-btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* Right Panel - Stacked: 3D Preview + Tool Palette */
+.skin-creator-right-panel {
+  min-width: 250px;
+  max-width: 700px;
+  background: var(--color-bg-surface);
+  border-left: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+/* 3D Preview */
+.skin-creator-3d-container {
+  width: 100%;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.skin-creator-3d {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-base);
+  cursor: grab;
+  user-select: none;
+  overflow: hidden;
+  position: relative;
+}
+
+.skin-creator-3d:active {
+  cursor: grabbing;
+}
+
+.viewer-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-tertiary);
+  gap: var(--space-2);
+}
+
+/* Tool Palette - fills remaining space below 3D preview */
+.skin-creator-tool-palette {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--color-border);
+  overflow-y: auto;
+}
+
+.skin-creator-tool-palette .skin-creator-panel-header {
+  flex-shrink: 0;
+}
+
+.tool-palette-content {
+  flex: 1;
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.tool-palette-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.tool-palette-section-title {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-tertiary);
+}
+
+.tool-palette-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.viewer-placeholder span {
+  font-size: 1.25rem;
+}
+
+.viewer-placeholder p {
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.viewer-hint {
+  position: absolute;
+  bottom: var(--space-3);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  color: var(--color-text-tertiary);
+  opacity: 0.6;
+  pointer-events: none;
+  user-select: none;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Skin Creator - Costume Selection */
+.skin-creator-select {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Full-width sticky header bar for the costume-select step (matches the
+   editor step's header so the view doesn't open headerless / jolt). */
+.skin-creator-select-topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-bg-deep);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.skin-creator-select-topbar h2 {
+  font-size: 1.125rem;
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.skin-creator-select-topbar .skin-creator-character {
+  margin-left: auto;
+}
+
+.skin-creator-select-scroll {
+  flex: 1;
+  overflow-y: auto;
+  /* Inner .storage-viewer supplies its own centered width + page padding
+     (matches the vault grid pages), so this is just the scroll viewport. */
+}
+
+.skin-creator-loading {
+  color: var(--color-text-secondary);
+  padding: var(--space-4);
+}
+
+.skin-creator-loading-edit {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  color: var(--color-text-secondary);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.skin-creator-reconnecting {
+  color: var(--color-warning);
+  padding: var(--space-4);
+}
+
+.skin-creator-error {
+  color: var(--color-red);
+  padding: var(--space-4);
+  background: rgba(255, 100, 100, 0.1);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-4);
+}
+
+/* "Choose a starting point" cards reuse the vault .skin-card look (gradient,
+   LED hover border, 3:4 portrait) so this step matches the grid pages.
+   These only add what's specific to the picker on top of .skin-card. */
+.skin-creator-starter-card {
+  cursor: pointer;
+}
+
+.skin-creator-costume {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-bg-deep);
+  border-radius: var(--radius-sm);
+}
+
+/* 3D Viewer Canvas */
+.viewer-canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Skin Creator Header Buttons */
+.skin-creator-header-buttons {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.skin-creator-save,
+.skin-creator-export {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.skin-creator-save {
+  background: var(--color-accent);
+  color: white;
+}
+
+.skin-creator-save:hover {
+  background: var(--color-accent-hover);
+}
+
+.skin-creator-export {
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
+.skin-creator-export:hover {
+  background: var(--color-bg-hover);
+}
+
+.skin-creator-dirty {
+  color: var(--color-warning);
+  font-size: 1.25rem;
+  margin-left: var(--space-1);
+}
+
+/* Save Modal */
+.skin-creator-save-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+}
+
+.skin-creator-save-modal {
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  min-width: 400px;
+  max-width: 500px;
+}
+
+.skin-creator-save-modal h2 {
+  margin: 0 0 var(--space-2) 0;
+  font-size: 1.25rem;
+  color: var(--color-text-primary);
+}
+
+.skin-creator-save-modal p {
+  margin: 0 0 var(--space-4) 0;
+  color: var(--color-text-secondary);
+}
+
+.skin-name-input {
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-base);
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  margin-bottom: var(--space-4);
+}
+
+.skin-name-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.save-error {
+  color: var(--color-danger);
+  font-size: 0.875rem;
+  margin-bottom: var(--space-3);
+}
+
+.save-modal-buttons {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
+}
+
+.save-cancel,
+.save-confirm {
+  padding: var(--space-2) var(--space-4);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.save-cancel {
+  background: var(--color-bg-deep);
+  color: var(--color-text-secondary);
+}
+
+.save-cancel:hover:not(:disabled) {
+  background: var(--color-bg-hover);
+}
+
+.save-confirm {
+  background: var(--color-accent);
+  color: white;
+}
+
+.save-confirm:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+}
+
+.save-cancel:disabled,
+.save-confirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Edited texture indicator */
+.skin-creator-texture-item.edited .texture-name {
+  color: var(--color-warning);
+}
+
+/* Color Palette Section */
+.tool-palette-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.palette-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.max-groups-input {
+  width: 40px;
+  padding: var(--space-1);
+  font-size: 0.7rem;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  text-align: center;
+}
+
+.max-groups-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.max-groups-input::-webkit-inner-spin-button,
+.max-groups-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.palette-analyze-btn,
+.palette-reset-btn {
+  padding: var(--space-1) var(--space-2);
+  font-size: 0.7rem;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.palette-analyze-btn:hover:not(:disabled),
+.palette-reset-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.palette-analyze-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.palette-loading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  color: var(--color-text-tertiary);
+  font-size: 0.75rem;
+}
+
+/* Color Grid - Compact swatch display */
+.color-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: var(--space-2) 0;
+}
+
+.color-grid-item {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.15s, box-shadow 0.15s;
+  border: 2px solid transparent;
+}
+
+.color-grid-item:hover {
+  transform: scale(1.1);
+  z-index: 1;
+}
+
+.color-grid-item.selected {
+  border-color: var(--color-cyan);
+  box-shadow: 0 0 0 2px rgba(0, 255, 255, 0.3);
+}
+
+.color-grid-item.modified::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 8px;
+  height: 8px;
+  background: #ffb432;
+  border-radius: 50%;
+  border: 1px solid var(--color-bg-deep);
+}
+
+.color-grid-swatch {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.color-grid-original {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+}
+
+/* Color Editor - Expanded controls */
+.color-editor {
+  background: var(--color-bg-base);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.color-editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.color-editor-swatches {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.color-reset-btn {
+  padding: 4px 10px;
+  font-size: 0.7rem;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.color-reset-btn:hover:not(:disabled) {
+  border-color: var(--color-cyan);
+  color: var(--color-cyan);
+}
+
+.color-reset-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.color-editor-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.color-swatch-original {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.color-arrow {
+  font-size: 0.7rem;
+  color: var(--color-text-tertiary);
+  flex-shrink: 0;
+}
+
+.color-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.slider-row label {
+  font-size: 0.7rem;
+  color: var(--color-text-tertiary);
+  width: 28px;
+  flex-shrink: 0;
+}
+
+/* Custom color slider track */
+.slider-track {
+  flex: 1;
+  height: 20px;
+  border-radius: 4px;
+  position: relative;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+
+.slider-track input.color-slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  margin: 0;
+}
+
+.slider-track input.color-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 8px;
+  height: 24px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.slider-track input.color-slider::-moz-range-thumb {
+  width: 8px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.slider-thumb-indicator {
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 0 0 2px white,
+    0 0 0 3px rgba(0, 0, 0, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+.slider-value {
+  font-size: 0.7rem;
+  color: var(--color-text-secondary);
+  width: 32px;
+  text-align: right;
+  flex-shrink: 0;
+  font-family: monospace;
+}
+
+.no-colors-found {
+  padding: var(--space-2);
+  text-align: center;
+  color: var(--color-text-tertiary);
+  font-size: 0.75rem;
+}
+
+/* Resize Handles */
+.resize-handle {
+  background: transparent;
+  position: relative;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.resize-handle::before {
+  content: '';
+  position: absolute;
+  background: var(--color-border);
+  transition: background 0.15s, transform 0.15s;
+}
+
+.resize-handle:hover::before,
+.resize-handle:active::before {
+  background: var(--color-cyan);
+}
+
+/* Vertical resize handle (left-right) */
+.resize-handle.vertical {
+  width: 8px;
+  cursor: ew-resize;
+}
+
+.resize-handle.vertical::before {
+  left: 3px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+}
+
+.resize-handle.vertical:hover::before {
+  transform: scaleX(2);
+}
+
+/* Horizontal resize handle (up-down) */
+.resize-handle.horizontal {
+  height: 8px;
+  cursor: ns-resize;
+}
+
+.resize-handle.horizontal::before {
+  top: 3px;
+  left: 0;
+  right: 0;
+  height: 2px;
+}
+
+.resize-handle.horizontal:hover::before {
+  transform: scaleY(2);
+}
+
+/* Grip indicator on hover */
+.resize-handle::after {
+  content: '';
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.resize-handle:hover::after {
+  opacity: 1;
+}
+
+.resize-handle.vertical::after {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 24px;
+  background: repeating-linear-gradient(
+    180deg,
+    var(--color-cyan) 0px,
+    var(--color-cyan) 2px,
+    transparent 2px,
+    transparent 6px
+  );
+}
+
+.resize-handle.horizontal::after {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-cyan) 0px,
+    var(--color-cyan) 2px,
+    transparent 2px,
+    transparent 6px
+  );
+}
+
+/* Tool Sections - Drawer Style */
+.tool-section {
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.tool-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-3);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    transparent 100%
+  );
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tool-section-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+}
+
+.tool-section-badge {
+  font-size: 0.55rem;
+  padding: 2px 6px;
+  background: rgba(0, 255, 255, 0.1);
+  color: var(--color-cyan);
+  border-radius: 10px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.tool-section-badge.batch {
+  background: rgba(255, 180, 50, 0.15);
+  color: #ffb432;
+}
+
+.tool-section-content {
+  padding: var(--space-2) var(--space-3);
+}
+
+/* Tool button refinements */
+.tool-btn {
+  position: relative;
+}
+
+.tool-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+}
+
+.tool-btn:hover {
+  transform: translateY(-1px);
+}
+
+.tool-btn.active {
+  box-shadow:
+    0 0 0 1px rgba(0, 255, 255, 0.2),
+    0 2px 8px rgba(0, 255, 255, 0.15);
+}
+
+.tool-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Shared Ice Climbers editor: both inventories remain visible side by side. */
+.skin-creator-texture-groups { display: flex; flex: 1; min-height: 0; overflow: hidden; }
+.skin-creator-texture-group { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.skin-creator-texture-groups.paired .skin-creator-texture-group + .skin-creator-texture-group { border-left: 1px solid var(--border-color, #444); }
+.skin-creator-texture-group h3 { margin: 0; padding: 4px 12px; font-size: 13px; }
+.skin-creator-texture-group .skin-creator-texture-list { min-height: 0; }
+/* Texture sections (TextureStrip): the model a match shows, its low-poly copy and the
+   animation frames, stacked in one scroll; each list wraps to its own height. */
+.skin-creator-texture-sections { flex: 1; min-height: 0; overflow-y: auto; }
+.skin-creator-texture-section .skin-creator-texture-list { flex: none; overflow: visible; padding-top: 2px; }
+.skin-creator-texture-section + .skin-creator-texture-section { border-top: 1px solid var(--color-border-subtle); }
+.texture-section-header { margin: 0; padding: 6px 12px 0; font-family: var(--font-display); font-size: 0.68rem; font-weight: var(--font-medium); color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; }
+.texture-also { font-size: 0.55rem; line-height: 1.2; color: var(--color-text-tertiary); white-space: nowrap; }
+.skin-creator-texture-item { color: inherit; font: inherit; text-align: left; }
+.skin-creator-pair-label { font-size: 13px; color: var(--text-secondary, #aaa); }
+.skin-creator-palette-scope { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; font-size: 12px; }
+.skin-creator-palette-scope select { color: inherit; background: var(--bg-secondary, #242424); padding: 4px 6px; }
+
+/* Compact editor workspace. Separators own the boundary; panels don't double it. */
+.skin-creator-overlay:not(.skin-creator-overlay--select) { container-type: inline-size; }
+.skin-creator-header { padding: 10px 16px; gap: 12px; flex-wrap: wrap; }
+.skin-creator-title h1 { font-size: 1rem; letter-spacing: -.02em; }
+.skin-creator-body, .skin-creator-main, .skin-creator-canvas-area { min-width: 0; min-height: 0; }
+.skin-creator-right-panel { min-width: 220px; max-width: 48%; border-left: 0; }
+.skin-creator-texture-strip { border-top: 0; }
+.skin-creator-panel-header { background: transparent; border: 0; text-transform: none; letter-spacing: 0; font-weight: 500; padding: 6px 10px; min-height: 30px; box-sizing: border-box; }
+.skin-creator-toolbar { background: var(--color-bg-surface); padding: 5px 8px; border: 0; gap: 3px; }
+.skin-creator-toolbar .toolbar-btn { border-color: transparent; background: transparent; border-radius: 6px; }
+.skin-creator-toolbar .toolbar-btn:hover { background: var(--color-bg-hover, #ffffff0d); }
+.skin-creator-toolbar .toolbar-btn.active { color: var(--color-cyan); background: color-mix(in srgb, var(--color-cyan) 12%, transparent); }
+.skin-creator-canvas { min-height: 0; outline: none; isolation: isolate; }
+.paint-canvas { flex: none; max-width: none; max-height: none; box-shadow: 0 4px 24px #0004; background: repeating-conic-gradient(var(--color-bg-elevated) 0% 25%, var(--color-bg-deep) 0% 50%) 50% / 16px 16px; }
+.skin-creator-canvas.pan-mode, .skin-creator-canvas.pan-mode .paint-canvas { cursor: grab; }
+.skin-creator-canvas.is-panning, .skin-creator-canvas.is-panning .paint-canvas { cursor: grabbing; }
+.skin-creator-canvas:focus-visible { box-shadow: inset 0 0 0 1px var(--color-cyan); }
+.skin-creator-overlay .resize-handle { touch-action: none; outline: none; }
+.skin-creator-overlay .resize-handle.vertical { width: 6px; }
+.skin-creator-overlay .resize-handle.horizontal { height: 6px; }
+.skin-creator-overlay .resize-handle.vertical::before { left: 2px; width: 1px; }
+.skin-creator-overlay .resize-handle.horizontal::before { top: 2px; height: 1px; }
+.skin-creator-overlay .resize-handle:focus-visible::before { background: var(--color-cyan); }
+.skin-creator-overlay .resize-handle::after { opacity: .45; }
+.skin-creator-overlay .resize-handle:hover::after { opacity: 1; }
+.skin-creator-3d-container { min-height: 0; }
+.skin-creator-tool-palette { border-top: 0; min-height: 0; }
+.skin-creator-tool-palette .tool-palette-section-title { text-transform: none; }
+.skin-creator-tool-palette .tool-palette-content { padding: 6px 10px; gap: 8px; }
+.skin-creator-tool-palette .tool-section { border: 0; background: transparent; border-radius: 0; }
+.skin-creator-tool-palette .tool-section-content { padding: 0; }
+.skin-creator-tool-palette .tool-palette-section-header { margin-bottom: 10px; }
+.skin-creator-tool-palette .tool-section-badge { font-size: 10px; font-weight: 400; text-transform: none; background: transparent; color: var(--color-text-tertiary); padding: 0; }
+.skin-creator-texture-item { padding: 5px; border: 1px solid transparent; border-radius: 7px; background: transparent; }
+.skin-creator-texture-item:hover { background: var(--color-bg-hover, #ffffff0d); border-color: transparent; }
+.skin-creator-texture-item.selected { background: color-mix(in srgb, var(--color-cyan) 9%, transparent); border-color: color-mix(in srgb, var(--color-cyan) 55%, transparent); }
+.skin-creator-texture-item .texture-thumbnail { width: 52px; height: 52px; }
+.skin-creator-texture-list { padding: 4px 8px; gap: 5px; }
+.texture-count { color: var(--color-text-tertiary); margin-left: 4px; font-variant-numeric: tabular-nums; }
+.texture-search { width: min(220px, 45%); padding: 3px 8px; color: var(--color-text-primary); background: var(--color-bg-base); border: 1px solid transparent; border-radius: 5px; font: inherit; outline: none; }
+.texture-search:focus { border-color: var(--color-cyan); }
+.texture-view-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 8px; min-height: 36px; box-sizing: border-box; flex-shrink: 0; background: var(--color-bg-surface); }
+.texture-view-info { display: flex; align-items: baseline; gap: 8px; font-size: 11px; color: var(--color-text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.texture-view-info small { color: var(--color-text-tertiary); font-size: 10px; }
+.texture-view-controls { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+.texture-view-controls button { display: grid; place-items: center; min-width: 28px; height: 28px; padding: 0 6px; border: 0; border-radius: 5px; background: transparent; color: var(--color-text-secondary); cursor: pointer; font-size: 12px; }
+.texture-view-controls button:hover, .texture-view-controls button[aria-pressed="true"] { background: var(--color-bg-hover, #ffffff0d); color: var(--color-cyan); }
+.texture-view-controls button:disabled { opacity: .35; cursor: default; }
+.texture-view-controls .texture-zoom-value { min-width: 54px; font-variant-numeric: tabular-nums; }
+.skin-creator-overlay .canvas-floating-actions { left: 10px; bottom: 10px; gap: 4px; }
+.skin-creator-overlay button.canvas-float-btn { background: var(--color-bg-surface); color: var(--color-text-secondary); border: 1px solid var(--color-border); border-radius: 6px; padding: 5px 8px; box-shadow: 0 2px 8px #0002; font-size: 11px; }
+@container (max-width: 650px) {
+  .skin-creator-right-panel { min-width: 180px; max-width: 40%; }
+  .texture-view-bar { flex-wrap: wrap; }
+  .texture-view-info { width: 100%; }
+  .skin-creator-title { flex-wrap: wrap; gap: 6px; }
+  .skin-creator-header-buttons { gap: 4px; }
+  .skin-creator-header-buttons button { padding: 6px 8px; }
+  .skin-creator-header-buttons button svg + span { display: none; }
+}
+
+.stage-animation-controls { display: flex; align-items: center; gap: 5px; min-width: 0; }
+.stage-animation-controls input { width: 90px; min-width: 20px; }
+.stage-animation-controls button { border: 1px solid var(--color-border); border-radius: 6px; color: var(--color-text-primary); background: var(--color-bg-surface); padding: 4px 8px; cursor: pointer; }
+.editor-color-tools { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.editor-color-tools > .skin-creator-tool-palette { flex: 1; min-height: 0; }
+.editor-color-tabs { display: flex; gap: 4px; padding: 6px 8px; flex-shrink: 0; }
+.editor-color-tabs button, .material-colors-panel button { border: 1px solid var(--color-border); border-radius: 6px; background: transparent; color: var(--color-text-secondary); padding: 4px 7px; font-size: 11px; cursor: pointer; }
+.editor-color-tabs button[aria-selected=true] { color: var(--color-cyan); background: var(--color-bg-elevated); }
+.material-colors-panel { flex: 1; min-height: 0; overflow: auto; padding: 8px 10px; background: var(--color-bg-surface); font-size: 11px; }
+.material-colors-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.material-colors-panel > select { width: 100%; margin-bottom: 8px; min-height: 28px; padding: 5px 7px; font-size: 11px; }
+.material-base-preview { display: flex; align-items: center; gap: 6px; }
+.material-colors-panel p { color: var(--color-text-secondary); line-height: 1.5; margin: 8px 0; }
+.material-color-field { margin-top: 12px; }
+.material-color-field > label { display: block; margin-bottom: 4px; }
+.material-color-field > div { display: flex; align-items: center; gap: 4px; }
+.material-color-field input { min-width: 0; }
+.material-color-field input[type=color] { width: 28px; height: 28px; padding: 0; flex-shrink: 0; }
+.material-color-field .material-hex, .material-color-field input[type=number] { width: 60px; flex: 1; min-height: 28px; height: 28px; padding: 3px 6px; font-size: 11px; }
+.material-color-field button:disabled { opacity: .45; cursor: default; }
+
+/* Keep palette controls together; swatches scroll independently, never pushing
+   the hue/saturation controls down through a long wrapping list. */
+.skin-creator-right-panel { min-width: 260px; min-height: 0; overflow: hidden; }
+.skin-creator-right-panel > .skin-creator-3d-container { flex: 1 1 0; min-height: 96px; }
+
+/* Bottom row: texture browser on the left, color tools on the right. Moving the
+   color tools out of the right column gives the 3D preview the full height. */
+.skin-creator-bottom { display: flex; flex-shrink: 0; min-height: 0; max-height: min(600px, 55%); overflow: hidden; background: var(--color-bg-surface); }
+.skin-creator-bottom > .skin-creator-texture-strip { flex: 1; min-width: 0; min-height: 0; max-height: none; height: auto; }
+.skin-creator-bottom > .editor-color-tools { flex-shrink: 0; min-width: 240px; max-width: 60%; height: 100%; }
+.editor-color-toolbar { display: flex; align-items: center; gap: 4px; padding: 4px 6px; min-height: 30px; flex-shrink: 0; }
+.editor-color-toolbar .editor-color-tabs { padding: 0; gap: 3px; min-width: 0; }
+.editor-color-tools .skin-creator-tool-palette { overflow: auto; overscroll-behavior: contain; }
+.editor-color-tools .tool-palette-content { padding: 2px 8px 6px; }
+.editor-color-tools .tool-palette-section-header { min-height: 26px; margin-bottom: 3px; gap: 6px; }
+.editor-color-tools .tool-palette-section-title { min-width: 0; font-size: 11px; letter-spacing: 0; }
+.editor-color-tools .palette-controls { flex-shrink: 0; }
+.editor-color-tools .skin-creator-palette-scope { margin-bottom: 5px; gap: 4px; font-size: 11px; }
+.editor-color-tools .skin-creator-palette-scope select { min-height: 26px; padding: 3px 5px; font-size: 11px; max-width: 100%; }
+.editor-color-tools .color-grid { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; gap: 6px; padding: 5px 3px 7px; margin: 0; scrollbar-width: thin; overscroll-behavior: contain; }
+.editor-color-tools button.color-grid-item { flex: 0 0 30px; width: 30px; height: 30px; padding: 0; background: transparent; }
+.editor-color-tools .color-grid-item:hover { transform: none; box-shadow: 0 0 0 1px var(--color-text-secondary); }
+.editor-color-tools .color-grid-item:focus-visible { outline: 2px solid var(--color-cyan); outline-offset: 1px; }
+.editor-color-tools .color-editor { margin-top: 3px; padding: 6px 2px 2px; border: 0; border-top: 1px solid var(--color-border); border-radius: 0; background: transparent; }
+.editor-color-tools .color-editor-header { margin-bottom: 6px; }
+.editor-color-tools .color-swatch, .editor-color-tools .color-swatch-original { width: 20px; height: 20px; }
+.editor-color-tools .color-editor-sliders { gap: 8px; }
+.editor-color-tools .slider-row { gap: 6px; min-height: 24px; }
+.editor-color-tools .slider-track { min-width: 0; }
+.editor-color-tools .slider-track input.color-slider { padding: 0; min-width: 0; min-height: 0; border: 0; box-sizing: border-box; }
+
+/* ============================================
+   APP LOOK (2026-09-09)
+   The editor keeps its layout but borrows the rest of the app's language:
+   gradient cards with soft borders instead of flat hard-edged splits,
+   cyan gradient title + chips (pose manager header), gold primary button,
+   display font on controls, hexagon loader for loading states.
+   Appended last so it wins over the older rules above.
+   ============================================ */
+
+/* Workspace: deep backdrop with the app's faint cyan wash; panels float as cards */
+.skin-creator-overlay:not(.skin-creator-overlay--select) {
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 0%, rgba(125, 211, 232, 0.06), transparent 70%),
+    var(--color-bg-deep);
+}
+.skin-creator-overlay .skin-creator-body { padding: 0 var(--space-2) var(--space-2); gap: 0; }
+.skin-creator-overlay .skin-creator-main { gap: 0; }
+
+.skin-creator-canvas-area,
+.skin-creator-right-panel,
+.skin-creator-bottom > .skin-creator-texture-strip,
+.skin-creator-bottom > .editor-color-tools {
+  background: linear-gradient(180deg, var(--color-bg-elevated) 0%, var(--color-bg-base) 100%);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+.skin-creator-right-panel { border-left: 1px solid var(--color-border-subtle); }
+.skin-creator-bottom { background: transparent; }
+.skin-creator-3d { background: var(--color-bg-deep); }
+.skin-creator-canvas { background: var(--color-bg-deep); }
+.skin-creator-toolbar,
+.texture-view-bar,
+.editor-color-toolbar,
+.skin-creator-panel-header { background: transparent; }
+.skin-creator-toolbar { border-bottom: 1px solid var(--color-border-subtle); }
+.texture-view-bar { border-top: 1px solid var(--color-border-subtle); }
+.skin-creator-panel-header,
+.texture-view-info,
+.skin-creator-texture-group h3 {
+  font-family: var(--font-display);
+  font-weight: var(--font-medium);
+  color: var(--color-text-secondary);
+}
+
+/* Header: same gradient + cyan hairline as the app header, pose-manager title */
+.skin-creator-header {
+  position: relative;
+  background: linear-gradient(180deg, var(--color-bg-elevated) 0%, var(--color-bg-base) 100%);
+  border-bottom: 1px solid var(--color-border-subtle);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+.skin-creator-header::after,
+.skin-creator-select-topbar::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--color-cyan-muted) 20%, var(--color-cyan) 50%, var(--color-cyan-muted) 80%, transparent 100%);
+  opacity: 0.6;
+  pointer-events: none;
+}
+.skin-creator-select-topbar {
+  position: relative;
+  background: linear-gradient(180deg, var(--color-bg-elevated) 0%, var(--color-bg-base) 100%);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+.skin-creator-title h1 {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-tight);
+  background: var(--gradient-cyan);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.skin-creator-character,
+.skin-creator-costume {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  padding: 2px 10px;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+}
+.skin-creator-character { color: var(--color-cyan); }
+.skin-creator-costume { color: var(--color-text-secondary); }
+.skin-creator-pair-label { font-family: var(--font-body); color: var(--color-text-tertiary); }
+.skin-creator-pose-select { text-transform: none; letter-spacing: 0; font-family: var(--font-display); font-size: var(--text-xs); }
+.skin-creator-pose-select select {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  padding: var(--space-1) var(--space-3);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.skin-creator-pose-select select:focus { border-color: var(--color-cyan); box-shadow: var(--glow-cyan-sm); }
+
+/* Header buttons: gold primary (Save), secondary (Download), pill close */
+.skin-creator-header-buttons button {
+  font-family: var(--font-display);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-sm);
+  border-radius: var(--radius-md);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), filter var(--transition-fast);
+}
+.skin-creator-save {
+  background: var(--gradient-gold);
+  color: var(--color-bg-deep);
+  font-weight: var(--font-bold);
+  box-shadow: var(--shadow-sm);
+}
+.skin-creator-save:hover:not(:disabled) {
+  background: var(--gradient-gold);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md), var(--glow-gold-sm);
+  filter: brightness(1.08);
+}
+.skin-creator-save:disabled,
+.skin-creator-export:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(0.3); }
+.skin-creator-export { background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary); }
+.skin-creator-export:hover:not(:disabled) { background: var(--color-bg-hover); border-color: var(--color-text-tertiary); }
+.skin-creator-close {
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-bg-surface);
+  color: var(--color-text-tertiary);
+  font-weight: var(--font-medium);
+}
+.skin-creator-close:hover { background: var(--color-danger-muted); color: var(--color-danger); border-color: var(--color-danger); }
+.skin-creator-header-buttons > button:not([class]) {
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+.skin-creator-header-buttons > button:not([class]):hover { color: var(--color-cyan); border-color: var(--color-cyan); }
+
+/* Paint toolbar: soft rounded tool buttons, cyan glow when active */
+.toolbar-btn { border-radius: var(--radius-md); color: var(--color-text-secondary); }
+.skin-creator-toolbar .toolbar-btn.active {
+  color: var(--color-cyan);
+  background: var(--color-cyan-muted);
+  box-shadow: var(--glow-cyan-sm);
+}
+.toolbar-separator { background: var(--color-border-subtle); }
+.color-picker { border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); background: var(--color-bg-elevated); }
+.color-picker:hover { border-color: var(--color-cyan); }
+.color-picker::-webkit-color-swatch { border-radius: var(--radius-sm); }
+.toolbar-label, .brush-size-value { font-family: var(--font-display); }
+.brush-size-slider { accent-color: var(--color-cyan); }
+
+/* Canvas float buttons + zoom bar: the vault's action-button look */
+.skin-creator-overlay button.canvas-float-btn {
+  font-family: var(--font-display);
+  font-weight: var(--font-medium);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+.skin-creator-overlay button.canvas-float-btn:hover { color: var(--color-cyan); border-color: var(--color-cyan); background: var(--color-bg-surface); }
+.texture-view-controls button { font-family: var(--font-display); border-radius: var(--radius-md); }
+.texture-view-controls button:hover, .texture-view-controls button[aria-pressed="true"] { background: var(--color-cyan-muted); color: var(--color-cyan); }
+.refresh-btn:hover:not(:disabled) { color: var(--color-cyan); background: var(--color-cyan-muted); }
+
+/* 3D preview hint + placeholders */
+.viewer-hint { font-family: var(--font-body); }
+.viewer-placeholder { gap: var(--space-4); font-family: var(--font-display); }
+.viewer-placeholder span { font-size: var(--text-md); font-weight: var(--font-medium); color: var(--color-text-secondary); }
+.viewer-placeholder p { color: var(--color-text-tertiary); }
+
+/* Texture browser: pill search, rounded thumbnails, cyan-glow selection */
+.texture-search {
+  border-radius: var(--radius-full);
+  padding: 4px 12px;
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border-subtle);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+}
+.texture-search:focus { border-color: var(--color-cyan); box-shadow: var(--glow-cyan-sm); }
+.texture-count { font-family: var(--font-body); }
+.skin-creator-texture-item { border-radius: var(--radius-lg); }
+.skin-creator-texture-item .texture-thumbnail { border-radius: var(--radius-md); background: var(--color-bg-deep); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04); }
+.skin-creator-texture-item.selected { box-shadow: var(--glow-cyan-sm); }
+.skin-creator-texture-item.selected .texture-name { color: var(--color-cyan); }
+.texture-name { font-family: var(--font-display); }
+
+/* Color tools: pill tabs, outlined analyze, rounded swatches + editor */
+.editor-color-tabs button,
+.material-colors-panel button,
+.palette-analyze-btn,
+.palette-reset-btn,
+.color-reset-btn {
+  font-family: var(--font-display);
+  font-weight: var(--font-medium);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border-subtle);
+  transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
+}
+.editor-color-tabs button[aria-selected=true] { color: var(--color-cyan); background: var(--color-cyan-muted); border-color: transparent; }
+.editor-color-tabs button:not([aria-selected=true]):hover { color: var(--color-text-primary); border-color: var(--color-border); }
+.palette-analyze-btn:hover:not(:disabled), .palette-reset-btn:hover, .color-reset-btn:hover:not(:disabled), .material-colors-panel button:hover:not(:disabled) {
+  color: var(--color-cyan);
+  border-color: var(--color-cyan);
+  box-shadow: var(--glow-cyan-sm);
+}
+.max-groups-input, .skin-creator-palette-scope select, .material-colors-panel > select, .material-color-field input {
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  color: var(--color-text-primary);
+}
+.max-groups-input:focus, .skin-creator-palette-scope select:focus, .material-colors-panel > select:focus { outline: none; border-color: var(--color-cyan); box-shadow: var(--glow-cyan-sm); }
+.tool-palette-section-title, .skin-creator-palette-scope, .material-colors-heading { font-family: var(--font-display); }
+.editor-color-tools button.color-grid-item { border-radius: var(--radius-md); }
+.editor-color-tools .color-grid-item.selected { box-shadow: 0 0 0 2px var(--color-cyan), var(--glow-cyan-sm); }
+.editor-color-tools .color-editor {
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+}
+.slider-track { border-radius: var(--radius-full); }
+.slider-value, .slider-row label { font-family: var(--font-display); }
+
+/* Resize handles: cyan grip like the app's dividers */
+.skin-creator-overlay .resize-handle::before { background: transparent; }
+.skin-creator-overlay .resize-handle:hover::before, .skin-creator-overlay .resize-handle:active::before { background: var(--color-cyan-muted); }
+
+/* Errors + reconnect notices as the app's callouts */
+.skin-creator-error {
+  margin: var(--space-2) var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-danger-muted);
+  border: 1px solid rgba(255, 71, 87, 0.35);
+  border-radius: var(--radius-lg);
+  color: var(--color-danger);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+}
+.skin-creator-reconnecting {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-warning-muted);
+  border: 1px solid rgba(255, 165, 2, 0.35);
+  border-radius: var(--radius-lg);
+  color: var(--color-warning);
+  font-size: var(--text-sm);
+}
+
+/* Loading screens: the app's hexagon loader in an import-style card */
+.skin-creator-loading-edit { gap: var(--space-6); }
+.skin-creator-loading-edit .back-button { align-self: flex-start; margin: var(--space-4) 0 0 var(--page-inline-padding); }
+.skin-creator-loading-card {
+  margin: auto;
+  min-width: 340px;
+  padding: var(--space-10) var(--space-12);
+  text-align: center;
+  background: linear-gradient(180deg, var(--color-bg-elevated) 0%, var(--color-bg-base) 100%);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl), var(--glow-cyan-sm);
+  animation: scaleIn var(--duration-normal) var(--ease-spring);
+}
+.skin-creator-loading-card .skin-creator-loading-hex { margin: 0 auto var(--space-6); }
+.skin-creator-loading-card h3 {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+}
+.skin-creator-loading-card p { margin: 0; color: var(--color-text-tertiary); font-size: var(--text-sm); }
+.skin-creator-loading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) 0 var(--space-6);
+  color: var(--color-text-tertiary);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+}
+.skin-creator-loading .hexagon-loader { margin: 0; }
+
+/* Save modal: pose-manager card treatment, gold confirm */
+.skin-creator-save-overlay { background: rgba(6, 12, 20, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.skin-creator-save-modal {
+  background: linear-gradient(165deg, var(--color-bg-elevated) 0%, var(--color-bg-base) 40%, var(--color-bg-deep) 100%);
+  border: 1px solid var(--color-cyan);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl), var(--glow-cyan);
+  animation: scaleIn var(--duration-normal) var(--ease-spring);
+}
+.skin-creator-save-modal h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  background: var(--gradient-cyan);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.skin-name-input { background: var(--color-bg-deep); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); font-family: var(--font-body); }
+.skin-name-input:focus { border-color: var(--color-cyan); box-shadow: var(--glow-cyan-sm); }
+.save-cancel, .save-confirm { font-family: var(--font-display); font-weight: var(--font-semibold); }
+.save-cancel { background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary); }
+.save-cancel:hover:not(:disabled) { background: var(--color-bg-hover); border-color: var(--color-text-tertiary); }
+.save-confirm { background: var(--gradient-gold); color: var(--color-bg-deep); font-weight: var(--font-bold); }
+.save-confirm:hover:not(:disabled) { background: var(--gradient-gold); transform: translateY(-1px); box-shadow: var(--shadow-md), var(--glow-gold-sm); filter: brightness(1.08); }

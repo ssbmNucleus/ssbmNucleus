@@ -1,0 +1,108 @@
+/* "Report this chat" -- BugReportModal's look (CreditsModal overlay + card). */
+
+.chat-report-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.chat-report-button:hover:not(:disabled),
+.chat-report-button:focus-visible {
+  opacity: 1;
+  color: var(--color-text-primary);
+  border-color: var(--color-border-subtle);
+}
+.chat-report-button:disabled { opacity: 0.35; cursor: default; }
+
+.chat-report-modal {
+  gap: var(--space-3);
+  overflow-y: auto;
+}
+.chat-report-modal .credits-modal-sub { margin-bottom: var(--space-2); }
+
+.chat-report-label {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.chat-report-note,
+.chat-report-contact {
+  width: 100%;
+  padding: var(--space-3);
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  resize: vertical;
+}
+.chat-report-note:focus,
+.chat-report-contact:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.chat-report-files {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.chat-report-files-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+.chat-report-files-toggle input { accent-color: var(--color-primary); }
+.chat-report-files .chat-report-muted { margin: 0; }
+
+.chat-report-preview {
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+.chat-report-preview > summary { cursor: pointer; color: var(--color-text-primary); }
+.chat-report-preview ul { margin: var(--space-2) 0; padding-left: var(--space-5); }
+.chat-report-preview li { margin: 2px 0; }
+.chat-report-transcript pre {
+  max-height: 260px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: var(--color-bg-deep);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  font-size: var(--text-xs);
+}
+.chat-report-transcript > summary { cursor: pointer; }
+
+.chat-report-muted {
+  margin: var(--space-1) 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+.chat-report-notice {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-warning, var(--color-text-secondary));
+}
+.chat-report-id {
+  font-family: var(--font-mono, monospace);
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+}
+.chat-report-buttons { gap: var(--space-2); }

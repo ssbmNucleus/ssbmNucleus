@@ -1,0 +1,115 @@
+/* Notice-card chrome for ShareNoticeModal (formerly ShareNoticeModal.css). */
+
+/* First-share consent dialog. Descended from the old Watch Lite Patreon ad —
+   same small centered card, but it asks instead of selling. */
+
+.share-notice-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.6);
+  display: grid;
+  place-items: center;
+  padding: var(--space-6);
+  animation: fadeIn 120ms var(--ease-out);
+}
+
+.share-notice {
+  position: relative;
+  width: min(28rem, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-lg);
+}
+
+.share-notice-close {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.share-notice-close:hover { color: var(--color-danger); }
+
+.share-notice-title {
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--color-text-primary);
+}
+
+/* Left-aligned, unlike the ad it grew from: this is a list of facts to read,
+   not a pitch to skim. */
+.share-notice-body {
+  margin: 0;
+  padding-left: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+.share-notice-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.share-notice-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-family: var(--font-display);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+}
+
+.share-notice-btn--go {
+  border-color: transparent;
+  background: var(--color-accent);
+  color: var(--color-bg-deep);
+}
+
+.share-notice-btn:hover { filter: brightness(1.08); }
+
+/* Share problems (ShareProblemModal): prose, not a list, and a Patreon button
+   in Patreon's colour so it says where it goes. */
+.share-problem-body { padding-left: 0; }
+.share-problem-body p { margin: 0; }
+
+.share-problem-link {
+  align-self: flex-start;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.share-problem-link:hover { color: var(--color-text-primary); }
+
+.share-notice-btn.share-problem-patreon {
+  border-color: transparent;
+  background: #f96854;
+  color: #fff;
+}

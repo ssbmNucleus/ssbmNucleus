@@ -1,0 +1,24 @@
+.large-roster-warning {
+  flex-shrink: 0;
+  margin: var(--space-3, 12px) 0;
+  padding: var(--space-3, 12px) var(--space-4, 16px);
+  border: 1px solid var(--color-gold, #d4aa54);
+  border-radius: var(--radius-md, 8px);
+  background: color-mix(in srgb, var(--color-gold, #d4aa54) 8%, var(--color-bg-surface, #202832));
+  color: var(--color-text-secondary, #ddd);
+  font-size: var(--text-sm, 13px);
+  line-height: 1.5;
+}
+
+.mex-panel > .large-roster-warning {
+  margin: var(--space-3, 12px) var(--page-inline-padding, 20px) 0;
+}
+
+.large-roster-warning > strong { color: var(--color-gold, #d4aa54); }
+.large-roster-warning p { margin: 4px 0 0; }
+.large-roster-warning details { margin-top: 6px; }
+.large-roster-warning summary { cursor: pointer; }
+.large-roster-warning summary:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.large-roster-warning--unknown { border-color: var(--color-border, #59636d); }
+.large-roster-warning--unknown > strong { color: var(--color-text-primary, #eee); }
+.large-roster-warning button { margin-top: 6px; }

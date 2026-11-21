@@ -1,0 +1,4 @@
+{"character": "Pikachu", "source": "PlPkNr", "verified": true,
+ "notes": "0 is the flat body fur colour (8x8, covers almost the whole body). 1 is the tail (includes its brown base). 2 = ears, texture holds the yellow AND the black tip. 3 = mouth interior, 7 = the lip strip around the mouth (grouped with mouth). 6 = the two brown back stripes. 8 = nose. Eye matanim frames 10-14 belong to 4, 15-19 to 9.",
+ "groups": {"fur": [0], "tail": [1], "ears": [2], "mouth": [3,7], "cheeks": [5], "back stripes": [6], "nose": [8],
+            "eyes": [4,9,10,11,12,13,14,15,16,17,18,19]}}

@@ -1,0 +1,365 @@
+/* ExportHome.jsx: the three export cards (Export ISO / Export Patch / Add
+   Bundle), their Advanced panels (CSP compression, Color Smash) and the
+   output name field. */
+
+/* Compression Input Styling */
+.compression-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.compression-number-input {
+  width: 100px;
+  padding: 0.5rem;
+  background: var(--color-bg-surface, #283544);
+  border: 2px solid var(--color-border, #3d4f5c);
+  border-radius: 4px;
+  color: var(--color-text-primary, #f5f5f5);
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+}
+
+.compression-number-input:focus {
+  outline: none;
+  border-color: var(--color-cyan, #7dd3e8);
+}
+
+.compression-multiplier {
+  color: var(--color-text-tertiary, #8896a4);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Compression Slider Styling */
+.compression-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, var(--color-danger, #ff4757), var(--color-warning, #ffa502), var(--color-success, #4ade80));
+  outline: none;
+  -webkit-appearance: none;
+  margin: 0.5rem 0;
+  cursor: pointer;
+}
+
+.compression-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-cyan, #7dd3e8);
+  cursor: pointer;
+  border: 2px solid var(--color-text-primary, #f5f5f5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s;
+}
+
+.compression-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.compression-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-cyan, #7dd3e8);
+  cursor: pointer;
+  border: 2px solid var(--color-text-primary, #f5f5f5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s;
+}
+
+.compression-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
+.compression-hints {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.hint-label {
+  color: var(--color-text-tertiary, #8896a4);
+  font-style: italic;
+}
+
+.hint-recommended {
+  color: var(--color-success, #4ade80);
+  font-weight: 600;
+}
+
+/* Color Smash Checkbox Styling */
+.color-smash-group {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border, #3d4f5c);
+}
+
+.color-smash-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  color: var(--color-text-primary, #f5f5f5);
+  font-weight: 500;
+}
+
+.color-smash-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--color-cyan, #7dd3e8);
+}
+
+.color-smash-info {
+  margin-top: 0.5rem;
+  margin-left: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary, #b8c5d0);
+  line-height: 1.4;
+}
+
+/* Advanced Section */
+
+.advanced-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--color-text-tertiary, #8896a4);
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  transition: color 0.2s;
+  width: 100%;
+  text-align: left;
+}
+
+.advanced-toggle:hover {
+  color: var(--color-text-secondary, #b8c5d0);
+}
+
+.toggle-arrow {
+  font-size: 0.75rem;
+  transition: transform 0.2s;
+}
+
+.advanced-content {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--color-bg-deep, #0a1420);
+  border-radius: 8px;
+  border: 1px solid var(--color-border-subtle, #2d3d4c);
+}
+
+.advanced-content .form-group {
+  margin-bottom: 1rem;
+}
+
+.advanced-content .color-smash-group {
+  margin-top: 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border-subtle, #2d3d4c);
+}
+
+/* =========================================================================
+   Redesigned export screen
+   ========================================================================= */
+
+.filename-group {
+  margin-bottom: 1.25rem;
+}
+
+.filename-group input {
+  font-family: 'Courier New', monospace;
+  font-size: 0.95rem;
+}
+
+/* =========================================================================
+   Minimalist export home (Export ISO / Export Patch / Add Bundle)
+   ========================================================================= */
+
+.export-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3, 0.75rem);
+  margin-bottom: var(--space-5, 1.25rem);
+}
+
+.export-option {
+  --accent: var(--color-cyan, #7dd3e8);
+  --accent-grad: var(--gradient-cyan);
+  --accent-tint: rgba(125, 211, 232, 0.13);
+  --accent-line: rgba(125, 211, 232, 0.4);
+  --accent-glow: rgba(125, 211, 232, 0.35);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4, 1rem);
+  padding: var(--space-4, 1rem) var(--space-5, 1.25rem);
+  background:
+    linear-gradient(120% 120% at 0% 50%, var(--accent-tint), transparent 42%),
+    var(--color-bg-elevated, #1a2332);
+  border: 1px solid var(--color-border, #3d4f5c);
+  border-radius: var(--radius-lg, 12px);
+  overflow: hidden;
+  transition:
+    border-color var(--transition-normal, 0.25s),
+    transform var(--transition-spring, 0.25s),
+    box-shadow var(--transition-normal, 0.25s);
+}
+
+/* accent edge stripe */
+.export-option::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent-grad);
+  opacity: 0.65;
+  transition: width var(--transition-normal, 0.25s), opacity var(--transition-normal, 0.25s);
+}
+
+.export-option:not(.disabled):hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-line);
+  box-shadow: var(--shadow-lg);
+}
+
+.export-option:not(.disabled):hover::before { width: 5px; opacity: 1; }
+
+.export-option.disabled { opacity: 0.55; }
+
+.export-option.accent-cyan {
+  --accent: var(--color-cyan, #7dd3e8); --accent-grad: var(--gradient-cyan);
+  --accent-tint: rgba(125, 211, 232, 0.13); --accent-line: rgba(125, 211, 232, 0.4); --accent-glow: rgba(125, 211, 232, 0.35);
+}
+.export-option.accent-teal {
+  --accent: var(--color-teal, #00d4aa); --accent-grad: var(--gradient-teal);
+  --accent-tint: rgba(0, 212, 170, 0.13); --accent-line: rgba(0, 212, 170, 0.4); --accent-glow: rgba(0, 212, 170, 0.35);
+}
+.export-option.accent-gold {
+  --accent: var(--color-gold, #ffc700); --accent-grad: var(--gradient-gold);
+  --accent-tint: rgba(255, 199, 0, 0.13); --accent-line: rgba(255, 199, 0, 0.45); --accent-glow: rgba(255, 199, 0, 0.35);
+}
+
+.option-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.option-text h3 {
+  margin: 0 0 0.15rem 0;
+  color: #fff;
+  font-family: var(--font-display, sans-serif);
+  font-size: var(--text-md, 1rem);
+  font-weight: var(--font-bold, 700);
+  letter-spacing: var(--tracking-tight, -0.01em);
+}
+
+.option-text p {
+  margin: 0;
+  color: var(--color-text-secondary, #b8c5d0);
+  font-size: var(--text-sm, 0.85rem);
+  line-height: var(--leading-snug, 1.4);
+}
+
+.option-reason {
+  color: var(--color-warning, #ffa502) !important;
+  font-style: italic;
+  margin-top: 0.3rem !important;
+  font-size: var(--text-xs, 0.75rem) !important;
+}
+
+.btn-option {
+  flex-shrink: 0;
+  min-width: 5.25rem;
+  padding: var(--space-2, 0.55rem) var(--space-5, 1.3rem);
+  background: var(--accent-grad);
+  color: var(--color-bg-deep, #0a1420);
+  border: none;
+  border-radius: var(--radius-md, 8px);
+  font-family: var(--font-display, sans-serif);
+  font-size: var(--text-sm, 0.95rem);
+  font-weight: var(--font-bold, 700);
+  cursor: pointer;
+  transition: transform var(--transition-fast, 0.15s), filter var(--transition-fast, 0.15s), box-shadow var(--transition-fast, 0.15s);
+}
+
+.btn-option:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+
+.btn-option:active:not(:disabled) { transform: scale(0.97); }
+
+.btn-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Option cards that carry an attached Advanced section (Export ISO / Patch) */
+.export-option.has-advanced {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+}
+
+.export-option-main {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4, 1rem);
+  padding: var(--space-4, 1rem) var(--space-5, 1.25rem);
+}
+
+.card-advanced {
+  border-top: 1px solid var(--color-border-subtle, #2d3d4c);
+}
+
+.card-advanced .advanced-toggle {
+  width: 100%;
+  margin: 0;
+  padding: var(--space-3, 0.75rem) var(--space-5, 1.25rem);
+}
+
+.card-advanced .advanced-content {
+  margin: 0;
+  padding: 0 var(--space-5, 1.25rem) var(--space-4, 1rem);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+/* Output name field with a fixed ".iso" suffix */
+.name-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.name-input-wrap input {
+  width: 100%;
+  padding-right: 3.25rem;
+}
+
+.name-suffix {
+  position: absolute;
+  right: 0.85rem;
+  pointer-events: none;
+  color: var(--color-text-tertiary, #8896a4);
+  font-family: 'Courier New', monospace;
+  font-size: 0.95rem;
+}

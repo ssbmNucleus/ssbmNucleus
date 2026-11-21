@@ -1,0 +1,146 @@
+/* The app-wide button system (.btn-primary/.btn-save, .btn-secondary/
+   .btn-cancel, .btn-export, .btn-danger) and the modal button row. Loaded
+   with the shell (App.jsx) because every area uses it. */
+
+/* ─────────────────────────────────────────
+   BUTTON SYSTEM
+   ───────────────────────────────────────── */
+
+/* Primary Button (Gold) */
+.btn-save,
+.btn-primary {
+  background: var(--gradient-gold);
+  color: var(--color-bg-deep);
+  border: none;
+  padding: var(--space-3) var(--space-6);
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: var(--font-bold);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    filter var(--transition-fast);
+  box-shadow: var(--shadow-sm), var(--glow-gold-sm);
+}
+
+.btn-save:hover:not(:disabled),
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), var(--glow-gold);
+  filter: brightness(1.1);
+}
+
+.btn-save:active:not(:disabled),
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-save:disabled,
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  filter: grayscale(0.3);
+}
+
+/* Secondary Button (Gray) */
+.btn-cancel,
+.btn-secondary {
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  padding: var(--space-3) var(--space-6);
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.btn-cancel:hover:not(:disabled),
+.btn-secondary:hover:not(:disabled) {
+  background: var(--color-bg-hover);
+  border-color: var(--color-text-tertiary);
+}
+
+.btn-cancel:active:not(:disabled),
+.btn-secondary:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Export Button (Cyan) */
+.btn-export {
+  background: var(--gradient-cyan);
+  color: var(--color-bg-deep);
+  border: none;
+  padding: var(--space-3) var(--space-6);
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: var(--font-bold);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    filter var(--transition-fast);
+  box-shadow: var(--shadow-sm), var(--glow-cyan-sm);
+}
+
+.btn-export:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), var(--glow-cyan);
+  filter: brightness(1.1);
+}
+
+.btn-export:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Danger Button (Red) */
+.btn-delete-modal,
+.btn-danger {
+  background: linear-gradient(135deg, var(--color-danger) 0%, var(--color-danger-dark) 100%);
+  color: white;
+  border: none;
+  padding: var(--space-3) var(--space-6);
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: var(--font-bold);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    filter var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-delete-modal:hover:not(:disabled),
+.btn-danger:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), var(--glow-danger);
+  filter: brightness(1.1);
+}
+
+.btn-delete-modal:active:not(:disabled),
+.btn-danger:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Button Group */
+.edit-buttons {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: stretch;
+  margin-top: var(--space-6);
+}
+
+.edit-buttons button {
+  flex: 1;
+}

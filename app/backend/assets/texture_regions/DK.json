@@ -1,0 +1,24 @@
+{
+  "character": "DK",
+  "basis": {"costumeCode": "PlDkNr", "textureCount": 29},
+  "regions": {
+    "fur": [0, 2, 4, 6, 7, 9, 21],
+    "skin": [13, 14, 15, 16, 18, 23, 24, 26],
+    "cloth": [19, 27],
+    "eyes": [11, 12],
+    "face_detail": [17, 28]
+  },
+  "protected": [11, 12, 17, 28],
+  "liveHints": [],
+  "maskHints": {},
+  "notes": {
+    "fur": "dark brown body fur",
+    "unmapped": "1/3/5/8/10/20/22 are GRAY noise shading overlays - leave untouched; 25 is an odd-size hidden texture",
+    "skin": "tan face/muzzle/hands/feet/chest (18 = main face)",
+    "cloth": "the red DK tie (27 = tie body with logo, 19 = tie tip)",
+    "11/12": "eye whites + pupil - protected",
+    "17": "inner mouth - protected",
+    "28": "teeth - protected",
+    "25": "unmapped: odd-size (148x199) fully hidden texture, left untouched"
+  }
+}

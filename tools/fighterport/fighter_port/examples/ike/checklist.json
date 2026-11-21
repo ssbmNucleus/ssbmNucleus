@@ -1,0 +1,438 @@
+{
+ "1.1": {
+  "answer": "done",
+  "how": "Imported onto Marth's skeleton; size by the driver's rule. Seen standing beside Marth in the two-fighter probes."
+ },
+ "1.2": {
+  "answer": "done",
+  "how": "Six costumes made from the disc's own costume files (FitIke00 to 05); portraits of all six looked at. Team colours picked by how much of each costume's changing part is the team's colour: red 1, blue 3, green 2."
+ },
+ "1.3": {
+  "answer": "done",
+  "how": "The ripped body was costume 1 (22 of its pictures matched costume 1, 10 costume 0): the port's first costume is now the game's first, made from it."
+ },
+ "1.4": {
+  "answer": "difference",
+  "how": "The rip carried five faces over each other; the game's own data says which is shown (the standing clip's visibility animation and the fighter's switches) and the rest were taken out before the import. He blinks on Brawl's frames, with lids drawn from Brawl's blinking face: photographed close up, half shut on frame 20, shut 21 to 25, half on 26, open by 28. His eyes shut on the frames Brawl's pain face shows (33 actions; set in the scripts, read back, not photographed being hit). His mouth does not change: Melee's eye pictures carry the eyes only."
+ },
+ "1.5": {
+  "answer": "done",
+  "how": "Ragnell in the right hand on the donor's weapon joint; seen in every picture of the move sheets."
+ },
+ "1.6": {
+  "answer": "not applicable",
+  "how": "Ike has one weapon."
+ },
+ "1.7": {
+  "answer": "done",
+  "how": "Aether throws the sword: the fighter's own sword bone follows it in the clip (read from the clip: it goes 45 units from the hand) and the hitboxes ride it; the live hitboxes were tracked up with it, frame by frame."
+ },
+ "1.8": {
+  "answer": "not applicable",
+  "how": "No bending weapon."
+ },
+ "1.9": {
+  "answer": "done",
+  "how": "Grab, pummel and the four throws photographed on the sheets; the held fighter hangs from the donor's hold joint."
+ },
+ "1.10": {
+  "answer": "difference",
+  "how": "Brawl simulates his cape and headband; here they are stiff, as imported."
+ },
+ "1.11": {
+  "answer": "done",
+  "how": "What rest hides was read from the standing clip's visibility animation and the fighter's switches (not from the model, whose flags say everything is shown) and five meshes were taken out of the rip; the body was imported again from the result. Seen from eight sides in the game: one face, one sword."
+ },
+ "1.12": {
+  "answer": "done",
+  "how": "Each eye is three pictures (white, iris, highlight), the iris and highlight clamped. They were named for the importer in its own words and drawn out as the game wraps them; the importer then made the eyes blink. The lids are Brawl's own blinking faces, drawn over the eye's picture. Seen in the close-up blink."
+ },
+ "2.1": {
+  "answer": "done",
+  "how": "179 clips on the donor's actions, 0 blocked, 0 failed. The driver's report lists none of the engine's actions without a clip."
+ },
+ "2.2": {
+  "answer": "done",
+  "how": "Each common action ends on the free frame its own Brawl script gives. Counted in the game, a frame at a time, against Brawl's number: spot dodge 25 (free on 26), roll forward 33 (34), roll back 37 (38), air dodge 39 (40), shield drop 15, jab 23, grab 29, dash grab 39, taunt 129, ledge jump 15 then 30, ledge attack 55, ledge roll 49, getup 29, getup attack 49, getup rolls 35, tech in place 26, the bounce on landing 26. The tech rolls were not reached by the test (it missed the tech) and are read back: 40."
+ },
+ "2.3": {
+  "answer": "done",
+  "how": "Attacks and taunts play on past their free frame; dodges, rolls and getups end at it (the driver's rule, the same as for the Ultimate fighters)."
+ },
+ "2.4": {
+  "answer": "done",
+  "how": "Landings and flinches are left to the engine's own lengths."
+ },
+ "2.5": {
+  "answer": "not applicable",
+  "how": "The reader follows Brawl's frame-speed command; none of Ike's scripts uses it (every action's script was searched)."
+ },
+ "2.6": {
+  "answer": "done",
+  "how": "Aether rises by its clip (55.4 units measured, ground and air); Quick Draw is moved by the port's code; the forward smash's step by the clip's root. Each measured in the stepped probes."
+ },
+ "2.7": {
+  "answer": "done",
+  "how": "Smash wind-up and swing are one clip (forward smash hits on 31 as published); Aether's start and rise are one."
+ },
+ "2.8": {
+  "answer": "done",
+  "how": "Every move photographed facing right and facing left (sheets2)."
+ },
+ "2.9": {
+  "answer": "done",
+  "how": "Melee's code was read state by state for which actions it enters one frame in, and the donor's own were counted in the game (dodge 28 stored, 27 shown; grab 30 and 30; taunt 93 and 93). The port's clips are stored a frame longer where it does: every action above then matched Brawl. Before this each was a frame short. The port's own states are entered with the step, and are stored longer too: Quick Draw's start counted 17, its dash 16, its end 14."
+ },
+ "3.1": {
+  "answer": "done",
+  "how": "Dodges, rolls, techs, getups and ledge actions carry Brawl's own untouchable frames (18 actions). Spot dodge 2 to 20 read back; not hit-tested one by one."
+ },
+ "3.2": {
+  "answer": "done",
+  "how": "Eruption 6 to 10 and Aether 18 to 38, from the scripts. Hit-tested: a jab landing on frame 5 of Eruption's release staggers him, on 6, 7, 9 and 10 it does not; Aether's armour read from the fighter a frame at a time. The full-charge Eruption has none, as its own script has none."
+ },
+ "3.3": {
+  "answer": "done",
+  "how": "Landing lag is Brawl's own number for each aerial (the fighter table's five landing values)."
+ },
+ "3.4": {
+  "answer": "done",
+  "how": "Smash charge sits where wind-up meets swing; the jab chain's windows come from the scripts' own flags. Jab 1, 2, 3 photographed."
+ },
+ "3.5": {
+  "answer": "done",
+  "how": "A hitbox written on frame N hits on N (Eruption's hit seen on 11, the forward smash on 31)."
+ },
+ "3.6": {
+  "answer": "done",
+  "how": "Armour was a frame late until a jab was landed on each frame; the port's frame code now counts the frame a hit will find."
+ },
+ "3.7": {
+  "answer": "done",
+  "how": "Brawl's loops are written out: Eruption's charge pulses 17 times at 11 frames and 4 at 10 (227 frames, where the charge is full at 229). Ike's hitboxes are in no loop: every move's hits were compared before and after, unchanged."
+ },
+ "4.1": {
+  "answer": "done",
+  "how": "Hitboxes from the scripts with their fixed knockback, element and shield damage. Seen: jab 3, forward smash 22% on 31, up smash on 25, down smash 13 and its back hit on 32, Eruption 10% (uncharged), 37% (full)."
+ },
+ "4.2": {
+  "answer": "done",
+  "how": "Two bits of a Brawl hitbox's last word say who it strikes (found on Donkey Kong's Hand Slap, which strikes only those on the ground). Read for every hit: Aether's plunge has an outer hit for those on the ground and a spike for those in the air. Seen in what Aether now lands (4.5)."
+ },
+ "4.3": {
+  "answer": "not applicable",
+  "how": "Brawl's hitboxes are balls, as Melee's are."
+ },
+ "4.4": {
+  "answer": "done",
+  "how": "Hitboxes keep the game's own order (the plunge's outer hit before its spike, as in Brawl)."
+ },
+ "4.5": {
+  "answer": "difference",
+  "how": "Aether's seven hits all land on a target standing 5 units ahead (25.1% of 25, measured). From 8 to 20 units ahead a standing Marth takes 11 to 18%: the first hit's launch does not always keep him in the rising sword's path. The hits are Brawl's own (angles 78 to 91, fixed knockback); how far a fixed knockback throws a fighter is the engines' own sum, and nothing was tuned."
+ },
+ "4.6": {
+  "answer": "not applicable",
+  "how": "Ike's scripts use no carrying angle."
+ },
+ "4.7": {
+  "answer": "done",
+  "how": "Eruption's damage by its charge, Quick Draw's by its charge and the counter's by what it took are set by code after the script makes the hit; each measured (10 and 4 a level, 9 to 16, 1.2 times with 10 the least)."
+ },
+ "4.8": {
+  "answer": "done",
+  "how": "Grab on frame 7 as in Brawl (seen), dash grab on 12; throws from the scripts' throw commands; all photographed."
+ },
+ "4.9": {
+  "answer": "done",
+  "how": "his up special's falling hit is made once and stays out until he lands, which his own state does (seen landing on a target, Test 3); the other hitboxes never ended are the final smash's, which is not ported"
+ },
+ "5.1": {
+  "answer": "done",
+  "how": "Brawl's fighter table is Melee's grown; 29 numbers copied by meaning (lined up on Marth, who is in both)."
+ },
+ "5.2": {
+  "answer": "done",
+  "how": "Jumps are Brawl's own starting speeds (the same engine lineage): jumpsquat 6 frames and a full hop of 31.6 measured."
+ },
+ "5.3": {
+  "answer": "done",
+  "how": "Lengths are scaled by the port's size (0.976); heights and distances measured in the game rather than copied."
+ },
+ "5.4": {
+  "answer": "done",
+  "how": "Numbers Brawl's table has no column for stay Marth's (the driver's report lists the 29 that were set)."
+ },
+ "6.1": {
+  "answer": "done",
+  "how": "Each special's start measured in the stepped probes; in the air Aether hangs (height unchanged for its first 39 frames)."
+ },
+ "6.2": {
+  "answer": "done",
+  "how": "Specials can be turned around on their first frames (the port's rule for every fighter)."
+ },
+ "6.3": {
+  "answer": "done",
+  "how": "Eruption: 7 levels of 30 frames (229 frames to full, 228 published), 10% and 4 more a level, and held to its fullest its own script: 37%, no armour, 10% to Ike himself. All measured."
+ },
+ "6.4": {
+  "answer": "not applicable",
+  "how": "Ike's specials have no early way out."
+ },
+ "6.5": {
+  "answer": "done",
+  "how": "Eruption and Quick Draw are held: Quick Draw stayed held for 96 frames in the probe and its charge stops adding at 70."
+ },
+ "6.6": {
+  "answer": "not applicable",
+  "how": "No projectile."
+ },
+ "6.7": {
+  "answer": "done",
+  "how": "Aether: rises 55.4, plunges at 5.85 a frame, catches a ledge only on the way down (seen), lands in its slam; ends standing, not helpless."
+ },
+ "6.8": {
+  "answer": "difference",
+  "how": "Quick Draw: 17 frames of start, 16 of dash at 4.1 a frame uncharged (71.4 units with its stop, 42% of the stage) and 8.2 fully charged (153.6 units, 90%), 14 of end; stops at an edge (seen), swings at the first fighter reached for 9 to 16%, helpless after it in the air (seen). The three numbers that brake it at the end are a reading: Brawl's table does not name them, and they are the ones that give a tap about half the stage and a full charge nearly all of it. Settling them needs Brawl itself measured."
+ },
+ "6.9": {
+  "answer": "not applicable",
+  "how": "No grab or latch among his specials."
+ },
+ "6.10": {
+  "answer": "done",
+  "how": "Counter: catches a hit on frames 11 to 33 exactly (a jab on 10 hurts him, on 11 is countered; a smash on 33 is countered, on 34 launches him); gives back 1.2 times, 10 the least (a 4% jab gave 10, a 14% smash 16). The ball a hit must touch is Ike's own from his table."
+ },
+ "6.11": {
+  "answer": "not applicable",
+  "how": "No gauge."
+ },
+ "6.12": {
+  "answer": "done",
+  "how": "The full-charge Eruption is a second script under the same name: on the donor's second release action."
+ },
+ "6.13": {
+  "answer": "not applicable",
+  "how": "No chain."
+ },
+ "6.14": {
+  "answer": "done",
+  "how": "Quick Draw in the air lands into the landing lag after a special (20 frames, seen)."
+ },
+ "6.15": {
+  "answer": "done",
+  "how": "Brawl keeps a full charge and a second version as a second script under the move's name (swing4, specialnend, specialairnend); the reader keeps both and the full charge has an action of its own"
+ },
+ "7.1": {
+  "answer": "done",
+  "how": "The bank holds 52 of Ike's sounds from the disc: 46 in the donor's places and 6 more it gained (Aether's four later sounds, Quick Draw's shout, the full Eruption's shout), each played by a script the port has no other use for. Listened to by machine: the game's own sound was recorded through seventeen moves and each sound the script plays looked for in it (see 9.11)."
+ },
+ "7.2": {
+  "answer": "done",
+  "how": "The trail runs on the frames and along the blade Brawl's own trail command gives, in the colour of Brawl's own trail picture (pale gold, 255 232 175). Seen on the sheets."
+ },
+ "7.3": {
+  "answer": "difference",
+  "how": "Drawn: the dust and gleam Brawl's scripts name, where Melee has its own; the colour Brawl lays over his body (7.6). Eruption's fire is a stand-in: Melee's burst of flame where the hitboxes are, and its explosion for a full charge, chosen from pictures of every shared effect Melee has. Brawl's is a blue flame of Ike's own. Not drawn at all: the flame on the sword while it charges, Quick Draw's streak, the counter's sparkle (particles of Ike's own, with no Melee form), and the light Eruption throws on him from one side."
+ },
+ "7.4": {
+  "answer": "not applicable",
+  "how": "Nothing of his on the HUD."
+ },
+ "7.5": {
+  "answer": "done",
+  "how": "Roster tile, six portraits and stock icons rendered from the costumes; the announcer's call is Brawl's own clip."
+ },
+ "7.6": {
+  "answer": "done",
+  "how": "Brawl's scripts give the colours and the frames; the port's code lays them over him. Photographed a frame at a time: the counter goes white on 11, grey, purple, off, and round again as in Brawl; Eruption's charge pulses red every 11 frames. Melee's own green flicker for a fighter who cannot be hurt is taken off while the counter shows its own colour."
+ },
+ "7.7": {
+  "answer": "done",
+  "how": "Ike's first two jabs are a punch and a kick: Brawl plays its shared swing for them, which is in no bank. They were silent (found by the recording: loudness 43 against 400 for a jab that sounds). They now play Melee's own swings (166, 165), as Melee's fighters do; the ledge attack plays Melee's sword swing. The other shared sounds are only numbered in Brawl's files and are not carried."
+ },
+ "7.8": {
+  "answer": "done",
+  "how": "Six sounds were added to the bank. The first try gave them new script numbers, which the installer does not point at the port's bank: all six were silent in the recording. They now take the big and small forms' places (Melee plays those only for its own fighters' banks), and are heard."
+ },
+ "7.9": {
+  "answer": "done",
+  "how": "Ike's own effects are named from his effect file's list (seven of them). Melee's shared effects 1000 to 1069 were photographed in the game, two pictures each; Eruption's two stand-ins were chosen from those."
+ },
+ "7.10": {
+  "answer": "not applicable",
+  "how": "Ike carries no effect file of his own: his effects are stand-ins from Melee's shared ones"
+ },
+ "7.11": {
+  "answer": "done",
+  "how": "Brawl numbers his lines (vc_ike_NNN) and each is placed by what a move's script plays; under the rule as it stands now three special-voice samples (count2, count3, dolphin) would be silent and their sounds added to the bank instead; today they hold sounds of his moves, which are heard only from his own scripts because his specials are states of his own (worked out on 2026-11-12, not rebuilt)"
+ },
+ "7.12": {
+  "answer": "done",
+  "how": "a sword fighter on a sword donor: where his bank lacks a swing the donor's sword swing plays, the same thing; his sounds were checked by recording (Test 3)"
+ },
+ "9.1": {
+  "answer": "done",
+  "how": "sheet_probe on the finished build: every move both ways, looked at sheet by sheet."
+ },
+ "9.2": {
+  "answer": "done",
+  "how": "Counted in the game, a frame at a time: seventeen common actions and the states of each special (2.2, 2.9)."
+ },
+ "9.3": {
+  "answer": "difference",
+  "how": "Smashes, jab, grab and the specials landed on a target. Tilts and aerials were photographed, not each landed at near and far reach."
+ },
+ "9.4": {
+  "answer": "done",
+  "how": "Installed scripts read back by the driver's own report and by shared_check."
+ },
+ "9.5": {
+  "answer": "done",
+  "how": "Each special walked against Brawl's description: charge, recoil, armour, counter window and multiple, dash, edge, swing, ledge catch, slam."
+ },
+ "9.6": {
+  "answer": "done",
+  "how": "Listed: script commands not read (effects, rumble, screen shake, item actions, the final smash) and table numbers not used (three of Eruption's, five of the counter's, Aether's four). The list found the counter's ball and that Eruption's damage starts from the table's 10, not the script's 9."
+ },
+ "9.7": {
+  "answer": "done",
+  "how": "The counter test's misses at frames 34 to 36 were checked with a bigger hit before being read: the jab missed his pose, the counter had ended."
+ },
+ "9.8": {
+  "answer": "done",
+  "how": "A second fighter given the pad, the game stepped: armour, the counter's window and what it gives back."
+ },
+ "9.9": {
+  "answer": "done",
+  "how": "Quick Draw first measured the stage (it ended at the edge); measured again from the far side."
+ },
+ "9.10": {
+  "answer": "done",
+  "how": "Four rules changed while finishing Ike (armour's frame, the air up special's travel, where a hitbox is put when drift cannot tell, which sounds get the bank's spare places). Cloud and Byleth were rebuilt under them (Cloud and Byleth Test 9) and checked: Byleth's axe armour now starts on frame 34 (a jab on 33 staggers, on 34 does not), Cloud's up special rises 45.0 in the air as on the ground, and the moves whose hitboxes changed joint land as before (dash attack 11%, up smash 12%, Byleth's down smash 23%)."
+ },
+ "9.11": {
+  "answer": "done",
+  "how": "Done on the finished build. Heard on the frame the script gives: every tilt's and smash's swing and voice, Eruption's three sounds and both shouts, Quick Draw's three sounds and its shout, Aether's first three sounds and its plunge's, the counter's, the grab's own, the jump's and the taunt's voice (39 in all). Aether's fourth sound and its slam's play under louder ones and are found on their frames at about a third of a clean match."
+ },
+ "9.12": {
+  "answer": "done",
+  "how": "The standing clip stepped through a blink with the camera on the head; the fighter photographed from eight sides."
+ },
+ "9.13": {
+  "answer": "done",
+  "how": "the game's own clock on 2026-11-12: 0.40 of a sixtieth beside Donkey Kong, 0.63 with two Ikes (Marth beside Donkey Kong 0.20), 60 frames a second in both; each Ike costs about 0.22, so four in one match would pass 1 (not run)"
+ },
+ "10.1": {
+  "answer": "done",
+  "how": "Smashes and Aether joined; a clip of N frames hands over after N - 1."
+ },
+ "10.2": {
+  "answer": "done",
+  "how": "Fixed on the forward smash's published frame 31."
+ },
+ "10.3": {
+  "answer": "done",
+  "how": "Marth's rows named the fighter table's columns and, this pass, the special tables' (damage, multiple, least, ball)."
+ },
+ "10.4": {
+  "answer": "done",
+  "how": "Catch calls a shared script; the reader follows it (the grab boxes come from there)."
+ },
+ "10.5": {
+  "answer": "done",
+  "how": "Bones renamed to the names the driver's tables know."
+ },
+ "10.6": {
+  "answer": "done",
+  "how": "Read for every hitbox (4.2)."
+ },
+ "10.7": {
+  "answer": "done",
+  "how": "Both lists read: the shared file's 76 names and Ike's own seven."
+ },
+ "10.8": {
+  "answer": "done",
+  "how": "The counter, the counter's strike and Eruption's charge carry them (7.6). Eruption's release has a light from one side: not carried (7.3)."
+ },
+ "11.1": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ },
+ "11.2": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ },
+ "11.3": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ },
+ "11.4": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ },
+ "11.5": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ },
+ "11.6": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ },
+ "11.7": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ },
+ "11.8": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ },
+ "11.9": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ },
+ "11.10": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ },
+ "11.11": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ },
+ "11.12": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ },
+ "11.13": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ },
+ "11.14": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ },
+ "11.15": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ },
+ "11.16": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ },
+ "11.17": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ },
+ "11.18": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ },
+ "11.19": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ },
+ "11.20": {
+  "answer": "not applicable",
+  "how": "Ike stands on the donor's skeleton (Marth's)"
+ }
+}

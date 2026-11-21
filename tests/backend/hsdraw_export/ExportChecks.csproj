@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Links the PREBUILT HSDRawViewer from the ssbmNucleus-hsdlib release (the source tree no
+    longer lives in this repo). Fetch it first:  python tools/build/fetch_native.py hsdlib
+    Override the folder with -p:HsdDir=<dir holding HSDRaw.dll + HSDRawViewer.dll + IONET.dll>.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <HsdDir Condition="'$(HsdDir)' == ''">../../../app/utility/hsdraw/win-x64</HsdDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HSDRaw"><HintPath>$(HsdDir)/HSDRaw.dll</HintPath></Reference>
+    <Reference Include="HSDRawViewer"><HintPath>$(HsdDir)/HSDRawViewer.dll</HintPath></Reference>
+    <Reference Include="IONET"><HintPath>$(HsdDir)/IONET.dll</HintPath></Reference>
+    <Reference Include="OpenTK.Mathematics"><HintPath>$(HsdDir)/OpenTK.Mathematics.dll</HintPath></Reference>
+  </ItemGroup>
+</Project>

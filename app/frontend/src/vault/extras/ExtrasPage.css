@@ -1,0 +1,570 @@
+/* Extras page: extra-type cards, extra mod cards, create card, editor modal shell — split from StorageViewer.css 2026-08-22 (phase 3) */
+/* Rules copied verbatim; loaded right after StorageViewer.css from StorageViewer.jsx so the cascade order is unchanged. */
+
+/* =====================
+   3D Model Viewer
+   ===================== */
+
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+
+/* ─────────────────────────────────────────
+   Folder Organization
+   ───────────────────────────────────────── */
+
+/* Header with back button and create folder button */
+.character-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MORE DROPDOWN MENU
+   Replaces individual folder/poses/extras buttons with a single dropdown
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.character-header-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+  margin-left: auto;
+}
+
+.character-action-button {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+}
+
+.character-action-button:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-border-hover);
+  background: var(--color-bg-surface);
+}
+
+.character-action-button:active {
+  transform: scale(0.98);
+}
+
+.character-action-button--extras {
+  background: var(--gradient-gold);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: var(--glow-gold-sm);
+}
+
+.character-action-button--extras:hover {
+  background: var(--gradient-gold-hover);
+  color: #fff;
+  box-shadow: var(--shadow-md), var(--glow-gold-sm);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   EXTRAS PAGE VIEW (Full-page layout like character detail)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.extras-page {
+  /* Inherits from .character-detail */
+}
+
+.extras-page-loading,
+.extras-page-empty {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: var(--space-10) var(--space-5);
+}
+
+.extras-page-empty p {
+  margin: var(--space-2) 0;
+}
+
+/* Extra Type Cards for page view (larger, in the skins-grid) */
+.extra-type-page-card {
+  background: linear-gradient(180deg, var(--color-bg-elevated) 0%, var(--color-bg-base) 100%);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  min-height: 200px;
+  position: relative;
+  transition:
+    transform var(--transition-normal),
+    box-shadow var(--transition-normal),
+    border-color var(--transition-normal);
+}
+
+.extra-type-page-card::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: calc(var(--radius-lg) + 2px);
+  padding: 2px;
+  background: conic-gradient(
+    from var(--border-angle, 0deg),
+    transparent 0%,
+    transparent 25%,
+    rgba(125, 211, 232, 0.9) 30%,
+    var(--color-cyan) 35%,
+    rgba(125, 211, 232, 0.9) 40%,
+    transparent 45%,
+    transparent 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+  animation: rotateBorder 2s linear infinite paused;
+}
+
+.extra-type-page-card:hover::before {
+  opacity: 1;
+  animation-play-state: running;
+}
+
+.extra-type-page-card:hover {
+  transform: perspective(1000px) translateY(-8px) scale(1.02);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(125, 211, 232, 0.15);
+  border-color: rgba(125, 211, 232, 0.5);
+}
+
+.extra-type-page-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--color-bg-deep) 0%, var(--color-bg-surface) 100%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-cyan);
+  transition: all 0.3s ease;
+}
+
+.extra-type-page-card:hover .extra-type-page-icon {
+  border-color: var(--color-cyan);
+  box-shadow: 0 0 20px rgba(125, 211, 232, 0.3);
+  transform: scale(1.1);
+}
+
+.extra-type-page-info {
+  text-align: center;
+}
+
+.extra-type-page-name {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: #fff;
+  display: block;
+  margin-bottom: var(--space-1);
+}
+
+.extra-type-page-count {
+  font-size: var(--text-xs);
+  color: var(--color-cyan);
+  background: rgba(125, 211, 232, 0.1);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.extra-type-shared {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  display: block;
+  margin-top: var(--space-1);
+  font-style: italic;
+}
+
+/* Up-B Preview Styles */
+.upb-preview-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* Extra Mod Cards (same size as skin cards) */
+.extra-mod-card {
+  background: linear-gradient(180deg, var(--color-bg-elevated) 0%, var(--color-bg-base) 100%);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  position: relative;
+  cursor: pointer;
+  animation: cardEntrance var(--duration-slow) var(--ease-out) backwards;
+  transition:
+    transform var(--transition-normal),
+    box-shadow var(--transition-normal),
+    border-color var(--transition-normal);
+  overflow: visible;
+}
+
+.extra-mod-card::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: calc(var(--radius-lg) + 2px);
+  padding: 2px;
+  background: conic-gradient(
+    from var(--border-angle, 0deg),
+    transparent 0%,
+    transparent 25%,
+    rgba(125, 211, 232, 0.9) 30%,
+    var(--color-cyan) 35%,
+    rgba(125, 211, 232, 0.9) 40%,
+    transparent 45%,
+    transparent 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+  animation: rotateBorder 2s linear infinite paused;
+}
+
+.extra-mod-card:hover::before {
+  opacity: 1;
+  animation-play-state: running;
+}
+
+.extra-mod-card:hover {
+  transform: perspective(1000px) translateY(-8px) scale(1.02);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(125, 211, 232, 0.15);
+  border-color: rgba(125, 211, 232, 0.5);
+}
+
+.extra-mod-image-container {
+  position: relative;
+  aspect-ratio: 272 / 376;
+  background: var(--color-bg-deep);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: var(--space-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+.extra-mod-image-container .laser-beam-preview,
+.extra-mod-image-container .laser-ring-preview,
+.extra-mod-image-container .sideb-preview,
+.extra-mod-image-container .upb-preview,
+.extra-mod-image-container .shine-preview,
+.extra-mod-image-container .sword-preview {
+  width: 100%;
+  height: 100%;
+}
+
+
+.extra-mod-info {
+  text-align: center;
+}
+
+.extra-mod-name {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text-secondary);
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.extra-mod-badge {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  background: var(--color-bg-deep);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  margin-top: var(--space-1);
+  display: inline-block;
+}
+
+/* Create Extra Mod Card */
+.create-extra-mod-card {
+  background: linear-gradient(160deg, var(--color-bg-elevated) 0%, var(--color-bg-surface) 100%);
+  border: 1px dashed var(--color-border);
+}
+
+.create-extra-mod-card:hover {
+  border-style: solid;
+  border-color: var(--color-cyan);
+}
+
+.create-extra-mod-card.expanded {
+  border-style: solid;
+  border-color: var(--color-cyan);
+}
+
+.create-extra-mod-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+.create-extra-mod-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  background: var(--color-bg-deep);
+  border: 2px dashed var(--color-border);
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.create-extra-mod-card:hover .create-extra-mod-icon {
+  color: var(--color-cyan);
+  border-color: var(--color-cyan);
+}
+
+.create-extra-mod-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  height: 100%;
+  justify-content: center;
+}
+
+.create-extra-mod-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: var(--text-sm);
+}
+
+.create-extra-mod-option:hover {
+  border-color: var(--color-cyan);
+  color: #fff;
+  background: rgba(125, 211, 232, 0.1);
+}
+
+.create-extra-mod-cancel {
+  padding: var(--space-2);
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: var(--text-xs);
+  transition: color 0.15s ease;
+  text-align: center;
+}
+
+.create-extra-mod-cancel:hover {
+  color: var(--color-text-secondary);
+}
+
+.create-extra-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-cyan);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+
+/* Extras Header */
+.extras-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+
+/* Create Extra Card */
+
+
+.create-extra-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-cyan);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   LASER EDITOR MODAL
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.laser-editor-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  animation: fadeIn 0.2s ease;
+  padding: var(--page-block-padding) var(--modal-inline-padding);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.laser-editor-modal {
+  background: linear-gradient(180deg, #1a1a2e 0%, #16162a 100%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  /* 2026-07 redesign: containerized responsive shell -- wide enough for the
+     Advanced per-element card grid, still fluid down to phone widths. */
+  width: min(100%, 58rem);
+  max-height: min(100%, var(--modal-max-height));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+  animation: slideUp 0.3s ease;
+  margin: auto;
+}
+
+.laser-editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.laser-editor-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.laser-editor-title-text {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: #fff;
+}
+
+.laser-editor-title-char {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  padding: var(--space-1) var(--space-3);
+  background: var(--color-bg-elevated);
+  border-radius: var(--radius-sm);
+}
+
+.laser-editor-close {
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  transition: all 0.15s ease;
+}
+
+.laser-editor-close:hover {
+  background: var(--color-bg-elevated);
+  color: #fff;
+}
+
+.laser-editor-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.laser-editor-name-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.laser-editor-name-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text-secondary);
+}
+
+.laser-editor-name-input {
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  color: #fff;
+  font-size: var(--text-base);
+  transition: border-color 0.15s ease;
+}
+
+.laser-editor-name-input:focus {
+  outline: none;
+  border-color: var(--color-cyan);
+}
+
+.laser-editor-name-input::placeholder {
+  color: var(--color-text-muted);
+}

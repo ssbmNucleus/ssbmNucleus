@@ -1,0 +1,11 @@
+# Shell scripts must keep LF endings even on a Windows checkout: bash reads a
+# CRLF script as commands ending in $'\r' and dies with "command not found"
+# (this is what broke tools/build/build-linux.sh on a Linux box, and it is
+# the same reason the vendored dotnet-install.sh could not be run from WSL).
+*.sh text eol=lf
+
+# cmd.exe misparses LF-only batch files (it loses its place in the file and
+# reports errors like ". was unexpected at this time"), worst under code page
+# 65001. Batch files are always CRLF on disk and ASCII only.
+*.bat text eol=crlf
+*.cmd text eol=crlf

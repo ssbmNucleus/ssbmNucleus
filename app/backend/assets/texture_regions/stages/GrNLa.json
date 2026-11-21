@@ -1,0 +1,13 @@
+{
+  "stage": "finaldestination",
+  "code": "GrNLa",
+  "basis": {"textureCount": 68},
+  "regions": {
+    "deck": [4, 5, 6, 7, 8, 52]
+  },
+  "protected": [],
+  "notes": {
+    "deck": "52 = the top surface + 4-8 plates. DIAG-VERIFIED (solid-push capture): the deck is the ONLY visibly texture-driven surface, and it is multiplied by a DARK material - use BRIGHT materials with modulate lo>=1.0 hi>=2.0 or edits barely read",
+    "limitations": "DIAG-VERIFIED: the magenta rim glow and orange hull lines are vertex/material color, NOT textures (pushing 59/60/63/64 changed nothing); the swirling background is animated vertex color. FD texture themes = deck only. A future material-color op could unlock rim/hull."
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "character": "Link",
+  "basis": {"costumeCode": "PlLkNr", "textureCount": 53},
+  "regions": {
+    "tunic": [0, 1, 2, 3, 5, 6, 7, 12, 20, 35],
+    "cloth": [21, 33, 34, 43, 44, 47],
+    "skin": [8, 9, 10, 14, 16, 30, 37],
+    "fur": [17, 18, 36],
+    "leather": [4, 11, 13, 19, 22, 23, 24, 25, 26, 27, 28, 29, 31, 39, 41, 42, 48],
+    "shield": [45, 49, 50, 51],
+    "eyes": [32, 38]
+  },
+  "protected": [14, 32, 38, 49],
+  "liveHints": [],
+  "maskHints": {},
+  "notes": {
+    "tunic": "green tunic + hat (3 = front, 1 = back)",
+    "cloth": "white undershirt + tights (34 = front, 33 = back)",
+    "skin": "face (14 - painted eyes, protected), arms, ears",
+    "fur": "blonde hair (17/18)",
+    "leather": "brown belts/straps (41), gauntlet (27), boots (48), grips",
+    "shield": "purple Hylian shield: 49 = front art (protected), 45/50/51 = rim/scabbard sheet",
+    "eyes": "32 (16x16) + 38 hidden - protected",
+    "unmapped": "15/40/46/52 smalls"
+  }
+}

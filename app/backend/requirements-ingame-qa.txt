@@ -1,0 +1,2 @@
+# Optional native desktop QA capture; not needed by the default PrintWindow backend.
+windows-capture==2.0.1; sys_platform == "win32"

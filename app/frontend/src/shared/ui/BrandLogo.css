@@ -1,0 +1,32 @@
+/* BrandLogo.jsx: the Nucleus mark. */
+
+.header-logo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  margin-right: calc(var(--space-3) * -0.5); /* tuck the wordmark closer */
+}
+
+/* ── Brand mark (BrandLogo.jsx) ──────────────────────────────────────────
+   Always the Nucleus mark — stats mode keeps the same logo (the wordmark's
+   superscript tag carries the mode change instead). */
+.brand-logo {
+  position: relative;
+  display: inline-block;
+  flex: 0 0 auto;
+}
+
+.brand-logo-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* the website's header treatment: a soft glow sitting behind the mark.
+     Cyan in nucleus mode, green in stats mode. The crossfade is FAST (the
+     wordmark's pulse swaps its color instantly on toggle -- animations don't
+     crossfade -- and a slow filter here left the logo wearing the OLD mode's
+     glow after the rest of the header had turned, worst on the way out). */
+  filter: drop-shadow(0 0 8px rgba(125, 211, 232, 0.5));
+  transition: filter 120ms var(--ease-out);
+}

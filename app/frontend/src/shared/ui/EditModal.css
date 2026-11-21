@@ -1,0 +1,205 @@
+/* Fullscreen edit-modal shell: overlay, card with the travelling glow border,
+   header and the bottom action bar. Shared by the Vault EditModal and
+   CodesPasteModal and the Projects CodesManagerModal. Moved verbatim from
+   App.css 2026-10-03 (EditModal-only rules went to vault/EditModal.css).
+   The modalSlideUp / rotateBorder keyframes and @property --border-angle stay
+   in App.css because other sheets animate with them too. */
+
+/* ─────────────────────────────────────────
+   FULLSCREEN EDIT MODAL
+   ───────────────────────────────────────── */
+
+.edit-modal-fullscreen-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 12, 20, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal);
+  animation: fadeIn var(--duration-fast) var(--ease-out);
+  padding: var(--page-block-padding) var(--modal-inline-padding);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.edit-modal-fullscreen {
+  width: min(100%, var(--modal-max-width));
+  height: min(100%, var(--modal-max-height));
+  max-height: 100%;
+  background: linear-gradient(
+    165deg,
+    var(--color-bg-elevated) 0%,
+    var(--color-bg-base) 40%,
+    var(--color-bg-deep) 100%
+  );
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--color-cyan);
+  box-shadow:
+    var(--shadow-xl),
+    0 0 80px rgba(0, 0, 0, 0.5),
+    0 0 24px rgba(125, 211, 232, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: visible;
+  animation: modalSlideUp var(--duration-normal) var(--ease-spring);
+  margin: auto;
+}
+
+
+/* Traveling glow border effect (runs constantly) */
+.edit-modal-fullscreen::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: calc(var(--radius-2xl) + 2px);
+  padding: 2px;
+  background: conic-gradient(
+    from var(--border-angle, 0deg),
+    transparent 0%,
+    transparent 25%,
+    rgba(255, 255, 255, 0.9) 30%,
+    var(--color-cyan) 35%,
+    rgba(255, 255, 255, 0.9) 40%,
+    transparent 45%,
+    transparent 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 1;
+  z-index: -1;
+  animation: rotateBorder 2s linear infinite;
+}
+
+/* Glow layer behind */
+.edit-modal-fullscreen::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: calc(var(--radius-2xl) + 6px);
+  padding: 6px;
+  background: conic-gradient(
+    from var(--border-angle, 0deg),
+    transparent 0%,
+    transparent 28%,
+    var(--color-cyan) 35%,
+    transparent 42%,
+    transparent 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  filter: blur(6px);
+  opacity: 0.8;
+  z-index: -2;
+  animation: rotateBorder 2s linear infinite;
+}
+
+/* Modal Header */
+.edit-modal-header {
+  padding: var(--space-3) var(--space-6);
+  border-bottom: 1px solid var(--color-border-subtle);
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.edit-modal-header h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-tight);
+  background: var(--gradient-cyan);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Bottom Action Bar */
+.edit-modal-actions {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.edit-modal-action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.edit-modal-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.edit-modal-action-btn--save {
+  background: var(--gradient-gold);
+  color: var(--color-bg-deep);
+  box-shadow: var(--shadow-sm), var(--glow-gold-sm);
+}
+
+.edit-modal-action-btn--save:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), var(--glow-gold);
+  filter: brightness(1.1);
+}
+
+.edit-modal-action-btn--cancel {
+  background: var(--color-bg-surface);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.edit-modal-action-btn--cancel:hover:not(:disabled) {
+  background: var(--color-bg-hover);
+  border-color: var(--color-text-tertiary);
+}
+
+@media (max-width: 720px) {
+  .edit-modal-fullscreen-overlay {
+    padding: var(--space-3);
+  }
+
+  .edit-modal-fullscreen {
+    width: 100%;
+    height: min(100%, calc(var(--viewport-height) - (2 * var(--space-3))));
+    border-radius: var(--radius-xl);
+  }
+
+  .edit-modal-actions {
+    flex-wrap: wrap;
+    padding: var(--space-3);
+  }
+
+  .edit-modal-action-btn {
+    min-width: calc(50% - (var(--space-2) / 2));
+  }
+}

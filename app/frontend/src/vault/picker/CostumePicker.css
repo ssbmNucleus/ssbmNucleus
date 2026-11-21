@@ -1,0 +1,70 @@
+/* CostumePicker.jsx and StagePicker.jsx: the head (title or Back), the search box
+   and the GalleryGrid, filling whatever hosts them. Their host is Randall's
+   starting-pick popover (randall/assistant/StartPicker.jsx), which draws the
+   surface (AssistantPanel.css .randall-pick-popover) and bounds the height; the
+   picker takes the room it is given and its grid scrolls inside it. The grid,
+   cells and search box are GalleryGrid.css. */
+
+.costume-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  text-align: left;
+}
+
+/* Inside the assistant panel `.nucleus-assistant input` sets `font: inherit` and
+   its own focus ring; the search box keeps GalleryGrid.css's size and border. */
+.costume-picker .gallery-search { font-size: var(--text-sm); }
+.costume-picker .gallery-search:focus-visible { outline: none; }
+
+/* The grid takes what the head and search box leave, and scrolls. */
+.costume-picker .gallery-grid {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.costume-picker-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 26px;
+  font-size: var(--text-sm);
+}
+
+.costume-picker-head strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: var(--font-semibold);
+}
+
+.costume-picker-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex: 0 0 auto;
+  padding: 3px 8px 3px 4px;
+  background: transparent;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+
+.costume-picker-back:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.costume-picker-note {
+  margin: 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--text-xs);
+  line-height: 1.45;
+}

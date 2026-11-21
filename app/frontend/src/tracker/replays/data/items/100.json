@@ -1,0 +1,1 @@
+{"kind":100,"name":"It_Kind_Koopa_Flame","source":"PlKp.dat","family":"authored","scale":1.0,"states":[0],"animations":{"0":{"frames":{"0":[[0,0.0,0.0,0.0,2.7342,2,0,60,50,0,12,1,0,3]]},"end":0,"truncated":false}},"special":[],"throwSpeed":1.0,"gravity":0.0,"maxFallSpeed":10.0,"spawnVy":0.5,"weight":1,"ecb":[3.0,3.0,3.0,3.0],"velocityDirectionThreshold":0.15000000596046448}

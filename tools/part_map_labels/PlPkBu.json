@@ -1,0 +1,4 @@
+{"character": "Pikachu", "source": "PlPkBu", "verified": true,
+ "notes": "Body identical to PlPkNr (same indices 0-9). Eye matanim frames: 12-16 belong to 4, 17-21 to 9. UNLABELLED 10 (blue star party-hat cone per sheet) and 11 (white, likely the pompom): both are mapped (90/304 tris, bounds on top of the head) but do not render in either view, even when probed, so they are not confirmed.",
+ "groups": {"fur": [0], "tail": [1], "ears": [2], "mouth": [3,7], "cheeks": [5], "back stripes": [6], "nose": [8],
+            "eyes": [4,9,12,13,14,15,16,17,18,19,20,21]}}

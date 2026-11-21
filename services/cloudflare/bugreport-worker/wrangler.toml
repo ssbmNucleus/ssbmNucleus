@@ -1,0 +1,63 @@
+name = "nucleus-bugreport"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+workers_dev = true
+
+# In-app bug reports: the desktop backend POSTs a description + PUTs its logs
+# zip here; the worker stores both in R2 and pings a PRIVATE Discord channel
+# with a signed download link. Nothing goes to the public server. Deploy:
+#   CLOUDFLARE_ACCOUNT_ID=<account id> npx wrangler deploy
+# account_id is left out on purpose: wrangler reads CLOUDFLARE_ACCOUNT_ID
+# (the id is on the Cloudflare dashboard).
+#
+# A Workers route beats the Pages project on the same hostname, so this claims
+# /bugreport/* on ssbmnucleus.net without the website repo knowing (same trick
+# as replay-worker).
+# Both patterns are needed: "/bugreport/*" does NOT match the bare
+# "/bugreport" path (where POST create + GET ping live) — without the exact
+# route those fall through to the Pages site.
+[[routes]]
+pattern = "ssbmnucleus.net/bugreport"
+zone_name = "ssbmnucleus.net"
+
+[[routes]]
+pattern = "ssbmnucleus.net/bugreport/*"
+zone_name = "ssbmnucleus.net"
+
+[vars]
+# The website's Supabase project. The anon key is public (it ships in the
+# ssbmnucleus.net bundle). A client's own Discord-linked access token, when it
+# sends one, is forwarded to bugreport_identity() (a Supabase RPC) so a report
+# can carry the reporter's Discord username — reports are accepted
+# anonymously otherwise.
+SUPABASE_URL = "https://nttxcjrnqccogsibeqzz.supabase.co"
+SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50dHhjanJucWNjb2dzaWJlcXp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyMDY3NTYsImV4cCI6MjA3NTc4Mjc1Nn0.5EJaMlem2rASzuttx1_PtwGd2cuyAOtM8VJmwwiEudo"
+# Where the app's own updater reads latest.json from. The worker compares the
+# reporting client's version against it and refuses outdated clients (426) —
+# "update first" is always step one of a bug report.
+RELEASES_BASE = "https://releases.ssbmnucleus.net"
+# Hard cap on the uploaded zip. Keep under the zone's request-body limit
+# (100 MB on Free/Pro). The backend budgets its zip to stay well under this.
+MAX_ZIP_BYTES = "67108864"
+# How long a report is kept. Enforced by R2 lifecycle rules (see README), the
+# value here only feeds the signed-link expiry and the meta.json "expires".
+RETENTION_DAYS = "90"
+
+# Create once: CLOUDFLARE_ACCOUNT_ID=... npx wrangler r2 bucket create nucleus-bug-reports
+# Then the lifecycle rules (README): r/ expires after 90 days, s/ after 1 day.
+[[r2_buckets]]
+binding = "REPORTS"
+bucket_name = "nucleus-bug-reports"
+
+# Per-IP rate limit on report creation (Workers Rate Limiting binding).
+# period must be 10 or 60. If wrangler rejects this block on the account,
+# fall back to a zone WAF rate-limiting rule on /bugreport and delete it —
+# the worker treats a missing binding as "no limit".
+[[ratelimits]]
+name = "REPORT_LIMITER"
+namespace_id = "2001"
+simple = { limit = 3, period = 60 }
+
+# Secrets (NAMES only — set with `op read op://... | npx wrangler secret put NAME`):
+#   DISCORD_WEBHOOK_URL   webhook of the PRIVATE bug-reports channel
+#   LINK_SIGNING_SECRET   32+ random bytes; HMAC key for admin download links

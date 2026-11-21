@@ -1,0 +1,133 @@
+/* Shared chrome for the import pipeline's three question dialogs: the Slippi
+   safety warning, the duplicate prompt and the "What is this?" picker.
+   A single import can show two of them back to back, so they have to read as
+   one family. Before this each carried its own inline styles and hardcoded
+   #2a2a2a/#444 greys, which sat badly on the app's blue modal surface. */
+
+.import-dialog-overlay {
+  /* The Slippi warning also opens from inside the edit modal (Retest), so it
+     has to stack above one rather than tie with it on DOM order. */
+  z-index: calc(var(--z-modal) + 10);
+}
+
+.import-dialog {
+  max-width: min(100%, 32rem);
+  text-align: left;
+}
+
+.import-dialog-intro {
+  margin: 0 0 var(--space-5) 0;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.import-dialog-filename {
+  margin: 0 0 var(--space-2) 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--text-sm);
+  word-break: break-all;
+}
+
+/* Callout naming exactly what the question is about. */
+.import-dialog-callout {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.import-dialog-callout-warning {
+  border-left-color: var(--color-warning);
+}
+
+.import-dialog-callout-label {
+  display: block;
+  margin-bottom: var(--space-2);
+  color: var(--color-text-tertiary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.import-dialog-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  color: var(--color-text-primary);
+}
+
+/* A duplicate entry names the vault item it collided with, and shows its
+   portrait so the answer does not depend on remembering the name. */
+.import-dialog-entry {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.import-dialog-entry img {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-deep);
+}
+
+/* Two actions sit on a row like ConfirmDialog; three or more stack, because
+   they are alternatives with different consequences rather than yes/no. */
+.import-dialog-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.import-dialog-actions button {
+  width: 100%;
+}
+
+.import-dialog-actions-inline {
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.import-dialog-actions-inline button {
+  width: auto;
+  min-width: 7rem;
+}
+
+/* Dismissal is not one of the choices, so it is set apart from them and made
+   quieter -- .btn-cancel and .btn-secondary share one rule in App.css, which
+   left "Cancel" looking exactly as loud as the alternative it sits under. */
+.btn-cancel.import-dialog-dismiss {
+  margin-top: var(--space-2);
+  background: transparent;
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-tertiary);
+  font-weight: var(--font-medium);
+}
+
+.btn-cancel.import-dialog-dismiss:hover:not(:disabled) {
+  background: var(--color-bg-surface);
+  border-color: var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+/* "What is this?" options carry a label and an explanation. */
+.import-dialog-option {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.import-dialog-option-note {
+  font-size: var(--text-sm);
+  font-weight: 400;
+  opacity: 0.8;
+}

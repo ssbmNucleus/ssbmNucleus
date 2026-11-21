@@ -1,0 +1,18 @@
+{
+  "character": "Pichu",
+  "basis": {"costumeCode": "PlPcNr", "textureCount": 10},
+  "regions": {
+    "fur": [0, 1, 6, 7, 8],
+    "eyes": [2, 4],
+    "face_detail": [3, 5]
+  },
+  "protected": [2, 3, 4, 5],
+  "liveHints": [],
+  "maskHints": {},
+  "notes": {
+    "fur": "0 = 8x8 flat body yellow, 1 = black ear tips, 6/7 = body, 8 = tail folds",
+    "eyes": "2/4 = black eye spheres - protected",
+    "face_detail": "3 = pink cheeks, 5 = mouth - composite-protected, tint allowed",
+    "unmapped": "9 (mostly hidden)"
+  }
+}

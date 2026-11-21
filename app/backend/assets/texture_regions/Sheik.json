@@ -1,0 +1,24 @@
+{
+  "character": "Sheik",
+  "basis": {"costumeCode": "PlSkNr", "textureCount": 28},
+  "regions": {
+    "cloth": [0, 1, 3, 5, 6, 7, 8, 11, 22, 24, 25, 26],
+    "trim": [2, 4, 10, 12, 13, 17, 18],
+    "fur": [19],
+    "skin": [20, 21],
+    "eyes": [15, 16],
+    "face_detail": [23]
+  },
+  "protected": [15, 16, 23],
+  "liveHints": [],
+  "maskHints": {},
+  "notes": {
+    "cloth": "dark blue-gray bodysuit (3 = main, 6 = knees/elbows)",
+    "trim": "white bandage wraps: chest (13), waist (18, big), turban (2/4), misc (10/12/17)",
+    "fur": "blonde hair braid (19)",
+    "skin": "tan face/fingers (20), lower face area (21)",
+    "eyes": "15/16 = red eyes on tan - protected",
+    "23": "chest wrap with red Sheikah emblem - protected (signature art)",
+    "unmapped": "9/14/27 hidden or mixed leftovers"
+  }
+}

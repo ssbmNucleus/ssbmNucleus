@@ -1,0 +1,439 @@
+/* Shared by the Tracker mods modals: WatchModsModal, PlaylistModsModal and
+   video/FinalRenderModal (formerly WatchModsModal.css). */
+
+/* ============================================
+   Watch with mods — per-replay skin picker + build progress
+   ============================================ */
+
+.watchmods-overlay {
+  position: fixed;
+  /* The header stacks above in-tree overlays (.app-content is a z 0 stacking
+     context, the header z 500), so start below it -- see --app-header-h. */
+  inset: var(--app-header-h) 0 0 0;
+  z-index: var(--z-modal);
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn var(--duration-fast) var(--ease-out);
+}
+
+.watchmods-modal {
+  width: min(94vw, 46rem);
+  /* Never taller than the space below the header: a flex-centred box taller
+     than that runs up under the header, hiding the title and Close. The skin
+     list (.watchmods-players) is the part that shrinks and scrolls; the skin
+     dropdowns render in a portal, so this overflow cannot clip them. */
+  max-height: var(--modal-max-height);
+  overflow-y: auto;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5) var(--space-6) var(--space-6);
+  box-shadow: var(--shadow-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.watchmods-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.watchmods-head h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+}
+
+.watchmods-close {
+  background: none;
+  border: none;
+  color: var(--color-text-tertiary);
+  font-size: var(--text-2xl);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.watchmods-close:hover:not(:disabled) {
+  color: var(--color-text-primary);
+}
+
+.watchmods-sub {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+
+.watchmods-loading {
+  color: var(--color-text-tertiary);
+}
+
+.watchmods-playlist-note {
+  margin: 0 0 var(--space-3);
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.watchmods-players {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-height: min(52vh, 460px);
+  overflow-y: auto;
+  padding-right: 4px;
+  /* the only child that gives up height when the modal hits the window cap */
+  flex: 0 1 auto;
+  min-height: 72px;
+}
+.watchmods-modal > :not(.watchmods-players) {
+  flex-shrink: 0;
+}
+.watchmods-lite {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  color: #35d0be;
+  background: #0e2320;
+  border: 1px solid #1f4d47;
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-4);
+  cursor: pointer;
+}
+.watchmods-lite:hover:not(:disabled) { background: #123029; border-color: #35d0be; }
+.watchmods-lite:disabled { opacity: .5; cursor: default; }
+
+.watchmods-player {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+}
+
+.watchmods-stock {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+  flex: 0 0 auto;
+}
+
+.watchmods-who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.watchmods-char {
+  font-weight: var(--font-semibold);
+  font-size: var(--text-md);
+}
+
+.watchmods-name {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.watchmods-noskins {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+/* The open picker is GallerySelect — a portalled thumbnail grid, styled in
+   GallerySelect.css. It CANNOT be styled from here: it renders on document.body,
+   so it is not a descendant of .watchmods-player. Only the closed TRIGGER below
+   is still nested, and it reuses the icon-select-* classes. */
+
+.watchmods-player .icon-select-button {
+  min-width: 15rem;
+  max-width: 19rem;
+}
+
+.watchmods-player .icon-select-button .icon-select-img {
+  width: 32px;
+  height: 44px;
+}
+
+.watchmods-player .icon-select-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+/* stage row: thumbnails are wide screenshots, not portraits */
+.watchmods-stageicon {
+  width: 48px;
+  height: 38px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+
+.watchmods-stagerow .icon-select-button .icon-select-img {
+  width: 48px;
+  height: 27px;
+}
+
+.watchmods-warn {
+  color: var(--color-warning);
+  font-size: var(--text-sm);
+}
+
+/* While Dolphin boots and plays, the modal is the game's window, scaled with
+   the room below the app header like Watch Lite's popup: up to 90% of it,
+   plus up to 64px across and 32px down on small windows, never past 96%.
+   The game keeps its own shape (4:3, or 16:9 for a widescreen watch); the
+   title row and the controls row grow with the window by --wm-s (1x in a
+   1440x810 room, up to 2x). */
+.watchmods-modal.is-playing {
+  --wm-room-h: calc(100vh - var(--app-header-h, 0px));
+  --wm-max-w: min(96vw, 90vw + 64px);
+  --wm-max-h: min(var(--wm-room-h) * .96, var(--wm-room-h) * .9 + 32px);
+  --wm-s: tan(atan2(clamp(1px, min(100vw / 1440, var(--wm-room-h) / 810), 2px), 1px));
+  --wm-ar: calc(4 / 3);
+  /* around the stage: the side padding and border across; down, the padding,
+     the 2rem title and 2.5rem controls rows (zoomed), their gaps and the border */
+  --wm-chrome-w: calc(2 * var(--space-6) + 2px);
+  --wm-chrome-h: calc(var(--space-5) + var(--space-6) + var(--space-4) + var(--space-3)
+                      + 4.5rem * var(--wm-s) + 2px);
+  /* a multiple of 16px: whole pixels at 4:3 and 16:9 alike */
+  --wm-stage: round(down, min(var(--wm-max-w) - var(--wm-chrome-w),
+                              (var(--wm-max-h) - var(--wm-chrome-h)) * var(--wm-ar)), 16px);
+  width: calc(var(--wm-stage) + var(--wm-chrome-w));
+  max-height: none;
+  overflow: hidden;
+}
+.watchmods-modal.is-playing.is-wide { --wm-ar: calc(16 / 9); }
+
+.watchmods-modal.is-playing .watchmods-head,
+.watchmods-modal.is-playing .watchmods-detail,
+.watchmods-modal.is-playing .watchmods-playctl { zoom: var(--wm-s); }
+.watchmods-modal.is-playing .watchmods-head { height: 2rem; }
+
+/* status line and controls on one row, the game under them */
+.watchmods-modal.is-playing .watchmods-progress {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0;
+}
+.watchmods-modal.is-playing .watchmods-detail {
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  text-align: left;
+}
+.watchmods-modal.is-playing .watchmods-playctl { height: 2.5rem; align-items: center; }
+
+.watchmods-stage {
+  grid-column: 1 / -1;
+  position: relative;
+  display: flex;
+  width: var(--wm-stage);
+  height: calc(var(--wm-stage) / var(--wm-ar));
+  overflow: hidden;
+  background: #000;
+  border-radius: var(--radius-md);
+}
+.watchmods-stage video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.watchmods-stage-note {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  text-align: center;
+  color: var(--color-text-tertiary);
+  font-size: var(--text-sm);
+}
+
+/* Dolphin popped out into its own window: collapse back to a small card */
+.watchmods-modal.is-playing.is-popout {
+  width: min(94vw, 30rem);
+}
+
+.watchmods-playctl {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.watchmods-record-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.watchmods-record {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.watchmods-record input {
+  accent-color: var(--color-accent);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.watchmods-record-dir {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.watchmods-compress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: calc(-1 * var(--space-2));
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.watchmods-compress input {
+  accent-color: var(--color-accent);
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.watchmods-record-path {
+  max-width: 22rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  direction: rtl;      /* keep the tail (folder name) visible when truncated */
+  text-align: left;
+}
+
+.watchmods-record-label {
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+}
+
+.watchmods-record-note {
+  margin-top: calc(-1 * var(--space-2));
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.watchmods-batch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.watchmods-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.watchmods-link {
+  background: var(--color-bg-secondary, transparent);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  text-decoration: none;
+  cursor: pointer;
+  padding: var(--space-2) var(--space-3);
+}
+
+.watchmods-link:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-border-focus);
+}
+
+.watchmods-saved {
+  font-size: var(--text-sm);
+  color: var(--color-success, #7fd77f);
+}
+
+
+.watchmods-start {
+  align-self: flex-start;
+  padding: var(--space-3) var(--space-8);
+  background: var(--gradient-gold);
+  color: var(--color-text-primary);
+  border: none;
+  border-radius: var(--radius-lg);
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: var(--font-bold);
+  cursor: pointer;
+  box-shadow: var(--glow-gold-sm);
+  transition: transform var(--transition-fast), filter var(--transition-fast);
+}
+
+.watchmods-start:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.15);
+}
+
+.watchmods-start:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.watchmods-eta {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.watchmods-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-6) 0;
+}
+
+.watchmods-spinner {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-accent);
+  animation: watchmodsSpin 0.9s linear infinite;
+}
+
+.watchmods-detail {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+@keyframes watchmodsSpin {
+  to { transform: rotate(360deg); }
+}

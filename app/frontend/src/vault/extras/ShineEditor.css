@@ -1,0 +1,107 @@
+/* Shine editor styles — split from StorageViewer.css 2026-08-22 */
+/* Rules copied verbatim; loaded after StorageViewer.css via the owning component. */
+
+/* ===========================================
+   SHINE EDITOR - Interactive SVG Hexagon
+   Based on shine matrix picture (shinematrix.png)
+   =========================================== */
+
+.shine-interactive-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.shine-preview-label {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.shine-svg-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--color-bg-deep);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.shine-hexagon-svg {
+  max-width: 200px;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+.shine-layer-indicator {
+  text-align: center;
+  min-height: 20px;
+}
+
+.shine-layer-name {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-shadow: 0 0 8px currentColor;
+  transition: color 0.2s ease;
+}
+
+/* Shine editor modal adjustments */
+.shine-editor-modal {
+  max-width: 500px;
+}
+
+/* Layer selector buttons */
+.shine-layer-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.shine-layer-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-deep);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.shine-layer-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--layer-color, var(--color-border));
+}
+
+.shine-layer-btn.selected {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-text-primary);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--layer-color, #fff) 30%, transparent);
+}
+
+.shine-layer-btn-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.shine-layer-btn-label {
+  white-space: nowrap;
+}
+
+/* Active color picker area */
+.shine-active-picker {
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  margin-bottom: var(--space-3);
+}

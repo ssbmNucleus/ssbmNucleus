@@ -1,0 +1,87 @@
+/* Same neutral outline as the row chips beside it (.replay-actions button /
+   .combo-actions .wl-trigger). Icon-only, so the row barely widens; the
+   copied/failed states recolor in place rather than growing a label. */
+.share-link-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.share-link-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* State colors carry over any container's generic button styling (the
+   ReplaysPage row styles every .replay-actions button) — hence the class
+   doubled for specificity. */
+.share-link-btn.is-copied,
+.share-link-btn.is-copied:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.share-link-btn.is-failed,
+.share-link-btn.is-failed:hover {
+  border-color: var(--color-error, #d05a5a);
+  color: var(--color-error, #d05a5a);
+}
+
+/* The share sheet (Copy link, when the clipboard refused). Anchored to the chip. */
+.share-link-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.share-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  /* Inline style flips this to position:fixed at open time — list rows are
+     stacking contexts and painted over the absolute version. */
+  z-index: 1000;
+  min-width: 220px;
+  max-height: 260px;
+  overflow-y: auto;
+  background: var(--color-bg-secondary, #0b1a12);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  padding: var(--space-1);
+}
+
+.share-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.share-menu-item:hover:not(:disabled) {
+  background: var(--color-bg-tertiary, rgba(255, 255, 255, 0.06));
+  color: var(--color-accent);
+}
+
+.share-menu-item:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

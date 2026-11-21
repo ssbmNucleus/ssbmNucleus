@@ -1,0 +1,34 @@
+.viewer-canvas-surface {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  touch-action: none;
+  overscroll-behavior: contain;
+}
+
+.viewer-canvas-surface:focus-visible {
+  outline: 2px solid var(--color-cyan, #7dd3e8);
+  outline-offset: -2px;
+}
+
+.viewer-stream-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.viewer-capability-warning {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  padding: 8px;
+  color: #fff;
+  background: rgba(35, 25, 10, 0.92);
+  z-index: 1;
+  font-size: 12px;
+  pointer-events: none;
+}

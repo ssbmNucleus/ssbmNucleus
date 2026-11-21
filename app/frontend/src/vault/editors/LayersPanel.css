@@ -1,0 +1,134 @@
+/* ---- layers panel -------------------------------------------------------
+   Sits in the color-tools tab strip beside the palette. Sized like the
+   material panel next to it: 11px, scrolls on its own, never pushes the tabs
+   out of view. */
+.layers-panel {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-surface);
+  font-size: 11px;
+}
+
+.layers-panel--empty {
+  padding: 10px;
+  color: var(--color-text-secondary);
+}
+
+.layers-actions {
+  display: flex;
+  gap: 3px;
+  padding: 6px 8px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.layers-actions .toolbar-btn { width: 26px; height: 26px; }
+.layers-actions .toolbar-btn:disabled { opacity: 0.4; cursor: default; }
+.layers-actions .toolbar-btn--danger:hover:not(:disabled) { color: var(--color-danger); border-color: var(--color-danger); }
+
+.layers-list {
+  flex: 1 1 auto;
+  min-height: 48px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+}
+
+.layers-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 4px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.layers-row:hover { background: var(--color-bg-elevated); }
+
+.layers-row--active {
+  background: color-mix(in srgb, var(--color-cyan) 12%, transparent);
+  border-color: var(--color-cyan);
+}
+
+/* a hidden layer still lists, greyed, so you can find it again */
+.layers-row--hidden .layers-name { opacity: 0.45; text-decoration: line-through; }
+
+.layers-eye {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+}
+
+.layers-eye:hover { color: var(--color-cyan); background: var(--color-bg-hover, #ffffff0d); }
+
+.layers-name {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 2px 4px;
+  color: var(--color-text-primary);
+  font: inherit;
+}
+
+.layers-name:hover { border-color: var(--color-border-subtle); }
+.layers-name:focus { border-color: var(--color-cyan); outline: none; background: var(--color-bg-deep); }
+
+.layers-badge {
+  flex-shrink: 0;
+  padding: 1px 4px;
+  border-radius: var(--radius-xs);
+  background: var(--color-bg-deep);
+  color: var(--color-text-tertiary);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.layers-properties {
+  flex-shrink: 0;
+  padding: 6px 8px;
+  border-top: 1px solid var(--color-border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.layers-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.layers-field > span:first-child {
+  flex: 0 0 48px;
+  color: var(--color-text-secondary);
+}
+
+.layers-field select { flex: 1; min-width: 0; min-height: 26px; padding: 3px 5px; font-size: 11px; }
+.layers-field input[type=range] { flex: 1; min-width: 0; }
+.layers-value { flex: 0 0 26px; text-align: right; font-variant-numeric: tabular-nums; color: var(--color-text-secondary); }
+
+.layers-note {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 6px 8px;
+  color: var(--color-text-tertiary);
+  line-height: 1.4;
+  border-top: 1px solid var(--color-border-subtle);
+}

@@ -1,0 +1,22 @@
+{
+  "character": "Peach",
+  "basis": {"costumeCode": "PlPeNr", "textureCount": 48},
+  "regions": {
+    "dress": [0, 1, 2, 3, 20, 21, 22, 23, 24, 25, 30, 31, 33],
+    "fur": [13, 14, 15, 16, 17, 27],
+    "skin": [7, 8, 9, 10, 11, 12, 18],
+    "gloves": [19, 32, 34, 35],
+    "jewels": [4, 5, 6, 26, 28, 29, 36, 37, 38]
+  },
+  "protected": [7],
+  "liveHints": [],
+  "maskHints": {},
+  "notes": {
+    "dress": "pink gown: 33 = front skirt (huge), 31 = back skirt (huge), 0 = bodice, 20/21 = puff sleeves/pattern",
+    "fur": "blonde hair: 15 = main front, 16 = back (huge), 13/14/17 = locks",
+    "skin": "face sheet (7 = 256x256, painted eyes - protected), arms/neck",
+    "gloves": "long white gloves (19/32 = 160x160 pair)",
+    "jewels": "gold crown (4) + rubies (5) + sapphire (6), chest brooch (36), ring (38), earrings (37)",
+    "unmapped": "39-47 hidden smalls, 34/35 hidden glove dupes kept in gloves"
+  }
+}

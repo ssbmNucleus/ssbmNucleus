@@ -1,0 +1,22 @@
+{
+  "viewport": {
+    "w": 670.265625,
+    "h": 398.5,
+    "dpr": 1
+  },
+  "marks": [
+    {
+      "kind": "ring",
+      "box": {
+        "x": 85,
+        "y": 327.5,
+        "w": 223.125,
+        "h": 24
+      },
+      "pad": 14
+    }
+  ],
+  "crop": null,
+  "captured": "2026-09-14",
+  "source": "https://ssbmnucleus.net/post/17586/mario-and-luigi-oppsisite-day-animelee"
+}

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Flight fire-puff texture</title>
+  <desc id="desc">Schematic: cyan puffs trail below the moving fighter. Gray streamers are context. Trail colors also tint the puff texture.</desc>
+  <rect width="160" height="160" rx="16" fill="#0d1520"/>
+  <path d="M80 24Q48 73 28 137M80 24Q112 73 132 137M68 38Q52 84 47 137M92 38Q108 84 113 137" fill="none" stroke="#334557" stroke-width="5"/>
+  <path d="M80 23L90 45L84 65H76L70 45Z" fill="#66798b"/>
+  <g fill="#67e8f9">
+    <path d="M65 78C57 70 65 59 75 66C83 55 96 66 91 76C104 84 95 99 84 94C78 105 62 96 65 87C55 86 58 77 65 78Z"/>
+    <path d="M56 115C49 107 60 97 68 104C77 98 89 111 80 119C85 130 68 139 62 128C51 129 47 119 56 115Z" opacity=".75"/>
+    <path d="M104 111Q93 105 101 98Q100 106 110 107Q117 117 106 126Q111 116 104 111Z" opacity=".9"/>
+  </g>
+  <path d="M131 55V25M123 34L131 25L139 34" fill="none" stroke="#8395a7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

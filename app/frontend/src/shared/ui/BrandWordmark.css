@@ -1,0 +1,164 @@
+/* BrandWordmark.jsx: the header wordmark and its nucleus/stats mode toggle. */
+
+/* Header brand (logo + title) */
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.vault-text {
+  color: var(--color-cyan);
+}
+
+/* ─────────────────────────────────────────
+   BRAND MODE TOGGLE (nucleus <-> stats)
+   The whole logo + wordmark block is the click target. The word "Nucleus"
+   pulses (cyan in nucleus mode, green in stats mode) — "SSBM" stays plain.
+   This is a loud, obvious control, not an easter egg. The wordmark itself
+   never changes — one brand — but stats mode slides in a superscript
+   "stats" tag after the word as the accent floods green. (The internal
+   mode id / class suffix is still "nucleome".)
+   ───────────────────────────────────────── */
+
+.brand-toggle {
+  cursor: pointer;
+  border-radius: var(--radius-lg);
+  padding: var(--space-1) var(--space-2);
+  margin: calc(-1 * var(--space-1)) calc(-1 * var(--space-2));
+  transition: background var(--transition-fast);
+}
+
+.brand-toggle:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.brand-toggle:active {
+  transform: scale(0.99);
+}
+
+/* Packaged builds gate nucleOME off, so the wordmark is branding rather than a
+   control (BrandWordmark renders no onToggle). It keeps the glow/pulse and the
+   h1 filter reset — only the clickable affordances come off. */
+.brand-toggle--static {
+  cursor: default;
+}
+
+.brand-toggle--static:hover {
+  background: transparent;
+}
+
+.brand-toggle--static:active {
+  transform: none;
+}
+
+.brand-toggle--nucleome .brand-logo-image {
+  filter: drop-shadow(0 0 8px rgba(56, 224, 124, 0.55));
+}
+
+.brand-word {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.brand-toggle--nucleus .brand-word {
+  animation: brandGlowCyan 1.8s ease-in-out infinite;
+}
+
+.brand-toggle--nucleome .brand-word {
+  animation: brandGlowGreen 1.8s ease-in-out infinite;
+}
+
+/* "Nucle" recolors with the mode so the whole word reads as one brand */
+.brand-toggle .vault-text {
+  transition: color var(--duration-normal) var(--ease-out);
+}
+
+.brand-toggle--nucleome .vault-text {
+  color: var(--color-green);
+}
+
+/* The "us" accent: cyan in nucleus mode, green in stats mode. */
+.brand-suffix {
+  color: var(--color-cyan-light);
+  transition: color var(--duration-normal) var(--ease-out);
+}
+
+.brand-toggle--nucleome .brand-suffix {
+  color: var(--color-green-light);
+}
+
+/* Superscript "stats" tag: collapsed to zero width in nucleus mode so the
+   wordmark sits exactly where it always did, sliding open (width + fade +
+   drop) as stats mode arrives. Sized/raised like a superscript; the h1's
+   baseline flex keeps the word itself put. */
+.brand-stats-tag {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 0;
+  opacity: 0;
+  align-self: flex-start;
+  margin-left: 0.12em;
+  font-size: 0.42em;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-green-light);
+  /* opt OUT of the wordmark's pulsing glow: text-shadow inherits, and at
+     0.42em the big word's 16-48px shadows smear into one solid blob that
+     reads as a highlight box behind the tag */
+  text-shadow: none;
+  transform: translateY(-0.25em);
+  transition:
+    max-width var(--duration-normal) var(--ease-out),
+    opacity var(--duration-normal) var(--ease-out),
+    transform var(--duration-normal) var(--ease-out);
+}
+
+.brand-toggle--nucleome .brand-stats-tag {
+  /* reveal cap only (overflow:hidden slide) — "tracker" needs more room
+     than the old "stats" tag; overshoot is harmless once fully open */
+  max-width: 6em;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes brandGlowCyan {
+  0%, 100% {
+    text-shadow:
+      0 0 6px rgba(125, 211, 232, 0.95),
+      0 0 16px rgba(125, 211, 232, 0.65),
+      0 0 30px rgba(125, 211, 232, 0.35);
+  }
+  50% {
+    text-shadow:
+      0 0 10px rgba(165, 228, 243, 1),
+      0 0 26px rgba(125, 211, 232, 0.9),
+      0 0 48px rgba(125, 211, 232, 0.55);
+  }
+}
+
+@keyframes brandGlowGreen {
+  0%, 100% {
+    text-shadow:
+      0 0 6px rgba(56, 224, 124, 0.95),
+      0 0 16px rgba(56, 224, 124, 0.65),
+      0 0 30px rgba(56, 224, 124, 0.35);
+  }
+  50% {
+    text-shadow:
+      0 0 10px rgba(108, 235, 159, 1),
+      0 0 26px rgba(56, 224, 124, 0.9),
+      0 0 48px rgba(56, 224, 124, 0.55);
+  }
+}
+
+.app-version {
+  align-self: flex-end;
+  margin-bottom: 6px;
+  font-family: 'Exo 2', 'Segoe UI', sans-serif;
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted, rgba(255, 255, 255, 0.45));
+}

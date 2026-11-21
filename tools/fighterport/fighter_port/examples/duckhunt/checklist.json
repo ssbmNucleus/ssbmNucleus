@@ -1,0 +1,530 @@
+{
+ "1.1": {
+  "answer": "done",
+  "how": "His own skeleton (102 joints, the game's order) and model; drawn at 0.9698 of the game's size. Seen beside Donkey Kong."
+ },
+ "1.2": {
+  "answer": "difference",
+  "how": "Eight costumes, each built from its own folder of the game's files (c00 to c07). Team colours are picked by hue: red is costume 1; no costume is blue or green, so both fall to costume 0."
+ },
+ "1.3": {
+  "answer": "not applicable",
+  "how": "Not a rip: the body is the game's own model files."
+ },
+ "1.4": {
+  "answer": "done",
+  "how": "His face is whole parts shown and hidden: 38 parts in ten groups beside the body (own_faces). Blink, hurt face, open mouth, raised ears, the duck's wing: seen close up on duckhunt20."
+ },
+ "1.5": {
+  "answer": "not applicable",
+  "how": "No weapon."
+ },
+ "1.6": {
+  "answer": "not applicable",
+  "how": "No weapon."
+ },
+ "1.7": {
+  "answer": "not applicable",
+  "how": "No weapon."
+ },
+ "1.8": {
+  "answer": "not applicable",
+  "how": "Nothing that bends."
+ },
+ "1.9": {
+  "answer": "done",
+  "how": "The game's own throw bone (joint 100); the four throws seen."
+ },
+ "1.10": {
+  "answer": "done",
+  "how": "On his own skeleton: seven chains (ears, cheeks, tongue) on Melee's physics."
+ },
+ "1.11": {
+  "answer": "done",
+  "how": "What rest shows is read from the game's resting clip (a00defaulteyelid); every other part is carried as a choice of a group."
+ },
+ "1.12": {
+  "answer": "not applicable",
+  "how": "His eyes are whole parts, not layered pictures."
+ },
+ "1.13": {
+  "answer": "done",
+  "how": "0.29 of a frame beside Donkey Kong, 0.40 for two of him (was 1.61): weightings of three joints in tenths, groups made again, a low-detail copy for the shadow."
+ },
+ "2.1": {
+  "answer": "difference",
+  "how": "209 of his own clips; 20 actions hold a pose because the game has no clip for them (named in report.json: parasol, screw attack, blind, and special slots the port does not use)."
+ },
+ "2.2": {
+  "answer": "done",
+  "how": "From the game's motion list; counted in the game: spot dodge 25, rolls 29 and 34, grab 34, dash grab 42, jab 33, taunt, shield drop."
+ },
+ "2.4": {
+  "answer": "done",
+  "how": "The shared actions keep the engine's own lengths (the shield drop takes the game's shared number, not his script's)."
+ },
+ "2.6": {
+  "answer": "done",
+  "how": "Per action from the donor's own flag: the engine's flag set on 7 more actions whose clip moves him, travel kept on the root in 30 clips, taken off in 6."
+ },
+ "2.9": {
+  "answer": "done",
+  "how": "Stored one frame longer where Melee enters a frame in (the driver's rule); the counts above are the game's."
+ },
+ "3.1": {
+  "answer": "done",
+  "how": "Untouchable frames of 21 shared actions on the game's frames (report.json: shared)."
+ },
+ "3.3": {
+  "answer": "done",
+  "how": "Landing lag per aerial is the game's number (10, 9, 14, 11, 15)."
+ },
+ "3.5": {
+  "answer": "done",
+  "how": "Fixed against published frames: his smashes' shots (17-18, 23-24, 29-30) and the five gunmen (55, 67, 73, 79, 91) land on them in the game."
+ },
+ "3.6": {
+  "answer": "done",
+  "how": "The specials' frame code counts the entering frame as the state's first (stepped: Duck Jump 5, 80, 20; down special 41)."
+ },
+ "4.1": {
+  "answer": "done",
+  "how": "23 moves written from the game's scripts on his own joints; 81 hitbox sizes in world units times 0.9698."
+ },
+ "4.8": {
+  "answer": "done",
+  "how": "Grab boxes from the game: frames 6 to 8, dash grab 9 to 11, four boxes each."
+ },
+ "4.9": {
+  "answer": "done",
+  "how": "His smashes: the script makes each hitbox and never ends it; the frames are the published ones, checked frame by frame with the hitboxes drawn."
+ },
+ "5.1": {
+  "answer": "done",
+  "how": "Walk, dash, run, traction, air speed and both parts of air steering, gravity, fall speeds, weight: the game's numbers (31 set)."
+ },
+ "5.2": {
+  "answer": "done",
+  "how": "Jumps as heights under his own gravity; double jump as a share; short hop."
+ },
+ "5.4": {
+  "answer": "difference",
+  "how": "Still Marth's: the walk animation's three thresholds, run acceleration, turn frames, ledge jump, normal landing lag (4), wall jump speeds, the hat and flower places, the frozen block, the egg."
+ },
+ "5.5": {
+  "answer": "done",
+  "how": "Gone down one by one on 2026-11-12 (scratch attr_evidence.py); what was added is in oneshot.ATTRIBUTES."
+ },
+ "5.6": {
+  "answer": "done",
+  "how": "The 24 fighters in both games side by side: walk start is Melee's times 1.05 each with each, jumps the same, item throw the same."
+ },
+ "5.7": {
+  "answer": "done",
+  "how": "Air steering is two numbers now (0.07 by the stick, 0.01 flat)."
+ },
+ "5.8": {
+  "answer": "done",
+  "how": "Shield: the game's radius 9.7 (the engine multiplies by the drawn scale itself)."
+ },
+ "5.9": {
+  "answer": "done",
+  "how": "He jumps off walls (the game's wall_jump_type), set in the roster entry."
+ },
+ "6.1": {
+  "answer": "done",
+  "how": "Up special: speed kept and given as the game's parameter file says (special_numbers in report.json)."
+ },
+ "6.2": {
+  "answer": "done",
+  "how": "Specials can be turned round as they start."
+ },
+ "6.3": {
+  "answer": "not applicable",
+  "how": "None of his specials charges."
+ },
+ "6.4": {
+  "answer": "done",
+  "how": "Duck Jump ends by an aerial or an air dodge from frame 51 of the move (one frame earlier does not)."
+ },
+ "6.6": {
+  "answer": "difference",
+  "how": "Can, clay, gunman and bullet are items of the port's own. Adjustments: every shot breaks the clay; its last hit is one ball; opponents cannot knock the can; the gunmen are flat cut-outs and cannot be hit; damage is whole numbers."
+ },
+ "6.7": {
+  "answer": "done",
+  "how": "Duck Jump: rose 78.8; drifts 12 with no stick, 104 with it; helpless after, landing 30 frames."
+ },
+ "6.10": {
+  "answer": "not applicable",
+  "how": "No counter, reflector or absorber."
+ },
+ "6.11": {
+  "answer": "not applicable",
+  "how": "No meter."
+ },
+ "6.13": {
+  "answer": "not applicable",
+  "how": "No chain."
+ },
+ "6.12": {
+  "answer": "done",
+  "how": "Five gunmen, each once a round in no set order; each timed."
+ },
+ "6.14": {
+  "answer": "done",
+  "how": "Air versions of the neutral and side specials land into the ground ones (the driver's rule); the cancelled aerial lands in 30 frames."
+ },
+ "6.15": {
+  "answer": "done",
+  "how": "The reticle, can and clay register scripts under his moves' names before his own: the reader keeps the longest run without a repeated name."
+ },
+ "6.16": {
+  "answer": "done",
+  "how": "Each item is removed on its life, outside the stage, and when he dies (seen for the can and the clay)."
+ },
+ "6.17": {
+  "answer": "done",
+  "how": "Counted that way."
+ },
+ "6.18": {
+  "answer": "done",
+  "how": "Known and allowed for in the probe tests."
+ },
+ "6.19": {
+  "answer": "done",
+  "how": "Hidden with the flag on the whole model; a frame after the break looked at in the open."
+ },
+ "6.20": {
+  "answer": "done",
+  "how": "Removal effects set to none for his items; no white puff."
+ },
+ "6.21": {
+  "answer": "done",
+  "how": "The bank is rebuilt with every build; every code-played sound heard by recording on duckhunt20 (19 heard)."
+ },
+ "6.22": {
+  "answer": "done",
+  "how": "His code's eight sounds are declared (own_duckhunt.CODE_SOUNDS) and given plain places."
+ },
+ "6.23": {
+  "answer": "done",
+  "how": "Samples matched against each other (n02 was the tail of n01)."
+ },
+ "6.24": {
+  "answer": "done",
+  "how": "The reticle: a picture on every stepped frame."
+ },
+ "6.25": {
+  "answer": "done",
+  "how": "The aerial out of the Duck Jump: stepped; no ordinary fall frame between."
+ },
+ "6.26": {
+  "answer": "done",
+  "how": "The gunman asks one frame early; hits land on the published frames."
+ },
+ "6.27": {
+  "answer": "done",
+  "how": "Five gunmen in one frozen run, told apart by damage."
+ },
+ "6.28": {
+  "answer": "difference",
+  "how": "Listed; not built: the can's knock as it lands and its warning, the gunmen's own six sounds."
+ },
+ "6.29": {
+  "answer": "done",
+  "how": "The whistle and the helpless fall's sound matched by their beginnings."
+ },
+ "6.30": {
+  "answer": "done",
+  "how": "The can's explosion is his own sound (n07)."
+ },
+ "6.31": {
+  "answer": "done",
+  "how": "The helpless fall's sound ends with the fall; the can's whistle is ended on landing."
+ },
+ "6.32": {
+  "answer": "difference",
+  "how": "A gunman's bullet knocks his own can along one hop (the wiki says projectiles change its flight; how far is in code not read)."
+ },
+ "6.33": {
+  "answer": "done",
+  "how": "The code's sounds use their own mark (port_code), not the taunt's."
+ },
+ "7.1": {
+  "answer": "difference",
+  "how": "His own on the game's frames; nothing of Marth's. He has no line for a ledge, dizzy, sleep, teetering, lifting: those are silent."
+ },
+ "7.2": {
+  "answer": "not applicable",
+  "how": "No sword."
+ },
+ "7.3": {
+  "answer": "done",
+  "how": "The engine's own dust and flashes where his scripts call the shared ones."
+ },
+ "7.4": {
+  "answer": "done",
+  "how": "His stock icon and his series emblem behind the damage (the whole duck; its body is behind the digits)."
+ },
+ "7.5": {
+  "answer": "done",
+  "how": "Roster tile, eight portraits and stock icons from pictures taken in the game, name, announcer call, results screen."
+ },
+ "7.6": {
+  "answer": "not applicable",
+  "how": "His scripts lay no colour over the body."
+ },
+ "7.7": {
+  "answer": "done",
+  "how": "Shared swing sounds by Melee's own numbers."
+ },
+ "7.8": {
+  "answer": "done",
+  "how": "The bank gains 16 samples (12, plus 4 for code-played sounds); it loads and plays."
+ },
+ "7.9": {
+  "answer": "done",
+  "how": "His own effect file."
+ },
+ "7.10": {
+  "answer": "difference",
+  "how": "40 generators for 5 effects, each looked at in its move; speed lines drawn thin and turned. Effects that are 3D shapes are not carried (16 notes in the driver's log)."
+ },
+ "7.11": {
+  "answer": "done",
+  "how": "Dog and duck lines matched on the word for the occasion."
+ },
+ "7.12": {
+  "answer": "done",
+  "how": "No donor swing stands in; every attack sound now has a place."
+ },
+ "7.13": {
+  "answer": "difference",
+  "how": "The taunt and the three win poses play their own. Steps and landings are Melee's shared sounds from Marth's kept scripts; his own step sounds are not carried."
+ },
+ "7.14": {
+  "answer": "done",
+  "how": "The side taunt, the dog's laugh."
+ },
+ "7.15": {
+  "answer": "done",
+  "how": "Ten voice slots nothing plays any more hold his sounds; the jump slot holds his jump sound."
+ },
+ "9.2": {
+  "answer": "done",
+  "how": "Counted (see 2.2)."
+ },
+ "9.4": {
+  "answer": "done",
+  "how": "The driver reads back what it wrote (PASS: 327 actions, 209 clips)."
+ },
+ "9.5": {
+  "answer": "done",
+  "how": "Each special against the wiki and published frames (the specials worker's tables)."
+ },
+ "9.8": {
+  "answer": "done",
+  "how": "Hits and the hurt face checked by a second fighter striking him, stepped."
+ },
+ "9.11": {
+  "answer": "done",
+  "how": "By recording: 16 attack sounds, the taunt's four, the jump, 19 special sounds, the laugh on the results screen."
+ },
+ "9.12": {
+  "answer": "done",
+  "how": "The standing blink stepped (open, half, shut, half, open)."
+ },
+ "9.13": {
+  "answer": "done",
+  "how": "By the game's own clock: 0.29."
+ },
+ "10.1": {
+  "answer": "not applicable",
+  "how": "Not a Brawl port."
+ },
+ "10.2": {
+  "answer": "not applicable",
+  "how": "Not a Brawl port."
+ },
+ "10.3": {
+  "answer": "not applicable",
+  "how": "Not a Brawl port."
+ },
+ "10.4": {
+  "answer": "not applicable",
+  "how": "Not a Brawl port."
+ },
+ "10.5": {
+  "answer": "not applicable",
+  "how": "Not a Brawl port."
+ },
+ "10.6": {
+  "answer": "not applicable",
+  "how": "Not a Brawl port."
+ },
+ "10.7": {
+  "answer": "not applicable",
+  "how": "Not a Brawl port."
+ },
+ "10.8": {
+  "answer": "not applicable",
+  "how": "Not a Brawl port."
+ },
+ "11.1": {
+  "answer": "done",
+  "how": "His own skeleton: a dog on all fours with a duck on its back is nobody's shape."
+ },
+ "11.2": {
+  "answer": "done",
+  "how": "He stood, walked and jumped in a normal disc before anything else was built."
+ },
+ "11.3": {
+  "answer": "done",
+  "how": "Every bone in its own frame, in the game's order."
+ },
+ "11.4": {
+  "answer": "done",
+  "how": "The game's model at rest with its own weights (made simpler: three joints, tenths)."
+ },
+ "11.5": {
+  "answer": "done",
+  "how": "Every joint-numbered table rewritten (own_data); the camera joint is his waist."
+ },
+ "11.6": {
+  "answer": "done",
+  "how": "Hurtboxes and collision joints from the game's own parameters."
+ },
+ "11.7": {
+  "answer": "done",
+  "how": "An empty texture animation tree for the donor's code to reach."
+ },
+ "11.8": {
+  "answer": "done",
+  "how": "Clips bind by position; read back."
+ },
+ "11.9": {
+  "answer": "done",
+  "how": "See 2.6."
+ },
+ "11.10": {
+  "answer": "done",
+  "how": "Twenty held poses, named in report.json."
+ },
+ "11.11": {
+  "answer": "done",
+  "how": "Seven chains, eleven collision spheres."
+ },
+ "11.12": {
+  "answer": "done",
+  "how": "Per action from the game's own blend file: 281 actions swing, 46 follow the clip in part."
+ },
+ "11.14": {
+  "answer": "done",
+  "how": "The drawn size is the game's size against the donor's."
+ },
+ "11.15": {
+  "answer": "done",
+  "how": "His name is set tighter on the roster plate."
+ },
+ "11.16": {
+  "answer": "done",
+  "how": "See 1.13."
+ },
+ "11.17": {
+  "answer": "done",
+  "how": "A low-detail copy (74 matrices) for the shadow's pass."
+ },
+ "11.18": {
+  "answer": "done",
+  "how": "All eight built the same way; same pieces and cost."
+ },
+ "11.19": {
+  "answer": "done",
+  "how": "Portraits and stock icons cut from pictures taken in the game."
+ },
+ "11.20": {
+  "answer": "done",
+  "how": "Results screen clips and the cut-scene pose are his own; so are the versus card's and the trophy fall's (held poses)."
+ },
+ "11.21": {
+  "answer": "done",
+  "how": "Ten groups and the body: exactly what the engine holds."
+ },
+ "11.22": {
+  "answer": "done",
+  "how": "Defaults in the load code, put back each frame."
+ },
+ "11.23": {
+  "answer": "done",
+  "how": "1,589 commands in 178 actions; 25 of the donor's taken out; 57 commands in five rows of the results screen."
+ },
+ "11.24": {
+  "answer": "done",
+  "how": "The standing blink is per-frame code."
+ },
+ "11.25": {
+  "answer": "difference",
+  "how": "The shadow, the reflection and the off-screen bubble show the resting outline whatever the face does."
+ },
+ "11.26": {
+  "answer": "difference",
+  "how": "His costume is 1.8 MB (the game's largest is 1.1): pictures at most 512 a side. Beside Peach on Pokemon Stadium 0.34 MB is left; two of him there 0.49 MB. He is the game's own 30,000 triangles."
+ },
+ "11.27": {
+  "answer": "done",
+  "how": "14 vertices take a normal from their triangles."
+ },
+ "11.28": {
+  "answer": "difference",
+  "how": "Seen: every choice once (on the face worker's disc), blink, hit, smash, jump, metal, a second costume, nothing twice. Not seen on duckhunt20 itself: every choice once, metal."
+ },
+ "12.1": {
+  "answer": "done",
+  "how": "A flat model cut from the game's series picture; seen in the HUD and behind the winner."
+ },
+ "12.2": {
+  "answer": "difference",
+  "how": "His own fanfare is on the disc and his entry names it. Not heard: test runs play no game music."
+ },
+ "12.3": {
+  "answer": "done",
+  "how": "His own clips; the snicker seen with the full panel."
+ },
+ "12.4": {
+  "answer": "difference",
+  "how": "The versus card shows his standing pose (seen in Classic). The trophy fall is a held pose, not looked at."
+ },
+ "12.5": {
+  "answer": "done",
+  "how": "DUCK HUNT on the banner and under the portrait; his announcer call."
+ },
+ "12.6": {
+  "answer": "difference",
+  "how": "See 1.2."
+ },
+ "12.7": {
+  "answer": "difference",
+  "how": "Marth's: target test, trophies, the pictures and film after a win."
+ },
+ "12.8": {
+  "answer": "difference",
+  "how": "Kirby gets nothing from him (see 12.13)."
+ },
+ "12.10": {
+  "answer": "difference",
+  "how": "The computer plays Marth's habits with his moves."
+ },
+ "12.12": {
+  "answer": "done",
+  "how": "Classic started with him: his character screen, the versus card, the first fight (against Mario) played through."
+ },
+ "12.13": {
+  "answer": "done",
+  "how": "Kirby copies him and the game goes on (kirby_copy_probe on duckhunt20)."
+ },
+ "12.14": {
+  "answer": "done",
+  "how": "The laugh heard on the results screen at the game's frame 86 of the first pose."
+ }
+}

@@ -1,0 +1,262 @@
+/* Vault grid layouts (characters / stages / honeycomb), custom-grid drag states, pending-builtin overlay — split from StorageViewer.css 2026-08-22 (phase 3) */
+/* Rules copied verbatim; loaded right after StorageViewer.css from StorageViewer.jsx so the cascade order is unchanged. */
+
+/* ─────────────────────────────────────────
+   CHARACTER / STAGE GRIDS
+   ───────────────────────────────────────── */
+
+.characters-grid {
+  --char-gap: var(--space-3);
+  --char-row-gap: var(--space-4);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: var(--char-gap);
+  row-gap: var(--char-row-gap);
+  /* Full page-shell width: bigger icons while keeping 9 per row / 3 rows */
+  width: 100%;
+}
+
+.characters-grid .character-card {
+  flex: 0 0 calc((100% - (8 * var(--char-gap))) / 9);
+  min-width: 0;
+}
+
+.stages-grid {
+  --stage-gap: var(--space-3);
+  --stage-height-fit-width: max(34rem, calc((var(--viewport-height) - 22rem) * 1.4));
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--stage-gap);
+  width: min(100%, 56rem, var(--stage-height-fit-width));
+}
+
+.stages-grid .stage-card {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+}
+
+/* Stages home: 2 rows of 4 -- the six DAS stages, Custom Stages, More Stages. */
+.stages-grid--eight {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: min(100%, 72rem, calc(var(--stage-height-fit-width) * 1.33));
+}
+
+/* More Stages sub-page: the stage picked at level 2 sits beside the back button. */
+.more-stages-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-weight: var(--font-medium);
+  color: var(--color-text-primary);
+}
+
+.more-stages-title__icon {
+  width: 40px;
+  height: 35px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-subtle);
+  image-rendering: pixelated;
+}
+
+.more-stage-card--empty .stage-variant-count {
+  color: var(--color-text-tertiary);
+}
+
+/* ─────────────────────────────────────────
+   CUSTOM STAGES SUB-PAGE GRID
+   ───────────────────────────────────────── */
+
+.custom-stages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.custom-stages-grid .stage-icon {
+  image-rendering: pixelated;
+}
+
+/* Drag/drop states for custom-stage cards (mirrors .skin-card behavior) */
+.custom-stages-grid .stage-card[draggable="true"] {
+  cursor: grab;
+  user-select: none;
+}
+
+.custom-stages-grid .stage-card[draggable="true"]:active:not(.dragging) {
+  transform: scale(0.98);
+}
+
+.custom-stages-grid .stage-card.dragging {
+  opacity: 1;
+  transform: scale(1.03);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.5),
+    0 10px 20px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(125, 211, 232, 0.3);
+  z-index: var(--z-dropdown);
+  cursor: grabbing;
+}
+
+.custom-stages-grid.is-dragging .stage-card,
+.custom-stages-grid.is-dragging .folder-card {
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.custom-stages-grid.is-dragging .stage-card:not(.dragging),
+.custom-stages-grid.is-dragging .folder-card:not(.dragging) {
+  opacity: 0.85;
+  filter: brightness(0.95);
+}
+
+/* Drag-to-reorder states for custom-character cards (mirrors .stage-card) */
+.custom-characters-grid .character-card[draggable="true"] {
+  cursor: grab;
+  user-select: none;
+}
+
+.custom-characters-grid .character-card[draggable="true"]:active:not(.dragging) {
+  transform: scale(0.98);
+}
+
+.custom-characters-grid .character-card.dragging {
+  opacity: 1;
+  transform: scale(1.03);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.5),
+    0 10px 20px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(125, 211, 232, 0.3);
+  z-index: var(--z-dropdown);
+  cursor: grabbing;
+}
+
+.custom-stages-grid .stage-card.just-dropped {
+  animation: dropSettle 0.4s var(--ease-spring);
+}
+
+.custom-stages-gateway .stage-placeholder {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+}
+
+/* ─────────────────────────────────────────
+   CUSTOM CHARACTERS SUB-PAGE GRID
+   ───────────────────────────────────────── */
+
+/* Layout comes from .characters-grid; custom icons are low-res CSS rips */
+.custom-characters-grid .character-css-icon {
+  image-rendering: pixelated;
+}
+
+/* Built-in fighters staged by first-run setup but not rendered yet: greyed out
+   until clicked, then they build themselves in place. */
+.character-card.pending-builtin .character-icon-container {
+  position: relative;
+}
+
+.character-card.pending-builtin .character-css-icon,
+.character-card.pending-builtin .character-placeholder {
+  filter: grayscale(1) brightness(0.55);
+  transition: filter 0.2s ease;
+}
+
+.character-card.pending-builtin:hover .character-css-icon,
+.character-card.pending-builtin:hover .character-placeholder {
+  filter: grayscale(0.5) brightness(0.8);
+}
+
+.character-card.pending-builtin .skin-count {
+  color: var(--color-text-muted);
+}
+
+.pending-builtin-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  text-align: center;
+  background: rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+}
+
+.pending-builtin-pct {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-cyan);
+}
+
+.pending-builtin-hint {
+  font-size: var(--text-xs);
+  line-height: 1.2;
+  color: var(--color-text-secondary);
+}
+
+.pending-builtin-hint.error {
+  color: var(--color-danger);
+}
+
+.character-card.pending-builtin.setting-up {
+  cursor: progress;
+}
+
+.character-card.pending-builtin.setting-up .character-icon-container {
+  border-color: var(--color-cyan);
+}
+
+/* ─────────────────────────────────────────
+   CUSTOM STAGE DETAIL VIEW
+   ───────────────────────────────────────── */
+
+/* Responsive overrides (shredded from the StorageViewer.css breakpoint blocks 2026-08-22) */
+@media (max-width: 968px) {
+  .characters-grid {
+    --char-gap: var(--space-2);
+    --char-row-gap: var(--space-3);
+    width: min(100%, 52rem);
+  }
+
+  .characters-grid .character-card {
+    flex-basis: calc((100% - (5 * var(--char-gap))) / 6);
+  }
+
+  .stages-grid {
+    --stage-gap: var(--space-3);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+    width: min(100%, 28rem);
+  }
+
+  /* Honeycomb needs three columns - fall back to the plain grid */
+  .stages-grid--hex {
+    grid-template-rows: none;
+  }
+
+  .stages-grid--hex > * {
+    grid-area: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .characters-grid {
+    --char-gap: 6px;
+    --char-row-gap: var(--space-2);
+    width: 100%;
+  }
+
+  .characters-grid .character-card {
+    flex-basis: calc((100% - (4 * var(--char-gap))) / 5);
+  }
+
+  .stages-grid {
+    gap: var(--space-3);
+    width: 100%;
+  }
+}

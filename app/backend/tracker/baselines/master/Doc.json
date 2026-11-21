@@ -1,0 +1,459 @@
+{
+ "tier": "master",
+ "char": "Doc",
+ "n_games": 2530,
+ "minutes": 8429.0,
+ "metrics": {
+  "lc_rate": {
+   "median": 81.82,
+   "mean": 78.62,
+   "p25": 70.0,
+   "p75": 89.47
+  },
+  "wd_per_min": {
+   "median": 3.56,
+   "mean": 4.25,
+   "p25": 2.21,
+   "p75": 5.94
+  },
+  "apm": {
+   "median": 105.4,
+   "mean": 118.07,
+   "p25": 90.2,
+   "p75": 153.4
+  },
+  "tech_rate": {
+   "median": 33.33,
+   "mean": 33.65,
+   "p25": 0.0,
+   "p75": 50.0
+  },
+  "openings_per_min": {
+   "median": 7.65,
+   "mean": 7.66,
+   "p25": 6.57,
+   "p75": 8.74
+  },
+  "dmg_per_conv": {
+   "median": 13.19,
+   "mean": 13.46,
+   "p25": 11.88,
+   "p75": 14.65
+  },
+  "one_hit_pct": {
+   "median": 68.18,
+   "mean": 67.6,
+   "p25": 60.0,
+   "p75": 75.76
+  },
+  "kill_conv_pct": {
+   "median": 4.65,
+   "mean": 4.92,
+   "p25": 2.22,
+   "p75": 7.41
+  },
+  "avg_death_pct": {
+   "median": 116.3,
+   "mean": 116.53,
+   "p25": 103.3,
+   "p75": 130.5
+  },
+  "deaths_per_min": {
+   "median": 1.08,
+   "mean": 1.13,
+   "p25": 0.77,
+   "p75": 1.41
+  },
+  "dmg_taken_per_min": {
+   "median": 127.3,
+   "mean": 130.31,
+   "p25": 105.93,
+   "p75": 152.05
+  },
+  "center_control": {
+   "median": 41.9,
+   "mean": 41.9,
+   "p25": 36.7,
+   "p75": 47.4
+  },
+  "corner_pct": {
+   "median": 31.6,
+   "mean": 32.03,
+   "p25": 25.9,
+   "p75": 37.6
+  },
+  "neutral_wins_pct": {
+   "median": 46.7,
+   "mean": 46.97,
+   "p25": 41.7,
+   "p75": 52.2
+  }
+ },
+ "deaths": {
+  "n_deaths": 8636,
+  "percent_distribution": {
+   "0-19": 1.1,
+   "20-39": 1.5,
+   "40-59": 3.1,
+   "60-79": 7.2,
+   "80-99": 15.1,
+   "100-119": 27.4,
+   "120-139": 23.7,
+   "140-159": 14.0,
+   "160-179": 5.4,
+   "180+": 1.6
+  },
+  "percentiles": {
+   "p10": 74.1,
+   "p25": 97.17,
+   "median": 116.2,
+   "p75": 136.1,
+   "p90": 153.7
+  },
+  "causes_pct": {
+   "raw": 23.9,
+   "edgeguard": 39.7,
+   "failed_recovery": 31.7,
+   "tech_chase": 1.4,
+   "sd": 3.2
+  },
+  "by_move_pct": {
+   "bair": 22.8,
+   "usmash": 11.5,
+   "fair": 11.5,
+   "uair": 9.3,
+   "nair": 7.0,
+   "down-B": 6.4,
+   "fsmash": 6.0,
+   "dair": 6.0,
+   "dsmash": 3.7,
+   "neutral-B": 2.8
+  }
+ },
+ "kills": {
+  "n_deaths": 7377,
+  "percent_distribution": {
+   "0-19": 2.0,
+   "20-39": 3.4,
+   "40-59": 4.4,
+   "60-79": 7.9,
+   "80-99": 15.3,
+   "100-119": 24.9,
+   "120-139": 24.8,
+   "140-159": 11.3,
+   "160-179": 4.4,
+   "180+": 1.7
+  },
+  "percentiles": {
+   "p10": 60.96,
+   "p25": 91.0,
+   "median": 114.5,
+   "p75": 132.7,
+   "p90": 150.64
+  },
+  "causes_pct": {
+   "raw": 31.8,
+   "edgeguard": 21.9,
+   "failed_recovery": 39.3,
+   "tech_chase": 2.0,
+   "sd": 5.0
+  },
+  "by_move_pct": {
+   "fair": 23.3,
+   "dsmash": 22.5,
+   "side-B": 13.2,
+   "fsmash": 11.4,
+   "bair": 11.0,
+   "nair": 5.1,
+   "up-B": 1.6,
+   "ftilt": 1.6,
+   "neutral-B": 1.4,
+   "bthrow": 1.3
+  }
+ },
+ "tech": {
+  "overall_rate": 34.9,
+  "ground_rate": 37.4,
+  "platform_rate": 30.9,
+  "after_throw_rate": 58.3,
+  "n_situations": 11458
+ },
+ "recovery": {
+  "success_pct": 75.8,
+  "attempts_per_game": 12.09
+ },
+ "per_matchup": {
+  "Fox": {
+   "n_games": 748,
+   "win_pct": 32.2,
+   "openings_per_min": 7.26,
+   "dmg_per_conv": 13.82,
+   "kill_conv_pct": 5.0,
+   "avg_death_pct": 110.55,
+   "deaths_per_min": 1.17,
+   "tech_rate": 33.33,
+   "lc_rate": 80.33,
+   "death_causes_pct": {
+    "raw": 24.0,
+    "edgeguard": 31.9,
+    "failed_recovery": 40.6,
+    "tech_chase": 0.3,
+    "sd": 3.2
+   }
+  },
+  "Falco": {
+   "n_games": 354,
+   "win_pct": 38.4,
+   "openings_per_min": 7.62,
+   "dmg_per_conv": 13.2,
+   "kill_conv_pct": 5.0,
+   "avg_death_pct": 121.8,
+   "deaths_per_min": 1.17,
+   "tech_rate": 33.33,
+   "lc_rate": 77.78,
+   "death_causes_pct": {
+    "raw": 24.5,
+    "edgeguard": 49.9,
+    "failed_recovery": 20.5,
+    "tech_chase": 2.8,
+    "sd": 2.3
+   }
+  },
+  "Sheik": {
+   "n_games": 251,
+   "win_pct": 37.1,
+   "openings_per_min": 7.86,
+   "dmg_per_conv": 13.61,
+   "kill_conv_pct": 4.55,
+   "avg_death_pct": 120.9,
+   "deaths_per_min": 1.08,
+   "tech_rate": 33.33,
+   "lc_rate": 78.57,
+   "death_causes_pct": {
+    "raw": 24.0,
+    "edgeguard": 43.4,
+    "failed_recovery": 27.9,
+    "tech_chase": 1.4,
+    "sd": 3.4
+   }
+  },
+  "Marth": {
+   "n_games": 230,
+   "win_pct": 42.6,
+   "openings_per_min": 7.92,
+   "dmg_per_conv": 13.07,
+   "kill_conv_pct": 4.17,
+   "avg_death_pct": 120.8,
+   "deaths_per_min": 0.95,
+   "tech_rate": 40.0,
+   "lc_rate": 87.3,
+   "death_causes_pct": {
+    "raw": 18.5,
+    "edgeguard": 49.9,
+    "failed_recovery": 25.6,
+    "tech_chase": 2.8,
+    "sd": 3.1
+   }
+  },
+  "CF": {
+   "n_games": 173,
+   "win_pct": 30.6,
+   "openings_per_min": 8.0,
+   "dmg_per_conv": 13.83,
+   "kill_conv_pct": 4.55,
+   "avg_death_pct": 104.8,
+   "deaths_per_min": 1.27,
+   "tech_rate": 28.57,
+   "lc_rate": 80.0,
+   "death_causes_pct": {
+    "raw": 21.5,
+    "edgeguard": 48.9,
+    "failed_recovery": 24.0,
+    "tech_chase": 3.3,
+    "sd": 2.3
+   }
+  },
+  "Puff": {
+   "n_games": 147,
+   "win_pct": 25.9,
+   "openings_per_min": 7.04,
+   "dmg_per_conv": 11.86,
+   "kill_conv_pct": 5.26,
+   "avg_death_pct": 121.5,
+   "deaths_per_min": 1.01,
+   "tech_rate": 25.0,
+   "lc_rate": 81.82,
+   "death_causes_pct": {
+    "raw": 22.8,
+    "edgeguard": 51.0,
+    "failed_recovery": 22.6,
+    "tech_chase": 0.9,
+    "sd": 2.7
+   }
+  },
+  "Peach": {
+   "n_games": 120,
+   "win_pct": 47.5,
+   "openings_per_min": 7.98,
+   "dmg_per_conv": 12.39,
+   "kill_conv_pct": 5.2,
+   "avg_death_pct": 132.85,
+   "deaths_per_min": 0.81,
+   "tech_rate": 33.33,
+   "lc_rate": 84.73,
+   "death_causes_pct": {
+    "raw": 24.0,
+    "edgeguard": 35.8,
+    "failed_recovery": 37.2,
+    "tech_chase": 1.2,
+    "sd": 1.8
+   }
+  },
+  "Samus": {
+   "n_games": 85,
+   "win_pct": 60.0,
+   "openings_per_min": 7.95,
+   "dmg_per_conv": 12.04,
+   "kill_conv_pct": 4.76,
+   "avg_death_pct": 126.5,
+   "deaths_per_min": 0.64,
+   "tech_rate": 25.0,
+   "lc_rate": 83.33,
+   "death_causes_pct": {
+    "raw": 25.0,
+    "edgeguard": 35.3,
+    "failed_recovery": 37.7,
+    "tech_chase": 0.4,
+    "sd": 1.6
+   }
+  },
+  "DK": {
+   "n_games": 83,
+   "win_pct": 25.3,
+   "openings_per_min": 8.87,
+   "dmg_per_conv": 12.49,
+   "kill_conv_pct": 4.35,
+   "avg_death_pct": 111.5,
+   "deaths_per_min": 1.09,
+   "tech_rate": 33.33,
+   "lc_rate": 77.27,
+   "death_causes_pct": {
+    "raw": 24.2,
+    "edgeguard": 45.7,
+    "failed_recovery": 22.8,
+    "tech_chase": 0.7,
+    "sd": 6.6
+   }
+  }
+ },
+ "per_stage": {
+  "PS": {
+   "n_games": 787,
+   "win_pct": 38.8,
+   "openings_per_min": 7.6,
+   "dmg_per_conv": 13.41,
+   "kill_conv_pct": 4.55,
+   "avg_death_pct": 116.8,
+   "deaths_per_min": 1.1,
+   "tech_rate": 33.33,
+   "lc_rate": 83.33,
+   "death_causes_pct": {
+    "raw": 26.1,
+    "edgeguard": 37.9,
+    "failed_recovery": 31.8,
+    "tech_chase": 1.3,
+    "sd": 2.9
+   }
+  },
+  "YS": {
+   "n_games": 609,
+   "win_pct": 35.0,
+   "openings_per_min": 7.8,
+   "dmg_per_conv": 13.03,
+   "kill_conv_pct": 5.71,
+   "avg_death_pct": 111.6,
+   "deaths_per_min": 1.17,
+   "tech_rate": 28.57,
+   "lc_rate": 78.57,
+   "death_causes_pct": {
+    "raw": 27.4,
+    "edgeguard": 38.5,
+    "failed_recovery": 27.8,
+    "tech_chase": 2.5,
+    "sd": 3.7
+   }
+  },
+  "BF": {
+   "n_games": 431,
+   "win_pct": 33.9,
+   "openings_per_min": 7.54,
+   "dmg_per_conv": 12.92,
+   "kill_conv_pct": 4.55,
+   "avg_death_pct": 117.05,
+   "deaths_per_min": 1.0,
+   "tech_rate": 33.33,
+   "lc_rate": 83.33,
+   "death_causes_pct": {
+    "raw": 18.2,
+    "edgeguard": 42.2,
+    "failed_recovery": 34.9,
+    "tech_chase": 0.9,
+    "sd": 3.8
+   }
+  },
+  "FoD": {
+   "n_games": 307,
+   "win_pct": 36.8,
+   "openings_per_min": 7.64,
+   "dmg_per_conv": 12.8,
+   "kill_conv_pct": 4.76,
+   "avg_death_pct": 118.5,
+   "deaths_per_min": 1.05,
+   "tech_rate": 33.33,
+   "lc_rate": 75.0,
+   "death_causes_pct": {
+    "raw": 25.0,
+    "edgeguard": 42.7,
+    "failed_recovery": 28.9,
+    "tech_chase": 1.0,
+    "sd": 2.4
+   }
+  },
+  "FD": {
+   "n_games": 279,
+   "win_pct": 41.6,
+   "openings_per_min": 7.78,
+   "dmg_per_conv": 13.56,
+   "kill_conv_pct": 3.33,
+   "avg_death_pct": 120.7,
+   "deaths_per_min": 0.91,
+   "tech_rate": 33.33,
+   "lc_rate": 87.5,
+   "death_causes_pct": {
+    "raw": 22.3,
+    "edgeguard": 36.6,
+    "failed_recovery": 36.3,
+    "tech_chase": 1.2,
+    "sd": 3.5
+   }
+  },
+  "DL": {
+   "n_games": 117,
+   "win_pct": 30.8,
+   "openings_per_min": 7.24,
+   "dmg_per_conv": 13.19,
+   "kill_conv_pct": 3.7,
+   "avg_death_pct": 126.8,
+   "deaths_per_min": 0.93,
+   "tech_rate": 33.33,
+   "lc_rate": 84.21,
+   "death_causes_pct": {
+    "raw": 13.6,
+    "edgeguard": 47.2,
+    "failed_recovery": 37.0,
+    "tech_chase": 0.7,
+    "sd": 1.5
+   }
+  }
+ }
+}

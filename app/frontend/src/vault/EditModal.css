@@ -1,0 +1,1160 @@
+/* EditModal additions (2026-09-08 rework): title-as-name header, grouped
+   actions, stage safety segmented control, "More" disclosure, footer note, and
+   the in-game test overlay (moved out of inline styles). The base rules that
+   used to live in App.css come first, below. */
+
+/* ---- Base EditModal rules, moved verbatim from App.css 2026-10-03 (they used
+   to load before this file, so they stay ahead of the additions below). The
+   shared shell (.edit-modal-fullscreen*, -header, -actions, -action-btn) is
+   in shared/EditModal.css. ---- */
+
+/* Close Button */
+.edit-modal-close {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-surface);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  z-index: 10;
+  border: 1px solid var(--color-border-subtle);
+}
+
+.edit-modal-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.edit-modal-close:hover {
+  background: var(--color-danger-muted);
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+  transform: rotate(90deg);
+}
+
+/* Modal Body - Horizontal Layout */
+.edit-modal-body {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-6);
+  overflow: auto;
+  min-height: 0;
+}
+
+/* CSP Section - Left Column (grows to take leftover space) */
+.edit-modal-csp-section {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 14rem;
+}
+
+/* Sizing area for the hero panel: a size container so the panel can
+   scale to whichever axis runs out first while hugging the image */
+.edit-modal-csp-stage {
+  flex: 1 1 auto;
+  min-height: 0;
+  container-type: size;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-modal-csp-container {
+  /* As big as fits: full width, or full height scaled by the image's aspect */
+  aspect-ratio: var(--panel-aspect, 0.75);
+  width: min(100cqw, calc(100cqh * var(--panel-aspect, 0.75)));
+  position: relative;
+  background: var(--color-bg-deep);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-inner-lg);
+  padding: var(--space-2);
+}
+
+/* Subtle grid pattern background */
+.edit-modal-csp-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(125, 211, 232, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 211, 232, 0.02) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+}
+
+.edit-modal-csp-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.4));
+}
+
+.edit-modal-csp-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-bg-surface) 0%, var(--color-bg-deep) 100%);
+}
+
+.edit-modal-csp-placeholder span {
+  font-family: var(--font-display);
+  font-size: 120px;
+  font-weight: var(--font-extrabold);
+  color: var(--color-bg-hover);
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Image Edit Button */
+.edit-modal-image-edit-btn {
+  position: absolute;
+  bottom: var(--space-4);
+  right: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: rgba(10, 20, 32, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all var(--transition-fast);
+  z-index: 5;
+}
+
+.edit-modal-csp-container:hover .edit-modal-image-edit-btn,
+.edit-modal-stock-container:hover .edit-modal-image-edit-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.edit-modal-image-edit-btn:hover {
+  background: var(--color-cyan-muted);
+  border-color: var(--color-cyan);
+  color: var(--color-cyan);
+  box-shadow: var(--glow-cyan-sm);
+}
+
+/* Generate-stock button: bottom-left of the stock tile, ✨ stays visible */
+
+@keyframes stock-generate-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Generated-stock compare + confirm bar */
+
+.edit-modal-stock-confirm-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.edit-modal-stock-confirm-btn {
+  padding: var(--space-1) var(--space-3);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+
+.edit-modal-stock-confirm-btn:hover:not(:disabled) {
+  border-color: var(--color-cyan);
+  color: var(--color-cyan);
+}
+
+.edit-modal-stock-confirm-btn--yes:hover:not(:disabled) {
+  border-color: var(--color-green, #4ade80);
+  color: var(--color-green, #4ade80);
+}
+
+.edit-modal-stock-confirm-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* Action Buttons - Middle Column */
+
+.edit-modal-stock-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.3));
+}
+
+/* Stock icon placed under the CSP in the left column */
+.edit-modal-stock-container--under-csp {
+  flex: 0 0 auto;
+  width: clamp(4.5rem, 30%, 6rem);
+  align-self: center;
+  margin-top: var(--space-4);
+}
+
+/* Per-transformation skins indicator. Same cyan chip as the install-page card
+   (.transform-skins-badge), sized to sit inline with the modal's controls. */
+.edit-modal-forms-badge {
+  align-self: flex-start;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-cyan);
+  color: var(--color-bg-base);
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: var(--font-bold);
+  letter-spacing: 0.06em;
+  line-height: 1.6;
+  cursor: help;
+}
+
+/* Slippi Section */
+.edit-modal-slippi-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.edit-modal-slippi-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  transition: all var(--transition-fast);
+}
+
+.edit-modal-slippi-badge--safe {
+  background: var(--color-success-muted);
+  border: 1px solid var(--color-success);
+  color: var(--color-success);
+}
+
+.edit-modal-slippi-badge--unsafe {
+  background: var(--color-danger-muted);
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+}
+
+.edit-modal-slippi-badge--unknown {
+  background: rgba(128, 128, 128, 0.15);
+  border: 1px solid var(--color-text-muted);
+  color: var(--color-text-tertiary);
+}
+
+.edit-modal-slippi-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  animation: slippiPulse 2s ease-in-out infinite;
+}
+
+.edit-modal-slippi-badge--safe .edit-modal-slippi-indicator {
+  background: var(--color-success);
+  box-shadow: 0 0 8px var(--color-success);
+}
+
+.edit-modal-slippi-badge--unsafe .edit-modal-slippi-indicator {
+  background: var(--color-danger);
+  box-shadow: 0 0 8px var(--color-danger);
+}
+
+.edit-modal-slippi-badge--unknown .edit-modal-slippi-indicator {
+  background: var(--color-text-muted);
+  animation: none;
+}
+
+@keyframes slippiPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.edit-modal-slippi-override {
+  margin-left: auto;
+  font-size: var(--text-xs);
+  opacity: 0.7;
+}
+
+/* Slippi Toggle Button */
+.edit-modal-slippi-retest-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-3);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-bottom: var(--space-3);
+}
+
+.edit-modal-slippi-retest-btn:hover:not(:disabled) {
+  background: var(--color-cyan-muted);
+  border-color: var(--color-cyan);
+  color: var(--color-cyan);
+}
+
+.edit-modal-slippi-retest-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.edit-modal-action-btn--export {
+  background: var(--gradient-cyan);
+  color: var(--color-bg-deep);
+  box-shadow: var(--shadow-sm), var(--glow-cyan-sm);
+}
+
+.edit-modal-action-btn--export:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), var(--glow-cyan);
+  filter: brightness(1.1);
+}
+
+.edit-modal-action-btn--delete {
+  background: linear-gradient(135deg, var(--color-danger) 0%, var(--color-danger-dark) 100%);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.edit-modal-action-btn--delete:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), var(--glow-danger);
+  filter: brightness(1.1);
+}
+
+/* Action Spinner */
+.edit-modal-action-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: var(--radius-full);
+  animation: spin 0.8s linear infinite;
+}
+
+@media (max-width: 1080px) {
+  .edit-modal-body {
+    flex-wrap: wrap;
+    overflow-y: auto;
+  }
+
+  .edit-modal-csp-section {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* Wrapped layout: column height is content-driven, so a size container
+     would collapse — fall back to width-driven panel sizing */
+  .edit-modal-csp-stage {
+    container-type: normal;
+    flex: 0 0 auto;
+  }
+
+  .edit-modal-csp-container {
+    width: min(100%, calc(28rem * var(--panel-aspect, 0.75)));
+  }
+}
+
+@media (max-width: 720px) {
+  .edit-modal-body {
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-3);
+  }
+
+  .edit-modal-csp-section,
+  .edit-modal-stock-section,
+  .edit-modal-controls-section,
+  .edit-modal-controls-section--wide {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+}
+
+/* ---- additions ---- */
+
+/* ---- size: tighter than the generic fullscreen modal ---- */
+.edit-modal-fullscreen--item {
+  width: min(100%, 940px);
+}
+
+/* costume page: one column around a 136:188 portrait. 700px is where the
+   portrait stops growing on a tall window -- past that the height runs out
+   first and the extra width is dead space. */
+.edit-modal-fullscreen--costume { width: min(100%, 700px); }
+
+/* The media column spans the modal. It used to be capped at 400px for a panel
+   beside it; nothing renders .edit-modal-panel any more, so that cap only held
+   the hero to 288px wide and left the modal height unused. */
+.edit-modal-fullscreen--item .edit-modal-csp-section {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+}
+
+.edit-modal-fullscreen--item .edit-modal-csp-stage { width: 100%; }
+
+/* hover actions over an image (portrait / stock icon) */
+.edit-modal-hover-actions {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--space-2);
+  z-index: 6;
+  display: flex;
+  flex-wrap: wrap; /* three buttons on a narrow portrait stack instead of spilling out */
+  justify-content: center;
+  gap: var(--space-2);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  pointer-events: none;
+}
+
+.edit-modal-csp-container:hover .edit-modal-hover-actions,
+.edit-modal-csp-container:focus-within .edit-modal-hover-actions,
+.edit-modal-stock-hero:hover .edit-modal-hover-actions,
+.edit-modal-stock-hero:focus-within .edit-modal-hover-actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.edit-modal-hover-actions .edit-modal-image-edit-btn {
+  position: static;
+  opacity: 1;
+  transform: none;
+}
+
+/* Export sits at the TOP of the same image, opposite the import / render row,
+   so the two never overlap on a short tile. */
+.edit-modal-hover-actions--top {
+  top: var(--space-2);
+  bottom: auto;
+}
+
+/* three buttons (replace + the two icon styles) over a 96px tile */
+.edit-modal-hover-actions--stock { bottom: 4px; gap: 4px; }
+.edit-modal-hover-actions--stock.edit-modal-hover-actions--top { top: 4px; bottom: auto; }
+.edit-modal-hover-actions--stock .edit-modal-icon-btn { width: 26px; height: 26px; }
+
+/* the stock icon itself, under the portrait */
+.edit-modal-stock-hero {
+  position: relative;
+  flex: 0 0 96px;
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-weight: var(--font-bold);
+  color: var(--color-text-tertiary);
+}
+
+.edit-modal-stock-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  padding: 8px;
+}
+
+/* ---- header: the name is the title ---- */
+.edit-modal-header--title {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  padding-right: calc(var(--space-6) + 40px); /* keep clear of the close button */
+}
+
+.edit-modal-title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  width: 100%;
+  min-width: 0;
+}
+
+.edit-modal-title-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom-color: var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-2);
+  margin-left: calc(-1 * var(--space-2));
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.edit-modal-title-input:hover:not(:disabled) { border-color: var(--color-border-subtle); }
+
+.edit-modal-title-input:focus {
+  outline: none;
+  border-color: var(--color-cyan);
+  background: var(--color-bg-surface);
+}
+
+.edit-modal-title-input:disabled { opacity: 0.7; }
+
+.edit-modal-title-status {
+  flex: 0 0 auto;
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  min-width: 7em;
+}
+
+.edit-modal-title--dirty .edit-modal-title-status { color: var(--color-cyan); }
+
+.edit-modal-subtitle {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+}
+
+/* ---- layout: no scrolling. The body's height is the constraint; the portrait
+   column sizes its hero to that height (container query in App.css) and the
+   right panel is a compact tile grid that fits beside it. ---- */
+@media (min-width: 1081px) {
+  .edit-modal-fullscreen .edit-modal-body { overflow: hidden; }
+}
+
+/* compact action tile: icon over a short label */
+.edit-modal-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 56px;
+  padding: var(--space-2) var(--space-1);
+  background: linear-gradient(135deg, var(--color-bg-surface) 0%, var(--color-bg-elevated) 100%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  line-height: 1.15;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.edit-modal-tile svg { width: 18px; height: 18px; flex: 0 0 auto; }
+
+/* the CSP hero: crop-fill the fixed 136:188 frame */
+.edit-modal-csp-image--cover { object-fit: cover; }
+
+/* stock icon strip under the portrait: framed icon + Replace / Generate tiles */
+.edit-modal-stock-strip {
+  flex: 0 0 auto;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.edit-modal-stock-row {
+  display: flex;
+  align-items: center;   /* the stock icon stays taller than the tiles beside it */
+  gap: var(--space-2);
+}
+
+.edit-modal-stock-row > .edit-modal-tile { min-height: 60px; }
+
+.edit-modal-stock-thumb {
+  flex: 0 0 64px;
+  width: 64px;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-weight: var(--font-bold);
+  color: var(--color-text-tertiary);
+}
+
+.edit-modal-stock-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  padding: 6px;
+}
+
+.edit-modal-stock-row > .edit-modal-tile { flex: 1 1 0; min-width: 0; }
+
+.edit-modal-tile:hover:not(:disabled) {
+  border-color: var(--color-cyan);
+  color: var(--color-text-primary);
+  box-shadow: var(--glow-cyan-sm);
+  transform: translateY(-1px);
+}
+
+.edit-modal-tile:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.edit-modal-tile--accent {
+  background: var(--gradient-cyan, var(--color-cyan));
+  border-color: transparent;
+  color: var(--color-bg-deep);
+}
+
+.edit-modal-tile--accent:hover:not(:disabled) { color: var(--color-bg-deep); }
+
+/* Slippi verdict + actions on one row */
+.edit-modal-slippi-row {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.edit-modal-slippi-row .edit-modal-slippi-badge {
+  flex: 1 1 auto;
+  padding: var(--space-2) var(--space-3);
+}
+
+.edit-modal-slippi-row .edit-modal-slippi-retest-btn {
+  width: auto;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-xs);
+}
+
+/* ---- stage safety segmented control ---- */
+.edit-modal-segmented {
+  display: inline-flex;
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  gap: 3px;
+}
+
+.edit-modal-segmented-btn {
+  flex: 1;
+  padding: var(--space-2) var(--space-3);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-tertiary);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.edit-modal-segmented-btn:hover:not(:disabled):not(.edit-modal-segmented-btn--on) { color: var(--color-text-primary); }
+.edit-modal-segmented-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.edit-modal-segmented-btn--on { background: var(--color-bg-elevated); color: var(--color-text-primary); }
+.edit-modal-segmented-btn--on.is-safe { background: var(--color-success, #2ecc71); color: var(--color-bg-deep); }
+.edit-modal-segmented-btn--on.is-unsafe { background: var(--color-danger, #e74c3c); color: #fff; }
+
+/* ---- retake reveal: the new render wipes in left-to-right over the old
+   portrait, led by a glowing edge ---- */
+.edit-modal-reveal {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.edit-modal-reveal .edit-modal-csp-image {
+  position: absolute;
+  inset: 0;
+}
+
+/* The portrait being replaced leaves as the new one arrives. Portraits are
+   cut-outs on a clear ground, so one left underneath shows through the other
+   wherever the two poses differ (two fighters at once). */
+.edit-modal-reveal-old {
+  z-index: 1;
+  animation: editModalRevealOut 1100ms cubic-bezier(0.45, 0.05, 0.25, 1) both;
+}
+
+.edit-modal-reveal-new {
+  z-index: 2;
+  animation: editModalReveal 1100ms cubic-bezier(0.45, 0.05, 0.25, 1) both;
+}
+
+.edit-modal-reveal-edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, var(--color-cyan) 25%, #fff 50%, var(--color-cyan) 75%, transparent);
+  box-shadow: 0 0 18px 4px rgba(125, 211, 232, 0.55), 0 0 48px 12px rgba(125, 211, 232, 0.25);
+  animation: editModalRevealEdge 1100ms cubic-bezier(0.45, 0.05, 0.25, 1) both;
+}
+
+@keyframes editModalReveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes editModalRevealOut {
+  from { clip-path: inset(0 0 0 0); }
+  to   { clip-path: inset(0 0 0 100%); }
+}
+
+@keyframes editModalRevealEdge {
+  0%   { left: 0; opacity: 0; }
+  8%   { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .edit-modal-reveal-new { animation: none; }
+  .edit-modal-reveal-old { animation: none; visibility: hidden; }
+  .edit-modal-reveal-edge { display: none; }
+}
+
+/* ---- retake confirm: sits ON the hero so the portrait never resizes ---- */
+.edit-modal-csp-confirm-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-5) var(--space-3) var(--space-3);
+  background: linear-gradient(to top, rgba(6, 12, 20, 0.95) 55%, rgba(6, 12, 20, 0));
+  animation: fadeIn var(--duration-normal) var(--ease-out) 900ms both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .edit-modal-csp-confirm-overlay { animation-delay: 0ms; }
+}
+
+/* which pose the preview is, when one was picked */
+.edit-modal-csp-confirm-pose {
+  margin-bottom: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+/* ---- pose list: over the foot of the portrait, where its buttons were ---- */
+.edit-modal-pose-picker {
+  position: absolute;
+  left: var(--space-2);
+  right: var(--space-2);
+  bottom: var(--space-2);
+  z-index: 7;
+  max-height: 70%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(10, 20, 32, 0.94);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  animation: fadeIn var(--duration-fast) var(--ease-out);
+}
+
+.edit-modal-pose-picker-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border-subtle);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.edit-modal-pose-picker-close {
+  width: 26px;
+  height: 26px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+}
+
+.edit-modal-pose-picker-close:hover { border-color: var(--color-border); color: var(--color-text-primary); }
+
+.edit-modal-pose-picker-list {
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--space-1);
+}
+
+.edit-modal-pose-choice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-1) var(--space-2);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  text-align: left;
+  cursor: pointer;
+}
+
+.edit-modal-pose-choice:hover,
+.edit-modal-pose-choice:focus-visible {
+  outline: none;
+  background: var(--color-cyan-muted);
+  border-color: var(--color-cyan);
+  color: var(--color-cyan);
+}
+
+.edit-modal-pose-thumb {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  color: var(--color-text-tertiary);
+}
+
+.edit-modal-pose-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+.edit-modal-pose-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.edit-modal-pose-showing {
+  flex: 0 0 auto;
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+
+.edit-modal-pose-new {
+  width: auto;
+  margin: 0 var(--space-1) var(--space-1);
+  border-top: 1px solid var(--color-border-subtle);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  color: var(--color-text-secondary);
+}
+
+.edit-modal-pose-picker-note {
+  padding: var(--space-2) var(--space-3) var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+
+/* stock compare inside the same row */
+.edit-modal-stock-arrow {
+  align-self: center;
+  color: var(--color-text-tertiary);
+  font-size: var(--text-lg);
+}
+
+.edit-modal-stock-thumb--new { border-color: var(--color-cyan); box-shadow: var(--glow-cyan-sm); }
+
+/* ---- portrait render overlay (was inline) ---- */
+.edit-modal-csp-rendering-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 8, 16, 0.78);
+  border-radius: inherit;
+  color: var(--color-text-secondary);
+  font-size: 0.85em;
+}
+
+/* ---- footer ---- */
+.edit-modal-actions--end { justify-content: flex-end; align-items: center; flex-wrap: nowrap; }
+.edit-modal-actions--end .edit-modal-action-btn { flex: 0 0 auto; min-width: 0; padding: var(--space-2) var(--space-4); }
+
+.edit-modal-actions .edit-modal-slippi-card {
+  flex-direction: row;
+  align-items: stretch;
+  margin-right: auto;
+  min-width: 0;
+}
+
+.edit-modal-actions .edit-modal-slippi-toggle-btn { width: auto; white-space: nowrap; }
+
+.edit-modal-actions .edit-modal-slippi-row {
+  padding: 0 var(--space-2) 0 0;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.edit-modal-actions .edit-modal-slippi-retest-btn {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  padding: var(--space-1) var(--space-2);
+}
+
+
+/* ---- in-game test overlay (was inline) ---- */
+.edit-modal-test-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  border-radius: inherit;
+  background: rgba(8, 8, 16, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-modal-test-panel {
+  width: 90%;
+  max-width: 560px;
+  max-height: 92%;
+  overflow-y: auto;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.edit-modal-test-panel--running {
+  width: 96%;
+  height: 96%;
+  max-width: none;
+  max-height: none;
+  min-height: 0;
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.edit-modal-test-text { color: var(--color-text-secondary); margin-bottom: 1rem; }
+
+.edit-modal-test-verdict {
+  display: inline-block;
+  padding: 0.35rem 1.1rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 1.15em;
+  margin-bottom: 0.75rem;
+  color: #fff;
+}
+
+.edit-modal-test-verdict.is-pass { background: var(--color-success, #2ecc71); }
+.edit-modal-test-verdict.is-fail { background: var(--color-error, #e74c3c); }
+
+.edit-modal-test-shot {
+  max-width: 100%;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  margin-bottom: 1rem;
+}
+
+.edit-modal-test-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 760px) {
+  .edit-modal-title-input { font-size: var(--text-xl); }
+}
+
+/* ---- Slippi verdict card: the coloured box IS the dropdown; Retest and the
+   override live inside it ---- */
+.edit-modal-slippi-card {
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
+  overflow: hidden;
+}
+
+.edit-modal-slippi-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  background: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  text-align: left;
+  cursor: pointer;
+}
+
+.edit-modal-slippi-toggle-btn:hover { filter: brightness(1.12); }
+
+.edit-modal-slippi-chevron {
+  margin-left: auto;
+  font-size: var(--text-xs);
+  opacity: 0.8;
+  transition: transform var(--transition-fast);
+}
+
+.edit-modal-slippi-card.is-open .edit-modal-slippi-chevron { transform: rotate(180deg); }
+
+.edit-modal-slippi-card .edit-modal-slippi-row {
+  padding: 0 var(--space-3) var(--space-3);
+  animation: fadeIn var(--duration-fast) var(--ease-out);
+}
+
+.edit-modal-slippi-card .edit-modal-slippi-retest-btn {
+  flex: 1 1 0;
+  background: rgba(0, 0, 0, 0.28);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: inherit;
+}
+
+.edit-modal-slippi-card .edit-modal-slippi-retest-btn:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.42);
+  border-color: currentColor;
+}
+
+/* ---- portrait + stock side by side, model tiles underneath ---- */
+.edit-modal-media {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;          /* the column centres its children; the row must still span it */
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+/* the stage is a size container (no intrinsic width): it must be GIVEN the
+   row's remaining width, or it collapses to nothing */
+.edit-modal-media .edit-modal-csp-stage { flex: 1 1 0; min-width: 0; align-self: stretch; height: auto; }
+
+.edit-modal-stock-side {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-modal-stock-compare {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.edit-modal-stock-compare .edit-modal-stock-arrow { font-size: var(--text-sm); }
+
+.edit-modal-stock-compare-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* round icon buttons over the stock icon (own style; the App.css pill hides its text) */
+.edit-modal-icon-btn {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-full);
+  background: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: all var(--transition-fast);
+}
+
+.edit-modal-icon-btn:hover:not(:disabled) { border-color: var(--color-cyan); box-shadow: var(--glow-cyan-sm); }
+.edit-modal-icon-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ---- footer Slippi card: centred header, tidy expanded row ---- */
+.edit-modal-actions .edit-modal-slippi-card { align-items: center; }
+.edit-modal-actions .edit-modal-slippi-toggle-btn { padding: var(--space-2) var(--space-3); }
+.edit-modal-actions .edit-modal-slippi-card.is-open .edit-modal-slippi-toggle-btn {
+  border-right: 1px solid rgba(255, 255, 255, 0.14);
+}
+.edit-modal-actions .edit-modal-slippi-row { padding: var(--space-1) var(--space-2); }
+
+.edit-modal-stock-strip .edit-modal-stock-row { align-items: stretch; }
+
+/* ---- stage safety inside the footer card ---- */
+.edit-modal-actions .edit-modal-segmented { padding: 2px; gap: 2px; }
+.edit-modal-actions .edit-modal-segmented-btn { padding: var(--space-1) var(--space-3); font-size: var(--text-xs); }
+.edit-modal-slippi-badge--unknown.edit-modal-slippi-card { border-color: var(--color-border); }

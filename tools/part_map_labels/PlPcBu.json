@@ -1,0 +1,4 @@
+{"character": "Pichu", "source": "PlPcBu", "verified": true,
+ "notes": "Body textures are shifted vs PlPcNr: fur 7, neck ruff 8 (also the nose), eyes 9/10 (+ blink frames 18-20 of 9, 21-22 of 10), cheeks 11, mouth 12, ears 13/14 (13 also skins the tail), feet 15. Goggles: 0 = frame, 1 = lens (mapped_triangles 0 but it DOES render as the lens, probe-confirmed), 2 = upper strap, 3 = lower strap, 4 = back buckle. Scarf: 5 = neck wrap, 6 = knot/tail of the scarf. UNLABELLED 16 (goggle-lens-looking 64x32, 42 tris) and 17 (eye-ball, 8 tris): neither renders in either view even when probed.",
+ "groups": {"fur": [7], "neck ruff": [8], "eyes": [9,10,18,19,20,21,22], "cheeks": [11], "mouth": [12], "ears": [13,14], "feet": [15],
+            "goggles": [0,1,2,3,4], "scarf": [5,6]}}

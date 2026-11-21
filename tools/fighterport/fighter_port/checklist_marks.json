@@ -1,0 +1,1347 @@
+{
+ "1.1": {
+  "mark": "files",
+  "look": true,
+  "how": "scale and proportions are in the receipt; seen in the standing picture"
+ },
+ "1.2": {
+  "mark": "files",
+  "look": true,
+  "how": "costumes counted, each from its own folder, team entries set; the costume sheet"
+ },
+ "1.3": {
+  "mark": "files",
+  "look": false,
+  "how": "donor route: which costume the rip is, from its own pictures"
+ },
+ "1.4": {
+  "mark": "files+boot",
+  "look": true,
+  "how": "groups and switch commands counted; the blink once in the head picture"
+ },
+ "1.5": {
+  "mark": "files",
+  "look": true,
+  "how": "the bone table; seen in the move pictures"
+ },
+ "1.6": {
+  "mark": "files",
+  "look": true,
+  "how": "show and hide frames are in the scripts; seen in the move pictures"
+ },
+ "1.7": {
+  "mark": "files",
+  "look": false,
+  "how": "the bone's clip compared with the weapon's own clip"
+ },
+ "1.8": {
+  "mark": "files",
+  "look": false,
+  "how": "joints counted against the limit"
+ },
+ "1.9": {
+  "mark": "files+boot",
+  "look": false,
+  "how": "the table; one grab in the boot"
+ },
+ "1.10": {
+  "mark": "files",
+  "look": false,
+  "how": "the list of what is stiff or carried"
+ },
+ "1.11": {
+  "mark": "files",
+  "look": false,
+  "how": "what rest hides is counted out of the body"
+ },
+ "1.12": {
+  "mark": "files",
+  "look": true,
+  "how": "layers named in the receipt; the head picture"
+ },
+ "1.13": {
+  "mark": "files+boot",
+  "look": false,
+  "how": "matrices counted, cost predicted (0.06 of a frame per 1,000); one clock reading"
+ },
+ "1.14": {
+  "mark": "files",
+  "look": true,
+  "how": "the body's parts no clip names, listed from the model and the clips, each with what the game does with it; the weapon seen in the move pictures"
+ },
+ "1.15": {
+  "mark": "code",
+  "look": true,
+  "how": "only a fighter that draws a weapon: a picture of the move with the weapon out, looking at where it rests"
+ },
+ "1.16": {
+  "mark": "code",
+  "look": true,
+  "how": "material_bake.one_tile and own_skeleton's layer bake moving a white that lies whole repeats off its picture (tested); the faces are looked at in the art sheet"
+ },
+ "2.1": {
+  "mark": "files",
+  "look": false,
+  "how": "every action the engine enters has a clip or is named as holding a pose"
+ },
+ "2.2": {
+  "mark": "files",
+  "look": false,
+  "how": "the frame he may act on in each ordinary move, read back from the built script against the game's (the report's table)"
+ },
+ "2.3": {
+  "mark": "files",
+  "look": false,
+  "how": "which end at the free frame: from the scripts"
+ },
+ "2.4": {
+  "mark": "files",
+  "look": false,
+  "how": "which the engine ends itself: a table"
+ },
+ "2.5": {
+  "mark": "files",
+  "look": false,
+  "how": "speed changes are script commands; a special's installed clip length against the game's is not in a receipt yet: read the clip"
+ },
+ "2.6": {
+  "mark": "files+boot",
+  "look": false,
+  "how": "the action's flag; how far each action travelled is logged in the walk"
+ },
+ "2.7": {
+  "mark": "files",
+  "look": false,
+  "how": "joined and cut clips are in the receipt"
+ },
+ "2.8": {
+  "mark": "files+boot",
+  "look": true,
+  "how": "the game's clips with a second copy for facing left, listed against the clips carried; a picture each way of the specials only, where code places things"
+ },
+ "2.9": {
+  "mark": "files+boot",
+  "look": false,
+  "how": "the entry convention is the engine's; frames per state logged in the walk and compared by machine"
+ },
+ "2.10": {
+  "mark": "files",
+  "look": false,
+  "how": "the clip bank lists the clips it refused by action"
+ },
+ "2.11": {
+  "mark": "files",
+  "look": false,
+  "how": "report.json held: each common action looked up in the engine and the source (own_route.MELEE_NAMES)"
+ },
+ "2.12": {
+  "mark": "files+boot",
+  "look": false,
+  "how": "the driver's travel line and verify 11.9; the round's roll tests (went)"
+ },
+ "3.1": {
+  "mark": "files",
+  "look": false,
+  "how": "the frames written for each shared action are in the receipt; the four dodges are held against the game's own table"
+ },
+ "3.2": {
+  "mark": "files",
+  "look": false,
+  "how": "script armour read back; armour in code is a special (code)"
+ },
+ "3.3": {
+  "mark": "files",
+  "look": false,
+  "how": "numbers"
+ },
+ "3.4": {
+  "mark": "files",
+  "look": false,
+  "how": "script windows"
+ },
+ "3.5": {
+  "mark": "rule",
+  "look": false,
+  "how": "settled once for Melee"
+ },
+ "3.6": {
+  "mark": "rule",
+  "look": false,
+  "how": "a rule for code of the port; matters only where a fighter has such code"
+ },
+ "3.7": {
+  "mark": "files",
+  "look": false,
+  "how": "loops written out by the reader"
+ },
+ "3.8": {
+  "mark": "files",
+  "look": false,
+  "how": "each timed clip's last key against its script's frame to act from, in the spec"
+ },
+ "3.9": {
+  "mark": "files",
+  "look": false,
+  "how": "the reader's alternatives in game.json; the squat's frames in the attributes, read back by the probe's attrs line"
+ },
+ "3.10": {
+  "mark": "rule",
+  "look": false,
+  "how": "a difference said: the game's dodges have no frames in its files"
+ },
+ "4.1": {
+  "mark": "files",
+  "look": false,
+  "how": "first hit frame and damage of each ordinary move read back against the game's script; joint, place, size, angle and knockback are not compared yet"
+ },
+ "4.2": {
+  "mark": "files",
+  "look": false,
+  "how": "hitbox flags"
+ },
+ "4.3": {
+  "mark": "files",
+  "look": false,
+  "how": "how much of the line the balls cover is computed"
+ },
+ "4.4": {
+  "mark": "files",
+  "look": false,
+  "how": "hitbox order"
+ },
+ "4.5": {
+  "mark": "files",
+  "look": false,
+  "how": "rehit and group fields"
+ },
+ "4.6": {
+  "mark": "files",
+  "look": false,
+  "how": "the list of angles written another way"
+ },
+ "4.7": {
+  "mark": "files",
+  "look": false,
+  "how": "listed; if done in code it is a special (code)"
+ },
+ "4.8": {
+  "mark": "files+boot",
+  "look": false,
+  "how": "grab frames and each throw's damage and angle read back against the game's; one grab and throw in the boot for the hang and the turn"
+ },
+ "4.9": {
+  "mark": "files",
+  "look": false,
+  "how": "marked as taken from published frame data"
+ },
+ "4.10": {
+  "mark": "code",
+  "look": true,
+  "how": "the driver's four-hitbox note and verify 4.1's 'said' for it, tested"
+ },
+ "4.11": {
+  "mark": "files",
+  "look": false,
+  "how": "each throw's damage read back against the game's, 0 included (verify 4.8)"
+ },
+ "4.12": {
+  "mark": "files+boot",
+  "look": false,
+  "how": "the reader's boxes split at the frame (game.json); one test on a pinned target counts the hits (id_fair_pinned)"
+ },
+ "5.1": {
+  "mark": "files+boot",
+  "look": false,
+  "how": "the receipt holds how many numbers were set, not their values: read once from the game's memory beside the game's parameters until the receipt lists them"
+ },
+ "5.2": {
+  "mark": "files",
+  "look": false,
+  "how": "heights computed from the numbers by the engine's own formula"
+ },
+ "5.3": {
+  "mark": "files",
+  "look": false,
+  "how": "computed, not measured in the game"
+ },
+ "5.4": {
+  "mark": "files",
+  "look": false,
+  "how": "the receipt names each number left as the donor's"
+ },
+ "5.5": {
+  "mark": "files",
+  "look": false,
+  "how": "the receipt holds a count only: which numbers stay the donor's is said by hand until it lists them"
+ },
+ "5.6": {
+  "mark": "rule",
+  "look": false,
+  "how": "once per source game: harness/both_games.py"
+ },
+ "5.7": {
+  "mark": "files",
+  "look": false,
+  "how": "both halves set"
+ },
+ "5.8": {
+  "mark": "files",
+  "look": false,
+  "how": "shield divided by the drawn scale"
+ },
+ "5.9": {
+  "mark": "files",
+  "look": false,
+  "how": "roster entry fields"
+ },
+ "5.10": {
+  "mark": "files",
+  "look": false,
+  "how": "each number's source and the code that uses it named in the reader (gamedata.attributes); attrs and vel in a round"
+ },
+ "6.1": {
+  "mark": "code",
+  "look": false,
+  "how": ""
+ },
+ "6.2": {
+  "mark": "code",
+  "look": false,
+  "how": ""
+ },
+ "6.3": {
+  "mark": "code",
+  "look": false,
+  "how": ""
+ },
+ "6.4": {
+  "mark": "code",
+  "look": false,
+  "how": ""
+ },
+ "6.5": {
+  "mark": "code",
+  "look": false,
+  "how": ""
+ },
+ "6.6": {
+  "mark": "code",
+  "look": true,
+  "how": ""
+ },
+ "6.7": {
+  "mark": "code",
+  "look": false,
+  "how": ""
+ },
+ "6.8": {
+  "mark": "code",
+  "look": false,
+  "how": ""
+ },
+ "6.9": {
+  "mark": "code",
+  "look": false,
+  "how": ""
+ },
+ "6.10": {
+  "mark": "code",
+  "look": false,
+  "how": ""
+ },
+ "6.11": {
+  "mark": "code",
+  "look": true,
+  "how": ""
+ },
+ "6.12": {
+  "mark": "code",
+  "look": false,
+  "how": ""
+ },
+ "6.13": {
+  "mark": "code",
+  "look": false,
+  "how": ""
+ },
+ "6.14": {
+  "mark": "code",
+  "look": false,
+  "how": ""
+ },
+ "6.15": {
+  "mark": "files",
+  "look": false,
+  "how": "the reader's rule; the receipt says which script was kept"
+ },
+ "6.16": {
+  "mark": "code",
+  "look": true,
+  "how": "the item in the game; its box size, rehit and removal are file checks"
+ },
+ "6.17": {
+  "mark": "rule",
+  "look": false,
+  "how": "how to count"
+ },
+ "6.18": {
+  "mark": "rule",
+  "look": false,
+  "how": "how to order the steps of a boot"
+ },
+ "6.19": {
+  "mark": "code",
+  "look": true,
+  "how": "the frame after an item breaks"
+ },
+ "6.20": {
+  "mark": "files",
+  "look": false,
+  "how": "the item's removal effect and sound are set to none"
+ },
+ "6.21": {
+  "mark": "files",
+  "look": false,
+  "how": "the bank is newer than the driver's last run"
+ },
+ "6.22": {
+  "mark": "files",
+  "look": false,
+  "how": "each sound the fighter's module says its code plays is on a place of the bank that code can call"
+ },
+ "6.23": {
+  "mark": "rule",
+  "look": false,
+  "how": "how to match samples"
+ },
+ "6.24": {
+  "mark": "rule",
+  "look": false,
+  "how": "how to photograph a short thing"
+ },
+ "6.25": {
+  "mark": "code",
+  "look": false,
+  "how": ""
+ },
+ "6.26": {
+  "mark": "code",
+  "look": false,
+  "how": ""
+ },
+ "6.27": {
+  "mark": "rule",
+  "look": false,
+  "how": "how to count a random round"
+ },
+ "6.28": {
+  "mark": "files",
+  "look": false,
+  "how": "every sound the game's code plays is declared by the fighter's module, and each declared sound has a place code can call"
+ },
+ "6.29": {
+  "mark": "rule",
+  "look": false,
+  "how": "how to match a cut sound"
+ },
+ "6.30": {
+  "mark": "rule",
+  "look": false,
+  "how": "where to look before calling a sound shared"
+ },
+ "6.31": {
+  "mark": "code",
+  "look": false,
+  "how": ""
+ },
+ "6.32": {
+  "mark": "code",
+  "look": false,
+  "how": ""
+ },
+ "6.33": {
+  "mark": "rule",
+  "look": false,
+  "how": "a rule for the tools"
+ },
+ "6.34": {
+  "mark": "files",
+  "look": false,
+  "how": "the special actions given the game's hitboxes are in the receipt; each hit is still landed in the game"
+ },
+ "6.35": {
+  "mark": "files",
+  "look": false,
+  "how": "how many of the table's values are named and which are not, from the fighter's module and the parameter file"
+ },
+ "6.36": {
+  "mark": "code",
+  "look": false,
+  "how": "a state that moves him along the ground: its distance, stepped once"
+ },
+ "6.37": {
+  "mark": "code",
+  "look": false,
+  "how": "each state stepped on the ground and in the air, over an edge and at a ledge"
+ },
+ "6.38": {
+  "mark": "code",
+  "look": false,
+  "how": "the helpless fall and its landing counted; a reflector with a shot thrown at it"
+ },
+ "6.39": {
+  "mark": "rule",
+  "look": false,
+  "how": "how a fighter's module is laid out"
+ },
+ "6.40": {
+  "mark": "rule",
+  "look": false,
+  "how": "a habit of the porter: the pages go in the work folder"
+ },
+ "6.41": {
+  "mark": "rule",
+  "look": false,
+  "how": "where the engine's source is"
+ },
+ "6.42": {
+  "mark": "code",
+  "look": true,
+  "how": "pictures of the special across the made thing's life: each pose on its frames"
+ },
+ "6.43": {
+  "mark": "code",
+  "look": true,
+  "how": "pictures of the special on the frames its code makes an effect: the effect shows with what it goes with"
+ },
+ "6.44": {
+  "mark": "code",
+  "look": true,
+  "how": "a test stepping the round of hits, the target's damage read after each"
+ },
+ "6.45": {
+  "mark": "code",
+  "look": true,
+  "how": "a high hit and a low one into the counter: both caught"
+ },
+ "6.46": {
+  "mark": "code",
+  "look": true,
+  "how": "where he comes out of the strike, against where the source game puts him"
+ },
+ "6.47": {
+  "mark": "files",
+  "look": false,
+  "how": "the driver's notes name every script with alternatives; the module carries them"
+ },
+ "6.48": {
+  "mark": "code",
+  "look": true,
+  "how": "the move struck, or ended at a ledge: he is seen again and can be hit"
+ },
+ "6.49": {
+  "mark": "code",
+  "look": true,
+  "how": "the picture looked at in the game"
+ },
+ "6.50": {
+  "mark": "rule",
+  "look": false,
+  "how": "every vl.prc value the module reads is in its NAMES or named as READING"
+ },
+ "6.51": {
+  "mark": "files",
+  "look": false,
+  "how": "verify 7.1: no sound of a special on a place no script calls"
+ },
+ "6.52": {
+  "mark": "code",
+  "look": false,
+  "how": "the made thing's flight stepped (PROBE_ITEMS): its speed and how far it goes, against the source game's"
+ },
+ "6.53": {
+  "mark": "code",
+  "look": true,
+  "how": "a test that grabs a bag in reach and one that misses, the states and the throw read"
+ },
+ "6.54": {
+  "mark": "code",
+  "look": false,
+  "how": "a test struck in the window, then the next hit, its damage read against the plain one"
+ },
+ "6.55": {
+  "mark": "files",
+  "look": false,
+  "how": "game.json holds a game_ script for every special whose sound_/effect_ scripts exist"
+ },
+ "6.56": {
+  "mark": "code",
+  "look": false,
+  "how": "the mode's numbers by name; two arts seen changing his numbers in the game (attrs, a hit in the mode against the same without)"
+ },
+ "6.57": {
+  "mark": "rule",
+  "look": false,
+  "how": "every value the module reads is in its NAMES; a 4+ word name only with a repeating pattern"
+ },
+ "6.58": {
+  "mark": "code",
+  "look": false,
+  "how": "each of his states whose clip travels is moved by the module or the engine: the distance read in a stepped test"
+ },
+ "6.59": {
+  "mark": "code",
+  "look": true,
+  "how": "the mode's effects in the report (`art_shown` notes, effect_file rows); pictures as it starts and while it is on (sk_arts_show)"
+ },
+ "6.60": {
+  "mark": "code",
+  "look": false,
+  "how": "a throw in two modes: the damage the bag took read in each (sk_buster_throw, sk_smash_throw)"
+ },
+ "6.61": {
+  "mark": "code",
+  "look": false,
+  "how": "the module's NAMES give `<mode>_blown_mul`; the hook set in the frame code (own_shulk.py:Arts_Blown, under the tag archive/fighterport-character-specific-2026-11)"
+ },
+ "6.62": {
+  "mark": "rule",
+  "look": false,
+  "how": "a value found only with its chance weighed (prc_names.chance); what was tried is listed for a value left at 1"
+ },
+ "6.63": {
+  "mark": "files",
+  "look": false,
+  "how": "the reader's specials (game.json `specials`) against the source's input table"
+ },
+ "6.64": {
+  "mark": "code",
+  "look": false,
+  "how": "a full charge stepped: the swing's frame and the move's end against the game's (id_fire_hold)"
+ },
+ "6.65": {
+  "mark": "code",
+  "look": false,
+  "how": "the reader's spawn terms; each special tested with the stick held the ways it reads"
+ },
+ "6.66": {
+  "mark": "files",
+  "look": true,
+  "how": "the article models the reader wrote; a picture of the thing out"
+ },
+ "6.67": {
+  "mark": "code",
+  "look": false,
+  "how": "the move's own sets in game.json; the rise read a frame at a time"
+ },
+ "6.68": {
+  "mark": "code",
+  "look": false,
+  "how": "the thing's hits on the bag counted in a stepped test (a frame apart, as many as the game's)"
+ },
+ "6.69": {
+  "mark": "code",
+  "look": true,
+  "how": "look_probe stepped test of a burning hit (zt_fireball): the bag's percent rising each tick"
+ },
+ "6.70": {
+  "mark": "code",
+  "look": true,
+  "how": "look_probe: the handed-over move strikes a target it overlaps (Fishbunjin's Bell Ringer, frame 10)"
+ },
+ "7.1": {
+  "mark": "files+boot",
+  "look": false,
+  "how": "two lists from the built files: the sounds a written script plays that the bank cannot, and the samples nothing plays; one recording for the frames"
+ },
+ "7.2": {
+  "mark": "files",
+  "look": true,
+  "how": "trail commands; seen in the move pictures"
+ },
+ "7.3": {
+  "mark": "files",
+  "look": true,
+  "how": "the list of effects and stand-ins; seen in the move pictures"
+ },
+ "7.4": {
+  "mark": "code",
+  "look": true,
+  "how": "only a fighter with a gauge"
+ },
+ "7.5": {
+  "mark": "files+boot",
+  "look": true,
+  "how": "art files present and sized; the portraits come from the boot"
+ },
+ "7.6": {
+  "mark": "files+boot",
+  "look": true,
+  "how": "the game's scripts that set a colour, counted against the actions the port plays one on; one picture of a move that flashes"
+ },
+ "7.7": {
+  "mark": "files",
+  "look": false,
+  "how": "shared sound numbers in the scripts"
+ },
+ "7.8": {
+  "mark": "files",
+  "look": false,
+  "how": "added samples sit on numbers the donor bank had"
+ },
+ "7.9": {
+  "mark": "files",
+  "look": true,
+  "how": "stand-ins chosen from the catalogue of shared effects; seen in the move pictures"
+ },
+ "7.10": {
+  "mark": "files",
+  "look": true,
+  "how": "converted generators counted; seen in the move pictures"
+ },
+ "7.11": {
+  "mark": "files",
+  "look": false,
+  "how": "voice table"
+ },
+ "7.12": {
+  "mark": "files",
+  "look": false,
+  "how": "the list of sounds with no room"
+ },
+ "7.13": {
+  "mark": "files",
+  "look": false,
+  "how": "the fighter's own sounds in scripts the port does not write, and the steps and landings left out of the ones it does, listed by name"
+ },
+ "7.14": {
+  "mark": "rule",
+  "look": false,
+  "how": "a choice made for the fighter, written in a table"
+ },
+ "7.15": {
+  "mark": "files",
+  "look": false,
+  "how": "which donor slots are room and which are kept"
+ },
+ "7.16": {
+  "mark": "files",
+  "look": false,
+  "how": "the effect file's receipt names every picture it could not read"
+ },
+ "7.17": {
+  "mark": "files",
+  "look": true,
+  "how": "every call the game makes follow a bone has generators the built effect file holds by the joint; whether the fire wraps him is seen in the move's pictures"
+ },
+ "7.18": {
+  "mark": "code",
+  "look": false,
+  "how": "voice.choose places a sound a script plays only where a script can call it (tested); verify 7.1 names any sound a written script plays that the bank cannot"
+ },
+ "7.19": {
+  "mark": "boot",
+  "look": true,
+  "how": "the receipt's `effect_file.pictures`: what each emitter drawn with more than one picture got (joined, a stand-in picture, left out); the specials' pictures looked at for dark squares"
+ },
+ "7.20": {
+  "mark": "files",
+  "look": false,
+  "how": "the bank receipt names the variant taken; verify 7.1 lists a name found in neither form"
+ },
+ "7.21": {
+  "mark": "files",
+  "look": true,
+  "how": "the receipt's `effect_file.shapes` and `stand_ins`: the emitters drawn on 3D shapes, carried as flattened stand-ins or refused, and why; seen in the move pictures"
+ },
+ "7.22": {
+  "mark": "files",
+  "look": false,
+  "how": "the receipt's `effect_file.shapes.why` (a shape refused for its width says how wide it would be drawn) and `stand_ins` (every carried one's width)"
+ },
+ "7.23": {
+  "mark": "rule",
+  "look": false,
+  "how": "how a picture is read (`effect_shapes.opaque`): a grey picture opaque but for its outermost ring is a mask; tests/test_own_effect_shapes.py holds it"
+ },
+ "7.24": {
+  "mark": "files",
+  "look": false,
+  "how": "no PLAY_SEQUENCE left as a hash in game.json; the driver's report `voice_sequences` gives each special's sequence a line; verify 7.1 names no voice in the bank played by no script"
+ },
+ "7.25": {
+  "mark": "files",
+  "look": false,
+  "how": "the report's dressed list: each normal with a picked set says `voice N (picked, for seq_...)`"
+ },
+ "9.1": {
+  "mark": "boot",
+  "look": true,
+  "how": "one way only, in the walk: a picture of each attack on its first hit frame"
+ },
+ "9.2": {
+  "mark": "files+boot",
+  "look": false,
+  "how": "the frame he may act on in the ordinary moves is read back against the game's; frames per state are logged in the walk; a special's states are counted in the game"
+ },
+ "9.3": {
+  "mark": "files",
+  "look": false,
+  "how": "reach computed from the clip's bone on the hit frames against the source's; one hit landed in the boot"
+ },
+ "9.4": {
+  "mark": "files",
+  "look": false,
+  "how": "this is the verifier: the report's table of each ordinary move as built beside the game's"
+ },
+ "9.5": {
+  "mark": "code",
+  "look": false,
+  "how": ""
+ },
+ "9.6": {
+  "mark": "files",
+  "look": false,
+  "how": "the reader's list of what it did not read"
+ },
+ "9.7": {
+  "mark": "rule",
+  "look": false,
+  "how": "method"
+ },
+ "9.8": {
+  "mark": "code",
+  "look": false,
+  "how": "only a fighter with armour or a counter"
+ },
+ "9.9": {
+  "mark": "rule",
+  "look": false,
+  "how": "method"
+ },
+ "9.10": {
+  "mark": "files",
+  "look": false,
+  "how": "the verifier re-run on earlier fighters; a boot only when a rule about the game changed"
+ },
+ "9.11": {
+  "mark": "files+boot",
+  "look": false,
+  "how": "the two lists of the built files first; then one recording over the round, every sample a script plays looked for in it"
+ },
+ "9.12": {
+  "mark": "boot",
+  "look": true,
+  "how": "the head picture is the stock icon's own; eight sides in the same stop"
+ },
+ "9.13": {
+  "mark": "files+boot",
+  "look": false,
+  "how": "predicted from the matrices; one reading"
+ },
+ "9.14": {
+  "mark": "rule",
+  "look": false,
+  "how": "the probes' own limits and words"
+ },
+ "9.15": {
+  "mark": "rule",
+  "look": false,
+  "how": "method"
+ },
+ "9.16": {
+  "mark": "rule",
+  "look": false,
+  "how": "method"
+ },
+ "9.17": {
+  "mark": "rule",
+  "look": false,
+  "how": "method"
+ },
+ "9.18": {
+  "mark": "rule",
+  "look": false,
+  "how": "method"
+ },
+ "9.19": {
+  "mark": "rule",
+  "look": false,
+  "how": "how an answer is recorded"
+ },
+ "9.20": {
+  "mark": "rule",
+  "look": false,
+  "how": "how a left-facing or diagonal test is written"
+ },
+ "9.21": {
+  "mark": "rule",
+  "look": false,
+  "how": "a way of reading the game: steplog lines, not the timed pictures (look_probe forms_frames)"
+ },
+ "9.22": {
+  "mark": "rule",
+  "look": false,
+  "how": "how a probe writes into the game: frozen (look_probe kill_stage_particles)"
+ },
+ "9.23": {
+  "mark": "rule",
+  "look": false,
+  "how": "the sound check prints no `not listened for` line for a test of a special"
+ },
+ "9.24": {
+  "mark": "rule",
+  "look": false,
+  "how": "every CODE_SOUNDS name is under a test in audio_check.ENGINE"
+ },
+ "9.25": {
+  "mark": "rule",
+  "look": false,
+  "how": "a rule of the probes: the target where the boxes are"
+ },
+ "9.26": {
+  "mark": "rule",
+  "look": false,
+  "how": "round.py --own --from --no-portraits"
+ },
+ "10.1": {
+  "mark": "rule",
+  "look": false,
+  "how": "a source game's reader"
+ },
+ "10.2": {
+  "mark": "rule",
+  "look": false,
+  "how": "a source game's reader"
+ },
+ "10.3": {
+  "mark": "rule",
+  "look": false,
+  "how": "a source game's reader"
+ },
+ "10.4": {
+  "mark": "rule",
+  "look": false,
+  "how": "a source game's reader"
+ },
+ "10.5": {
+  "mark": "rule",
+  "look": false,
+  "how": "a source game's reader"
+ },
+ "10.6": {
+  "mark": "rule",
+  "look": false,
+  "how": "a source game's reader"
+ },
+ "10.7": {
+  "mark": "rule",
+  "look": false,
+  "how": "a source game's reader"
+ },
+ "10.8": {
+  "mark": "rule",
+  "look": false,
+  "how": "a source game's reader"
+ },
+ "10.9": {
+  "mark": "rule",
+  "look": false,
+  "how": "source_game.written and the reader; tested in test_slapcity_reader"
+ },
+ "10.10": {
+  "mark": "rule",
+  "look": false,
+  "how": "the reader's cut of windows into parts (echo_rivals2/gamedata.py, tested)"
+ },
+ "10.11": {
+  "mark": "rule",
+  "look": false,
+  "how": "the reader (echo_rivals2), a picture of the fighter standing"
+ },
+ "10.12": {
+  "mark": "files",
+  "look": false,
+  "how": "verify 2.2/9.2 (the frame he may act on) and the sounds stage's log (no 'the fighter has no' for a numbered word)"
+ },
+ "10.13": {
+  "mark": "files",
+  "look": false,
+  "how": "verify 7.1/9.11 (sounds silent) from the reader's sounds.json"
+ },
+ "10.14": {
+  "mark": "files",
+  "look": false,
+  "how": "verify 10.14: preflight's record (preflight.json) of reader_check on the reader's output: no problem"
+ },
+ "10.15": {
+  "mark": "rule",
+  "look": false,
+  "how": "the reader reads every fighter by the game's own tables; tested in test_own_fishbunjin"
+ },
+ "11.1": {
+  "mark": "files",
+  "look": false,
+  "how": "joints, their depth, the largest clip and the hurtboxes against the limits"
+ },
+ "11.2": {
+  "mark": "boot",
+  "look": true,
+  "how": "the boot's first seconds"
+ },
+ "11.3": {
+  "mark": "files",
+  "look": false,
+  "how": "helpers listed"
+ },
+ "11.4": {
+  "mark": "files",
+  "look": false,
+  "how": ""
+ },
+ "11.5": {
+  "mark": "files",
+  "look": false,
+  "how": "tables rewritten and tables left, listed"
+ },
+ "11.6": {
+  "mark": "files",
+  "look": false,
+  "how": ""
+ },
+ "11.7": {
+  "mark": "files",
+  "look": false,
+  "how": "the empty tree and still animations are in the costume"
+ },
+ "11.8": {
+  "mark": "files",
+  "look": false,
+  "how": "clip sizes, which were thinned"
+ },
+ "11.9": {
+  "mark": "files+boot",
+  "look": false,
+  "how": "the flag per action; travel logged in the walk"
+ },
+ "11.10": {
+  "mark": "files",
+  "look": false,
+  "how": "the list of actions that hold a pose"
+ },
+ "11.11": {
+  "mark": "files",
+  "look": false,
+  "how": "chains and spheres counted"
+ },
+ "11.12": {
+  "mark": "files",
+  "look": false,
+  "how": ""
+ },
+ "11.13": {
+  "mark": "boot",
+  "look": true,
+  "how": "the walk already has a dash, a stop, a jump and a landing: pictures from it"
+ },
+ "11.14": {
+  "mark": "files",
+  "look": false,
+  "how": ""
+ },
+ "11.15": {
+  "mark": "files",
+  "look": false,
+  "how": "name length"
+ },
+ "11.16": {
+  "mark": "files",
+  "look": false,
+  "how": "skin_cost numbers"
+ },
+ "11.17": {
+  "mark": "files",
+  "look": false,
+  "how": "low-detail and metal lists named"
+ },
+ "11.18": {
+  "mark": "files",
+  "look": false,
+  "how": "every costume the same pieces, joints and cost"
+ },
+ "11.19": {
+  "mark": "boot",
+  "look": true,
+  "how": "the same boot: today this is eight boots of its own"
+ },
+ "11.20": {
+  "mark": "files",
+  "look": false,
+  "how": ""
+ },
+ "11.21": {
+  "mark": "files",
+  "look": false,
+  "how": "groups and pieces counted against 11 and 124"
+ },
+ "11.22": {
+  "mark": "files",
+  "look": false,
+  "how": ""
+ },
+ "11.23": {
+  "mark": "files",
+  "look": false,
+  "how": ""
+ },
+ "11.24": {
+  "mark": "boot",
+  "look": true,
+  "how": "the blink, in the head picture stepped"
+ },
+ "11.25": {
+  "mark": "files",
+  "look": false,
+  "how": ""
+ },
+ "11.26": {
+  "mark": "files+boot",
+  "look": false,
+  "how": "a sum of file sizes against the heap for the three worst matches; the game is asked once, on the last disc, with its picture looked at"
+ },
+ "11.27": {
+  "mark": "files",
+  "look": false,
+  "how": ""
+ },
+ "11.28": {
+  "mark": "boot",
+  "look": true,
+  "how": "face pictures from the walk: standing, hit, an attack, a jump"
+ },
+ "11.29": {
+  "mark": "rule",
+  "look": false,
+  "how": "settled in the code: a stage fetches what it reads"
+ },
+ "11.30": {
+  "mark": "rule",
+  "look": false,
+  "how": "a statement"
+ },
+ "11.31": {
+  "mark": "rule",
+  "look": false,
+  "how": "the command says which of the fighter's values were given, worked out or missing before its first long step"
+ },
+ "11.32": {
+  "mark": "rule",
+  "look": false,
+  "how": "how the command runs again"
+ },
+ "11.33": {
+  "mark": "files+boot",
+  "look": true,
+  "how": "the joints no clip moves that the skin uses, listed from the model and the clips; shoulders, elbows, wrists and knees looked at close in a move that turns them"
+ },
+ "11.34": {
+  "mark": "rule",
+  "look": false,
+  "how": "method: a picture with every heap reading"
+ },
+ "11.35": {
+  "mark": "code",
+  "look": false,
+  "how": "own_data.ecb_six and the root rule, tested; the report names what was left out"
+ },
+ "11.36": {
+  "mark": "files",
+  "look": true,
+  "how": "the rig's provenance names what was folded and given up; looked at in the round's pictures"
+ },
+ "11.37": {
+  "mark": "files",
+  "look": false,
+  "how": "the body's receipt names the groups drawn always and joined"
+ },
+ "11.38": {
+  "mark": "files",
+  "look": false,
+  "how": "the data report's readings, by points and by capsule"
+ },
+ "11.39": {
+  "mark": "rule",
+  "look": false,
+  "how": "the plain build says which specials are NOT BUILT"
+ },
+ "11.40": {
+  "mark": "files",
+  "look": false,
+  "how": "the bank's report lists unbound_tracks; the rig's log says how many clips it was made from"
+ },
+ "11.41": {
+  "mark": "files+boot",
+  "look": true,
+  "how": "the report's `trail` (joint, span, colour) and the code file's GetTrailData; in the game the probe's `trail` step reads the span and points while a move draws it (sk_trail), and one swing is seen"
+ },
+ "11.42": {
+  "mark": "files+boot",
+  "look": true,
+  "how": "verify 11.42: data/report.json's shield (the joint, and what hangs under it: nothing); the round's look_shield pictures"
+ },
+ "12.1": {
+  "mark": "files",
+  "look": true,
+  "how": "the emblem model is in the project; it is in every picture of the HUD"
+ },
+ "12.2": {
+  "mark": "files",
+  "look": false,
+  "how": "wired in the files; test runs play no music, so only the owner hears it"
+ },
+ "12.3": {
+  "mark": "boot",
+  "look": true,
+  "how": "the end of the same match"
+ },
+ "12.4": {
+  "mark": "files",
+  "look": false,
+  "how": "the files the engine asks for by name are on the disc"
+ },
+ "12.5": {
+  "mark": "files",
+  "look": false,
+  "how": ""
+ },
+ "12.6": {
+  "mark": "files",
+  "look": false,
+  "how": ""
+ },
+ "12.7": {
+  "mark": "rule",
+  "look": false,
+  "how": "a statement"
+ },
+ "12.8": {
+  "mark": "rule",
+  "look": false,
+  "how": "a statement"
+ },
+ "12.9": {
+  "mark": "boot",
+  "look": true,
+  "how": "an item, a hat, ice, metal: steps of the same match"
+ },
+ "12.10": {
+  "mark": "rule",
+  "look": false,
+  "how": "a statement"
+ },
+ "12.11": {
+  "mark": "rule",
+  "look": false,
+  "how": "a fact about the engine, looked up once"
+ },
+ "12.12": {
+  "mark": "files",
+  "look": false,
+  "how": "verify 12.12: what a one-player mode asks for (the versus card's pose, the trophy fall) is in the port's own files; starting the mode once in the game (classic_probe.py) only if wanted"
+ },
+ "12.13": {
+  "mark": "files",
+  "look": false,
+  "how": "the Kirby entries are none"
+ },
+ "12.14": {
+  "mark": "files+boot",
+  "look": false,
+  "how": "the win scripts carry the sounds; the recording runs on through the results screen"
+ },
+ "12.15": {
+  "mark": "code",
+  "look": false,
+  "how": "roster_tile.plate_words and its fallback, tested; the package log says the word"
+ },
+ "12.16": {
+  "mark": "code",
+  "look": true,
+  "how": "game_art.drawn_height and subject, tested; the art sheet looked at"
+ },
+ "12.17": {
+  "mark": "files+boot",
+  "look": true,
+  "how": "the emblem's receipt (larger, triangles); seen behind the damage in a match"
+ },
+ "12.18": {
+  "mark": "files",
+  "look": false,
+  "how": "verify 12.5 (announcer call present); the emblem receipt"
+ },
+ "12.19": {
+  "mark": "files",
+  "look": false,
+  "how": "the reader's identity/identity.json (what each of the three is and where it was found); the sounds stage's lines: series emblem, victory fanfare, the announcer"
+ },
+ "13.1": {
+  "mark": "rule",
+  "look": false,
+  "how": "a statement: fighters.FORMS and the group route of the port command"
+ },
+ "13.2": {
+  "mark": "code",
+  "look": false,
+  "how": "forms.build, tested; the driver report lists the switch states first"
+ },
+ "13.3": {
+  "mark": "boot",
+  "look": true,
+  "how": "the 'who' lines of the forms tests: kind, damage, place, facing before and after each switch"
+ },
+ "13.4": {
+  "mark": "files+boot",
+  "look": true,
+  "how": "the preload is in codes.gct (link.json); a match switches to every form and back, pictures of each"
+ },
+ "13.5": {
+  "mark": "files",
+  "look": false,
+  "how": "link.json: the ring, the slots off the screen; each form's costume count"
+ },
+ "13.6": {
+  "mark": "files",
+  "look": false,
+  "how": "12.5 answered for every form: its package has the group's call"
+ },
+ "13.7": {
+  "mark": "files+boot",
+  "look": false,
+  "how": "verify.forms_room on the forms; the heap probe once on the disc"
+ },
+ "13.8": {
+  "mark": "rule",
+  "look": false,
+  "how": "a list to go down: the build report's provides and the forms tests"
+ },
+ "13.9": {
+  "mark": "code",
+  "look": true,
+  "how": "forms.shrink_side, forms.looser, port.run_forms room loop, tested; the run log says each remake"
+ },
+ "13.10": {
+  "mark": "boot",
+  "look": true,
+  "how": "port stage art: game_art.py per form on the linked disc; the CSS picture of the tile"
+ },
+ "13.11": {
+  "mark": "boot",
+  "look": false,
+  "how": "look_probe forms_room (room before and after each switch); heap_probe for the files' heaps"
+ },
+ "13.12": {
+  "mark": "code",
+  "look": false,
+  "how": "forms.stale_disc and the art stage's stop, tested"
+ }
+}

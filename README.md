@@ -10,7 +10,34 @@ Mod manager for Super Smash Bros. Melee. Download, organize, and install charact
 
 **Discord:** [Join](https://discord.gg/EAjJnccxgF)
 
-This repository is the public home for **releases, issues, and documentation**.
+This repository is the public home for **releases, issues, documentation, and source**.
+
+## Source
+
+Every release from 0.9.0 on is one commit here, tagged `v<version>`: the source of exactly what
+that installer ships, plus the README, changelog and notices. Development happens elsewhere, so
+there is no history between releases. Pull requests are welcome; they are copied over by hand.
+
+SSBM Nucleus is licensed under the [GNU GPL v3.0](LICENSE). The combo state machine in
+`app/backend/tracker/combos/combo_index.py` is a port of
+[slippi-js](https://github.com/project-slippi/slippi-js) and keeps its LGPL-3.0 notice.
+Third-party licences are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+Three companion repos get a snapshot of the commit each release pins, tagged `nucleus-v<version>`:
+
+| Repo | What | Licence |
+|---|---|---|
+| [ssbmNucleus/rigswap](https://github.com/ssbmNucleus/rigswap) | puts a downloaded 3D model on a fighter's rig (Randall's model import) | GPL-3.0 |
+| [ssbmNucleus/HSDLib](https://github.com/ssbmNucleus/HSDLib) | fork of Ploaj's HSDLib / HSDRawViewer; the release carries its builds | MIT |
+| [ssbmNucleus/m-ex](https://github.com/ssbmNucleus/m-ex) | fork of MexManager / MexCLI on the m-ex system; the release carries its builds | none upstream; see its README |
+
+`app/utility/*.manifest.json` pin those releases, and `tools/build/fetch_native.py` and
+`tools/build/fetch_rigswap.py` fetch them. All four repos are public, so no GitHub account is needed.
+Setup is in [docs/dev/DEVELOPMENT.md](docs/dev/DEVELOPMENT.md).
+
+The source carries no Nintendo game data. A few dev-only and game-derived files are left out of
+this copy (test costumes, retail art, a commercial font), so some tests and previews need your own
+game files.
 
 ## Features
 

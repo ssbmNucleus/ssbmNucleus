@@ -1,0 +1,551 @@
+/* ============================================
+   nucleOME Combos — combo browser over extracted frame data
+   ============================================ */
+
+.combos-page {
+  width: 100%;
+  max-width: var(--page-shell-max-width);
+  margin: 0 auto;
+  padding: var(--space-6) var(--page-inline-padding) var(--space-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  animation: fadeIn var(--duration-normal) var(--ease-out);
+}
+
+/* Library status stays mounted during loading, scanning and empty states. */
+
+.combos-library-status {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 54px;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-elevated);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+
+.combos-loading { animation: none; }
+
+.combos-library-message { position: relative; min-width: 0; }
+.combos-library-status .combos-pending-btn { position: relative; min-width: 128px; }
+.combos-library-progress {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--gradient-green);
+  opacity: 0.25;
+  transition: width 1.8s linear;
+}
+.combos-library-status button:disabled,
+.combos-filters button:disabled,
+.combo-actions .share-link-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.combos-pending {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Compact action for the library status and error rows. */
+.combos-pending-btn {
+  margin-left: auto;
+  padding: var(--space-2) var(--space-5);
+  background: var(--gradient-gold);
+  color: var(--color-text-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: var(--glow-gold-sm);
+  transition: transform var(--transition-fast), filter var(--transition-fast);
+}
+
+.combos-pending-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.15);
+}
+
+/* ── Filters ── */
+
+.combos-filters {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.combos-opponent-search input {
+  background: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  min-height: 44px;
+  font-size: var(--text-sm);
+  font-family: var(--font-body);
+}
+
+.combos-opponent-search input:focus {
+  outline: none;
+  border-color: var(--color-border-focus);
+}
+
+.combos-direction {
+  display: inline-flex;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.combos-dir-btn {
+  padding: var(--space-2) var(--space-3);
+  min-height: 42px;
+  background: var(--color-bg-elevated);
+  border: none;
+  color: var(--color-text-tertiary);
+  font-size: var(--text-sm);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.combos-dir-btn + .combos-dir-btn {
+  border-left: 1px solid var(--color-border);
+}
+
+.combos-dir-btn.active {
+  background: var(--color-green-muted);
+  color: var(--color-accent);
+}
+
+.combos-kills {
+  padding: var(--space-2) var(--space-3);
+  min-height: 44px;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-tertiary);
+  font-size: var(--text-sm);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.combos-kills:hover {
+  border-color: var(--color-border-focus);
+}
+
+.combos-kills.active {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+  background: var(--color-danger-muted);
+}
+
+.combos-opponent-search {
+  flex: 1;
+  min-width: 10rem;
+}
+
+.combos-opponent-search input {
+  width: 100%;
+}
+
+/* ── Sort metric buttons ── */
+
+.combos-sort {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.combos-sort-label {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  margin-right: var(--space-1);
+}
+
+.combos-sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-2) var(--space-3);
+  min-height: 44px;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-tertiary);
+  font-size: var(--text-sm);
+  font-family: var(--font-body);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.combos-sort-btn:hover {
+  border-color: var(--color-border-focus);
+}
+
+.combos-sort-btn.active {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+}
+
+.combos-sort-arrow {
+  font-size: 0.9em;
+  line-height: 1;
+}
+
+.combos-count {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+.combos-playall-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  white-space: nowrap;
+}
+
+.combos-playall {
+  padding: var(--space-2) var(--space-4);
+  min-height: 44px;
+  background: var(--gradient-green);
+  color: var(--color-text-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: var(--glow-green-sm, none);
+  transition: transform var(--transition-fast), filter var(--transition-fast);
+}
+
+.combos-playall:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.15);
+}
+
+.combos-playall:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.combos-playcount {
+  width: 5ch;
+  min-height: 44px;
+  padding: var(--space-2);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.combos-playcount::-webkit-outer-spin-button,
+.combos-playcount::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.combos-playcount:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.combos-playall-suffix {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+}
+
+/* ── Combo rows ── */
+
+.combos-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.combos-none {
+  color: var(--color-text-tertiary);
+  padding: var(--space-4);
+  text-align: center;
+}
+
+.combo-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+  animation: comboRowIn 0.32s var(--ease-out) both;
+  animation-delay: calc(var(--row-i, 0) * 24ms);
+}
+
+@keyframes comboRowIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.995);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.combo-row:hover {
+  border-color: var(--color-border);
+  background: var(--color-bg-surface);
+}
+
+.combo-who,
+.combo-vs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.combo-who {
+  flex-basis: 9rem;
+}
+
+.combo-vs {
+  flex-basis: 9rem;
+}
+
+.combo-vs-label {
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+}
+
+.combo-stock {
+  width: 22px;
+  height: 22px;
+  image-rendering: pixelated;
+  flex: 0 0 auto;
+}
+
+.combo-player,
+.combo-opp {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.combo-opp {
+  font-weight: var(--font-regular);
+  color: var(--color-text-secondary);
+}
+
+/* name rendered as a slippi.gg profile link (button, styled inline) */
+.combo-name-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  max-width: 100%;
+}
+
+.combo-name-link:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.combo-main {
+  flex: 1 1 20rem;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* the move sequence as a chip chain: [Dair] → [Down B] → [Dair ×2] */
+.combo-seq {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.combo-move {
+  flex: 0 0 auto;
+  padding: 1px var(--space-2);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  white-space: nowrap;
+}
+
+.combo-move-hits {
+  margin-left: var(--space-1);
+  color: var(--color-text-tertiary);
+  font-weight: var(--font-regular);
+}
+
+.combo-seq-arrow {
+  flex: 0 0 auto;
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+}
+
+.combo-facts {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+
+.combo-damage {
+  font-family: var(--font-mono);
+  font-weight: var(--font-bold);
+  color: var(--color-gold);
+}
+
+.combo-percents,
+.combo-length {
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+.combo-kind {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-wider);
+  border-radius: var(--radius-sm);
+  padding: 1px var(--space-2);
+}
+
+.combo-kind--true {
+  color: var(--color-accent);
+  background: var(--color-green-muted);
+}
+
+.combo-kind--string {
+  color: var(--color-text-tertiary);
+  background: var(--color-bg-surface);
+}
+
+.combo-kill {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-danger);
+  background: var(--color-danger-muted);
+  border-radius: var(--radius-sm);
+  padding: 1px var(--space-2);
+}
+
+.combo-stage {
+  flex: 0 0 11rem;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.combo-stage-icon {
+  display: inline-block;
+  width: 34px;
+  height: 26px;
+  object-fit: cover;
+  border-radius: var(--radius-xs);
+  flex: 0 0 auto;
+}
+
+.combo-when {
+  flex: 0 0 9rem;
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+
+.combo-actions {
+  display: flex;
+  gap: var(--space-1);
+}
+
+/* Lite button: match the neutral outline used on Replays
+   (mirrors .replay-actions button in ReplaysPage.css, which overrides the
+   shared teal .wl-trigger style). */
+.combo-actions .wl-trigger {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-3);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.combo-actions .wl-trigger:hover {
+  background: transparent;
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.combo-watch {
+  background: transparent;
+  border: 1px solid var(--color-gold-muted);
+  border-radius: var(--radius-sm);
+  color: var(--color-gold);
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.combo-watch:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold-light);
+}
+
+@media (max-width: 1100px) {
+  .combo-stage, .combo-when { display: none; }
+}

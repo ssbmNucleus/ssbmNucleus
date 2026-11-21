@@ -1,0 +1,55 @@
+/* Pagination bar — split from MexPanel.css 2026-08-22 */
+/* Rules copied verbatim; loaded right after MexPanel.css from MexPanel.jsx so the cascade order is unchanged. */
+
+/* ─────────────────────────────────────────
+   PAGINATION BAR
+   Footer controls under the card lists (costumes / variants / stages / mods).
+   Rendered only when a list exceeds one page, so small lists are unaffected.
+   ───────────────────────────────────────── */
+
+.pagination-bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-top: 1px solid var(--color-border-subtle);
+  background: var(--color-bg-surface);
+}
+
+.pagination-btn {
+  min-width: 28px;
+  height: 26px;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm, 6px);
+  background: var(--color-bg-elevated);
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.pagination-btn:hover:not(:disabled) {
+  border-color: var(--color-cyan);
+  color: var(--color-cyan);
+  box-shadow: var(--glow-cyan-sm);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.pagination-info {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  padding: 0 var(--space-2);
+}

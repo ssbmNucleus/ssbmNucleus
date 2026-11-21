@@ -1,0 +1,26 @@
+{
+  "stage": "pokemonstadium",
+  "code": "GrPs",
+  "basis": {"textureCount": 120},
+  "regions": {
+    "turf": [115, 117],
+    "center_emblem": [116],
+    "turf_pattern": [18, 46, 47, 48, 49, 52],
+    "deck": [0, 1, 2, 3, 4],
+    "walls": [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 50, 51],
+    "stands": [62, 79],
+    "lights": [59, 61, 72, 76, 78]
+  },
+  "protected": [116],
+  "notes": {
+    "turf": "THE actual field: 115 = GrdPSNormalBaseA root (64x64 green grass tile), 117 = NormalBaseC root (white I8 detail overlay). These live as standalone roots OUTSIDE map_head -- the transformation engine uploads them by symbol name, which is why pushing any map_head texture never recolored the field. Composite/tint these to retheme the turf",
+    "center_emblem": "116 = GrdPSNormalBaseB root: the 256x256 Pokeball center circle - protected",
+    "turf_pattern": "the field luminance I4 sheets (18 + 46-49/52, alias GrdPStadiumBldK). Luminance/pattern detail only",
+    "deck": "the gray platform ring around the turf (grayscale sheets 0-4)",
+    "walls": "stadium wall/billboard sections (incl. the 288x256 olives 22-27, which are walls NOT deck)",
+    "stands": "orange crowd stands",
+    "lights": "white stadium lights + sky bits",
+    "limitations": "map_head 5-17 are the TRANSFORMATION bases/emblems (OVBase/OVF/OVG/OVHTP/OVN/OVR/OVW aliases) - not visible on the normal stage, leave alone. The jumbotron in-match text is SIS-rendered (engine text)",
+    "method": "mega-pack diff vs vanilla GrPs.usd (packs replace exactly NormalBaseA+B) + root-image alias dump, 2026-06-11. BASE IS GrPs.usd (NTSC English) - the .dat is the Japanese stage with a different texture story"
+  }
+}

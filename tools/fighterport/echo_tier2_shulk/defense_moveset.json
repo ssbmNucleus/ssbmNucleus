@@ -1,0 +1,221 @@
+{
+  "schema": 1,
+  "skeleton": "model/body/c00/model.nusktb",
+  "landmarks": "ultimate_landmarks.json",
+  "allow_unbound": [
+    "S_Hip_hit"
+  ],
+  "attachments": [
+    {
+      "source": "SwordR",
+      "source_anchor": "HandR",
+      "target": "JOBJ_75",
+      "target_anchor": "JOBJ_73"
+    }
+  ],
+  "clips": [
+    {
+      "id": "downbacku",
+      "category": "native_supplement",
+      "target_motion": "DownBackU",
+      "source": "motion/body/c00/f03downbacku.nuanmb",
+      "body_scale": "rigid",
+      "root_motion_joint": "Trans",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "root_policy_note": "Grounded recovery travel belongs to engine TransN, not the rendered pelvis; retain final position when returning to Wait."
+    },
+    {
+      "id": "downbackd",
+      "category": "native_supplement",
+      "target_motion": "DownBackD",
+      "source": "motion/body/c00/f04downbackd.nuanmb",
+      "body_scale": "rigid",
+      "root_motion_joint": "Trans",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "root_policy_note": "Grounded recovery travel belongs to engine TransN, not the rendered pelvis; retain final position when returning to Wait."
+    },
+    {
+      "id": "passive",
+      "category": "native_supplement",
+      "target_motion": "Passive",
+      "source": "motion/body/c00/f05passive.nuanmb",
+      "body_scale": "rigid",
+      "root_motion_joint": "Trans",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "root_policy_note": "Grounded recovery travel belongs to engine TransN, not the rendered pelvis; retain final position when returning to Wait."
+    },
+    {
+      "id": "passivestandf",
+      "category": "native_supplement",
+      "target_motion": "PassiveStandF",
+      "source": "motion/body/c00/f05passivestandf.nuanmb",
+      "body_scale": "rigid",
+      "root_motion_joint": "Trans",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "root_policy_note": "Grounded recovery travel belongs to engine TransN, not the rendered pelvis; retain final position when returning to Wait."
+    },
+    {
+      "id": "passivestandb",
+      "category": "native_supplement",
+      "target_motion": "PassiveStandB",
+      "source": "motion/body/c00/f05passivestandb.nuanmb",
+      "body_scale": "rigid",
+      "root_motion_joint": "Trans",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "root_policy_note": "Grounded recovery travel belongs to engine TransN, not the rendered pelvis; retain final position when returning to Wait."
+    },
+    {
+      "id": "downfowardu",
+      "category": "explicit_slot_reuse",
+      "target_motion": "DownFowardU",
+      "source": "motion/body/c00/f03downforwardu.nuanmb",
+      "body_scale": "rigid",
+      "root_motion_joint": "Trans",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "root_policy_note": "Grounded recovery travel belongs to engine TransN, not the rendered pelvis; retain final position when returning to Wait."
+    },
+    {
+      "id": "downfowardd",
+      "category": "explicit_slot_reuse",
+      "target_motion": "DownFowardD",
+      "source": "motion/body/c00/f04downforwardd.nuanmb",
+      "body_scale": "rigid",
+      "root_motion_joint": "Trans",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "root_policy_note": "Grounded recovery travel belongs to engine TransN, not the rendered pelvis; retain final position when returning to Wait."
+    }
+  ]
+}

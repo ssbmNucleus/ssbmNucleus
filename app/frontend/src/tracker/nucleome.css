@@ -1,0 +1,105 @@
+/* ============================================
+   nucleOME MODE - placeholder pages (v1 shell)
+   Styled with the shared token system so it reads as the same app family.
+   Accent-driven bits use var(--color-accent), which is green in nucleome
+   mode via the [data-mode="nucleome"] overrides in index.css.
+   ============================================ */
+
+.nucleome-page {
+  width: 100%;
+  max-width: var(--page-shell-max-width-narrow);
+  margin: 0 auto;
+  padding: var(--page-block-padding) var(--page-inline-padding);
+  animation: fadeIn var(--duration-normal) var(--ease-out);
+}
+
+.nucleome-page-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--color-bg-elevated) 0%, var(--color-bg-base) 100%);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--space-10) var(--space-8);
+  box-shadow: var(--shadow-lg);
+  animation: cardEntrance var(--duration-slow) var(--ease-out) backwards;
+}
+
+/* Accent hairline across the top of the card, matching the header's line */
+.nucleome-page-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--color-accent) 50%, transparent 100%);
+  opacity: 0.7;
+  transition: background var(--transition-normal);
+}
+
+.nucleome-page-kicker {
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-accent);
+  transition: color var(--transition-normal);
+}
+
+.nucleome-page-title {
+  font-size: var(--text-3xl);
+  margin: var(--space-2) 0 var(--space-3);
+}
+
+.nucleome-page-blurb {
+  color: var(--color-text-secondary);
+  font-size: var(--text-md);
+  max-width: 40rem;
+}
+
+.nucleome-page-soon {
+  display: inline-block;
+  margin-top: var(--space-6);
+  padding: var(--space-1) var(--space-3);
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-accent);
+  border: 1px solid currentColor;
+  border-radius: var(--radius-full);
+  opacity: 0.85;
+  transition: color var(--transition-normal);
+}
+
+/* ============================================
+   Mode transition — nucleus <-> nucleOME
+   The wordmark morph + accent flood already animate in the header; this
+   carries the same beat into the content area. The nucleOME <main> mounts
+   fresh on entry (animation on mount); the nucleus <main> stays mounted
+   (state preserved), so App.jsx flashes a short-lived .mode-enter class.
+   ============================================ */
+.app-content.mode-enter {
+  animation: modeContentIn 0.4s var(--ease-out) both;
+}
+
+/* Coach stays mounted across tab switches (so an in-flight turn keeps
+   streaming); when it isn't the active tab we hide it rather than unmount.
+   Double-class so this beats `.app-content { display: flex }` regardless of
+   stylesheet load order. */
+.app-content.app-content--hidden {
+  display: none;
+}
+
+@keyframes modeContentIn {
+  /* Transform/filter here would make the content a containing block for
+     viewport-fixed controls such as Import, moving them during mode switches. */
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

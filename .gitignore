@@ -1,0 +1,51 @@
+# Repo-level ignores. Rules for paths under app/ live in app/.gitignore.
+# Each block names the folder and WHO writes it. `git check-ignore -v <path>` explains any hit.
+
+# Python and Node: caches, virtualenvs, installs (every project in the repo)
+__pycache__/
+*.py[co]
+*.egg-info/
+.pytest_cache/
+venv/
+.venv/
+node_modules/
+*.log
+
+# Secrets and local config
+.env
+.release-secrets/
+.claude/worktrees/
+.claude/settings.local.json
+
+# Game files: never committed (retail ISOs, Nintendo assets)
+*.iso
+ISO DUMPS/
+
+# Replay corpus for tools/rank-baselines (peppi-py input); the packs it builds are tracked
+/data/
+/tools/rank-baselines/data/
+*.slp
+*.tar.gz
+
+# Built installers and release downloads (releases are published from the build, never from git)
+*.AppImage
+*.dmg
+/*.exe
+
+# wrangler local cache: services/cloudflare/* deploys
+.wrangler/
+
+# Agent and pytest scratch at the repo root (tests resolve parents[3] to here)
+/.tmp*/
+
+# docs/guide: capture pipeline output (docs/guide/scripts/capture-*.mjs write profile + seeded vault)
+/docs/guide/.capture/
+/docs/guide/dist/
+/docs/guide/img/_raw/
+
+# tools/ingame: libmelee/memory-probe venv (online_test_iso.sh, run-texture-harvest.js)
+/tools/ingame/nucleus/melee_venv/
+
+# Test scratch beside the backend tests, and local artifact campaigns (conftest ARTIFACT_ROOT)
+/tests/backend/.tmp*/
+/tests/artifacts/

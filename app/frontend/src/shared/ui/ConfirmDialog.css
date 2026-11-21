@@ -1,0 +1,34 @@
+.confirm-dialog-overlay {
+  z-index: calc(var(--z-tooltip) + 100);
+}
+
+.confirm-dialog-content {
+  max-width: 400px;
+  text-align: center;
+}
+
+.confirm-dialog-content h2 {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+.confirm-dialog-message {
+  padding: 0.5rem 0 1.5rem;
+}
+
+.confirm-dialog-message p {
+  margin: 0;
+  color: #ccc;
+  line-height: 1.5;
+}
+
+.confirm-dialog-buttons {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.confirm-dialog-buttons button {
+  min-width: 100px;
+  padding: 0.625rem 1.25rem;
+}

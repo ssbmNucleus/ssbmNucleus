@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Thin charge-flame wisps</title>
+  <desc id="desc">Schematic: cyan marks the thin wisps. Both their core and tint controls color this same element. Broad flame puffs remain gray.</desc>
+  <rect width="160" height="160" rx="16" fill="#0d1520"/>
+  <ellipse cx="80" cy="143" rx="37" ry="4" fill="#334557"/>
+  <path d="M60 68C42 53 55 32 72 40C69 18 99 17 102 40C121 29 135 57 116 69C132 91 104 107 91 89C74 107 47 89 60 68ZM65 111C53 101 66 91 76 98C86 87 104 101 96 111C110 124 92 138 81 128C68 138 53 123 65 111Z" fill="#334557"/>
+  <path d="M39 125C15 100 48 93 31 69C68 92 32 104 49 125ZM121 107C99 81 140 74 119 44C155 70 118 84 135 110Z" fill="#67e8f9"/>
+</svg>

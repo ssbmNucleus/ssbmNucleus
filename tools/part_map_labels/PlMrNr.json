@@ -1,0 +1,76 @@
+{
+ "character": "Mario",
+ "source": "PlMrNr",
+ "verified": true,
+ "notes": "Verified by highlight: 19 is the MOUTH (reads as cap on the sheet); 10 is the emblem; 20/21 are cap panels. masked: the cap emblem texture [10] also carries the cap colour around the emblem; the emblem itself is enclosed by its white ring, so the cap takes only the edge-connected cap-coloured pixels.",
+ "groups": {
+  "overalls": [
+   0,
+   1,
+   2,
+   4
+  ],
+  "overall buttons": [
+   3
+  ],
+  "shirt": [
+   5,
+   7
+  ],
+  "cap": [
+   8,
+   15,
+   16,
+   17,
+   20,
+   21
+  ],
+  "cap emblem": [
+   10
+  ],
+  "skin": [
+   6,
+   12,
+   13,
+   14
+  ],
+  "hair": [
+   11,
+   18
+  ],
+  "eyes": [
+   9,
+   32,
+   33,
+   34,
+   35,
+   36
+  ],
+  "mustache": [
+   22
+  ],
+  "mouth": [
+   19
+  ],
+  "gloves": [
+   26,
+   27,
+   28
+  ],
+  "shoes": [
+   23,
+   24,
+   25
+  ],
+  "low detail": [
+   29,
+   30,
+   31
+  ]
+ },
+ "masked": {
+  "cap": [
+   10
+  ]
+ }
+}

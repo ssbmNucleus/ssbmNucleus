@@ -1,0 +1,74 @@
+.numbered-pager {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  padding-bottom: var(--space-2);
+}
+
+.numbered-pager button {
+  min-width: 30px;
+  padding: var(--space-1) var(--space-2);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.numbered-pager button:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.numbered-pager button.is-current {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  opacity: 1;
+}
+
+.numbered-pager button:disabled:not(.is-current) {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* the ellipsis is a quiet button — clicking it opens the jump input */
+.numbered-pager button.numbered-pager-gap {
+  min-width: auto;
+  padding: 0 var(--space-1);
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+.numbered-pager button.numbered-pager-gap:hover {
+  color: var(--color-accent);
+}
+
+/* type-a-page-number input, swapped in place of a clicked ellipsis */
+.numbered-pager-jump {
+  width: 7ch;
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.numbered-pager-jump::-webkit-outer-spin-button,
+.numbered-pager-jump::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.numbered-pager-jump:focus {
+  outline: none;
+}

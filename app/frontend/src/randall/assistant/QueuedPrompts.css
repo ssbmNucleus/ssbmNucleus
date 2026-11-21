@@ -1,0 +1,240 @@
+/* Ported from Ozone App.css. Only queue-specific selectors belong here. */
+.nucleus-assistant .queued-chips {
+  --imsg-r: 18px;
+  --imsg-gap-in: 2px;
+  --imsg-gap-out: 8px;
+  --imsg-pad: 12px 16px;
+  --imsg-max: 84%;
+  --imsg-lh: 1.62;
+  --imsg-user-bg: var(--color-accent);
+}
+.queued-chips {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* The chip stack itself scrolls once it outgrows ~5 collapsed chips, so a long
+   queue can't push the composer off the pane. Newest chip is kept in view by
+   QueuedPrompts (the just-typed one is the one worth confirming). */
+.queued-chips-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-height: 240px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* "N queued · Clear all" — outside the scroll area so it never scrolls away. */
+.queued-chips-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-2) 0 var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+
+.queued-clear-btn {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--color-text-tertiary);
+  font-size: var(--text-xs);
+  padding: var(--space-1) var(--space-2);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+@media (hover: hover) { .queued-clear-btn:hover { background: var(--color-bg-surface); color: var(--color-text-primary); } }
+
+/* Claude Code's queued-message row: a quiet solid pill (lead mark · text ·
+   Steer · trash · overflow), sitting just above the composer. */
+.queued-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+}
+
+.queued-chip-lead {
+  flex: none;
+  display: flex;
+  align-items: center;
+  color: var(--color-text-muted);
+}
+
+/* One clipped line by default (same look as the old nowrap+ellipsis, but as a
+   line-clamp so it can unfold); click toggles .is-open, which wraps the full
+   text and scrolls internally past ~8 lines. */
+.queued-chip-text {
+  flex: 1;
+  min-width: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.queued-chip-text.is-open {
+  display: block;
+  -webkit-line-clamp: unset;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 160px;
+  overflow-y: auto;
+}
+/* Keep lead mark and actions pinned to the first line while the text unfolds. */
+.queued-chip.is-open { align-items: flex-start; }
+.queued-chip.is-open .queued-chip-lead,
+.queued-chip.is-open .queued-chip-actions { margin-top: 2px; }
+
+.queued-chip-actions {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+/* The primary action reads as a link, not a button — arrow + word, muted until
+   hover, exactly like the reference "↵ Steer". */
+.queued-steer-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--color-text-tertiary);
+  font-size: var(--text-sm);
+  padding: var(--space-1) var(--space-2);
+  white-space: nowrap;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+@media (hover: hover) { .queued-steer-btn:hover { background: var(--color-bg-surface); color: var(--color-text-primary); } }
+
+/* Trash / overflow: square icon buttons that sit flush with the Steer link. */
+.queued-chip-icon { padding: var(--space-1); }
+
+.queued-chip-more { position: relative; display: flex; }
+
+/* Opens upward — the chip lives at the bottom of the pane, above the composer. */
+.queued-chips .chip-menu {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  z-index: 30;
+  min-width: 9rem;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-1);
+}
+
+.queued-chips .icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  padding: var(--space-1) var(--space-2);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+@media (hover: hover) { .queued-chips .icon-btn:hover { background: var(--color-bg-surface); color: var(--color-text-primary); } }
+
+.queued-chips .menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  text-align: left;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+@media (hover: hover) { .queued-chips .menu-item:hover { background: var(--color-bg-surface); color: var(--color-text-primary); } }
+.queued-chips .menu-item-label { flex: 1; min-width: 0; }
+
+.nucleus-assistant .coach-scroll > .queued-chips {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--imsg-gap-in);
+  margin-top: var(--imsg-gap-out);
+}
+.nucleus-assistant .coach-scroll > .queued-chips .queued-chips-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--imsg-gap-in);
+  width: 100%;
+  /* The tray capped and scrolled its own stack; in the thread the thread
+     scrolls, so let them stand. */
+  max-height: none;
+  overflow: visible;
+}
+
+.nucleus-assistant .coach-scroll > .queued-chips .queued-chip {
+  max-width: var(--imsg-max);
+  width: auto;
+  padding: var(--imsg-pad);
+  border: 1px dashed color-mix(in oklab, var(--imsg-user-bg) 55%, transparent);
+  border-radius: var(--imsg-r);
+  /* Same colour as a sent bubble, well short of its weight — the message is
+     yours and is not on the wire yet. Dashed rather than merely faint: at a
+     glance you can tell "queued" from "sent but still delivering". */
+  background: color-mix(in oklab, var(--imsg-user-bg) 22%, transparent);
+  color: var(--color-text-primary);
+  font-size: var(--text-base);
+  line-height: var(--imsg-lh);
+}
+/* Read in full. The tray clipped to one line and made you tap to expand
+   because it was a compact strip above the composer; in the thread there is
+   room, and a queued message you cannot read is worse than a taller bubble.
+   Tap-to-expand still works — there is just nothing left to expand. */
+.nucleus-assistant .coach-scroll > .queued-chips .queued-chip-text {
+  font-size: var(--text-base);
+  line-height: var(--imsg-lh);
+  /* `display: block` and clearing the clamp TOGETHER. The base rule clips
+     with `-webkit-box` + `-webkit-line-clamp: 1`; relaxing only `overflow`
+     leaves the one-line box in place and the rest of the text simply escapes
+     it, spilling outside the bubble. */
+  display: block;
+  -webkit-line-clamp: unset;
+  white-space: pre-wrap;
+  overflow: visible;
+  overflow-wrap: anywhere;
+}
+/* The chip grows with its text now, so stop centring a multi-line body
+   against the lead icon. */
+.nucleus-assistant .coach-scroll > .queued-chips .queued-chip { align-items: flex-start; }
+.nucleus-assistant .coach-scroll > .queued-chips .queued-chip-lead { padding-top: 2px; }
+
+/* The count/clear line reads as a system row, like every other non-message
+   thing in the thread. */
+.nucleus-assistant .coach-scroll > .queued-chips .queued-chips-head {
+  align-self: center;
+  font-size: 13px;
+  color: var(--color-text-tertiary);
+  gap: var(--space-3);
+  padding: 2px 0 4px;
+}
+
+
+.queued-chip-img { flex-shrink: 0; font-size: var(--text-sm); }
+.queued-chips .queued-chip-icon { padding: var(--space-1); }
+.nucleus-assistant .steered-tag { font-size: var(--text-xs); color: var(--color-text-muted); margin-bottom: 2px; }

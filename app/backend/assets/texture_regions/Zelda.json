@@ -1,0 +1,20 @@
+{
+  "character": "Zelda",
+  "basis": {"costumeCode": "PlZdNr", "textureCount": 51},
+  "regions": {
+    "dress": [10, 11, 12, 13, 14, 15, 38, 39, 41, 42, 47, 48],
+    "skin": [26, 27, 28, 30, 32, 34, 35],
+    "fur": [2, 6, 7, 8, 9, 16, 17, 19, 20, 22, 24, 44, 45, 46, 50],
+    "jewels": [0, 4, 5, 49]
+  },
+  "protected": [27, 28],
+  "liveHints": [],
+  "maskHints": {},
+  "notes": {
+    "dress": "pink-magenta gown: 47 = skirt (160x320, huge), 10 = chest, 13/14 = dark underdress, 42 = front apron panel with art",
+    "skin": "pale skin: faces (27/28 - painted eyes, protected), arms/chest",
+    "fur": "light brown hair (22 = main sheet 128x256, huge front+back)",
+    "jewels": "gold tiara + jewelry (0), hidden golds (4/5), gem (49)",
+    "unmapped": "grays 1/3/18/21/23/25/29/31/33 + 36/37/40/43 barely-visible bits"
+  }
+}

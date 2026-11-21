@@ -1,0 +1,3 @@
+/* the "show this texture on the model" probe button pulses while it runs */
+.texture-view-controls .is-highlighting { color: var(--color-cyan); animation: texture-probe-pulse .48s linear infinite; }
+@keyframes texture-probe-pulse { 50% { opacity: .35; } }

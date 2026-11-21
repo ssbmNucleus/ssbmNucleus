@@ -1,0 +1,23 @@
+{
+  "pelvis": "Hip",
+  "spine": "Waist",
+  "chest": "Bust",
+  "neck": "Neck",
+  "head": "Head",
+  "l_collar": "ClavicleL",
+  "l_shoulder": "ShoulderL",
+  "l_elbow": "ArmL",
+  "l_wrist": "HandL",
+  "r_collar": "ClavicleR",
+  "r_shoulder": "ShoulderR",
+  "r_elbow": "ArmR",
+  "r_wrist": "HandR",
+  "l_hip": "LegL",
+  "l_knee": "KneeL",
+  "l_ankle": "FootL",
+  "l_toe": "ToeL",
+  "r_hip": "LegR",
+  "r_knee": "KneeR",
+  "r_ankle": "FootR",
+  "r_toe": "ToeR"
+}

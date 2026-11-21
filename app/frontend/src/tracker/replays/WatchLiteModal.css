@@ -1,0 +1,244 @@
+/* The app header stacks above the content area (see --app-header-h), so the
+   popup lives in the room below it, like the app's other modals. */
+.wl-backdrop {
+  position: fixed; inset: var(--app-header-h, 0px) 0 0 0; z-index: 1000;
+  background: rgba(6, 8, 13, .72); backdrop-filter: blur(3px);
+  display: grid; place-items: center;
+}
+/* The popup scales with that room. It may fill 90% of it, plus up to 64px
+   across and 32px down on small windows, never past 96%. --wl-u is 1px in a
+   1440x810 room and grows with it up to 2px; --wl-s is the same factor as a
+   plain number. The fixed-size pieces (header, side column, HUD, scrub bar,
+   prev/next row) are zoomed by --wl-s, and the stage gets the largest 16:9 box
+   that keeps the popup inside the limit. The stage and timeline canvases are
+   never zoomed: they size their backing store from their own box at
+   devicePixelRatio. Everything is scoped to .wl-modal, so inline clips (chat
+   cards, the profile pin, coach answers) keep their own sizes. */
+.wl-modal {
+  --wl-room-h: calc(100vh - var(--app-header-h, 0px));
+  --wl-max-w: min(96vw, 90vw + 64px);
+  --wl-max-h: min(var(--wl-room-h) * .96, var(--wl-room-h) * .9 + 32px);
+  --wl-u: clamp(1px, min(100vw / 1440, var(--wl-room-h) / 810), 2px);
+  --wl-s: tan(atan2(var(--wl-u), 1px));
+  --wl-side: calc(272 * var(--wl-u));
+  --wl-gap: calc(14 * var(--wl-u));
+  --wl-pad: calc(16 * var(--wl-u));
+  /* the height around the stage, in --wl-u: header 55, body padding 14 + 12,
+     clip gaps 6 + 6, scrub bar 28, timeline 6 + 26; plus the 2px border */
+  --wl-chrome: calc(153 * var(--wl-u) + 2px);
+  /* a multiple of 16px, so the 16:9 canvas is whole pixels both ways */
+  --wl-stage: round(down, min(var(--wl-max-w) - var(--wl-side) - var(--wl-gap) - 2 * var(--wl-pad) - 2px,
+                              (var(--wl-max-h) - var(--wl-chrome)) * 16 / 9), 16px);
+  width: calc(var(--wl-stage) + var(--wl-side) + var(--wl-gap) + 2 * var(--wl-pad) + 2px);
+  background: #0d1018;
+  border: 1px solid #242a3c; border-radius: 14px; overflow: hidden;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .6);
+  display: flex; flex-direction: column;
+}
+.wl-modal--list { --wl-chrome: calc(201 * var(--wl-u) + 2px); }   /* + the 48 prev/next row */
+.wl-modal-body { padding: calc(14 * var(--wl-u)) var(--wl-pad) calc(12 * var(--wl-u)); }
+.wl-modal .wl-head, .wl-modal .wl-side, .wl-modal .wl-hud, .wl-modal .wl-clip-bar,
+.wl-modal .wl-controls, .wl-modal .wl-note, .wl-modal .wl-play-badge, .wl-modal .wl-badge { zoom: var(--wl-s); }
+.wl-modal .wl-clip { gap: calc(6 * var(--wl-u)); }
+.wl-modal .wl-clip-bar { height: 28px; }
+.wl-modal .wl-clip-tl { height: calc(26 * var(--wl-u)); margin-top: calc(6 * var(--wl-u)); }
+.wl-modal .wl-controls { height: 48px; }
+/* the side column keeps its loaded size while the clip loads */
+.wl-modal .wl-inputbox { min-height: 112px; }
+.wl-modal .wl-panel { align-self: stretch; min-height: 115px; }
+.wl-clip-withpanel { display: grid; grid-template-columns: minmax(0, 1fr) 272px; gap: 14px; }
+.wl-modal .wl-clip-withpanel { grid-template-columns: minmax(0, 1fr) var(--wl-side); gap: var(--wl-gap); }
+@media (max-width: 860px) {
+  .wl-clip-withpanel, .wl-modal .wl-clip-withpanel { grid-template-columns: 1fr; }
+  .wl-modal { width: 96vw; max-height: 96%; overflow-y: auto; }
+}
+.wl-side { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.wl-gifbig {
+  font-weight: 700; font-size: 13px; color: #06110f; background: #35d0be;
+  border: none; border-radius: 9px; padding: 10px 14px; cursor: pointer;
+  letter-spacing: .02em;
+}
+.wl-gifbig:hover:not(:disabled) { background: #45e0ce; }
+.wl-gifbig:disabled { opacity: .6; cursor: default; }
+
+/* controllers — fixed-height box so the panel below never jumps */
+.wl-inputbox {
+  background: #131725; border: 1px solid #242a3c; border-radius: 10px;
+  padding: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+}
+.wl-inputcol { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 0; }
+.wl-inputnm { font-size: 11px; font-weight: 700; }
+.wl-ctrl { width: 100%; height: auto; display: block; }
+
+/* on-stage HUD: player cards + exchange banner */
+.wl-hud {
+  position: absolute; inset: 8px 8px auto 8px; display: flex;
+  justify-content: space-between; align-items: flex-start; gap: 8px; pointer-events: none;
+}
+.wl-hudcard {
+  display: flex; align-items: center; gap: 7px; background: rgba(11, 13, 19, .72);
+  border: 1px solid #242a3c; border-radius: 9px; padding: 5px 9px; backdrop-filter: blur(3px);
+}
+.wl-hudcard--1 { flex-direction: row-reverse; text-align: right; }
+.wl-hud-icon { width: 20px; height: 20px; flex: none; image-rendering: pixelated; }
+.wl-hud-who { display: flex; flex-direction: column; line-height: 1.12; min-width: 0; }
+.wl-hudcard--1 .wl-hud-who { align-items: flex-end; }
+.wl-hud-who b { font-weight: 700; font-size: 12px; color: #eaeef7; white-space: nowrap; }
+.wl-hud-who small { color: #7b8497; font-weight: 500; font-size: 9.5px; letter-spacing: .03em; }
+.wl-hud-stocks { display: flex; gap: 3px; }
+.wl-hud-stocks i { width: 7px; height: 7px; border-radius: 50%; display: block; }
+.wl-hud-pct { font-family: ui-monospace, monospace; font-size: 19px; font-weight: 600; color: #fff; font-variant-numeric: tabular-nums; }
+.wl-navpos { font-family: ui-monospace, monospace; font-size: 12px; color: #7b8497; }
+.wl-hud-pct b { font-size: 11px; font-weight: 600; color: #7b8497; }
+.wl-hudbanner {
+  align-self: center; background: rgba(11, 13, 19, .8); border: 1px solid #242a3c;
+  border-radius: 14px; padding: 5px 14px; font-size: 12px; color: #cfd5e4;
+  max-width: 60%; text-align: center; line-height: 1.5;
+  white-space: normal; overflow-wrap: anywhere;
+}
+.wl-head {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-bottom: 1px solid #242a3c;
+  background: linear-gradient(180deg, #10141f, #0d1018);
+}
+.wl-title { font-weight: 700; color: #eaeef7; font-size: 15px; display: flex; align-items: baseline; gap: 10px; }
+.wl-sub { font-weight: 500; font-size: 12px; color: #7b8497; font-family: ui-monospace, monospace; }
+.wl-close {
+  margin-left: auto; width: 30px; height: 30px; border-radius: 8px;
+  background: #171c2c; border: 1px solid #242a3c; color: #cfd5e4; cursor: pointer; font-size: 13px;
+}
+.wl-close:hover { border-color: #35d0be; color: #fff; }
+.wl-canvas { width: 100%; height: 100%; display: block; }
+
+/* reusable clip (modal + inline chat reel) */
+.wl-clip { display: flex; flex-direction: column; gap: 6px; }
+.wl-clip-stage {
+  position: relative; aspect-ratio: 16 / 9; cursor: pointer;
+  border-radius: 8px; overflow: hidden;
+  background: radial-gradient(120% 120% at 50% 25%, #121626, #0a0c12);
+}
+.wl-clip--modal .wl-clip-stage { border-radius: 0; }
+.wl-play-badge {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font-size: 34px; color: rgba(255, 255, 255, .85);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, .7); pointer-events: none;
+}
+.wl-expand {
+  position: absolute; top: 8px; right: 8px; z-index: 3;
+  width: 28px; height: 26px; border-radius: 7px;
+  background: rgba(11, 13, 19, .72); border: 1px solid #242a3c; color: #cfd5e4;
+  cursor: pointer; font-size: 14px; line-height: 1; display: grid; place-items: center;
+}
+.wl-expand:hover { border-color: #35d0be; color: #fff; background: rgba(11, 13, 19, .9); }
+.wl-clip-bar { display: flex; align-items: center; gap: 8px; padding: 0 2px; }
+.wl-mini {
+  flex: none; width: 26px; height: 22px; border-radius: 6px;
+  background: #171c2c; border: 1px solid #242a3c; color: #cfd5e4;
+  cursor: pointer; font-size: 10px; line-height: 1; display: grid; place-items: center;
+}
+.wl-mini:hover:not(:disabled) { border-color: #35d0be; color: #fff; }
+.wl-mini:disabled { opacity: .4; cursor: default; }
+.wl-seek { flex: 1; accent-color: #35d0be; height: 4px; cursor: pointer; }
+.wl-gif { width: auto; padding: 0 8px; font-weight: 700; letter-spacing: .03em; }
+.wl-clip-tl { width: 100%; height: 26px; display: block; margin-top: 6px; cursor: pointer; border-radius: 5px; }
+.wl-count {
+  margin-left: auto; font-family: ui-monospace, monospace; font-size: 12px;
+  color: #7b8497; font-variant-numeric: tabular-nums;
+}
+.wl-count + .wl-close { margin-left: 12px; }
+.wl-nav { display: flex; gap: 6px; }
+.wl-nav button {
+  font-size: 12px; font-weight: 600; color: #cfd5e4; background: #171c2c;
+  border: 1px solid #242a3c; border-radius: 7px; padding: 5px 12px; cursor: pointer;
+}
+.wl-nav button:hover:not(:disabled) { border-color: #35d0be; color: #fff; }
+.wl-nav button:disabled { opacity: .4; cursor: default; }
+.wl-clip--modal .wl-clip-bar { padding: 8px 16px 0; }
+.wl-clip-cap {
+  font-size: 12px; font-weight: 600; color: #cfd5e4; padding: 0 2px;
+  display: flex; gap: 8px; align-items: baseline; line-height: 1.3;
+}
+/* per-frame data panel (modal) */
+.wl-panel {
+  background: #131725; border: 1px solid #242a3c; border-radius: 10px;
+  padding: 10px 11px; font-size: 12px; color: #cfd5e4; min-width: 0;
+  align-self: start;
+}
+.wlp-time {
+  font-family: ui-monospace, monospace; font-size: 11px; color: #7b8497;
+  padding-bottom: 8px; margin-bottom: 8px; border-bottom: 1px solid #242a3c;
+}
+.wlp-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.wlp-col { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.wlp-col--1 { text-align: right; align-items: flex-end; }
+.wlp-nm { font-weight: 700; font-size: 12.5px; display: flex; gap: 5px; align-items: center; }
+.wlp-col--1 .wlp-nm { flex-direction: row-reverse; }
+.wlp-face { color: #7b8497; font-size: 11px; }
+.wlp-st { color: #7b8497; font-family: ui-monospace, monospace; font-size: 11.5px; }
+.wlp-mv { color: #35d0be; font-family: ui-monospace, monospace; font-size: 11.5px; min-height: 14px; }
+.wlp-num { font-family: ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+.wlp-role { font-weight: 700; font-size: 11.5px; }
+.wlp-inputs { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+.wlp-col--1 .wlp-inputs { flex-direction: row-reverse; }
+.wlp-stick {
+  position: relative; width: 34px; height: 34px; flex: none;
+  border: 1px solid #242a3c; border-radius: 50%; background: #0b0d13;
+}
+.wlp-stick::before, .wlp-stick::after { content: ''; position: absolute; background: #242a3c; }
+.wlp-stick::before { left: 0; right: 0; top: 50%; height: 1px; }
+.wlp-stick::after { top: 0; bottom: 0; left: 50%; width: 1px; }
+.wlp-stick i {
+  position: absolute; width: 7px; height: 7px; border-radius: 50%;
+  background: #35d0be; transform: translate(-50%, -50%);
+}
+.wlp-btns { display: flex; flex-wrap: wrap; gap: 3px; }
+.wlp-btns b {
+  font-family: ui-monospace, monospace; font-size: 10.5px; font-weight: 700;
+  color: #eaeef7; background: #1f2536; border: 1px solid #313a52;
+  border-radius: 4px; padding: 0 5px; line-height: 16px;
+}
+.wlp-btns em { color: #565e73; font-style: normal; }
+
+/* a row of clips inside a Randall answer */
+.wl-reel {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 12px; margin: 12px 0 4px;
+}
+.wl-note {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  color: #7b8497; font-size: 13px;
+}
+.wl-note.wl-err { color: #ff7a66; padding: 0 24px; text-align: center; }
+.wl-badge {
+  position: absolute; left: 12px; bottom: 12px;
+  font-size: 11px; color: #f5b642; background: rgba(11, 13, 19, .8);
+  border: 1px solid #4a3d1c; border-radius: 6px; padding: 3px 8px;
+}
+.wl-controls {
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 16px; border-top: 1px solid #242a3c;
+}
+.wl-btn {
+  font-weight: 600; font-size: 13px; color: #06110f; background: #35d0be;
+  border: none; border-radius: 8px; padding: 7px 16px; cursor: pointer;
+}
+.wl-btn:disabled { opacity: .5; cursor: default; }
+.wl-hint { color: #565e73; font-size: 12px; }
+
+/* the trigger button that sits next to the existing Watch button */
+.wl-trigger {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; font-weight: 600; color: #35d0be;
+  background: #0e2320; border: 1px solid #1f4d47; border-radius: 7px;
+  padding: 5px 10px; cursor: pointer;
+}
+.wl-trigger:hover { background: #123029; border-color: #35d0be; }
+
+/* character identity as stock icons (panel, controllers, banner) */
+.wl-nmicon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  vertical-align: -3px;
+  image-rendering: pixelated;
+}

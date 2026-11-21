@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "skeleton": "model/body/c00/model.nusktb",
+  "landmarks": "ultimate_landmarks.json",
+  "allow_unbound": [
+    "S_Hip_hit"
+  ],
+  "attachments": [
+    {
+      "source": "SwordR",
+      "source_anchor": "HandR",
+      "target": "JOBJ_75",
+      "target_anchor": "JOBJ_73"
+    }
+  ],
+  "clips": [
+    {
+      "id": "cliffcatch",
+      "category": "ledge",
+      "target_motion": "CliffCatch",
+      "source": "motion/body/c00/g01cliffcatch.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "cliffwait",
+      "category": "ledge",
+      "target_motion": "CliffWait",
+      "source": "motion/body/c00/g01cliffwait.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      }
+    }
+  ]
+}

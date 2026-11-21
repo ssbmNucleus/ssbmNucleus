@@ -1,0 +1,1083 @@
+{
+ "_about": "Test data only: the Tung Tung Tung Sahur import from the launch-video run (take 3), its chat record with paths shortened under C:\\imports. The user attached tung_tung_sahur.glb; Randall named the costume.",
+ "user": {
+  "role": "user",
+  "content": "this is tung tung tung sahur. put him in melee on whichever fighter he actually fits, keep his textures, save him to my vault and test him in game.",
+  "context": {
+   "files": [
+    {
+     "file_id": "8b71e17b4ab5415baf68feb61636525f",
+     "name": "tung_tung_sahur.glb",
+     "size": 3217880,
+     "extension": ".glb"
+    }
+   ]
+  }
+ },
+ "reply": {
+  "id": "866baee8165d407e875991c8fb88df14",
+  "role": "assistant",
+  "status": "done",
+  "started_at": 1791321992.5005908,
+  "run_kind": "reply"
+ },
+ "tool": {
+  "id": "7674bcb3000343cdb72a251792a3de15",
+  "name": "import_model",
+  "status": "done",
+  "started_at": 1791321995.3754456,
+  "completed_at": 1791322400.8190825,
+  "elapsed_ms": 405444,
+  "arguments": {
+   "name": "Tung Tung Tung Sahur",
+   "source": "8b71e17b4ab5415baf68feb61636525f"
+  },
+  "result": {
+   "status": "done",
+   "project": "tung-tung-sahur-471b6f",
+   "fighter": "Young Link",
+   "costume_name": "Tung Tung Tung Sahur",
+   "stages": [
+    {
+     "stage": 2,
+     "name": "clean",
+     "status": "done",
+     "seconds": 64.9
+    },
+    {
+     "stage": 3,
+     "name": "fighter",
+     "status": "done",
+     "seconds": 36.9
+    },
+    {
+     "stage": 4,
+     "name": "line_up",
+     "status": "done",
+     "seconds": 19.0
+    },
+    {
+     "stage": 5,
+     "name": "parts",
+     "status": "done",
+     "seconds": 8.2
+    },
+    {
+     "stage": 6,
+     "name": "weight",
+     "status": "done",
+     "seconds": 23.2
+    },
+    {
+     "stage": 7,
+     "name": "check",
+     "status": "done",
+     "seconds": 1.1
+    },
+    {
+     "stage": 8,
+     "name": "melee_safe",
+     "status": "done",
+     "seconds": 19.8
+    },
+    {
+     "stage": 9,
+     "name": "export",
+     "status": "done",
+     "seconds": 85.5
+    }
+   ],
+   "choices": [
+    {
+     "id": "D2",
+     "kind": "fighter",
+     "what": "Fighter",
+     "chosen": {
+      "value": "Young Link",
+      "label": "Young Link"
+     },
+     "why": "its outline fits the model best",
+     "alternative": {
+      "value": "Link",
+      "label": "Link",
+      "change": {
+       "kind": "fighter",
+       "choice": "D2",
+       "value": "Link"
+      },
+      "ask": "Put it on Link instead"
+     },
+     "others_count": 1,
+     "options": [
+      {
+       "value": "Young Link",
+       "label": "Young Link"
+      },
+      {
+       "value": "Link",
+       "label": "Link"
+      },
+      {
+       "value": "Samus",
+       "label": "Samus"
+      }
+     ],
+     "line": "You didn't pick a fighter, so I put it on Young Link, because its outline fits the model best. Link came next (and 1 more). If you want another fighter, I can do that.",
+     "poor_fit": false
+    },
+    {
+     "id": "D1-pieces:1",
+     "kind": "piece",
+     "what": "Held item",
+     "chosen": {
+      "value": "replace",
+      "label": "in place of Young Link's own sword"
+     },
+     "why": "Young Link fights with one",
+     "alternative": {
+      "value": "drop",
+      "label": "left off",
+      "change": {
+       "kind": "piece",
+       "choice": "D1-pieces:1",
+       "value": "drop"
+      },
+      "ask": "Leave the prop standing beside it off"
+     },
+     "others_count": 0,
+     "options": [
+      {
+       "value": "replace",
+       "label": "in place of Young Link's own sword"
+      },
+      {
+       "value": "drop",
+       "label": "left off"
+      }
+     ],
+     "line": "The model came with a prop standing beside it. I gave it to Young Link in place of Young Link's own sword, because Young Link fights with one. If you want it left off, with Young Link's own sword back, I can do that.",
+     "held": true,
+     "kept": true,
+     "thing": "a prop standing beside it",
+     "thing_said": "the prop standing beside it",
+     "replaces": "Young Link's own sword",
+     "fighter": "Young Link"
+    }
+   ],
+   "seconds": 397.8,
+   "cost_usd": 0.0,
+   "pictures": [
+    "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\sheet\\game-camera.png",
+    "C:\\imports\\tung-tung-sahur-471b6f\\09-export\\pictures\\dat\\dat-Wait-1.png",
+    "C:\\imports\\tung-tung-sahur-471b6f\\09-export\\pictures\\dat\\dat-Run-9.png",
+    "C:\\imports\\tung-tung-sahur-471b6f\\09-export\\pictures\\dat\\dat-AttackAirN-5.png",
+    "C:\\imports\\tung-tung-sahur-471b6f\\09-export\\pictures\\dat\\dat-blink.png"
+   ],
+   "sheet": {
+    "pictures": [
+     "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\sheet\\game-camera.png"
+    ],
+    "poses": [
+     "Wait-1",
+     "Run-9",
+     "Squat-5"
+    ],
+    "seconds": 11.8,
+    "notes": [
+     "CYAN OUTLINE = swings in the game (the fighter's own hair/cloth/tail dynamics): drawn here in its animation pose, not where the swing puts it."
+    ]
+   },
+   "dat": "C:\\imports\\tung-tung-sahur-471b6f\\09-export\\PlClNr.dat",
+   "vault_changed": true,
+   "studio_import": {
+    "tool": "import_model",
+    "id": "tung-tung-sahur-471b6f"
+   },
+   "files": [
+    {
+     "file_id": "b0584c2a33264493803038841b15b733",
+     "name": "workflow_sheet_game-camera.png",
+     "size": 269133,
+     "extension": ".png",
+     "sha256": "f39cf029b679e7a45907aa968551cdee2c79971d2d463b188a7b352749bbc964",
+     "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\sheet\\game-camera.png"
+    },
+    {
+     "file_id": "d9e2318c0aff4beb9564ee030b4afc07",
+     "name": "09-export_pictures_dat_dat-Wait-1.png",
+     "size": 277890,
+     "extension": ".png",
+     "sha256": "93e22711d5a7549ec717a3bd3189d81a4e24671e0eede0cbfd5bc1de402d9e9a",
+     "path": "C:\\imports\\tung-tung-sahur-471b6f\\09-export\\pictures\\dat\\dat-Wait-1.png"
+    },
+    {
+     "file_id": "541d00b5b2ae4eefa6d07ad84e61d949",
+     "name": "09-export_pictures_dat_dat-Run-9.png",
+     "size": 493275,
+     "extension": ".png",
+     "sha256": "d45783d241144d32ff64e8a0107cd6797bb0dcff3bfcf452e446765a3772c868",
+     "path": "C:\\imports\\tung-tung-sahur-471b6f\\09-export\\pictures\\dat\\dat-Run-9.png"
+    },
+    {
+     "file_id": "b0bb28b0d76b4a74b5fad8ad9a1cb7bf",
+     "name": "09-export_pictures_dat_dat-AttackAirN-5.png",
+     "size": 281045,
+     "extension": ".png",
+     "sha256": "4c8cdef265d4a1ee9f85c4bc128029e649ba7d7751e898fea9f69fda442a037c",
+     "path": "C:\\imports\\tung-tung-sahur-471b6f\\09-export\\pictures\\dat\\dat-AttackAirN-5.png"
+    },
+    {
+     "file_id": "8d1e45ac042c420c89c5c44b2c81c9d3",
+     "name": "09-export_pictures_dat_dat-blink.png",
+     "size": 224038,
+     "extension": ".png",
+     "sha256": "6d515437e5a7cdf1909626d766cd6e33b9b9648a73f18cbd434b77e4f07d8d1c",
+     "path": "C:\\imports\\tung-tung-sahur-471b6f\\09-export\\pictures\\dat\\dat-blink.png"
+    },
+    {
+     "file_id": "b9e15be0e5e24090a50fea9ab5a5d9cb",
+     "name": "PlClNr.dat",
+     "size": 364510,
+     "extension": ".dat",
+     "sha256": "6545aa42d80c13cd3dcb7100537d0f5b13da93e2990f523c7afa62528e78d2a3",
+     "path": "C:\\imports\\tung-tung-sahur-471b6f\\09-export\\PlClNr.dat"
+    }
+   ],
+   "saved": {
+    "name": "Tung Tung Tung Sahur",
+    "character": "Young Link",
+    "skin_id": "Tung Tung Tung Sahur 0e73ae52e88d-plclnr",
+    "costume_code": "PlClNr",
+    "slot": 0,
+    "installable": true,
+    "slippi_safe": true,
+    "notes": []
+   },
+   "flow": {
+    "version": 1,
+    "status": "done",
+    "phases": [
+     {
+      "key": "load",
+      "name": "Load",
+      "status": "done",
+      "seconds": 58.4,
+      "redo": null,
+      "fallback": null,
+      "entries": [
+       {
+        "key": "D1",
+        "point": "D1",
+        "family": "D1",
+        "title": "Model in the archive",
+        "who": "code",
+        "status": "skipped",
+        "outcome": "Not asked: the archive holds one model",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": "the archive holds one model",
+        "answer": null,
+        "pictures": [],
+        "seconds": 0.2,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null
+       },
+       {
+        "key": "D1-files",
+        "point": "D1-files",
+        "family": "D1-files",
+        "title": "Files to join",
+        "who": "code",
+        "status": "skipped",
+        "outcome": "Not asked: the archive holds one model",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": "the archive holds one model",
+        "answer": null,
+        "pictures": [],
+        "seconds": 0.0,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null
+       },
+       {
+        "key": "stage-2",
+        "point": null,
+        "family": "stage",
+        "title": "Clean up",
+        "who": "stage",
+        "status": "done",
+        "outcome": "Ran in 58 s",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": null,
+        "answer": null,
+        "pictures": [],
+        "seconds": 58.2,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null,
+        "stage": 2
+       }
+      ],
+      "pictures": []
+     },
+     {
+      "key": "identify",
+      "name": "Identify",
+      "status": "done",
+      "seconds": 12.9,
+      "redo": "Clean up ran a second time: Pieces to drop recorded into it",
+      "fallback": null,
+      "entries": [
+       {
+        "key": "facing",
+        "point": "facing",
+        "family": "facing",
+        "title": "Facing",
+        "who": "code",
+        "status": "skipped",
+        "outcome": "Not asked: settled by the toes",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": "settled by the toes",
+        "answer": null,
+        "pictures": [],
+        "seconds": 0.1,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null
+       },
+       {
+        "key": "labeller",
+        "point": "labeller",
+        "family": "labeller",
+        "title": "What the pieces are",
+        "who": "glm",
+        "status": "default",
+        "outcome": "No answer (the piece labeller failed (no answer from 2 call(s): call 1 no OpenRouter key configured after 0.02 s; call 2 no OpenRo…): the default stands",
+        "why": null,
+        "question": "You are looking at a 3D character model that will be fitted onto a video-game fighter's skeleton. The image has two rows of the same four views: A, B (A turned a quarter turn), C (the opposite side from A) and D (A again, from above). The views are taken from the file as it stands, so A is NOT necessarily the front. The top row shows the model as it looks. The bottom row paints it in numbered pie…",
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": null,
+        "answer": null,
+        "pictures": [
+         {
+          "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\points\\labeller\\sheet-round0.png",
+          "caption": "Sheet round0",
+          "file_id": "7394469f400342a4abf2630d57161095"
+         }
+        ],
+        "seconds": 0.0,
+        "cost_usd": 0.0,
+        "model": "z-ai/glm-5.3-flash",
+        "asker": "openrouter",
+        "error": "the piece labeller failed (no answer from 2 call(s): call 1 no OpenRouter key configured after 0.02 s; call 2 no OpenRouter key configured after 0 s): no piece is named, so D1-pieces has no body veto and the treatments no identities"
+       },
+       {
+        "key": "kind",
+        "point": "kind",
+        "family": "kind",
+        "title": "Ornament kinds",
+        "who": "code",
+        "status": "skipped",
+        "outcome": "Not asked: no piece is named",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": "no piece is named",
+        "answer": null,
+        "pictures": [],
+        "seconds": 0.0,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null
+       },
+       {
+        "key": "D1-pieces",
+        "point": "D1-pieces",
+        "family": "D1-pieces",
+        "title": "Pieces to drop",
+        "who": "glm",
+        "status": "default",
+        "outcome": "No answer (no answer from 2 call(s): call 1 no OpenRouter key configured after 0 s; call 2 no OpenRouter key configured after 0 s): the default stands",
+        "why": null,
+        "question": "Numbered pieces of a 3D model being made into a game costume. Picture 1: the model as designed (its own textures). Picture 2: the pieces in place, numbered (false colours; \"model\" is the rest of it). Picture 3: each piece alone, textured, each scaled to its own cell, in number order (left to right, then down); picture 4: the same, numbered. A measurement flagged each piece (said below with it); i…",
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": null,
+        "answer": null,
+        "pictures": [
+         {
+          "path": "C:\\imports\\tung-tung-sahur-471b6f\\02-clean\\pictures\\textured\\shaded-rest.png",
+          "caption": "The model as designed",
+          "file_id": "ae02fce1da7a42e9a3a968061396c0f3"
+         },
+         {
+          "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\points\\D1-pieces\\in-place\\parts-rest.png",
+          "caption": "Numbered · in place",
+          "file_id": "16741aa09f4f4f31b72ce7f40acb3bd7"
+         },
+         {
+          "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\points\\D1-pieces\\alone-textured\\shaded-rest.png",
+          "caption": "As it looks · alone",
+          "file_id": "876ef83273d14816b983c23070b99872"
+         },
+         {
+          "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\points\\D1-pieces\\alone-numbered\\parts-rest.png",
+          "caption": "Numbered · alone",
+          "file_id": "b3ccd02b81834b45806fd3b025f78bef"
+         }
+        ],
+        "seconds": 0.0,
+        "cost_usd": 0.0,
+        "model": "z-ai/glm-5.3-flash",
+        "asker": "openrouter",
+        "error": "no answer from 2 call(s): call 1 no OpenRouter key configured after 0 s; call 2 no OpenRouter key configured after 0 s"
+       },
+       {
+        "key": "stage-2:redo",
+        "point": null,
+        "family": "stage",
+        "title": "Clean up again",
+        "who": "stage",
+        "status": "done",
+        "outcome": "Ran again in 7 s: Pieces to drop recorded into it",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": null,
+        "answer": null,
+        "pictures": [],
+        "seconds": 6.7,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null,
+        "stage": 2,
+        "redo": true
+       }
+      ],
+      "pictures": [
+       {
+        "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\points\\labeller\\sheet-round0.png",
+        "caption": "Sheet round0",
+        "key": "labeller",
+        "file_id": "7394469f400342a4abf2630d57161095"
+       },
+       {
+        "path": "C:\\imports\\tung-tung-sahur-471b6f\\02-clean\\pictures\\textured\\shaded-rest.png",
+        "caption": "The model as designed",
+        "key": "D1-pieces",
+        "file_id": "ae02fce1da7a42e9a3a968061396c0f3"
+       },
+       {
+        "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\points\\D1-pieces\\in-place\\parts-rest.png",
+        "caption": "Numbered · in place",
+        "key": "D1-pieces",
+        "file_id": "16741aa09f4f4f31b72ce7f40acb3bd7"
+       },
+       {
+        "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\points\\D1-pieces\\alone-textured\\shaded-rest.png",
+        "caption": "As it looks · alone",
+        "key": "D1-pieces",
+        "file_id": "876ef83273d14816b983c23070b99872"
+       },
+       {
+        "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\points\\D1-pieces\\alone-numbered\\parts-rest.png",
+        "caption": "Numbered · alone",
+        "key": "D1-pieces",
+        "file_id": "b3ccd02b81834b45806fd3b025f78bef"
+       }
+      ]
+     },
+     {
+      "key": "fighter",
+      "name": "Fighter",
+      "status": "done",
+      "seconds": 57.0,
+      "redo": null,
+      "fallback": null,
+      "entries": [
+       {
+        "key": "stage-3",
+        "point": null,
+        "family": "stage",
+        "title": "Fit to the fighter",
+        "who": "stage",
+        "status": "done",
+        "outcome": "Ran in 37 s",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": null,
+        "answer": null,
+        "pictures": [],
+        "seconds": 36.9,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null,
+        "stage": 3
+       },
+       {
+        "key": "D2",
+        "point": "D2",
+        "family": "D2",
+        "title": "Fighter",
+        "who": "glm",
+        "status": "default",
+        "outcome": "No answer (no answer from 2 call(s): call 1 no OpenRouter key configured after 0 s; call 2 no OpenRouter key configured after 0 s): the default stands",
+        "why": null,
+        "question": "Picture 1 shows the model as designed (its own textures, upright, front, side and back). Picture 2 shows this model lined up at rest on 3 Melee fighters (Young Link, Link, Samus), each scaled to that fighter's height: grey where both cover, orange only the model, blue only the fighter; under each, how much the outlines overlap (IoU, front and side). The costume will move with the picked fighter's…",
+        "pick": "Young Link",
+        "default": "Young Link",
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": null,
+        "answer": null,
+        "pictures": [
+         {
+          "path": "C:\\imports\\tung-tung-sahur-471b6f\\02-clean\\pictures\\textured\\shaded-rest.png",
+          "caption": "The model as designed",
+          "file_id": "ae02fce1da7a42e9a3a968061396c0f3"
+         },
+         {
+          "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\points\\D2\\sheet.png",
+          "caption": "The ways beside the original",
+          "file_id": "174e0b222dfd48b680dcb0d733580686"
+         }
+        ],
+        "seconds": 0.0,
+        "cost_usd": 0.0,
+        "model": "z-ai/glm-5.3-flash",
+        "asker": "openrouter",
+        "error": "no answer from 2 call(s): call 1 no OpenRouter key configured after 0 s; call 2 no OpenRouter key configured after 0 s"
+       }
+      ],
+      "pictures": [
+       {
+        "path": "C:\\imports\\tung-tung-sahur-471b6f\\02-clean\\pictures\\textured\\shaded-rest.png",
+        "caption": "The model as designed",
+        "key": "D2",
+        "file_id": "ae02fce1da7a42e9a3a968061396c0f3"
+       },
+       {
+        "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\points\\D2\\sheet.png",
+        "caption": "The ways beside the original",
+        "key": "D2",
+        "file_id": "174e0b222dfd48b680dcb0d733580686"
+       }
+      ]
+     },
+     {
+      "key": "lineup",
+      "name": "Line up",
+      "status": "done",
+      "seconds": 58.0,
+      "redo": null,
+      "fallback": null,
+      "entries": [
+       {
+        "key": "stage-4",
+        "point": null,
+        "family": "stage",
+        "title": "Line up on the skeleton",
+        "who": "stage",
+        "status": "done",
+        "outcome": "Ran in 19 s",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": null,
+        "answer": null,
+        "pictures": [],
+        "seconds": 19.0,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null,
+        "stage": 4
+       },
+       {
+        "key": "D3:trigger",
+        "point": "D3",
+        "family": "D3",
+        "title": "Line-up check",
+        "who": "code",
+        "status": "measured",
+        "outcome": "Segment 4-17 (torso) squashed; segment 17-18 (torso) squashed; segment 18-42 (torso) squashed (the draft stands: the 2 orders did not agree (order 1 no pick, order 2 no pick))",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": null,
+        "answer": null,
+        "pictures": [],
+        "seconds": 39.0,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null
+       },
+       {
+        "key": "D3",
+        "point": "D3",
+        "family": "D3",
+        "title": "Line-up",
+        "who": "glm",
+        "status": "default",
+        "outcome": "The orders did not agree (order 1 no pick, order 2 no pick): draft, the default, stands",
+        "why": null,
+        "question": "Picture 1 shows the model as designed (its own textures, upright, front, side and back). This 3D model is lined up on the Melee fighter Young Link in 2 ways, each bound rigidly: picture 2 shows each way at rest from the front; picture 3 shows the fighter itself (vanilla, drawn first) and each way at the game camera in Wait-1, Run-9, Squat-5, each way named over its cells by its letter. The ways: …",
+        "pick": "draft",
+        "default": "draft",
+        "rounds": [
+         {
+          "order": 1,
+          "pick": null,
+          "means": null,
+          "used": "default",
+          "why": null,
+          "error": "no answer from 2 call(s): call 1 no OpenRouter key configured after 0 s; call 2 no OpenRouter key configured after 0 s"
+         },
+         {
+          "order": 2,
+          "pick": null,
+          "means": null,
+          "used": "default",
+          "why": null,
+          "error": "no answer from 2 call(s): call 1 no OpenRouter key configured after 0 s; call 2 no OpenRouter key configured after 0 s"
+         }
+        ],
+        "agreed": false,
+        "skip_reason": null,
+        "answer": null,
+        "pictures": [
+         {
+          "path": "C:\\imports\\tung-tung-sahur-471b6f\\02-clean\\pictures\\textured\\shaded-rest.png",
+          "caption": "The model as designed",
+          "file_id": "ae02fce1da7a42e9a3a968061396c0f3"
+         },
+         {
+          "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\points\\D3\\order1\\front.png",
+          "caption": "Each way from the front (order 1)",
+          "file_id": "778ca8d5a7264df994e9458e3e947ae8"
+         },
+         {
+          "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\points\\D3\\order1\\sheet.png",
+          "caption": "The ways beside the original at idle, run and squat (order 1)",
+          "file_id": "aeaed5e1bf3940c8a6722d789e02d9e2"
+         },
+         {
+          "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\points\\D3\\order2\\front.png",
+          "caption": "Each way from the front (order 2)",
+          "file_id": "60389df44678448ca9fc3b94a1fda4df"
+         },
+         {
+          "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\points\\D3\\order2\\sheet.png",
+          "caption": "The ways beside the original at idle, run and squat (order 2)",
+          "file_id": "37d7b85baa6f4f26bba3cf2522341bce"
+         }
+        ],
+        "seconds": 0.0,
+        "cost_usd": 0.0,
+        "model": "z-ai/glm-5.3-flash",
+        "asker": "openrouter",
+        "error": "no answer from 2 call(s): call 1 no OpenRouter key configured after 0 s; call 2 no OpenRouter key configured after 0 s; no answer from 2 call(s): call 1 no OpenRouter key configured after 0 s; call 2 no OpenRouter key configured after 0 s"
+       }
+      ],
+      "pictures": [
+       {
+        "path": "C:\\imports\\tung-tung-sahur-471b6f\\02-clean\\pictures\\textured\\shaded-rest.png",
+        "caption": "The model as designed",
+        "key": "D3",
+        "file_id": "ae02fce1da7a42e9a3a968061396c0f3"
+       },
+       {
+        "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\points\\D3\\order1\\front.png",
+        "caption": "Each way from the front (order 1)",
+        "key": "D3",
+        "file_id": "778ca8d5a7264df994e9458e3e947ae8"
+       },
+       {
+        "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\points\\D3\\order1\\sheet.png",
+        "caption": "The ways beside the original at idle, run and squat (order 1)",
+        "key": "D3",
+        "file_id": "aeaed5e1bf3940c8a6722d789e02d9e2"
+       },
+       {
+        "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\points\\D3\\order2\\front.png",
+        "caption": "Each way from the front (order 2)",
+        "key": "D3",
+        "file_id": "60389df44678448ca9fc3b94a1fda4df"
+       },
+       {
+        "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\points\\D3\\order2\\sheet.png",
+        "caption": "The ways beside the original at idle, run and squat (order 2)",
+        "key": "D3",
+        "file_id": "37d7b85baa6f4f26bba3cf2522341bce"
+       }
+      ]
+     },
+     {
+      "key": "treat",
+      "name": "Treat parts",
+      "status": "done",
+      "seconds": 14.5,
+      "redo": null,
+      "fallback": null,
+      "entries": [
+       {
+        "key": "treatments",
+        "point": "treatments",
+        "family": "treatments",
+        "title": "How each piece is treated",
+        "who": "code",
+        "status": "measured",
+        "outcome": "Pieces 3 ride one joint stiffly; the rest bend with the body; 3 by its measured default (what it is is uncertain)",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": null,
+        "answer": null,
+        "pictures": [],
+        "seconds": 2.9,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null
+       },
+       {
+        "key": "garment",
+        "point": "garment",
+        "family": "garment",
+        "title": "Waist cloth",
+        "who": "code",
+        "status": "skipped",
+        "outcome": "Not asked: no hanging piece is long clothing round the legs",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": "no hanging piece is long clothing round the legs",
+        "answer": null,
+        "pictures": [],
+        "seconds": 0.2,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null
+       },
+       {
+        "key": "D4",
+        "point": "D4",
+        "family": "D4",
+        "title": "Pose",
+        "who": "code",
+        "status": "skipped",
+        "outcome": "Not asked: no extra piece flagged",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": "no extra piece flagged",
+        "answer": null,
+        "pictures": [],
+        "seconds": 3.2,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null
+       },
+       {
+        "key": "stage-5",
+        "point": null,
+        "family": "stage",
+        "title": "Split into parts",
+        "who": "stage",
+        "status": "done",
+        "outcome": "Ran in 8 s",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": null,
+        "answer": null,
+        "pictures": [],
+        "seconds": 8.2,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null,
+        "stage": 5
+       }
+      ],
+      "pictures": []
+     },
+     {
+      "key": "weight",
+      "name": "Weight",
+      "status": "done",
+      "seconds": 23.6,
+      "redo": null,
+      "fallback": null,
+      "entries": [
+       {
+        "key": "stage-6",
+        "point": null,
+        "family": "stage",
+        "title": "Weight the skin",
+        "who": "stage",
+        "status": "done",
+        "outcome": "Ran in 23 s",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": null,
+        "answer": null,
+        "pictures": [],
+        "seconds": 23.2,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null,
+        "stage": 6
+       },
+       {
+        "key": "D6:trigger",
+        "point": "D6",
+        "family": "D6",
+        "title": "Deforms beyond vanilla",
+        "who": "code",
+        "status": "skipped",
+        "outcome": "R_leg within vanilla (+0.019, raw 0.124): not asked; l_leg within vanilla (+0.003, raw 0.128): not asked; l_arm within vanilla (-0.013, raw 0.201): not asked; torso within vanilla (-0.026, raw 0.154): not asked; and 1 more (nothing to ask)",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": "nothing to ask",
+        "answer": null,
+        "pictures": [],
+        "seconds": 0.4,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null
+       }
+      ],
+      "pictures": []
+     },
+     {
+      "key": "export",
+      "name": "Export",
+      "status": "done",
+      "seconds": 118.5,
+      "redo": null,
+      "fallback": null,
+      "entries": [
+       {
+        "key": "stage-7",
+        "point": null,
+        "family": "stage",
+        "title": "Move check",
+        "who": "stage",
+        "status": "done",
+        "outcome": "Passed through in 1 s: an import does not measure it (fix mode does, on demand)",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": null,
+        "answer": null,
+        "pictures": [],
+        "seconds": 1.1,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null,
+        "stage": 7
+       },
+       {
+        "key": "stage-8",
+        "point": null,
+        "family": "stage",
+        "title": "Fit Melee's limits",
+        "who": "stage",
+        "status": "done",
+        "outcome": "Ran in 20 s",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": null,
+        "answer": null,
+        "pictures": [],
+        "seconds": 19.8,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null,
+        "stage": 8
+       },
+       {
+        "key": "D7",
+        "point": "D7",
+        "family": "D7",
+        "title": "Blink",
+        "who": "code",
+        "status": "skipped",
+        "outcome": "Not asked: no material the blink can go on near Young Link's eyes (each needs drawables of its own and an image)",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": "no material the blink can go on near Young Link's eyes (each needs drawables of its own and an image)",
+        "answer": null,
+        "pictures": [],
+        "seconds": 0.3,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null
+       },
+       {
+        "key": "stage-9",
+        "point": null,
+        "family": "stage",
+        "title": "Write the costume file",
+        "who": "stage",
+        "status": "done",
+        "outcome": "Ran in 86 s",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": null,
+        "answer": null,
+        "pictures": [],
+        "seconds": 85.5,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null,
+        "stage": 9
+       },
+       {
+        "key": "sheet",
+        "point": null,
+        "family": "sheet",
+        "title": "Picture sheet",
+        "who": "stage",
+        "status": "done",
+        "outcome": "Your costume file at the game camera beside the original: Wait-1, Run-9, Squat-5",
+        "why": null,
+        "question": null,
+        "pick": null,
+        "default": null,
+        "rounds": [],
+        "agreed": null,
+        "skip_reason": null,
+        "answer": null,
+        "pictures": [
+         {
+          "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\sheet\\game-camera.png",
+          "caption": "Your costume file beside the original · Wait-1, Run-9, Squat-5",
+          "file_id": "b0584c2a33264493803038841b15b733"
+         }
+        ],
+        "seconds": 11.8,
+        "cost_usd": 0.0,
+        "model": null,
+        "asker": null,
+        "error": null
+       }
+      ],
+      "pictures": [
+       {
+        "path": "C:\\imports\\tung-tung-sahur-471b6f\\workflow\\sheet\\game-camera.png",
+        "caption": "Your costume file beside the original · Wait-1, Run-9, Squat-5",
+        "key": "sheet",
+        "file_id": "b0584c2a33264493803038841b15b733"
+       }
+      ]
+     }
+    ],
+    "asking": [],
+    "other": [],
+    "summary": {
+     "glm": 4,
+     "you": 0,
+     "ran_twice": 1,
+     "fallbacks": 0,
+     "skipped": 8,
+     "cost_usd": 0.0,
+     "seconds": 397.8
+    }
+   }
+  }
+ }
+}

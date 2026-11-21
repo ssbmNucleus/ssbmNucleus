@@ -1,0 +1,42 @@
+{
+  "_README": [
+    "rigswap's own package as the installer ships it, on all three platforms: Randall's model import runs it as",
+    "a subprocess (backend/randall/model_import/chat/import_job.py) on the tools the user downloads from",
+    "Settings (utility/model_import_tools.json: a CPython 3.13 with rigswap's wheels, and Blender 4).",
+    "",
+    "This file is TRACKED; the tree it describes (utility/rigswap/app/) is NOT -- .gitignore excludes it. Any",
+    "build machine reproduces it with a CPython 3.13 (the app's venv) and a rigswap clone holding the commit:",
+    "",
+    "    python tools/build/fetch_rigswap.py",
+    "",
+    "which takes rigswap's package at `rigswap.commit` and compiles it: only bytecode ships, except",
+    "`rigswap.source_kept`, which Blender 4 runs with its own Python 3.11 (the same posture as the backend's",
+    "blender_serve.py). It writes utility/rigswap/app/.fetch-receipt.json. The bytecode is CPython 3.13's, the",
+    "same on every platform, so the downloaded runtime (3.13 on each) reads it.",
+    "",
+    "VERSION PIN: move `rigswap.commit` to ship newer rigswap, and run a real import before shipping it. The",
+    "wheel versions it needs are utility/rigswap.requirements.txt (the one list; pin_model_import_tools.py",
+    "resolves them per platform)."
+  ],
+
+  "unpack_to": "utility/rigswap/app",
+  "entrypoint": "rigswap/plugins/melee/costume.pyc",
+
+  "rigswap": {
+    "repo": "https://github.com/ssbmNucleus/rigswap.git",
+    "commit": "d6f820ccb40d0baae4d7dbf9c5ec617975dfe5b1",
+    "package": "rigswap",
+    "entry": "rigswap.plugins.melee.costume",
+    "source_kept": ["rigswap/load/convert.py", "rigswap/load/materials.py"]
+  },
+
+  "verify_after_unpack": [
+    "rigswap/plugins/melee/costume.pyc",
+    "rigswap/load/convert.py"
+  ],
+
+  "license": {
+    "spdx": "GPL-3.0",
+    "notice": "THIRD_PARTY_NOTICES.md"
+  }
+}

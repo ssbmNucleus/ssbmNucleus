@@ -1,0 +1,6 @@
+[
+ {"id": "ko", "kind": "ko", "slp": "2026-10/Game_20261021T142042.slp", "stage": 28, "frame": 1536, "subject": {"port": 0},
+  "why": "Marth (port 1) KO'd off the bottom of Dream Land at -111.4, -125.2: effect 1067 unturned, so its particles' effect space is the world's axes"},
+ {"id": "star", "kind": "star", "slp": "2026-10/Game_20261020T225732.slp", "stage": 31, "frame": 2598, "subject": {"port": 0},
+  "why": "Ganondorf (port 1) star KO'd on Battlefield: its flight to z -350 and the twinkle (generator 289) at its end"}
+]

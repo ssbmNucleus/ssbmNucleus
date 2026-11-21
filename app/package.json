@@ -1,0 +1,275 @@
+{
+  "name": "ssbm-nucleus",
+  "version": "0.9.0",
+  "author": "sc00p",
+  "license": "GPL-3.0-only",
+  "description": "SSBM Nucleus - Costume and Stage Manager for Super Smash Bros. Melee",
+  "main": "electron/main.js",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "python backend/app.py",
+    "dev:frontend": "cd frontend && npm run dev",
+    "electron": "electron .",
+    "electron:dev": "concurrently \"npm run dev:backend\" \"npm run electron\"",
+    "wiki": "python ../tools/wiki/serve.py",
+    "build": "cd frontend && npm run build",
+    "package": "npm run build && electron-builder",
+    "package:win": "npm run build && electron-builder --win",
+    "package:linux": "npm run build && electron-builder --linux",
+    "package:mac": "npm run build && electron-builder --mac",
+    "install:frontend": "cd frontend && npm install"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "electron": "44.11.5",
+    "electron-builder": "^26.18.0",
+    "playwright-core": "^1.63.0"
+  },
+  "build": {
+    "appId": "com.ssbm.nucleus",
+    "productName": "SSBM Nucleus",
+    "forceCodeSigning": true,
+    "protocols": [
+      {
+        "name": "SSBM Nucleus",
+        "schemes": [
+          "nucleus"
+        ]
+      }
+    ],
+    "files": [
+      "electron/**/*",
+      "frontend/dist/**/*",
+      "!frontend/dist/**/*.map",
+      "!backend/**/*",
+      "!utility/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "dist/",
+        "to": "backend/",
+        "filter": [
+          "mex_backend*"
+        ]
+      },
+      {
+        "from": "utility/assets/vanilla/Sheik",
+        "to": "utility/assets/vanilla/Sheik",
+        "filter": [
+          "**/*.png"
+        ]
+      },
+      {
+        "from": "utility/assets/buttons",
+        "to": "utility/assets/buttons",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "utility/DynamicAlternateStages",
+        "to": "utility/DynamicAlternateStages",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "utility/tools/processor/csp_data",
+        "to": "utility/tools/processor/csp_data",
+        "filter": [
+          "**/*",
+          "!**/Pl*.dat",
+          "!**/Pl*.usd",
+          "!**/Ty*.dat",
+          "!**/CSP_2.zip",
+          "!**/MnSlChr*",
+          "!**/DEFAULT.png",
+          "!**/stock.png",
+          "!**/csp_Pl*.png",
+          "!**/css_icon.png",
+          "!**/__pycache__/**",
+          "!**/*.pyc",
+          "!**/*.pyo",
+          "!**/*.log"
+        ]
+      },
+      {
+        "from": "utility/clear_storage.py",
+        "to": "scripts/tools/clear_storage.py"
+      },
+      {
+        "from": "THIRD_PARTY_NOTICES.md",
+        "to": "THIRD_PARTY_NOTICES.md"
+      },
+      {
+        "from": "utility/rigswap/app",
+        "to": "utility/rigswap/app",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "utility/model_import_tools.json",
+        "to": "utility/model_import_tools.json"
+      }
+    ],
+    "directories": {
+      "output": "dist-electron"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "frontend/public/icon.png",
+      "signtoolOptions": {
+        "signingHashAlgorithms": [
+          "sha256"
+        ]
+      },
+      "extraResources": [
+        {
+          "from": "utility/xdelta",
+          "to": "utility/xdelta",
+          "filter": [
+            "xdelta3*"
+          ]
+        },
+        {
+          "from": "utility/unrar",
+          "to": "utility/unrar",
+          "filter": [
+            "**/*"
+          ]
+        },
+        {
+          "from": "utility/ffmpeg",
+          "to": "utility/ffmpeg",
+          "filter": [
+            "**/*"
+          ]
+        },
+        {
+          "from": "dist-backend/",
+          "to": "utility/",
+          "filter": [
+            "mex/**"
+          ]
+        },
+        {
+          "from": "dist-backend/hsdraw",
+          "to": "utility/HSDRawViewer",
+          "filter": [
+            "**/*"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "frontend/public/icon.png",
+      "category": "Utility",
+      "synopsis": "Costume and Stage Manager for Super Smash Bros. Melee",
+      "extraResources": [
+        {
+          "from": "utility/xdelta-linux",
+          "to": "utility/xdelta-linux",
+          "filter": [
+            "xdelta3*"
+          ]
+        },
+        {
+          "from": "utility/unrar-linux",
+          "to": "utility/unrar-linux",
+          "filter": [
+            "**/*"
+          ]
+        },
+        {
+          "from": "dist-backend/mex-linux",
+          "to": "utility/mex-linux",
+          "filter": [
+            "**/*"
+          ]
+        },
+        {
+          "from": "dist-backend/hsdraw-linux",
+          "to": "utility/hsdraw-linux",
+          "filter": [
+            "**/*"
+          ]
+        }
+      ]
+    },
+    "dmg": {
+      "sign": true
+    },
+    "mac": {
+      "category": "public.app-category.utilities",
+      "icon": "frontend/public/icon.png",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ],
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "extendInfo": {
+        "NSDocumentsFolderUsageDescription": "SSBM Nucleus reads your Melee ISO and Slippi replays from the folders you choose.",
+        "NSDownloadsFolderUsageDescription": "SSBM Nucleus reads your Melee ISO and the mods you download from the folders you choose.",
+        "NSDesktopFolderUsageDescription": "SSBM Nucleus reads your Melee ISO and mods from the folders you choose.",
+        "NSRemovableVolumesUsageDescription": "SSBM Nucleus reads your Melee ISO and replays from the drives you choose.",
+        "NSNetworkVolumesUsageDescription": "SSBM Nucleus reads your Melee ISO and replays from the drives you choose."
+      },
+      "entitlements": "build-resources/entitlements.mac.plist",
+      "entitlementsInherit": "build-resources/entitlements.mac.plist",
+      "extraResources": [
+        {
+          "from": "dist-backend/mex-mac",
+          "to": "utility/mex-mac",
+          "filter": [
+            "**/*"
+          ]
+        },
+        {
+          "from": "dist-backend/hsdraw-mac",
+          "to": "utility/hsdraw-mac",
+          "filter": [
+            "**/*"
+          ]
+        },
+        {
+          "from": "utility/xdelta-mac",
+          "to": "utility/xdelta-mac",
+          "filter": [
+            "xdelta3*"
+          ]
+        },
+        {
+          "from": "utility/unrar-mac",
+          "to": "utility/unrar-mac",
+          "filter": [
+            "**/*"
+          ]
+        }
+      ]
+    }
+  }
+}

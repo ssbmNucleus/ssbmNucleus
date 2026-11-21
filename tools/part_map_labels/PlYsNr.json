@@ -1,0 +1,47 @@
+{
+ "character": "Yoshi",
+ "source": "PlYsNr",
+ "verified": true,
+ "notes": "cheeks (10) = the white muzzle/jaw; belly = white chest strip (1) + white underbelly below the saddle (13); 12 is the red mouth interior. Unlabelled: 8, 9, 14 are mostly-transparent dark-green overlay textures on the legs/hips (a probe barely paints anything, so not confirmed; they likely need to follow any skin recolour); 17 (green circle, egg-sized bounds) never renders in the idle pose - probably the egg.",
+ "groups": {
+  "skin": [
+   0,
+   11
+  ],
+  "belly": [
+   1,
+   13
+  ],
+  "cheeks": [
+   10
+  ],
+  "mouth": [
+   12
+  ],
+  "eyes": [
+   18,
+   19,
+   20
+  ],
+  "back spikes": [
+   7
+  ],
+  "saddle": [
+   5
+  ],
+  "saddle rim": [
+   6
+  ],
+  "boots": [
+   2,
+   4
+  ],
+  "boot soles": [
+   3
+  ],
+  "low detail": [
+   15,
+   16
+  ]
+ }
+}

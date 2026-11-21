@@ -1,0 +1,58 @@
+{
+  "character": "Fox",
+  "comment": "Texture-index roles, mapped by visual inspection of every texture. Basis: a vanilla-derived costume DAT with 34 textures (c9-plfxc9). Skins derived from the vanilla Fox model share this layout; the regions endpoint flags 'approximate' when the open DAT's texture count differs.",
+  "basis": {
+    "skinId": "c9-plfxc9",
+    "textureCount": 34
+  },
+  "regions": {
+    "fur": [11, 12, 14, 15, 18, 25, 31, 33],
+    "cloth": [0, 1, 2, 3, 5, 7, 20, 21, 22, 23, 24, 26, 30],
+    "armor": [0, 1, 2, 4, 5, 6, 8, 9, 19, 27, 29, 30, 32],
+    "eyes": [10],
+    "face_detail": [13, 16, 17]
+  },
+  "protected": [10, 13, 16, 17],
+  "maskHints": {
+    "fur":   { "hueMin": 10,  "hueMax": 60,  "satMin": 20 },
+    "cloth": { "hueMin": 175, "hueMax": 270, "satMin": 18 },
+    "armor": { "satMax": 18, "lumMin": 30 },
+    "eyes":  { "hueMin": 175, "hueMax": 270, "satMin": 15 }
+  },
+  "notes": {
+    "0": "jacket front (emblem patch)",
+    "1": "pants front",
+    "2": "pants back",
+    "3": "belt",
+    "4": "glove pad",
+    "5": "leg armor (white + colored band)",
+    "6": "dark strip",
+    "7": "sleeve cloth",
+    "8": "boot cloth / white shell",
+    "9": "metal panel",
+    "10": "eye",
+    "11": "body fur",
+    "12": "head fur (ear)",
+    "13": "nose",
+    "14": "cheek fluff",
+    "15": "fur gradient (dark)",
+    "16": "mouth (upper)",
+    "17": "mouth (lower)",
+    "18": "eye-area fur",
+    "19": "metal shine",
+    "20": "cloth panel",
+    "21": "jacket back (logo)",
+    "22": "jacket back lower",
+    "23": "zipper strip",
+    "24": "cloth panel (wide)",
+    "25": "gold fur",
+    "26": "belt buckle",
+    "27": "glove/cuff shell (emblem watermark)",
+    "28": "tiny swatch (8x8)",
+    "29": "helmet panels",
+    "30": "helmet/jacket back shell (script)",
+    "31": "fur gradient (light)",
+    "32": "metal grid",
+    "33": "eyelid"
+  }
+}

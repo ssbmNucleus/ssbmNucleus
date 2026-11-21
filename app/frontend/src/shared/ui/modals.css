@@ -1,0 +1,182 @@
+/* The app-wide modal chrome: .edit-modal-overlay/.edit-modal-content, the
+   .modal-overlay/.modal-content dialogs and their form fields. Loaded with
+   the shell (App.jsx): any area may open one before its own chunk loads. */
+
+/* ─────────────────────────────────────────
+   MODAL SYSTEM
+   ───────────────────────────────────────── */
+
+.edit-modal-overlay {
+  position: fixed;
+  /* Start below the app header — it stacks above in-tree overlays, so a
+     full-viewport centered modal would bury its top edge under the bar. */
+  inset: var(--app-header-h, 0px) 0 0 0;
+  background: rgba(10, 20, 32, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal);
+  animation: fadeIn var(--duration-fast) var(--ease-out);
+  padding: var(--space-4);
+}
+
+.edit-modal-content {
+  background:
+    linear-gradient(
+      180deg,
+      var(--color-bg-elevated) 0%,
+      var(--color-bg-base) 100%
+    );
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  max-width: min(100%, 32rem);
+  width: 100%;
+  max-height: var(--modal-max-height);
+  overflow-y: auto;
+  box-shadow:
+    var(--shadow-xl),
+    0 0 0 1px var(--color-border-subtle),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  animation: scaleIn var(--duration-normal) var(--ease-spring);
+  position: relative;
+}
+
+/* Modal header */
+.edit-modal-content h2 {
+  margin: 0 0 var(--space-6) 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  text-align: center;
+}
+
+/* ─────────────────────────────────────────
+   FORM FIELDS (MODAL)
+   ───────────────────────────────────────── */
+
+.edit-field {
+  margin-bottom: var(--space-5);
+}
+
+.edit-field label {
+  display: block;
+  color: var(--color-text-secondary);
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  margin-bottom: var(--space-2);
+}
+
+.edit-field input {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-bg-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-size: var(--text-md);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.edit-field input:focus {
+  outline: none;
+  border-color: var(--color-cyan);
+  box-shadow: var(--glow-cyan-sm);
+  background: var(--color-bg-elevated);
+}
+
+@media (max-width: 720px) {
+  .edit-modal-overlay {
+    padding: var(--space-3);
+  }
+
+  .edit-modal-content {
+    padding: var(--space-5);
+  }
+}
+
+/* ---- Shared modal chrome -------------------------------------------------
+   These used to live in Settings.css, which is imported only by Settings.jsx
+   -- a lazily-loaded chunk. Any modal using .modal-overlay/.modal-content
+   therefore rendered UNSTYLED (inline, full width) until the user had opened
+   Settings at least once. App.css is always loaded, so they belong here. */
+
+/* ─────────────────────────────────────────
+   MODAL
+   ───────────────────────────────────────── */
+
+.modal-overlay {
+  position: fixed;
+  /* below the app header (it stacks above in-tree overlays) */
+  inset: var(--app-header-h, 0px) 0 0 0;
+  background: rgba(10, 20, 32, 0.9);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal);
+  animation: fadeIn var(--duration-fast) var(--ease-out);
+  padding: var(--space-4);
+}
+
+.modal-content {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  max-width: 440px;
+  width: 100%;
+  box-shadow: var(--shadow-xl);
+  animation: scaleIn var(--duration-normal) var(--ease-spring);
+}
+
+.modal-content h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-4) 0;
+}
+
+.modal-content p {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  margin: 0 0 var(--space-3) 0;
+}
+
+.modal-content ul {
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-4) var(--space-4) var(--space-8);
+  margin: 0 0 var(--space-4) 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}
+
+.modal-content ul li {
+  margin-bottom: var(--space-1);
+}
+
+.modal-content ul li:last-child {
+  margin-bottom: 0;
+}
+
+/* Modal Actions */
+.modal-actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-border-subtle);
+}

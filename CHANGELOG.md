@@ -2,6 +2,219 @@
 
 All notable changes to SSBM Nucleus are documented here.
 
+## 0.9.0 — 2026-11-21
+
+Randall, the AI assistant, comes with SSBM Nucleus now, and you can connect your own AI to
+Nucleus too.
+
+### Randall and your own AI (MCP)
+
+- Randall is now part of SSBM Nucleus. Open **AI** to ask him about your vault, your builds and
+  mods on ssbmnucleus.net. He can find and download mods, recolor a costume or a stage, take
+  portraits, sort your skins, make a build and install mods into it. Anything that changes your
+  files asks you first.
+
+- Randall's AI runs on your Patreon sign-in. **Randall settings** shows how much usage is left this
+  month and when it resets.
+
+- **Connect your own AI.** Settings > AI > **Connect your own AI (MCP)** gives you the
+  command to add Nucleus to Claude Code, Claude Desktop or Codex. That AI gets Randall's tools:
+  your vault, website downloads, model imports, builds, music, in-game tests and ISO export. If
+  Nucleus is not open, connecting opens it. Your own AI does the thinking, model imports included;
+  only tools that make pictures (material swatches for a recolor) use your Randall usage, as the
+  chat does.
+
+- Create a character and Import a stage model run through your own AI for now. In Randall's chat
+  they say **Use MCP**.
+
+- Settings has an **AI** category: connecting your own AI, the model import tools and the
+  **Creation toolkit**, where porting fighters from other games and building custom stages come
+  from (a copy of Nucleus's source you set up once), with a link to its setup guide.
+
+- Randall can test a costume, character or stage in the game right in the chat: live video,
+  controller play, progress and Stop. He can also turn an imported model into a new character
+  with five costumes, portraits, stock icons, a select-screen icon and name banners. Paired
+  fighters and Game & Watch are not supported yet.
+
+- Recolors: Randall can find the textures to change on the 3D model, make material swatches and
+  paint them through masks onto a copy of a costume. You see the changed pixels first, and you
+  can undo or export the edit. Generated materials use some of your Randall usage.
+
+- The workbench beside the chat shows what Randall made: the 3D model and a running game test, and
+  for a recolor every picture he made. A model import opens it on the new costume in 3D once the
+  costume is written; its steps are on its card in the chat. The 3D view shows the animation that
+  is loaded (or Pose, which keeps your camera), another chat's model starts in its pose with a
+  fresh camera, right-drag moves the model with your cursor, and **Reset the view** puts the camera
+  back. A saved Stage Lab or Skin Lab session keeps its name in the workbench title.
+
+- **Report this chat:** a small flag in Randall's chat sends that conversation privately to the
+  developer when something went wrong. You can add a note and a contact, and the dialog shows
+  exactly what is included before you send. Your AI key and computer username are never included.
+
+- While Randall works, Enter queues your next message. **Send now** sends the queue in order,
+  **Edit** takes a message back, and Stop keeps the messages not sent yet.
+
+- Long tasks keep running with a **Still working** notice and a Stop button. Pressing Stop while a
+  reply is finishing ends it as stopped and keeps what was saved. A message that fails to send no
+  longer replaces what you typed meanwhile. A task left running when Nucleus closed is marked
+  interrupted at the next start.
+
+- Quick searches and lookups use a faster model in the same chat, with the same history and
+  approvals.
+
+### Model import
+
+- Give Randall a model (a ZIP, GLB, glTF, OBJ, FBX, SMD or DAE file) and he fits it to a Melee
+  fighter and saves the costume to your Vault.
+
+- After an import, say what looks wrong ("the legs look wrong", "his head is too big", "he faces
+  backwards") and Randall changes that one thing, builds the costume again and saves it beside the
+  first. He can also leave a piece out, put one back, or make a part swing or hold still.
+
+- A weapon the model carries beside it, like the sword of Clash Royale's Barbarian, goes in the
+  fighter's hand.
+
+- Randall tells you when the import's own check thinks the costume came out wrong, in the check's
+  own words and not softened, instead of calling it done. The import card shows them too.
+
+- A model that came without the texture files it names (an OBJ without its .mtl, a DAE or FBX
+  whose pictures are not beside it or in its ZIP) is no longer imported all white without a word:
+  Randall names the missing files and asks for a ZIP with them, or goes ahead without them if you
+  say so. Your own AI hears the same over MCP.
+
+- Stop ends a running import at once and saves nothing, and its card says Stopped. Asking to try a
+  model again works after an import that failed or that you stopped.
+
+- Model import's tools are now an optional download in Settings (AI > **Model import
+  tools**), on Windows, macOS and Linux: Blender and the importer's Python, about 600 to 850 MB
+  from blender.org, python.org and PyPI, so the installer stays small. Asked to import without
+  them, Randall says so and the import's card has a Download button.
+
+- The old model importer is gone; in chats from before, an old import's card shows its result
+  without buttons.
+
+### Art from your own game
+
+- The character and stage select layout editors draw the select screen from your own copy of the
+  game, instead of a picture that came with the app. The first time takes a few seconds. Until
+  then, or if your game can't be found, the editor shows a plain panel.
+
+- Stage select icons and banners, and the HUD, pause and series pictures, come from your own game.
+  Nucleus makes them at setup and when you open a project. After this update it also makes any
+  missing ones in the background from your vanilla ISO, so Tracker's stage icons show up without
+  opening a project first.
+
+- Dynamic Alternate Stages: the six competitive stages' loaders are rebuilt from your own stage
+  files when you set them up. If Nucleus can't find a vanilla copy of one, the others still
+  install and the Stages tab shows a warning.
+
+### Tracker
+
+- Shared and synced replays upload as the original replay file, so share links and the phone get
+  every viewer fix. Fox's up-throw lasers now point the right way on share pages.
+
+### Fixes, including ones you reported on Discord
+
+- **Now Playing** has a new look: just the song name, on a dark bar that slides in at the top left
+  for a few seconds, above the timer, and hides while the game is paused. Projects that have the code pick it up on their next export; an entry you
+  changed yourself is left alone. A song name with a bracket or other symbol no longer loses the
+  letter after it, and a very long name ends in "...".
+
+- Fixed: with one stage page, L and R on the stage select screen no longer play the page sound and
+  slide the icons in again. Projects pick this up on their next save or export.
+
+- Fixed: a recording from a Dolphin window with an odd size (641×481, say) no longer fails to
+  export. Before, the normal export saved nothing while Compress for Discord worked.
+
+- Fixed: recording one replay stops by itself at the end of the game, and the video is the game's
+  length. Before, it kept recording the "Waiting for game" screen until you pressed Stop.
+
+- Fixed: changing the colour of Falcon Punch's fire no longer breaks the other Falcon Punch colour
+  options or putting them back.
+
+- Fixed: blue Jigglypuff keeps its bow in portraits taken with a saved pose.
+
+- Fixed: "Drop to import" no longer stays on screen after you drop a file on a chat. A pose taken
+  from the pose menu now becomes the skin's portrait, and the costume menu has **Pose**.
+
+- Fixed: a portrait preview no longer shows the old picture through the new one.
+
+- The model viewer lists every special move, air ones included, under Specials with a readable
+  name (Jigglypuff's air Pound was under Other), Samus's Super Missile smash and Kirby's copied
+  specials too. The viewer and the Pose Manager both call them "B" moves (Neutral B, Side B).
+  Angled forward tilts and smashes, Kirby's mouthful, DK's cargo throws and an opponent's motion
+  while being thrown have readable names too, the thrown ones under Grabs & Throws.
+
+- Fixed SMD exports of community costumes with repeated mesh names, looping material references or
+  empty textures.
+
+- Fixed: Escape closes a costume's or stage's edit window, from its name field too (with an
+  unsaved name, the first Escape puts the name back). The edit window no longer stays on top
+  when you switch to the AI or another tab; it is still open when you come back to the Vault.
+
+- Fixed: the 3D viewer's working folders (`viewer_*` in the data folder's scratch: a costume's, and
+  the workbench's working copies) are removed when Nucleus closes, also with a viewer still open,
+  and any left over are removed at the next start.
+
+- Fixed: a cancelled model import no longer leaves Blender's and the importer's temporary files
+  in the data folder's scratch. Each import keeps them in a folder of its own, removed when it
+  ends, and the next start removes those an earlier version left.
+
+- Fixed: `SSBM Nucleus.exe --mcp` no longer prints "Unable to move the cache" and GPU cache errors
+  into your AI client's log while Nucleus is open.
+
+- Fixed: the Import Vault window opens on Replace All with no file chosen every time, instead of
+  keeping your last choice.
+
+- **Export Vault** asks where to save the backup first. Cancelling there makes no backup; before,
+  cancelling the save threw away the backup it had just made. Backups leave out the Tracker's
+  replay-viewer animations (about 90 MB), which Nucleus downloads again when they're missing.
+
+- Fixed: Create Project tells you when Dynamic Alternate Stages couldn't set up a stage, and the
+  Stages tab shows those stages with an **Install Again** button.
+
+- Fixed: a page you add in the stage select layout editor can be filled: right-click a "?" slot
+  and pick its stage.
+
+- Fixed: the project's Extras panel shows what's in your Vault right away, and restoring vanilla
+  says "Restoring Vanilla" instead of "Importing".
+
+- Fixed: the Poses and Generate CSPs windows no longer stay on top when you switch tabs, and
+  Escape closes them. Generate CSPs shows the new portraits right after it makes them, and a new
+  pose starts framed like the portrait.
+
+- Fixed: right-drag in the Texture Lab and the Vault's 3D viewer moves the model with your cursor.
+  Sideways it went the wrong way.
+
+### Security
+
+- Watch Lite: player tags and other text from a replay file can no longer run code in the page.
+- Your own AI (MCP): Nucleus refuses network paths in any request, and asks you in its window
+  before connecting a creation toolkit folder.
+- Vault backups leave out your sign-in, your AI-client (MCP) settings and this PC's folders (replay
+  and recording folders, My game and its delivery records, the clean ISO), and keep everything
+  else, Tracker data included.
+  Restoring a backup keeps the sign-in, settings and folders you have, never takes a network path
+  from it, and can't write outside the Vault.
+- Patreon linking only accepts a link that Nucleus started, and asks before switching to another
+  Patreon account.
+- Nucleus no longer passes its private keys on the command line, where other programs on the PC
+  could read them.
+- Website imports (Add to Nucleus links) ask first and name the site the file comes from.
+- The app window has a Content-Security-Policy, so it runs scripts from the app only.
+- Electron 44.11.5 with the latest Chromium fixes, and an updated image library (Pillow 13) in the
+  model importer.
+- The backend log no longer writes the app's session token (or any other key or token in a
+  web address) into its request lines.
+- Saving a file from a link (a pack, a patch, a mod Randall made) opens a Save window named after
+  the file, in your Downloads folder. Before, its title was the download's web address, with the
+  app's session token in it.
+
+### Removed
+
+- The older separate custom character and stage imports (from a ZIP, or by scanning an ISO) are
+  gone. The Import page does both, as before: drop the ZIP, or scan an ISO there.
+
 ## 0.8.17 — 2026-11-09
 
 - Fixed: a Fox or Falco gun model made from skinned meshes crashed the game as soon as

@@ -1,0 +1,457 @@
+{
+  "schema": 1,
+  "skeleton": "model/body/c00/model.nusktb",
+  "landmarks": "ultimate_landmarks.json",
+  "allow_unbound": [
+    "S_Hip_hit"
+  ],
+  "attachments": [
+    {
+      "source": "SwordR",
+      "source_anchor": "HandR",
+      "target": "JOBJ_75",
+      "target_anchor": "JOBJ_73"
+    }
+  ],
+  "clips": [
+    {
+      "id": "ftilt",
+      "category": "normal",
+      "target_motion": "AttackS31",
+      "animation": "..\\..\\..\\..\\tests\\artifacts\\mocap\\20260904-ultimate\\shulk-ftilt-authored-sparse.anim",
+      "manifest": "..\\..\\..\\..\\tests\\artifacts\\mocap\\20260904-ultimate\\shulk-ftilt-authored-sparse.runs\\00b2b1adb6bb417e8dde807d29c13d9d\\manifest.json",
+      "review": "user accepted visible motion; gameplay separate"
+    },
+    {
+      "id": "jab1",
+      "category": "normal",
+      "target_motion": "Attack11",
+      "source": "motion/body/c00/c00attack11.nuanmb",
+      "last_frame": 25,
+      "timing_reference": "Jab 1",
+      "timing_status": "raw-frame trim/hold; actual state timing and scripts still require verification"
+    },
+    {
+      "id": "jab2",
+      "category": "normal",
+      "target_motion": "Attack12",
+      "source": "motion/body/c00/c00attack12.nuanmb",
+      "last_frame": 33,
+      "timing_reference": "Jab 2",
+      "timing_status": "raw-frame trim/hold; actual state timing and scripts still require verification"
+    },
+    {
+      "id": "dashattack",
+      "category": "normal",
+      "target_motion": "AttackDash",
+      "source": "motion/body/c00/c00attackdash.nuanmb",
+      "last_frame": 40,
+      "timing_reference": "dashattack",
+      "timing_status": "raw-frame trim/hold; actual state timing and scripts still require verification"
+    },
+    {
+      "id": "utilt",
+      "category": "normal",
+      "target_motion": "AttackHi3",
+      "source": "motion/body/c00/c02attackhi3.nuanmb",
+      "last_frame": 39,
+      "timing_reference": "utilt",
+      "timing_status": "raw-frame trim/hold; actual state timing and scripts still require verification"
+    },
+    {
+      "id": "dtilt",
+      "category": "normal",
+      "target_motion": "AttackLw3",
+      "source": "motion/body/c00/c02attacklw3.nuanmb",
+      "last_frame": 31,
+      "timing_reference": "dtilt",
+      "timing_status": "raw-frame trim/hold; actual state timing and scripts still require verification"
+    },
+    {
+      "id": "fsmash",
+      "category": "normal",
+      "target_motion": "AttackS4",
+      "source": "motion/body/c00/c03attacks4s.nuanmb",
+      "last_frame": 67,
+      "timing_reference": "fsmash",
+      "timing_status": "raw-frame trim/hold; actual state timing and scripts still require verification"
+    },
+    {
+      "id": "usmash",
+      "category": "normal",
+      "target_motion": "AttackHi4",
+      "source": "motion/body/c00/c04attackhi4.nuanmb",
+      "last_frame": 67,
+      "timing_reference": "usmash",
+      "timing_status": "raw-frame trim/hold; actual state timing and scripts still require verification"
+    },
+    {
+      "id": "dsmash",
+      "category": "normal",
+      "target_motion": "AttackLw4",
+      "source": "motion/body/c00/c04attacklw4.nuanmb",
+      "last_frame": 82,
+      "timing_reference": "dsmash",
+      "timing_status": "raw-frame trim/hold; actual state timing and scripts still require verification"
+    },
+    {
+      "id": "nair",
+      "category": "normal",
+      "target_motion": "AttackAirN",
+      "source": "motion/body/c00/c05attackairn.nuanmb",
+      "last_frame": 60,
+      "timing_reference": "nair",
+      "timing_status": "raw-frame trim/hold; actual state timing and scripts still require verification"
+    },
+    {
+      "id": "fair",
+      "category": "normal",
+      "target_motion": "AttackAirF",
+      "source": "motion/body/c00/c05attackairf.nuanmb",
+      "last_frame": 42,
+      "timing_reference": "fair",
+      "timing_status": "raw-frame trim/hold; actual state timing and scripts still require verification"
+    },
+    {
+      "id": "bair",
+      "category": "normal",
+      "target_motion": "AttackAirB",
+      "source": "motion/body/c00/c05attackairb.nuanmb",
+      "last_frame": 55,
+      "timing_reference": "bair",
+      "timing_status": "raw-frame trim/hold; actual state timing and scripts still require verification",
+      "body_scale": "rigid",
+      "scale_note": "Explicit candidate approximation: discard positive arm stretch, preserve donor bone lengths; see per-joint stretch ranges in retarget report."
+    },
+    {
+      "id": "uair",
+      "category": "normal",
+      "target_motion": "AttackAirHi",
+      "source": "motion/body/c00/c05attackairhi.nuanmb",
+      "last_frame": 55,
+      "timing_reference": "uair",
+      "timing_status": "raw-frame trim/hold; actual state timing and scripts still require verification"
+    },
+    {
+      "id": "dair",
+      "category": "normal",
+      "target_motion": "AttackAirLw",
+      "source": "motion/body/c00/c05attackairlw.nuanmb",
+      "last_frame": 61,
+      "timing_reference": "dair",
+      "timing_status": "raw-frame trim/hold; actual state timing and scripts still require verification"
+    },
+    {
+      "id": "idle",
+      "category": "locomotion",
+      "target_motion": "Wait1",
+      "source": "motion/body/c00/a00wait1.nuanmb"
+    },
+    {
+      "id": "idle2",
+      "category": "locomotion",
+      "target_motion": "Wait2",
+      "source": "motion/body/c00/a00wait2.nuanmb"
+    },
+    {
+      "id": "walk_slow",
+      "category": "locomotion",
+      "target_motion": "WalkSlow",
+      "source": "motion/body/c00/a01walkslow.nuanmb"
+    },
+    {
+      "id": "walk_middle",
+      "category": "locomotion",
+      "target_motion": "WalkMiddle",
+      "source": "motion/body/c00/a01walkmiddle.nuanmb"
+    },
+    {
+      "id": "walk_fast",
+      "category": "locomotion",
+      "target_motion": "WalkFast",
+      "source": "motion/body/c00/a01walkfast.nuanmb"
+    },
+    {
+      "id": "turn",
+      "category": "locomotion",
+      "target_motion": "Turn",
+      "source": "motion/body/c00/a01turn.nuanmb"
+    },
+    {
+      "id": "turn_run",
+      "category": "locomotion",
+      "target_motion": "TurnRun",
+      "source": "motion/body/c00/a02turnrun.nuanmb"
+    },
+    {
+      "id": "dash",
+      "category": "locomotion",
+      "target_motion": "Dash",
+      "source": "motion/body/c00/a02dash.nuanmb"
+    },
+    {
+      "id": "run",
+      "category": "locomotion",
+      "target_motion": "Run",
+      "source": "motion/body/c00/a02run.nuanmb"
+    },
+    {
+      "id": "run_brake",
+      "category": "locomotion",
+      "target_motion": "RunBrake",
+      "source": "motion/body/c00/a02runbrakel.nuanmb"
+    },
+    {
+      "id": "jump_f",
+      "category": "locomotion",
+      "target_motion": "JumpF",
+      "source": "motion/body/c00/a03jumpf.nuanmb"
+    },
+    {
+      "id": "jump_b",
+      "category": "locomotion",
+      "target_motion": "JumpB",
+      "source": "motion/body/c00/a03jumpb.nuanmb"
+    },
+    {
+      "id": "jump_air_f",
+      "category": "locomotion",
+      "target_motion": "JumpAerialF",
+      "source": "motion/body/c00/a03jumpaerialf.nuanmb"
+    },
+    {
+      "id": "jump_air_b",
+      "category": "locomotion",
+      "target_motion": "JumpAerialB",
+      "source": "motion/body/c00/a03jumpaerialb.nuanmb"
+    },
+    {
+      "id": "fall",
+      "category": "locomotion",
+      "target_motion": "Fall",
+      "source": "motion/body/c00/a04fall.nuanmb"
+    },
+    {
+      "id": "fall_f",
+      "category": "locomotion",
+      "target_motion": "FallF",
+      "source": "motion/body/c00/a04fallf.nuanmb"
+    },
+    {
+      "id": "fall_b",
+      "category": "locomotion",
+      "target_motion": "FallB",
+      "source": "motion/body/c00/a04fallb.nuanmb"
+    },
+    {
+      "id": "fall_air",
+      "category": "locomotion",
+      "target_motion": "FallAerial",
+      "source": "motion/body/c00/a04fallaerial.nuanmb"
+    },
+    {
+      "id": "fall_air_f",
+      "category": "locomotion",
+      "target_motion": "FallAerialF",
+      "source": "motion/body/c00/a04fallaerialf.nuanmb"
+    },
+    {
+      "id": "fall_air_b",
+      "category": "locomotion",
+      "target_motion": "FallAerialB",
+      "source": "motion/body/c00/a04fallaerialb.nuanmb"
+    },
+    {
+      "id": "fall_special",
+      "category": "locomotion",
+      "target_motion": "FallSpecial",
+      "source": "motion/body/c00/a04fallspecial.nuanmb"
+    },
+    {
+      "id": "fall_special_f",
+      "category": "locomotion",
+      "target_motion": "FallSpecialF",
+      "source": "motion/body/c00/a04fallspecialf.nuanmb"
+    },
+    {
+      "id": "fall_special_b",
+      "category": "locomotion",
+      "target_motion": "FallSpecialB",
+      "source": "motion/body/c00/a04fallspecialb.nuanmb"
+    },
+    {
+      "id": "squat",
+      "category": "locomotion",
+      "target_motion": "Squat",
+      "source": "motion/body/c00/a05squat.nuanmb"
+    },
+    {
+      "id": "squat_wait",
+      "category": "locomotion",
+      "target_motion": "SquatWait",
+      "source": "motion/body/c00/a05squatwait.nuanmb"
+    },
+    {
+      "id": "squat_rise",
+      "category": "locomotion",
+      "target_motion": "SquatRv",
+      "source": "motion/body/c00/a05squatrv.nuanmb"
+    },
+    {
+      "id": "landing",
+      "category": "locomotion",
+      "target_motion": "Landing",
+      "source": "motion/body/c00/a05landingheavy.nuanmb"
+    },
+    {
+      "id": "guard_on",
+      "category": "defense",
+      "target_motion": "GuardOn",
+      "source": "motion/body/c00/b00guardon.nuanmb"
+    },
+    {
+      "id": "guard",
+      "category": "defense",
+      "target_motion": "Guard",
+      "source": "motion/body/c00/b00guard.nuanmb"
+    },
+    {
+      "id": "guard_off",
+      "category": "defense",
+      "target_motion": "GuardOff",
+      "source": "motion/body/c00/b00guardoff.nuanmb"
+    },
+    {
+      "id": "guard_damage",
+      "category": "defense",
+      "target_motion": "GuardDamage",
+      "source": "motion/body/c00/b01guarddamage.nuanmb"
+    },
+    {
+      "id": "spotdodge",
+      "category": "defense",
+      "target_motion": "EscapeN",
+      "source": "motion/body/c00/b02escapen.nuanmb"
+    },
+    {
+      "id": "roll_f",
+      "category": "defense",
+      "target_motion": "EscapeF",
+      "source": "motion/body/c00/b02escapef.nuanmb"
+    },
+    {
+      "id": "roll_b",
+      "category": "defense",
+      "target_motion": "EscapeB",
+      "source": "motion/body/c00/b02escapeb.nuanmb"
+    },
+    {
+      "id": "airdodge",
+      "category": "defense",
+      "target_motion": "EscapeAir",
+      "source": "motion/body/c00/b02escapeair.nuanmb"
+    },
+    {
+      "id": "nair_land",
+      "category": "landing",
+      "target_motion": "LandingAirN",
+      "source": "motion/body/c00/c05landingairn.nuanmb"
+    },
+    {
+      "id": "fair_land",
+      "category": "landing",
+      "target_motion": "LandingAirF",
+      "source": "motion/body/c00/c05landingairf.nuanmb"
+    },
+    {
+      "id": "bair_land",
+      "category": "landing",
+      "target_motion": "LandingAirB",
+      "source": "motion/body/c00/c05landingairb.nuanmb"
+    },
+    {
+      "id": "uair_land",
+      "category": "landing",
+      "target_motion": "LandingAirHi",
+      "source": "motion/body/c00/c05landingairhi.nuanmb"
+    },
+    {
+      "id": "dair_land",
+      "category": "landing",
+      "target_motion": "LandingAirLw",
+      "source": "motion/body/c00/c05landingairlw.nuanmb"
+    },
+    {
+      "id": "grab",
+      "category": "grab",
+      "target_motion": "Catch",
+      "source": "motion/body/c00/e00catch.nuanmb"
+    },
+    {
+      "id": "dashgrab",
+      "category": "grab",
+      "target_motion": "CatchDash",
+      "source": "motion/body/c00/e00catchdash.nuanmb"
+    },
+    {
+      "id": "pummel",
+      "category": "grab",
+      "target_motion": "CatchAttack",
+      "source": "motion/body/c00/e00catchattack.nuanmb"
+    },
+    {
+      "id": "fthrow",
+      "category": "grab",
+      "target_motion": "ThrowF",
+      "source": "motion/body/c00/e01throwf.nuanmb"
+    },
+    {
+      "id": "bthrow",
+      "category": "grab",
+      "target_motion": "ThrowB",
+      "source": "motion/body/c00/e01throwb.nuanmb"
+    },
+    {
+      "id": "uthrow",
+      "category": "grab",
+      "target_motion": "ThrowHi",
+      "source": "motion/body/c00/e01throwhi.nuanmb"
+    },
+    {
+      "id": "dthrow",
+      "category": "grab",
+      "target_motion": "ThrowLw",
+      "source": "motion/body/c00/e01throwlw.nuanmb"
+    },
+    {
+      "id": "jab3",
+      "category": "gameplay",
+      "blocked": "Marth has no third jab slot; needs new state/transition"
+    },
+    {
+      "id": "monado_arts",
+      "category": "gameplay",
+      "blocked": "Fresh five-art selection, timers and effects required; old stance explicitly rejected"
+    },
+    {
+      "id": "back_slash",
+      "category": "gameplay",
+      "blocked": "Needs dedicated ground/air behavior and landing transition"
+    },
+    {
+      "id": "air_slash",
+      "category": "gameplay",
+      "blocked": "Needs first/second slash state logic and aerial recovery"
+    },
+    {
+      "id": "vision",
+      "category": "gameplay",
+      "blocked": "Needs counter detection, timing and retaliation state logic"
+    },
+    {
+      "id": "throw_victims",
+      "category": "gameplay",
+      "blocked": "Victim motion/attachment and throw scripts need separate authoring"
+    }
+  ]
+}

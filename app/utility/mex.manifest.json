@@ -1,0 +1,54 @@
+{
+  "_comment": [
+    "Pinned prebuilt MexCLI (self-contained net8) from the fork's GitHub Releases.",
+    "Fetch: python tools/build/fetch_native.py mex [--platform win-x64|linux-x64|osx-arm64|host]",
+    "To bump: publish a new tag on the fork, update `tag` and every sha256 here (from the release's SHA256SUMS.txt)."
+  ],
+  "repo": "ssbmNucleus/m-ex",
+  "tag": "nucleus-v0.9.0",
+  "platforms": {
+    "win-x64": {
+      "asset": "mexcli-win-x64.zip",
+      "sha256": "91ae8630c9bea96df51947702635fa657139c6d07bda341cacfcfb9c2858b29c",
+      "unpack_to": "utility/mex/win-x64",
+      "entrypoint": "mexcli.exe",
+      "verify_after_unpack": [
+        "mexcli.exe",
+        "codes.gct",
+        "seed_codes.ini",
+        "HSDRaw.dll",
+        "mexLib.dll"
+      ]
+    },
+    "linux-x64": {
+      "asset": "mexcli-linux-x64.zip",
+      "sha256": "e4a77ee04ac1466a9dc2036efaf1c56ea70dd32774643de185f542cd9708cfa6",
+      "unpack_to": "utility/mex/linux-x64",
+      "entrypoint": "mexcli",
+      "verify_after_unpack": [
+        "mexcli",
+        "codes.gct",
+        "seed_codes.ini",
+        "HSDRaw.dll",
+        "mexLib.dll"
+      ]
+    },
+    "osx-arm64": {
+      "asset": "mexcli-osx-arm64.zip",
+      "sha256": "18d66aaf6b6ca070ff793f2a06da9693e03aa28bdd4ed449f2f0e60d03a5f6b8",
+      "unpack_to": "utility/mex/osx-arm64",
+      "entrypoint": "mexcli",
+      "verify_after_unpack": [
+        "mexcli",
+        "codes.gct",
+        "seed_codes.ini",
+        "HSDRaw.dll",
+        "mexLib.dll"
+      ]
+    }
+  },
+  "license": {
+    "spdx": null,
+    "note": "Upstream m-ex / MexManager / MexCLI publish no license; see THIRD_PARTY_NOTICES.md. Source lives in the fork repo."
+  }
+}

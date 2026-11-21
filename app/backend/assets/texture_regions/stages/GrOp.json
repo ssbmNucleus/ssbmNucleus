@@ -1,0 +1,120 @@
+{
+  "stage": "dreamland",
+  "code": "GrOp",
+  "basis": {
+    "textureCount": 84
+  },
+  "regions": {
+    "background": [
+      18
+    ],
+    "ground": [
+      19,
+      20,
+      21,
+      36,
+      43,
+      44,
+      45,
+      58
+    ],
+    "wood": [
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      47,
+      48,
+      59,
+      60
+    ],
+    "foliage": [
+      49,
+      50,
+      61,
+      62,
+      63,
+      64,
+      65,
+      80,
+      81
+    ],
+    "trunk": [
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      75,
+      76,
+      77,
+      78,
+      79
+    ],
+    "water": [
+      37,
+      38,
+      39,
+      40,
+      41,
+      42
+    ],
+    "flowers": [
+      72,
+      73,
+      74,
+      82,
+      83
+    ],
+    "dirt": [
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57
+    ]
+  },
+  "protected": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "notes": {
+    "background": "18 = the painted mountain/sky panorama",
+    "ground": "grass tops + ledge edges of the main platform",
+    "wood": "the tower side panels (22/23/59/60 = big lattice) + gold strip bits",
+    "foliage": "tree canopy + bushes",
+    "trunk": "tree bark + Whispy's knots",
+    "water": "river + waterfall foam speckles",
+    "protected": "0-11 = Whispy Woods FACE animation frames (blowing) - tint ok, composite would break the animation",
+    "details": "66-71 unmapped tiny bits"
+  },
+  "materialHints": {
+    "background": {
+      "mode": "fit",
+      "quality": true
+    }
+  }
+}

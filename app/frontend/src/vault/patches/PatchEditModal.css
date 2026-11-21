@@ -1,0 +1,73 @@
+/* The xdelta and bundle edit modals (XdeltaEditModal.jsx, BundleEditModal.jsx):
+   the screenshot preview with its retake button. Their delete button is
+   .btn-delete-modal in shared/ui/buttons.css (it shares .btn-danger's rules). */
+
+/* Edit Preview */
+.edit-preview {
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto var(--space-6) auto;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-bg-deep);
+  box-shadow: var(--shadow-inner-lg);
+  position: relative;
+}
+
+.edit-preview img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.btn-edit-screenshot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 52px;
+  height: 52px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--gradient-cyan);
+  color: var(--color-bg-deep);
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.edit-preview:hover .btn-edit-screenshot {
+  opacity: 1;
+}
+
+.btn-edit-screenshot:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: var(--shadow-xl), var(--glow-cyan);
+}
+
+.edit-placeholder {
+  width: 100%;
+  padding-top: 100%;
+  position: relative;
+  background: var(--color-bg-surface);
+}
+
+.edit-placeholder span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: 56px;
+  font-weight: var(--font-extrabold);
+  color: var(--color-bg-deep);
+}

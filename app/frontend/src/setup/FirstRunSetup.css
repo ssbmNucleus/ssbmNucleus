@@ -1,0 +1,462 @@
+/* ============================================
+   SSBM NUCLEUS - First-Run Setup Modal
+   ============================================ */
+
+/* ─────────────────────────────────────────
+   OVERLAY
+   ───────────────────────────────────────── */
+
+.first-run-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 20, 32, 0.95);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: var(--page-block-padding) var(--page-inline-padding);
+}
+
+/* ─────────────────────────────────────────
+   MODAL
+   ───────────────────────────────────────── */
+
+.first-run-modal {
+  border-radius: 16px;
+  width: min(100%, 34rem);
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.5),
+    0 0 24px rgba(125, 211, 232, 0.12);
+  overflow: visible;
+  position: relative;
+  max-height: var(--modal-max-height);
+  isolation: isolate;
+}
+
+.first-run-modal-surface {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-cyan);
+  border-radius: inherit;
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+/* Traveling LED border effect (runs constantly, slow) */
+.first-run-modal::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: calc(16px + 2px);
+  padding: 2px;
+  background: conic-gradient(
+    from var(--border-angle, 0deg),
+    transparent 0%,
+    transparent 25%,
+    rgba(255, 255, 255, 0.9) 30%,
+    var(--color-cyan) 35%,
+    rgba(255, 255, 255, 0.9) 40%,
+    transparent 45%,
+    transparent 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 1;
+  pointer-events: none;
+  z-index: 0;
+  animation: rotateBorder 8s linear infinite;
+}
+
+/* Glow layer behind the LED */
+.first-run-modal::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: calc(16px + 6px);
+  padding: 6px;
+  background: conic-gradient(
+    from var(--border-angle, 0deg),
+    transparent 0%,
+    transparent 28%,
+    var(--color-cyan) 35%,
+    transparent 42%,
+    transparent 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  filter: blur(6px);
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: -1;
+  animation: rotateBorder 8s linear infinite;
+}
+
+@keyframes rotateBorder {
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+/* Register the custom property for animation */
+@property --border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.first-run-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--color-border-subtle);
+  background: linear-gradient(180deg,
+    var(--color-bg-surface) 0%,
+    var(--color-bg-elevated) 100%
+  );
+}
+
+.first-run-header-brand {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.first-run-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.first-run-header h1 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.first-run-cancel-button {
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-xs);
+}
+
+.first-run-content {
+  padding: var(--space-6);
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.first-run-footer {
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--color-border-subtle);
+  background: var(--color-bg-surface);
+  display: flex;
+  justify-content: center;
+}
+
+/* ─────────────────────────────────────────
+   STEP CONTENT
+   ───────────────────────────────────────── */
+
+.setup-step {
+  text-align: center;
+  max-width: 400px;
+  animation: cardEntrance var(--duration-slow) var(--ease-out) backwards;
+}
+
+.setup-step h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-4);
+}
+
+.setup-description {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  margin: 0 0 var(--space-4);
+}
+
+.setup-description strong {
+  color: var(--color-cyan);
+}
+
+.setup-description code {
+  background: var(--color-bg-surface);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  color: var(--color-text-primary);
+}
+
+.setup-note {
+  background: var(--color-info-muted);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  padding: var(--space-3);
+  margin-bottom: var(--space-5);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  text-align: left;
+}
+
+.setup-note strong {
+  color: var(--color-info);
+}
+
+/* ─────────────────────────────────────────
+   ICONS
+   ───────────────────────────────────────── */
+
+.setup-icon {
+  margin-bottom: var(--space-4);
+  color: var(--color-cyan);
+}
+
+.setup-icon.success {
+  color: var(--color-success);
+}
+
+.setup-icon.error {
+  color: var(--color-danger);
+}
+
+/* ─────────────────────────────────────────
+   ISO SELECTOR
+   ───────────────────────────────────────── */
+
+.iso-selector {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.iso-path-input {
+  flex: 1;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-3);
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.iso-path-input:focus {
+  outline: none;
+  border-color: var(--color-cyan);
+}
+
+/* ─────────────────────────────────────────
+   BUTTONS
+   ───────────────────────────────────────── */
+
+.setup-buttons {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  margin-top: var(--space-4);
+}
+
+/* Setup's own button look, scoped 2026-10-03: unscoped, these overrode the global
+   App.css buttons app-wide once setup had been opened (every gold primary
+   turned cyan). :where() keeps the specificity of the old bare selectors. */
+:where(.first-run-overlay) .btn-primary {
+  background: var(--gradient-cyan);
+  color: var(--color-bg-deep);
+  border: none;
+  border-radius: 8px;
+  padding: var(--space-3) var(--space-5);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(125, 211, 232, 0.3);
+}
+
+:where(.first-run-overlay) .btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(125, 211, 232, 0.4);
+}
+
+:where(.first-run-overlay) .btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+:where(.first-run-overlay) .btn-secondary {
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-3) var(--space-5);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+:where(.first-run-overlay) .btn-secondary:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-border-focus);
+}
+
+/* ─────────────────────────────────────────
+   PROGRESS
+   ───────────────────────────────────────── */
+
+.progress-container {
+  margin-top: var(--space-4);
+}
+
+.progress-bar {
+  height: 8px;
+  background: var(--color-bg-surface);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: var(--space-2);
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--gradient-cyan);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+}
+
+/* ─────────────────────────────────────────
+   SPINNER
+   ───────────────────────────────────────── */
+
+.setup-loader {
+  margin: 0 auto var(--space-4);
+}
+
+.setup-progress-meta {
+  margin-top: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+}
+
+/* ─────────────────────────────────────────
+   ERROR
+   ───────────────────────────────────────── */
+
+.setup-error {
+  background: var(--color-danger-muted);
+  border: 1px solid rgba(255, 71, 87, 0.3);
+  border-radius: 8px;
+  padding: var(--space-3);
+  margin-bottom: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+}
+
+.error-text {
+  color: var(--color-danger);
+}
+
+/* ─────────────────────────────────────────
+   STEP INDICATOR
+   ───────────────────────────────────────── */
+
+.step-indicator {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border);
+  transition: background 0.2s ease;
+}
+
+.step-dot.active {
+  background: var(--color-cyan);
+  box-shadow: 0 0 8px var(--color-cyan);
+}
+
+/* ─────────────────────────────────────────
+   AUTO-DETECTED PATHS
+   ───────────────────────────────────────── */
+
+.auto-detected-paths {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-3);
+  margin-bottom: var(--space-4);
+  text-align: left;
+}
+
+.detected-path {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2) 0;
+}
+
+.detected-path:not(:last-child) {
+  border-bottom: 1px solid var(--color-border-subtle);
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.detected-label {
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detected-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-cyan);
+  word-break: break-all;
+  line-height: 1.4;
+}

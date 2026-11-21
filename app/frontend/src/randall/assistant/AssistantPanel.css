@@ -1,0 +1,636 @@
+/* Nucleus host, tool receipts and settings. Shared chat geometry lives in ChatUI.css. */
+.assistant-host { flex: 1; width: 100%; min-height: 0; min-width: 0; }
+.assistant-host--hidden { display: none; }
+.assistant-host--editor { position: fixed; inset: 0 0 0 auto; width: min(390px, 42vw); z-index: 10001; border-left: 1px solid var(--color-border); }
+.app-content--assistant-editor .skin-creator-overlay { right: min(390px, 42vw); }
+.assistant-host--editor .coach-sidebar, .assistant-host--editor .chat-rail, .assistant-host--editor .chat-sidebar-scrim { display: none !important; }
+.assistant-host--editor .coach-page { margin-left: 0; width: 100%; }
+.assistant-editor-context { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 0; font-size: 12px; color: var(--color-text-secondary); }
+.assistant-editor-context button, .assistant-vault-edit, .assistant-mod-files button, .assistant-file-attachments button { border: 1px solid var(--color-border); background: var(--color-bg-elevated); color: var(--color-text-primary); border-radius: 8px; padding: 6px 10px; }
+.assistant-vault-edit { margin: 4px 12px; }
+.assistant-stage-card { min-width: 0; }
+.assistant-stage-card .assistant-vault-open { flex-direction: column; align-items: stretch; }
+.assistant-stage-card .assistant-vault-open img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: contain; border-radius: 6px; }
+.assistant-mod-files { display: flex; flex-wrap: wrap; gap: 8px; }
+.assistant-mod-files article { display: flex; flex-direction: column; gap: 8px; padding: 12px; min-width: 0; max-width: 100%; border: 1px solid var(--color-border); border-radius: 12px; font-size: 12px; overflow-wrap: anywhere; }
+.assistant-mod-files article > div { display: flex; flex-wrap: wrap; gap: 6px; }
+.assistant-mod-files img { max-width: 240px; max-height: 180px; object-fit: contain; image-rendering: pixelated; border-radius: 6px; }
+.assistant-mod-files small { color: var(--color-text-tertiary); }
+/* Speaks the same quiet work-summary language as the vault/help lookups above
+   rather than a bare native <details> marker. */
+.assistant-mod-inspection { margin: 8px 0; font-size: 13px; color: var(--color-text-tertiary); }
+.assistant-mod-inspection pre, .assistant-mod-inspection ul { max-height: 240px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+.assistant-file-attachments { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 0; }
+.app-content--assistant-full > .app-panel, .app-content--assistant-full > .app-panel-loading { display: none; }
+.nucleus-assistant { height: 100%; min-height: 0; display: flex; position: relative; background: var(--color-bg-base); color: var(--color-text-primary); font: var(--text-base)/var(--leading-relaxed) var(--font-body); container-type: inline-size; }
+/* Consolidated tool results can leave only the absolutely positioned avatar.
+   Keep the React turn mounted for streaming, but give empty turns no UI. */
+.nucleus-assistant .coach-turn--assistant:not(:has(> :not(.chat-speaker))) { display: none; }
+/* Activity belongs to the transcript, not the width of a growing reply bubble. */
+.shared-chat.nucleus-assistant .coach-turn--assistant { width: 100%; max-width: 100%; padding-left: 0; --assistant-content-width: 84%; }
+.nucleus-assistant .coach-turn--assistant > :not(.chat-speaker, .assistant-file-activity, .assistant-typing, .assistant-mod-tool) { margin-left: 36px; max-width: calc(var(--assistant-content-width) - 36px); }
+/* The wrapper spans the turn so its activity rows can centre on the thread.
+   Everything else inside it keeps the reply column's indent. */
+.nucleus-assistant .coach-turn--assistant > .assistant-mod-tool { width: 100%; max-width: 100%; }
+.nucleus-assistant .coach-turn--assistant > .assistant-mod-tool > :not(.assistant-download-activity, .assistant-mod-inspection) { margin-left: 36px; max-width: calc(var(--assistant-content-width) - 36px); }
+.nucleus-assistant .coach-turn--assistant > .assistant-typing { align-self: flex-start; margin-left: 36px; }
+.nucleus-assistant .coach-turn--assistant:not(:has(> :not(.chat-speaker, .assistant-file-activity))) > .chat-speaker { display: none; }
+@container (max-width: 650px) { .shared-chat.nucleus-assistant .coach-turn--assistant { --assistant-content-width: 94%; } }
+.nucleus-assistant *, .nucleus-assistant *::before, .nucleus-assistant *::after { box-sizing: border-box; }
+.nucleus-assistant button, .nucleus-assistant input, .nucleus-assistant textarea { font: inherit; }
+.nucleus-assistant button { cursor: pointer; }
+.nucleus-assistant button:disabled { opacity: .4; cursor: default; }
+.nucleus-assistant button:focus-visible, .nucleus-assistant input:focus-visible, .nucleus-assistant textarea:focus-visible { outline: 2px solid var(--color-cyan); outline-offset: 3px; }
+.nucleus-assistant .assistant-icon-button { display: grid; place-items: center; flex: 0 0 auto; width: 34px; height: 34px; border: 0; border-radius: var(--radius-lg); background: transparent; color: var(--color-text-secondary); padding: 0; }
+.nucleus-assistant .assistant-icon-button:hover, .assistant-icon-button[aria-expanded=true] { background: var(--color-bg-surface); color: var(--color-cyan); }
+.assistant-tool { width: 100%; }
+.assistant-tool { border: 1px solid #ffffff12; border-radius: 10px; padding: 12px; margin: 10px 0; background: #ffffff03; font-size: 12px; }
+.assistant-tool-heading { display: flex; align-items: center; gap: 8px; }
+.assistant-tool-heading > span:first-child { color: var(--color-cyan); }
+.assistant-tool-heading > span:last-child { margin-left: auto; color: var(--color-text-muted); font-size: 10px; }
+.assistant-tool p { color: var(--color-text-secondary); }
+.assistant-tool--error { border-color: #e7947940; }
+.assistant-items { display: grid; grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); gap: 7px; margin-top: 12px; }
+.assistant-item { display: flex; align-items: center; min-width: 0; gap: 6px; background: #ffffff04; border-radius: 8px; padding: 7px; }
+.assistant-item label { display: flex; align-items: center; cursor: pointer; gap: 3px; }
+.assistant-item img, .assistant-item-placeholder { width: 32px; height: 43px; object-fit: contain; }
+.assistant-item-placeholder { display: grid; place-items: center; color: var(--color-text-muted); }
+.assistant-item button { background: none; border: 0; color: inherit; min-width: 0; padding: 0; text-align: left; }
+.assistant-item strong { display: block; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.assistant-item small { color: var(--color-text-muted); font-size: 10px; }
+.assistant-preview { display: block; width: 180px; max-height: 250px; object-fit: contain; margin: 16px auto; background: #ffffff06; border-radius: 10px; }
+.assistant-csp-activity { display: flex; align-items: center; gap: 9px; width: fit-content; max-width: 100%; margin: 8px 0; padding: 10px 14px; border-radius: 18px; background: var(--imsg-asst-bg); color: var(--color-text-secondary); font-size: 12px; animation: assistant-chat-arrive 240ms ease-out both; }
+.assistant-csp-activity > svg { flex-shrink: 0; color: var(--color-cyan); opacity: .8; }
+.assistant-work-pulse { display: inline-flex; align-items: center; flex-shrink: 0; margin-left: 5px; }
+.assistant-work-pulse > i { width: 7px; height: 7px; background: var(--color-cyan); border-radius: 50%; animation: assistant-typing-wave 1.4s ease-in-out infinite; }
+.assistant-csp-preview { width: 224px; max-width: 100%; margin: 8px 0; overflow: hidden; border-radius: 18px; background: var(--imsg-asst-bg); animation: assistant-chat-arrive 280ms ease-out both; }
+.assistant-csp-preview > img { display: block; width: 100%; aspect-ratio: 34 / 47; object-fit: contain; background: radial-gradient(ellipse at 50% 35%, #ffffff09, transparent 75%); animation: assistant-file-reveal 300ms ease-out both; }
+.assistant-csp-preview > figcaption { display: flex; align-items: center; gap: 7px; padding: 10px 12px; font-size: 11px; color: var(--color-text-tertiary); }
+.assistant-csp-error { display: flex; align-items: flex-start; gap: 9px; max-width: 100%; margin: 8px 0; padding: 8px 0; color: var(--color-warning); font-size: 12px; overflow-wrap: anywhere; }
+.assistant-csp-error > svg { flex-shrink: 0; margin-top: 2px; }
+.assistant-csp-error strong { font-weight: 500; }
+.assistant-csp-error p { margin: 3px 0 0; color: var(--color-text-secondary); }
+.assistant-project { padding: 14px; margin: 10px 0; border-radius: 16px; background: var(--imsg-asst-bg); font-size: 12px; }
+.assistant-project h3 { margin: 0; font-size: 14px; }
+.assistant-project > p { color: var(--color-text-secondary); }
+.assistant-project-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 6px; }
+.assistant-project-heading > div, .assistant-project-items span { min-width: 0; }
+.assistant-project strong { overflow-wrap: anywhere; }
+.assistant-project small { display: block; color: var(--color-text-tertiary); font-size: 11px; margin-top: 3px; }
+.assistant-project-heading button { flex-shrink: 0; }
+.assistant-project-items { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr)); gap: 8px; max-height: 280px; overflow-y: auto; margin: 12px 0; }
+.assistant-project-items > div { display: flex; gap: 9px; align-items: center; padding: 8px; border-radius: 10px; background: #ffffff05; }
+.assistant-project-items img { width: 38px; height: 52px; object-fit: contain; flex-shrink: 0; }
+@media (prefers-reduced-motion: reduce) { .assistant-csp-activity, .assistant-work-pulse > i, .assistant-csp-preview, .assistant-csp-preview > img { animation: none; } }
+.assistant-tool details { margin: 9px 0; }
+.assistant-tool summary { cursor: pointer; }
+
+/* Ozone's quiet iMessage work summary: one pill, details only on demand. */
+.assistant-file-activity { width: 100%; margin: 8px 0; font-size: 13px; color: var(--color-text-tertiary); }
+.assistant-file-group > summary, .assistant-file-label { display: flex; align-items: center; justify-content: center; gap: 8px; width: fit-content; max-width: 100%; margin: 0 auto; padding: 7px 12px; border-radius: 999px; list-style: none; }
+.assistant-file-group > summary { cursor: pointer; transition: background 140ms ease, color 140ms ease; }
+.assistant-file-group > summary::-webkit-details-marker { display: none; }
+.assistant-file-group > summary:hover { background: var(--imsg-asst-bg); color: var(--color-text-secondary); }
+.assistant-file-group > summary:focus-visible { outline: 2px solid var(--color-cyan); outline-offset: 2px; }
+.assistant-file-chevron { opacity: .5; transition: transform 180ms ease; }
+.assistant-file-group[open] > summary .assistant-file-chevron { transform: rotate(90deg); }
+.assistant-file-body { width: min(100%, 580px); max-height: 320px; overflow-y: auto; scrollbar-width: thin; padding: 4px 16px; margin: 8px auto 0; border: 1px solid var(--color-border-subtle); border-radius: 14px; background: color-mix(in srgb, var(--imsg-asst-bg) 45%, transparent); color: var(--color-text-secondary); overflow-wrap: anywhere; animation: assistant-file-reveal 200ms ease-out; }
+.assistant-file-body:focus-visible { outline: 2px solid var(--color-cyan); outline-offset: 3px; }
+.assistant-read-section + .assistant-read-section { border-top: 1px solid var(--color-border-subtle); }
+.assistant-read-heading { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0 8px; font-size: 11px; color: var(--color-text-tertiary); }
+.assistant-read-list { list-style: none; margin: 0; padding: 0 0 6px; }
+.assistant-read-list > li { padding: 9px 0; }
+.assistant-read-list > li + li { border-top: 1px solid var(--color-border-subtle); }
+.assistant-read-name { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.assistant-read-name strong { font-weight: 500; color: var(--color-text-secondary); }
+.assistant-read-count { flex-shrink: 0; font-size: 10px; color: var(--color-text-tertiary); }
+.assistant-read-meta { display: block; margin-top: 3px; font-size: 11px; color: var(--color-text-tertiary); }
+.assistant-file-body > details { padding: 10px 0; }
+.assistant-file-body > details + details { margin-top: 10px; }
+.assistant-file-body summary { cursor: pointer; }
+.assistant-file-body .coach-md { margin-top: 10px; }
+@keyframes assistant-file-reveal { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .assistant-file-body { animation: none; } .assistant-file-group > summary, .assistant-file-chevron { transition: none; } }
+
+.assistant-secondary { border: 1px solid var(--color-border); background: var(--color-bg-elevated); color: var(--color-cyan); border-radius: var(--radius-md); padding: 7px 10px; font-size: var(--text-xs); }
+.assistant-secondary:hover:hover { background: var(--color-bg-surface); }
+.assistant-error { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); color: var(--color-warning); font-size: var(--text-xs); padding: var(--space-2) 0; }
+.assistant-error button { border: 0; background: transparent; color: inherit; font-size: 20px; }
+/* Low on usage for this chat's job (access.lowUsageWarning): a quiet line above the message bar, never a block. */
+.assistant-low-usage { margin: 0 0 var(--space-2); padding: 2px 0 2px var(--space-2); border-left: 2px solid var(--color-warning);
+  color: var(--color-text-secondary); font-size: var(--text-xs); line-height: 1.4; }
+.assistant-setup { padding: var(--space-3); margin-bottom: var(--space-3); background: var(--color-bg-elevated); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-lg); display: flex; flex-wrap: wrap; gap: var(--space-2); font-size: var(--text-xs); }
+.assistant-setup span { width: 100%; }
+.assistant-muted, .assistant-thinking { color: var(--color-text-tertiary); font-size: var(--text-xs); }
+.assistant-download-progress { display: flex; align-items: center; gap: 12px; color: var(--color-cyan); }
+.assistant-download-progress { padding: 14px 2px; font-size: 12px; }
+.assistant-download-progress .hexagon-loader { margin: 0; flex-shrink: 0; }
+.assistant-download-progress > div[role="status"] { display: flex; flex-direction: column; gap: 4px; }
+.assistant-download-progress small { color: var(--color-text-tertiary); font-size: 11px; }
+/* A live row is the same pill as the finished one, so the summary settles in
+   place instead of swapping shape when the tool completes. */
+.assistant-download-activity { display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: fit-content; max-width: 100%; margin: 8px auto; padding: 7px 12px; border-radius: 999px;
+  background: var(--imsg-asst-bg); font-size: 13px; color: var(--color-text-secondary);
+  animation: assistant-chat-arrive 240ms ease-out both; }
+@media (prefers-reduced-motion: reduce) {
+  .assistant-download-progress .hexagon-loader svg, .assistant-download-progress .hexagon-loader-glow { animation: none; transition: none; }
+  .assistant-work-pulse > i { animation: none; opacity: .75; }
+}
+.assistant-thinking { padding: 12px 16px; border-radius: 18px; background: var(--color-bg-surface); }
+/* One contained card, not a full-bleed page with two cards adrift in it:
+   the sections carry the structure, the surface around them does not. */
+/* Covers the whole panel: a top inset left a band of live chat showing above
+   the scrim. `margin: auto` on the card centres it without the flex-centring
+   bug that clips a tall child's top when the container scrolls. */
+.assistant-settings { position: absolute; inset: 0; z-index: 4; display: flex; padding: var(--space-6); overflow: auto;
+  background: color-mix(in srgb, var(--color-bg-base) 88%, transparent); backdrop-filter: blur(6px); }
+.assistant-settings-card { width: min(100%, 560px); margin: auto; border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl); background: var(--color-bg-elevated); overflow: hidden; }
+.assistant-settings-head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3);
+  padding: var(--space-4); border-bottom: 1px solid var(--color-border-subtle); }
+.assistant-settings h2 { font: var(--font-semibold) var(--text-xl) var(--font-display); margin: 0; }
+/* Rows are divided by a hairline rather than each being its own floating box. */
+.assistant-settings-row { padding: var(--space-4); }
+.assistant-settings-row + .assistant-settings-row { border-top: 1px solid var(--color-border-subtle); }
+.assistant-settings-row .assistant-sidebar-label { display: block; margin: 0 0 var(--space-2); }
+.assistant-settings-row strong { font-size: var(--text-sm); font-weight: var(--font-semibold); }
+/* The chat sidebar's usage bar (ChatUI.css), flush with the row's text; its words read like the row's, the reset
+   date under them like a caption. */
+.assistant-settings-row .assistant-settings-usage { padding: 0; gap: var(--space-2); }
+.assistant-settings-usage .coach-usage-text { font-size: var(--text-sm); color: var(--color-text-secondary); }
+.assistant-settings p.assistant-settings-reset { margin-top: var(--space-1); font-size: var(--text-xs); color: var(--color-text-tertiary); }
+.assistant-settings-switch { display: inline-flex; align-items: center; gap: var(--space-2); cursor: pointer; }
+.assistant-settings-switch input { accent-color: var(--color-cyan); width: 15px; height: 15px; margin: 0; }
+.assistant-settings p { font-size: var(--text-sm); color: var(--color-text-secondary); margin: var(--space-2) 0 var(--space-3); }
+.assistant-settings-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.assistant-settings .iso-path-container { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.assistant-settings .iso-path-container input { width: 100%; min-width: 120px; padding: var(--space-2); border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-bg-deep); color: var(--color-text-primary); font-size: var(--text-sm); }
+.assistant-settings .iso-browse-button { padding: 6px 12px; border: 1px solid var(--color-border); border-radius: var(--radius-md); color: var(--color-cyan); background: var(--color-bg-surface); }
+.assistant-working { animation: assistant-spin 1.5s linear infinite; }
+@keyframes assistant-spin { to { transform: rotate(360deg); } }
+
+.assistant-history-settings, .assistant-delete { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 8px; background: transparent; border: 0; color: var(--color-text-secondary); text-align: left; }
+.assistant-history-settings span { width: 100%; font-size: 11px; color: var(--color-text-muted); }
+.assistant-sidebar-label { display: block; font-size: var(--text-xs); color: var(--color-text-tertiary); }
+.assistant-context { font-size: var(--text-xs); }
+.assistant-context button { background: transparent; border: 0; color: var(--color-accent); cursor: pointer; }
+.assistant-tool { max-width: 100%; }
+@media (prefers-reduced-motion: reduce) { .assistant-working { animation: none; } }
+.assistant-approval { margin-top: var(--space-3); padding: var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-xl); background: var(--color-bg-elevated); }
+.assistant-approval.is-pending { border-color: var(--color-cyan); }
+.assistant-approval-status { font-size: var(--text-xs); color: var(--color-cyan); font-weight: var(--font-semibold); }
+.assistant-approval h3 { margin: var(--space-2) 0; font-family: var(--font-display); font-size: var(--text-base); }
+.assistant-approval p { margin: var(--space-2) 0; }
+.assistant-approval-changes { padding: 0; margin: var(--space-2) 0; list-style: none; max-height: 240px; overflow: auto; }
+.assistant-approval-changes li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2); padding: var(--space-2) 0; border-bottom: 1px solid var(--color-border-subtle); }
+.assistant-approval-changes span { color: var(--color-text-secondary); }
+.assistant-approval-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-4) 0 var(--space-2); }
+.assistant-approve { padding: var(--space-2) var(--space-4); border: 0; border-radius: var(--radius-md); background: var(--color-cyan); color: var(--color-bg-deep); font-weight: var(--font-semibold) !important; }
+.assistant-approval small { color: var(--color-text-tertiary); }
+.assistant-approval pre { font-size: var(--text-xs); max-height: 180px; }
+.assistant-tool--website { border: 0; padding: 0; background: transparent; }
+.assistant-website-mods { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 12px; margin-top: 8px; }
+.assistant-website-mod { min-width: 0; overflow: hidden; border: 1px solid var(--color-border-subtle); border-radius: 12px; background: var(--color-bg-elevated); }
+.assistant-mod-image { position: relative; width: 100%; min-width: 0; aspect-ratio: 16 / 10; max-height: 310px; background: #0c1628; overflow: hidden; }
+.assistant-mod-image img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.assistant-mod-placeholder { height: 100%; min-height: 36px; display: grid; place-items: center; color: var(--color-text-muted); font-size: 11px; }
+.assistant-mod-body { padding: 12px 14px; }
+.assistant-mod-body h3 { margin: 0 0 3px; font-size: 14px; line-height: 1.4; overflow-wrap: anywhere; }
+.assistant-mod-author { margin: 0 0 8px !important; font-size: 12px; color: var(--color-text-secondary); }
+.assistant-mod-link { display: inline-flex; align-items: center; padding: 7px 11px; border: 1px solid var(--color-border); border-radius: 7px; background: var(--color-bg-surface); color: var(--color-text-primary); font-size: 11px; text-decoration: none; transition: background 160ms ease, border-color 160ms ease; }
+.assistant-mod-link:hover { background: var(--color-bg-hover); border-color: var(--color-cyan); }
+.assistant-mod-gallery-controls { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; align-items: center; padding: 2px 4px; border-radius: 20px; background: #07101cce; color: #edf3fa; }
+.assistant-mod-gallery-controls button { width: 28px; height: 28px; border: 0; border-radius: 50%; background: transparent; color: inherit; font-size: 23px; line-height: 1; }
+.assistant-mod-gallery-controls button:hover { background: #ffffff20; }
+.assistant-mod-gallery-controls span { min-width: 28px; text-align: center; font-size: 10px; }
+.assistant-import-summary { color: var(--color-cyan) !important; }
+.assistant-download-choices { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 14px 0 0; padding: 0; border: 0; }
+.assistant-download-choices legend { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 8px; }
+.assistant-download-choices label { display: flex; align-items: center; gap: 7px; font-size: 12px; cursor: pointer; }
+.assistant-download-choices input { accent-color: var(--color-cyan); }
+.assistant-mod-counts { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11px; color: var(--color-text-muted); margin: 0 0 8px !important; }
+.assistant-mod-counts { align-items: center; }
+.assistant-mod-like { display: inline-flex; align-items: center; gap: 5px; padding: 3px 0; border: 0; background: transparent; color: inherit; font-size: inherit; transition: color 160ms ease, transform 160ms ease; }
+.nucleus-assistant .assistant-mod-like:disabled { opacity: 1; cursor: default; }
+.assistant-mod-like:not(:disabled):hover, .assistant-mod-like.is-liked { color: #f28da6; }
+.assistant-mod-like:not(:disabled):active { transform: scale(.9); }
+.assistant-mod-like-error { flex-basis: 100%; color: var(--color-error, #ff9292); }
+.assistant-mod-download { display: block; margin-top: 12px; padding: 7px 15px; border: 0; border-radius: 7px; background: var(--color-cyan); color: var(--color-bg-deep); font-size: 12px; }
+.assistant-tool .assistant-mod-download-state { margin: 12px 0 0 !important; color: var(--color-cyan); font-size: 12px; }
+.assistant-approval--inline { margin: 12px 0 0; padding: 0; border: 0; background: transparent; }
+.assistant-approval--inline .assistant-approval-actions { margin-bottom: 0; }
+.assistant-mod-image { touch-action: pan-y; }
+.assistant-mod-image .assistant-gallery-outgoing { position: absolute; inset: 0; pointer-events: none; }
+.assistant-mod-gallery-controls { z-index: 2; }
+.is-sliding-next { --slide-in: 25%; --slide-out: -25%; }
+.is-sliding-previous { --slide-in: -25%; --slide-out: 25%; }
+.is-sliding-next .assistant-gallery-current, .is-sliding-previous .assistant-gallery-current { animation: assistant-gallery-enter 280ms cubic-bezier(.22,.61,.36,1) both; }
+.assistant-gallery-outgoing { animation: assistant-gallery-exit 280ms cubic-bezier(.22,.61,.36,1) both; }
+@keyframes assistant-gallery-enter { from { opacity: 0; transform: translateX(var(--slide-in)); } to { opacity: 1; transform: translateX(0); } }
+@keyframes assistant-gallery-exit { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(var(--slide-out)); } }
+@media (prefers-reduced-motion: reduce) {
+  .assistant-mod-image .assistant-gallery-current, .assistant-mod-image .assistant-gallery-outgoing { animation: none; }
+  .assistant-mod-image .assistant-gallery-outgoing { display: none; }
+  .assistant-mod-like { transition: none; }
+}
+/* auto-FILL, not auto-fit: auto-fit collapses the empty tracks, so a single
+   result stretched across the whole thread. Keeping the tracks lets one card
+   sit at its own width while a row of them still fills out evenly. */
+.assistant-vault-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); gap: 10px; margin-top: 12px; }
+.assistant-vault-card { min-width: 0; border: 1px solid var(--color-border-subtle); background: var(--color-bg-elevated); border-radius: 10px; overflow: hidden; }
+.assistant-vault-card.is-selected { border-color: var(--color-cyan); }
+.assistant-vault-open { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px; border: 0; background: transparent; color: inherit; text-align: left; }
+.assistant-vault-open img, .assistant-vault-no-image { flex: 0 0 54px; width: 54px; height: 74px; object-fit: contain; }
+.assistant-vault-no-image { display: grid; place-items: center; color: var(--color-text-muted); font-size: 10px; text-align: center; }
+.assistant-vault-open > span:last-child { min-width: 0; }
+.assistant-vault-open strong { display: block; font-size: 13px; overflow-wrap: anywhere; }
+.assistant-vault-open small { display: block; color: var(--color-text-secondary); font-size: 11px; margin-top: 4px; }
+
+.nucleus-assistant .assistant-website-mod, .nucleus-assistant .assistant-download-receipt, .nucleus-assistant .coach-msg { animation: assistant-chat-arrive 280ms cubic-bezier(.22,.61,.36,1) both; }
+@keyframes assistant-chat-arrive { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+.assistant-download-receipt { margin-top: 12px; padding: 12px; border: 1px solid var(--color-border-subtle); border-radius: 12px; background: var(--color-bg-elevated); }
+.assistant-tool .assistant-receipt-title { display: flex; align-items: center; gap: 8px; color: var(--color-cyan); margin: 0 0 10px; font-size: 13px; }
+.assistant-receipt-title > span { font-size: 11px; color: var(--color-text-secondary); }
+.assistant-receipt-items { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 8px; }
+.assistant-receipt-item { display: flex; align-items: center; gap: 8px; padding: 8px; border: 0; border-radius: 8px; background: var(--color-bg-surface); color: var(--color-text-primary); text-align: left; min-width: 0; }
+.assistant-receipt-csp { width: 48px; height: 66px; object-fit: contain; flex: 0 0 48px; }
+.assistant-receipt-preview { width: 104px; height: 66px; object-fit: contain; flex: 0 0 104px; border-radius: 6px; }
+.assistant-receipt-wide { align-items: center; }
+.assistant-receipt-stock { width: 24px; height: 24px; object-fit: contain; flex: 0 0 24px; image-rendering: pixelated; }
+.assistant-receipt-item .is-missing { display: grid; place-items: center; color: var(--color-text-muted); font-size: 9px; text-align: center; }
+.assistant-receipt-item strong { display: block; font-size: 12px; overflow-wrap: anywhere; }
+.assistant-receipt-item small, .assistant-download-receipt > small { color: var(--color-text-secondary); font-size: 10px; }
+.assistant-download-dialog { width: min(660px, calc(100vw - 32px)); max-height: min(800px, calc(100dvh - 40px)); padding: 22px; box-sizing: border-box; border: 1px solid var(--color-border); border-radius: 16px; background: var(--color-bg-elevated, #1c2c3b); color: var(--color-text-primary, #edf3fa); box-shadow: 0 24px 80px #0008; overflow: auto; }
+.assistant-download-dialog { margin: auto; }
+.assistant-download-dialog::backdrop { background: #040b16b8; backdrop-filter: blur(3px); }
+.assistant-download-dialog header { display: flex; justify-content: space-between; gap: 16px; }
+.assistant-download-dialog h2 { font-size: 18px; margin: 0; outline: none; }
+.assistant-download-dialog p { font-size: 12px; color: var(--color-text-secondary); }
+.assistant-download-dialog button, .assistant-download-dialog input, .assistant-download-dialog select { font: inherit; }
+.assistant-download-dialog button { cursor: pointer; border: 1px solid var(--color-border); border-radius: 7px; padding: 7px 11px; background: var(--color-bg-surface); color: inherit; font-size: 12px; }
+.assistant-download-dialog button:disabled { opacity: .45; cursor: default; }
+.assistant-download-dialog .download-review-close { padding: 0; width: 30px; height: 30px; font-size: 22px; border: 0; background: transparent; }
+.download-review-summary { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-top: 18px; font-size: 12px; }
+.download-review-summary > span { color: var(--color-text-secondary); }
+.download-review-groups { width: 100%; display: flex; flex-wrap: wrap; gap: 6px; max-height: 90px; overflow: auto; }
+.download-review-groups button { font-size: 11px; padding: 4px 8px; }
+.download-review-groups span { color: var(--color-cyan); margin-left: 4px; }
+.download-review-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 8px; }
+.download-review-filters input, .download-review-filters select { min-width: 0; padding: 8px; border: 1px solid var(--color-border); border-radius: 7px; background: var(--color-bg-deep); color: inherit; font-size: 12px; }
+.download-review-filters input { flex: 1 1 180px; }
+.download-review-list { height: clamp(130px, 32vh, 300px); overflow: auto; border: 1px solid var(--color-border-subtle); border-radius: 8px; }
+.assistant-slippi-dialog { width: min(400px, calc(100vw - 32px)); padding: 18px; border-radius: 20px; }
+.assistant-slippi-dialog header { align-items: center; margin-bottom: 14px; }
+.assistant-slippi-dialog h2 { font-size: 17px; }
+.slippi-review-image { display: block; width: 100%; height: 180px; object-fit: contain; border-radius: 12px; background: #ffffff04; }
+.slippi-review-missing { display: grid; place-items: center; height: 100px; color: var(--color-text-tertiary); font-size: 12px; }
+.slippi-review-caption { margin-top: 14px; overflow-wrap: anywhere; }
+.slippi-review-caption strong { font-size: 14px; font-weight: 600; }
+.slippi-review-caption p { margin: 5px 0 0; }
+.slippi-review-costumes { list-style: none; margin: 12px 0 0; padding: 0; max-height: 140px; overflow: auto; }
+.slippi-review-costumes li { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; font-size: 11px; }
+.slippi-review-costumes span { min-width: 0; overflow-wrap: anywhere; }
+.slippi-review-costumes small { color: var(--color-text-tertiary); flex-shrink: 0; }
+.assistant-slippi-dialog > footer { display: flex; gap: 8px; margin-top: 18px; flex-wrap: wrap; }
+.assistant-slippi-dialog > footer button { flex: 1 1 auto; padding: 10px; }
+.assistant-mod-review[open] { display: flex; flex-direction: column; gap: 16px; overflow: hidden; }
+.assistant-mod-review header, .assistant-mod-review > footer, .assistant-mod-review > fieldset, .assistant-mod-review > .download-review-filters { flex-shrink: 0; }
+.assistant-mod-review header p { margin: 5px 0 0; }
+.assistant-mod-review .review-author { color: var(--color-text-tertiary); }
+.assistant-mod-review > footer, .assistant-mod-review .download-review-filters { margin: 0; }
+.review-content { min-height: 0; overflow: auto; }
+.review-mod-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; list-style: none; padding: 0; margin: 0; max-height: 300px; overflow: auto; }
+.review-mod-card { display: flex; align-items: center; gap: 12px; min-width: 0; padding: 10px; border: 1px solid var(--color-border-subtle); border-radius: 12px; background: var(--color-bg-surface); }
+.review-mod-art { position: relative; flex: 0 0 54px; height: 76px; }
+.review-mod-csp { display: block; width: 54px; height: 76px; object-fit: contain; }
+.review-mod-landscape .review-mod-art { flex-basis: 112px; height: 72px; }
+.review-mod-landscape .review-mod-csp { width: 112px; height: 72px; border-radius: 6px; }
+.review-mod-stock { position: absolute; right: -5px; bottom: 0; width: 24px; height: 24px; object-fit: contain; image-rendering: pixelated; filter: drop-shadow(0 1px 3px #000b); }
+.review-mod-missing { display: grid; place-items: center; text-align: center; border-radius: 6px; background: #ffffff05; color: var(--color-text-muted); font-size: 10px; }
+.review-mod-card > div:last-child { min-width: 0; }
+.assistant-bulk-download { margin: 8px 0; }
+.assistant-bulk-fix { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--color-text-secondary); }
+.assistant-bulk-fix input { accent-color: var(--color-cyan); }
+.review-bulk-grid .review-mod-csp { flex: 0 0 64px; width: 64px; height: 72px; border-radius: 7px; }
+.review-mod-card strong { display: block; font-size: 12px; font-weight: 600; }
+.review-mod-card span:not(.review-mod-missing) { display: block; font-size: 11px; color: var(--color-text-secondary); overflow-wrap: anywhere; margin-top: 4px; }
+.review-files { margin-top: 16px; }
+.review-files h3 { font-size: 12px; margin: 0 0 8px; font-weight: 500; }
+.review-files h3 span { color: var(--color-text-tertiary); margin-left: 5px; }
+.review-files > ul { display: flex; flex-wrap: wrap; gap: 5px 12px; list-style: none; margin: 0; padding: 0; max-height: 100px; overflow: auto; }
+.review-files li { max-width: 100%; font-size: 11px; color: var(--color-text-secondary); overflow-wrap: anywhere; }
+@media (max-width: 480px) { .review-mod-grid { grid-template-columns: 1fr; } .assistant-mod-review { padding: 16px; } }
+.download-review-list ul { list-style: none; padding: 0; margin: 0; }
+.download-review-list li { padding: 9px 12px; border-bottom: 1px solid var(--color-border-subtle); overflow-wrap: anywhere; }
+.download-review-list strong { font-size: 12px; font-weight: 500; }
+.download-review-list small { display: block; margin-top: 3px; font-size: 10px; color: var(--color-text-secondary); }
+.download-review-list > p { padding: 8px 12px; }
+.download-review-pages { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 8px; font-size: 11px; }
+.assistant-download-dialog footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+.assistant-download-dialog .download-review-confirm { background: var(--color-cyan, #79c6da); color: #081320; border-color: transparent; }
+.assistant-download-dialog[open] { animation: assistant-chat-arrive 180ms ease-out both; }
+@media (prefers-reduced-motion: reduce) {
+  .assistant-download-dialog[open] { animation: none; }
+  .nucleus-assistant .assistant-website-mod, .nucleus-assistant .assistant-download-receipt, .nucleus-assistant .coach-msg, .assistant-typing > span { animation: none; }
+  .assistant-typing > span { opacity: .7; }
+  .assistant-mod-link { transition: none; }
+}
+
+/* A single search result keeps the same readable card proportions as a grid. */
+.assistant-website-mods > :only-child { width: 100%; max-width: 496px; justify-self: start; }
+.assistant-mod-image { width: 100%; min-width: 0; }
+
+.assistant-long-task { display: flex; align-items: center; gap: 14px; margin: 0 0 10px; padding: 12px 14px; border: 1px solid var(--color-border-subtle); border-radius: 12px; background: var(--color-bg-surface); }
+.assistant-long-task > div { flex: 1; min-width: 0; }
+.assistant-long-task strong { font-size: 12px; font-weight: 600; color: var(--color-text-primary); }
+.assistant-long-task p { margin: 4px 0 0; font-size: 12px; line-height: 1.5; color: var(--color-text-secondary); }
+.assistant-long-task button { flex-shrink: 0; }
+.assistant-game-test { margin: 12px 0; padding: 14px; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-bg-deep); }
+.assistant-game-test > strong { display: block; margin-bottom: 8px; }
+.assistant-game-test small, .assistant-test-receipt { color: var(--color-text-secondary); }
+
+/* --- the shared task cards (ASTRA-UI-REVIEW's generic card set) ------------ */
+.assistant-task-card { margin: 12px 0; padding: 14px; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-bg-surface); font-size: 13px; }
+.assistant-task-card header { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.assistant-task-card header strong { font-size: 13px; font-weight: 600; }
+.assistant-task-card p { margin: 6px 0; line-height: 1.5; }
+.assistant-outcome { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--color-text-tertiary); }
+.assistant-task-result.is-success .assistant-outcome { color: var(--color-green, var(--color-text-secondary)); }
+.assistant-task-result.is-failed .assistant-outcome, .assistant-task-result.is-blocked .assistant-outcome { color: var(--color-red, var(--color-text-secondary)); }
+.assistant-task-result.is-qualified { border-left: 3px solid var(--color-border-strong, var(--color-border)); }
+.assistant-task-summary { font-weight: 500; color: var(--color-text-primary); }
+.assistant-task-headline, .assistant-task-worst { color: var(--color-red, var(--color-text-primary)); font-weight: 500; }
+.assistant-task-scope, .assistant-task-limit, .assistant-task-facts, .assistant-task-bound, .assistant-task-cost, .assistant-task-waiting { color: var(--color-text-secondary); font-size: 12px; }
+.assistant-achieved { list-style: none; margin: 8px 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.assistant-achieved li { font-size: 11px; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--color-border); }
+.assistant-achieved li.is-no { color: var(--color-text-tertiary); }
+.assistant-task-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.assistant-check-list { list-style: none; margin: 6px 0; padding: 0; display: grid; gap: 4px; }
+.assistant-check-list li { display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px; }
+.assistant-check-list li strong { font-weight: 600; }
+.assistant-check-list li.is-fail strong, .assistant-check-list li.is-unknown strong { color: var(--color-red, inherit); }
+.assistant-check-list li small { flex-basis: 100%; color: var(--color-text-tertiary); }
+.assistant-settled { margin: 8px 0; padding: 10px 12px; border-left: 3px solid var(--color-border-strong, var(--color-border)); background: var(--color-bg-deep); border-radius: 0 8px 8px 0; }
+.assistant-settled p { margin: 2px 0; font-size: 12px; }
+.assistant-settled-what { color: var(--color-text-primary); font-weight: 500; }
+.assistant-settled-kept, .assistant-settled-next { color: var(--color-text-secondary); }
+.assistant-task-progress { display: flex; align-items: flex-start; gap: 14px; }
+.assistant-task-progress > div { flex: 1; min-width: 0; }
+.assistant-task-progress.is-compact { margin: 0 0 10px; padding: 12px 14px; border-radius: 12px; }
+.assistant-comparison-images { display: flex; flex-wrap: wrap; gap: 10px; }
+.assistant-comparison-images figure { margin: 0; max-width: 100%; }
+.assistant-comparison-images img { max-width: min(100%, 420px); height: auto; border-radius: 8px; }
+.assistant-comparison-images figcaption, .assistant-comparison-label { font-size: 11px; color: var(--color-text-tertiary); }
+.assistant-comparison-notes { margin: 8px 0 0; padding-left: 18px; font-size: 12px; color: var(--color-text-secondary); }
+.assistant-safety { display: inline-flex; flex-direction: column; font-size: 11px; color: var(--color-text-tertiary); }
+.assistant-safety.is-costume_check_passed { color: var(--color-green, var(--color-text-secondary)); }
+.assistant-safety.is-costume_check_failed { color: var(--color-red, var(--color-text-secondary)); }
+.assistant-no-match p, .assistant-broadened { font-size: 12px; color: var(--color-text-secondary); }
+
+/* --- the welcome surface --------------------------------------------------- */
+.assistant-welcome { display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
+.assistant-welcome-line { font-size: 14px; line-height: 1.55; text-align: center; }
+.assistant-welcome-note { font-size: 12px; color: var(--color-text-secondary); text-align: center; }
+.assistant-status-rows { display: grid; gap: 6px; margin-top: 4px; }
+.assistant-status-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1px solid var(--color-border-subtle); border-radius: 10px; font-size: 12px; }
+.assistant-status-row .assistant-status-label { flex: 0 0 110px; color: var(--color-text-secondary); }
+.assistant-status-row .assistant-status-state { flex: 1; font-weight: 500; }
+.assistant-status-row.is-todo .assistant-status-state { color: var(--color-text-tertiary); }
+.assistant-destination-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
+.assistant-destination-list button { display: flex; flex-direction: column; gap: 2px; width: 100%; text-align: left; padding: 10px 12px; border: 1px solid var(--color-border); border-radius: 10px; background: var(--color-bg-elevated); color: inherit; }
+.assistant-destination-list li.is-chosen button { border-color: var(--color-cyan); }
+.assistant-destination-list small { color: var(--color-text-tertiary); font-size: 11px; }
+.assistant-character-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+.assistant-look-cards { display: flex; flex-wrap: wrap; gap: 10px; }
+.assistant-look-cards article { display: flex; flex-direction: column; gap: 6px; width: 150px; padding: 10px; border: 1px solid var(--color-border); border-radius: 12px; font-size: 12px; }
+.assistant-look-cards img { width: 100%; height: auto; border-radius: 8px; }
+
+/* --- what a download is, where it lands, and what broadened a search -------- */
+.assistant-download-facts { margin: 12px 0 0; display: flex; flex-direction: column; gap: 6px; }
+.assistant-download-what { font-size: 13px; color: var(--color-text-primary); margin: 0; }
+.assistant-download-check { font-size: 11px; color: var(--color-text-tertiary); margin: 0; }
+.assistant-download-warning { margin: 0; padding: 8px 10px; border-left: 3px solid var(--color-warning); background: var(--color-bg-deep); border-radius: 0 8px 8px 0; font-size: 12px; color: var(--color-text-secondary); }
+.assistant-download-identity { font-size: 11px; color: var(--color-text-tertiary); }
+.assistant-download-identity summary { cursor: pointer; }
+.assistant-download-identity dl { display: grid; gap: 2px; margin: 6px 0 0; }
+.assistant-download-identity dt { color: var(--color-text-muted); }
+.assistant-download-identity dd { margin: 0 0 4px; word-break: break-all; }
+.assistant-download-choices label > span { display: flex; flex-direction: column; gap: 2px; }
+.assistant-download-choices label small { color: var(--color-text-tertiary); font-size: 11px; }
+.assistant-download-refused, .assistant-download-choice-needed { margin: 8px 0; padding: 10px 12px; border-left: 3px solid var(--color-border-strong, var(--color-border)); background: var(--color-bg-deep); border-radius: 0 8px 8px 0; }
+.assistant-download-refused { border-left-color: var(--color-warning); }
+.assistant-download-refused p, .assistant-download-choice-needed p { margin: 2px 0; font-size: 12px; color: var(--color-text-secondary); }
+.assistant-receipt-where, .assistant-receipt-note { font-size: 12px; color: var(--color-text-secondary); margin: 2px 0; }
+.assistant-choice-options { list-style: none; margin: 6px 0; padding: 0; display: grid; gap: 6px; }
+.assistant-choice-options li { display: flex; flex-direction: column; font-size: 12px; }
+.assistant-choice-options small { color: var(--color-text-tertiary); font-size: 11px; }
+.assistant-search-relaxed { font-size: 12px; color: var(--color-text-secondary); margin: 0 0 8px; }
+.assistant-mod-alternative { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 11px; color: var(--color-text-tertiary); margin: 0 0 8px !important; }
+.assistant-mod-alternative span { padding: 1px 7px; border: 1px solid var(--color-border); border-radius: 999px; color: var(--color-text-secondary); }
+.assistant-destination-choice { margin-top: 10px; display: grid; gap: 8px; }
+.assistant-destination-clean { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: var(--color-text-secondary); }
+.assistant-safety-provenance { color: var(--color-text-tertiary); font-size: 10px; }
+.assistant-status-row small { flex-basis: 100%; color: var(--color-text-tertiary); }
+
+/* --- task modes: the composer's pill, the new-chat screen and its starting points, the
+   starting pick, follow-ups --------------------------------------------------------- */
+/* The pill sits in the composer box's control row (Composer.jsx), where the Claude app
+   has its mode selector. Sized under `.nucleus-assistant` because that scope sets
+   `font: inherit` on buttons. */
+.randall-task-picker { position: relative; flex: 0 0 auto; min-width: 0; }
+.nucleus-assistant .randall-task-pill { display: inline-flex; align-items: center; gap: 6px; height: 28px; max-width: 13rem; padding: 0 10px;
+  border: 1px solid var(--color-border-subtle); border-radius: var(--radius-full); background: color-mix(in srgb, var(--color-bg-surface) 55%, transparent);
+  color: var(--color-text-secondary); font-size: var(--text-xs); font-weight: 500; line-height: 1; white-space: nowrap;
+  transition: color var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast); }
+.randall-task-pill .randall-task-icon { flex: 0 0 auto; }
+.randall-task-pill-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.randall-task-pill-caret { flex: 0 0 auto; opacity: .7; transition: transform var(--transition-fast); }
+.randall-task-pill[aria-expanded=true] .randall-task-pill-caret { transform: rotate(180deg); }
+.randall-task-pill.is-task { color: var(--color-accent); border-color: color-mix(in srgb, var(--color-accent) 40%, var(--color-border-subtle));
+  background: color-mix(in srgb, var(--color-accent) 10%, transparent); }
+@media (hover: hover) {
+  .randall-task-pill:not(.is-locked):not(:disabled):hover { background: var(--color-bg-hover); color: var(--color-text-primary); }
+  .randall-task-pill.is-task:not(.is-locked):not(:disabled):hover { background: color-mix(in srgb, var(--color-accent) 18%, transparent); color: var(--color-accent); }
+}
+/* Locked: it names the chat's task and is not a control, so no hover and no caret. */
+.randall-task-pill.is-locked { cursor: default; padding-inline: 11px; }
+.randall-task-pill.is-locked:not(.is-task) { color: var(--color-text-tertiary); background: transparent; }
+
+/* The pill's menu: Ask, then the starting points under their group names, the ones
+   Randall cannot run greyed with "Use MCP". Opens above the pill, over the box. */
+.randall-task-menu { position: absolute; left: 0; bottom: calc(100% + 8px); z-index: var(--z-dropdown, 100); min-width: 15rem;
+  display: flex; flex-direction: column; gap: 1px; padding: 5px; background: var(--color-bg-elevated); border: 1px solid var(--color-border);
+  border-radius: 12px; box-shadow: var(--shadow-lg, 0 8px 24px #0006); animation: randall-task-menu-in 120ms var(--ease-out, ease-out); }
+@keyframes randall-task-menu-in { from { opacity: 0; transform: translateY(4px); } }
+.randall-task-menu-group { display: flex; flex-direction: column; gap: 1px; margin-top: 4px; padding-top: 4px; border-top: 1px solid var(--color-border-subtle); }
+.randall-task-menu-label { padding: 3px 10px 2px; color: var(--color-text-tertiary); font-size: 10px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
+.nucleus-assistant .randall-task-option { display: flex; align-items: center; gap: 9px; width: 100%; padding: 7px 10px;
+  border: 0; border-radius: 8px; background: transparent; color: var(--color-text-secondary); font-size: var(--text-sm); text-align: left; white-space: nowrap; }
+.randall-task-option .randall-task-icon { flex: 0 0 auto; color: var(--color-text-tertiary); }
+.randall-task-option-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.randall-task-option:hover, .randall-task-option:focus-visible { background: var(--color-bg-surface); color: var(--color-text-primary); }
+.randall-task-option:hover .randall-task-icon, .randall-task-option:focus-visible .randall-task-icon,
+.randall-task-option[aria-checked=true] .randall-task-icon { color: var(--color-accent); }
+.nucleus-assistant .randall-task-option:focus-visible { outline-offset: -2px; }
+.randall-task-option[aria-checked=true] { color: var(--color-text-primary); }
+.randall-task-check { flex: 0 0 auto; color: var(--color-accent); visibility: hidden; }
+.randall-task-option[aria-checked=true] .randall-task-check { visibility: visible; }
+/* A stub: reachable with the arrows (a menu's disabled item), nothing to press. */
+.nucleus-assistant .randall-task-option.is-unavailable { color: var(--color-text-tertiary); cursor: default; }
+.randall-task-option.is-unavailable:hover { background: transparent; color: var(--color-text-tertiary); }
+.randall-task-option.is-unavailable .randall-task-icon { color: var(--color-text-muted); }
+/* "Use MCP", in the menu and on a starting-point chip. */
+.randall-task-soon { flex: 0 0 auto; padding: 0 7px; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-full);
+  color: var(--color-text-tertiary); font-size: 10px; font-weight: 500; line-height: 16px; white-space: nowrap; }
+/* Task placeholders are longer than "Message Randall..." and a narrow composer
+   (the editor sidebar) would wrap them, growing the box before anything is typed.
+   Scoped to the form Composer marks while a task placeholder is showing. */
+.randall-task-composer .ozone-composer textarea:placeholder-shown { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* The new-chat screen (2026-10-04): the composer in the middle of the page, as the
+   Claude app's new chat has it. The bar keeps its bottom anchor (rows added above
+   the box, an attachment or an error, grow upward and the box stays put); only
+   the anchor moves, 64px under the middle, which centres a one-line box a little
+   below the middle. The first message sends it to the bottom; it glides there. */
+.shared-chat.nucleus-assistant .coach-page > .coach-inputarea { transition: bottom 280ms var(--ease-out); }
+.shared-chat.nucleus-assistant .coach-page > .coach-inputarea.is-start { bottom: calc(50% - 64px); }
+/* Room for the open sidebar (owner 11-20). The sidebar is an overlay, and the box
+   centred on the page under it: at the default 1400px window its left edge sat 9px
+   under the sidebar (69px at 1280), and the click-catcher took the first click on it.
+   Where the chat is wide enough to sit beside it, the page moves over instead, and
+   there is no click-catcher. 234px is the sidebar's 288px less the 54px rail it
+   covers. A narrow chat, or one sharing the row with the open workbench, keeps the
+   overlay, which any click outside closes. */
+.shared-chat.nucleus-assistant > .coach-page { transition: margin-left 140ms ease-out; }
+@container (min-width: 900px) {
+  .shared-chat.nucleus-assistant.is-sidebar-open:not(:has(> .workbench)) > .coach-page { margin-left: 234px; transition-duration: 220ms; }
+  .shared-chat.nucleus-assistant.is-sidebar-open:not(:has(> .workbench)) > .coach-sidebar { box-shadow: none; }
+  .shared-chat.nucleus-assistant.is-sidebar-open:not(:has(> .workbench)) > .chat-sidebar-scrim { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .shared-chat.nucleus-assistant > .coach-page { transition: none; } }
+/* Randall and one line, over the box and out of the bar's flow. */
+.randall-start-greeting { position: absolute; left: 0; right: 0; bottom: 100%; display: flex; flex-direction: column; align-items: center;
+  gap: var(--space-3); padding-bottom: var(--space-6, 24px); text-align: center; animation: randall-start-in 260ms var(--ease-out) both; }
+.randall-start-sprite { display: grid; place-items: center; width: 56px; height: 56px; }
+.randall-start-greeting p { margin: 0; color: var(--color-text-primary); font-family: var(--font-display); font-size: var(--text-2xl);
+  font-weight: var(--font-medium); line-height: 1.25; letter-spacing: -.01em; }
+@keyframes randall-start-in { from { opacity: 0; transform: translateY(6px); } }
+
+/* The starting points: chips under the box, one row per group (Characters, then
+   Stages) with its name in a narrow column at the left. Out of the bar's flow,
+   like the greeting. With a workflow chosen they fade out (`is-away`, inert). */
+.randall-start-points { position: absolute; top: 100%; left: 0; right: 0; display: flex; flex-direction: column; gap: var(--space-2);
+  padding: var(--space-4) var(--space-2) 0; animation: randall-start-in 260ms var(--ease-out) both; container: randall-start / inline-size;
+  transition: opacity 160ms var(--ease-out), transform 160ms var(--ease-out), visibility 0s; }
+.randall-start-points.is-away { opacity: 0; visibility: hidden; transform: translateY(-4px); pointer-events: none;
+  transition: opacity 120ms ease-out, transform 120ms ease-out, visibility 0s linear 120ms; }
+.randall-start-group { display: flex; align-items: flex-start; gap: var(--space-3); min-width: 0; }
+.randall-start-group-label { flex: 0 0 5.75rem; padding-top: 7px; color: var(--color-text-tertiary); font-size: 10px; font-weight: 600;
+  letter-spacing: .06em; line-height: 16px; text-transform: uppercase; }
+.randall-start-row { display: flex; flex-wrap: wrap; gap: 6px; flex: 1 1 auto; min-width: 0; }
+.nucleus-assistant .randall-start-point { display: inline-flex; align-items: center; gap: 7px; max-width: 100%; height: 30px; padding: 0 12px 0 10px;
+  border: 1px solid var(--color-border-subtle); border-radius: var(--radius-full); background: color-mix(in srgb, var(--color-bg-elevated) 55%, transparent);
+  color: var(--color-text-secondary); font-size: var(--text-sm); line-height: 1; white-space: nowrap;
+  transition: border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast); }
+.randall-start-point > span:not(.randall-task-soon) { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.randall-start-point .randall-task-icon { flex: 0 0 auto; color: var(--color-accent); }
+@media (hover: hover) {
+  .randall-start-point:not(:disabled):not(.is-unavailable):hover { border-color: color-mix(in srgb, var(--color-accent) 55%, var(--color-border-subtle));
+    background: color-mix(in srgb, var(--color-accent) 8%, transparent); color: var(--color-text-primary); }
+}
+/* Not built yet: a dashed, quiet chip with nothing to press. */
+.nucleus-assistant .randall-start-point.is-unavailable { border-style: dashed; background: transparent; color: var(--color-text-tertiary); cursor: default; }
+.randall-start-point.is-unavailable .randall-task-icon { color: var(--color-text-muted); }
+/* Measured on the box itself, not the page (the open sidebar can take part of the
+   page): the name goes above its chips once the label column (92px), its gap and
+   the Characters row (627px of chips) stop fitting side by side, so that row still
+   fits on one line. 760px is the box width an 860px chat used to give. */
+@container randall-start (max-width: 760px) {
+  .randall-start-group + .randall-start-group { margin-top: 4px; }
+  .randall-start-group { flex-direction: column; gap: 6px; }
+  .randall-start-group-label { flex: none; padding: 0 2px; }
+}
+
+/* The starting pick in the control row (StartPicker.jsx): "Choose costume" until
+   something is picked, then its thumbnail and name with × to clear. Not
+   positioned on purpose: its popover anchors to the composer box (positioned in
+   OzoneComposer.css), not to this button. It gives way first when the row is narrow. */
+.randall-pick { display: flex; align-items: center; flex: 0 1 auto; min-width: 0; }
+.randall-pick-chip { display: inline-flex; align-items: center; max-width: 100%; height: 28px; border: 1px dashed var(--color-border);
+  border-radius: var(--radius-full); transition: border-color var(--transition-fast), background var(--transition-fast); }
+.randall-pick-chip.is-picked { border-style: solid; border-color: color-mix(in srgb, var(--color-accent) 40%, var(--color-border-subtle));
+  background: color-mix(in srgb, var(--color-accent) 8%, var(--color-bg-elevated)); }
+.nucleus-assistant .randall-pick-open { display: inline-flex; align-items: center; gap: 6px; min-width: 0; height: 100%; padding: 0 11px 0 9px;
+  border: 0; border-radius: var(--radius-full); background: transparent; color: var(--color-text-secondary);
+  font-size: var(--text-xs); font-weight: 500; line-height: 1; white-space: nowrap; }
+.randall-pick-open > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.randall-pick-icon { flex: 0 0 auto; }
+.randall-pick-chip.is-picked .randall-pick-open { padding: 0 6px 0 3px; color: var(--color-text-primary); }
+@media (hover: hover) {
+  .randall-pick-chip:not(.is-picked):has(.randall-pick-open:not(:disabled):hover) { border-color: color-mix(in srgb, var(--color-accent) 55%, var(--color-border)); }
+  .randall-pick-open:not(:disabled):hover { color: var(--color-text-primary); }
+}
+.randall-pick-open[aria-expanded=true] { color: var(--color-text-primary); }
+.randall-pick-thumb { flex: 0 0 auto; object-fit: contain; border-radius: 4px; background: var(--color-bg-base); }
+.randall-pick-thumb--vault, .randall-pick-thumb--stock { width: 17px; height: 22px; }
+.randall-pick-thumb--fighter { width: 25px; height: 22px; }
+.randall-pick-thumb--glyph { display: grid; place-items: center; width: 22px; height: 22px; font-size: 14px; font-weight: 700; line-height: 1; color: var(--color-text-secondary); }
+.randall-pick-thumb--stage { width: 36px; height: 21px; object-fit: cover; border-radius: 999px 4px 4px 999px; }
+.nucleus-assistant .randall-pick-clear { display: grid; place-items: center; flex: 0 0 auto; width: 22px; height: 22px; margin-right: 3px; padding: 0;
+  border: 0; border-radius: 50%; background: transparent; color: var(--color-text-tertiary); }
+.randall-pick-clear:hover { background: var(--color-bg-hover); color: var(--color-text-primary); }
+
+/* The picker's popover: the picker (vault/picker/CostumePicker.css) in the app's
+   dropdown surface, anchored to the composer box's left edge, above or below it
+   (pickPopover.popoverPlacement sets the side and the max height), as wide as the
+   box up to 520px. The picker fills it and its grid scrolls inside. */
+.randall-pick-popover { position: absolute; left: 0; z-index: var(--z-dropdown, 100); display: flex; flex-direction: column;
+  width: min(520px, 100%); max-height: 60vh; padding: var(--space-3); background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border); border-radius: 14px; box-shadow: var(--shadow-xl, 0 16px 48px #0008);
+  color: var(--color-text-primary); text-align: left; animation: randall-pick-in 140ms var(--ease-out) both; }
+.randall-pick-popover.is-up { bottom: calc(100% + 8px); --randall-pick-from: 6px; }
+.randall-pick-popover.is-down { top: calc(100% + 8px); --randall-pick-from: -6px; }
+@keyframes randall-pick-in { from { opacity: 0; transform: translateY(var(--randall-pick-from, 6px)); } }
+
+/* Follow-ups under the last reply share the reply column's indent. */
+.randall-task-again, .randall-task-mismatch { margin-left: 36px; max-width: calc(var(--assistant-content-width, 84%) - 36px);
+  animation: randall-task-follow-in 220ms var(--ease-out, ease-out) both; }
+@keyframes randall-task-follow-in { from { opacity: 0; transform: translateY(4px); } }
+.randall-task-again { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.randall-task-again-group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; min-width: 0; }
+/* The same-chat next step reads as the primary action; the chips stay quiet. */
+.nucleus-assistant .randall-task-followup { display: inline-flex; align-items: center; padding: 5px 12px; border: 1px solid color-mix(in srgb, var(--color-accent) 45%, var(--color-border-subtle));
+  border-radius: var(--radius-full); background: color-mix(in srgb, var(--color-accent) 10%, transparent); color: var(--color-accent); font-size: var(--text-xs); font-weight: 500;
+  transition: background var(--transition-fast); }
+@media (hover: hover) { .randall-task-followup:not(:disabled):hover { background: color-mix(in srgb, var(--color-accent) 18%, transparent); } }
+.randall-task-again-label { color: var(--color-text-tertiary); font-size: var(--text-xs); }
+.randall-task-tiles--compact { display: flex; flex-wrap: wrap; gap: 6px; }
+.nucleus-assistant .randall-task-tiles--compact .randall-task-tile { display: flex; align-items: center; min-width: 0; padding: 5px 11px;
+  border: 1px solid var(--color-border-subtle); border-radius: var(--radius-full); background: transparent; color: var(--color-text-primary);
+  text-align: left; transition: border-color var(--transition-fast), color var(--transition-fast); }
+.randall-task-tiles--compact .randall-task-tile strong { font-size: var(--text-xs); font-weight: 500; line-height: 1.3; color: var(--color-text-secondary); }
+@media (hover: hover) {
+  .randall-task-tiles--compact .randall-task-tile:not(:disabled):hover { border-color: color-mix(in srgb, var(--color-accent) 60%, var(--color-border-subtle)); }
+  .randall-task-tiles--compact .randall-task-tile:not(:disabled):hover strong { color: var(--color-accent); }
+}
+.nucleus-assistant .randall-task-switch { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid color-mix(in srgb, var(--color-accent) 45%, var(--color-border-subtle));
+  border-radius: var(--radius-full); background: color-mix(in srgb, var(--color-accent) 8%, transparent); color: var(--color-accent); font-size: var(--text-xs); font-weight: 500;
+  transition: background var(--transition-fast); }
+@media (hover: hover) { .randall-task-switch:not(:disabled):hover { background: color-mix(in srgb, var(--color-accent) 16%, transparent); } }
+
+/* What a sent message carried (startPick.contextNotes). */
+.randall-sent-note { color: var(--color-text-tertiary); font-size: 11px; }
+
+/* A narrow panel (the editor sidebar): the pill keeps only its icon while a pick
+   control shares the row with it; its full name stays its accessible name. */
+@container (max-width: 480px) {
+  .nucleus-assistant .randall-task-pill { max-width: 7.5rem; }
+  .ozone-composer-tools:has(.randall-pick) .randall-task-pill.is-task .randall-task-pill-label { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .randall-task-menu, .randall-task-again, .randall-task-mismatch, .randall-start-greeting, .randall-start-points, .randall-pick-popover { animation: none; }
+  .randall-task-pill-caret, .randall-start-points, .randall-start-points.is-away,
+  .shared-chat.nucleus-assistant .coach-page > .coach-inputarea { transition: none; }
+  .randall-start-points.is-away { transform: none; }
+}

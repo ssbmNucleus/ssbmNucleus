@@ -1,0 +1,50 @@
+/* ---- area selection ------------------------------------------------------
+   A sibling of the paint canvas, pinned to its layout box and given the same
+   transform by useCanvasScale, so the ants sit exactly on the pixels they
+   describe at any zoom. Never drawn INTO the canvas -- that is texture data. */
+.skin-creator-canvas.tool-select { cursor: crosshair; }
+.skin-creator-canvas.tool-replace { cursor: cell; }
+
+.paint-selection {
+  position: absolute;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* The overlay rides the canvas's zoom transform, so a plain CSS border would
+   be scaled with it (1px of border drew as 16px of dash at 16x -- the old
+   jank). SVG strokes marked non-scaling stay 1 screen px at any zoom. */
+.paint-selection-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.paint-selection-fill {
+  fill: color-mix(in srgb, var(--color-cyan) 10%, transparent);
+}
+
+/* stroke-width, dashes and --ants-march are all set inline in TEXTURE units
+   (screen px / zoom) -- see SelectionOverlay for why they cannot be constants */
+.paint-selection-ants {
+  fill: none;
+  stroke: var(--color-cyan);
+  animation: paint-selection-march 0.6s linear infinite;
+}
+
+.paint-selection-ants--shadow {
+  stroke: rgba(6, 12, 20, 0.9);
+}
+
+.paint-selection-handle {
+  fill: var(--color-bg-elevated);
+  stroke: var(--color-cyan);
+}
+
+@keyframes paint-selection-march {
+  to { stroke-dashoffset: var(--ants-march); }
+}
+
+.toolbar-selection-size { font-variant-numeric: tabular-nums; opacity: .8; }

@@ -1,0 +1,26 @@
+{
+  "character": "Ganondorf",
+  "basis": {"costumeCode": "PlGnNr", "textureCount": 52},
+  "regions": {
+    "cape": [46],
+    "fur": [21, 22, 24, 26],
+    "skin": [0, 2, 11, 14, 15, 37, 38, 40],
+    "armor": [3, 4, 5, 6, 7, 8, 18, 20, 32, 36],
+    "leather": [1, 12, 13, 16, 17, 23, 35, 39, 41, 42, 43, 44, 45, 49, 51],
+    "trim": [9, 10, 25, 28, 48, 50],
+    "jewels": [27, 29, 30, 33, 34, 47]
+  },
+  "protected": [0],
+  "liveHints": [],
+  "maskHints": {},
+  "notes": {
+    "cape": "46 = the patterned tan cape (dominates the back)",
+    "fur": "orange hair + beard (21 = main sheet)",
+    "skin": "dark tan Gerudo skin; 0 = face sheet with painted eyes (protected)",
+    "armor": "dark teal-gray plate (6/7/8 = chest/shoulders) + trim (3/4)",
+    "leather": "brown belts/straps/boots/gloves",
+    "trim": "white patterned arm/leg wraps (10/28 = main)",
+    "jewels": "amulet golds (29/30) + green gems (27/47) + earring teals (33/34)",
+    "unmapped": "19/31 dark grays"
+  }
+}

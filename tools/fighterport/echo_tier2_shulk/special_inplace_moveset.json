@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "skeleton": "model/body/c00/model.nusktb",
+  "landmarks": "ultimate_landmarks.json",
+  "allow_unbound": [
+    "S_Hip_hit"
+  ],
+  "attachments": [
+    {
+      "source": "SwordR",
+      "source_anchor": "HandR",
+      "target": "JOBJ_75",
+      "target_anchor": "JOBJ_73"
+    }
+  ],
+  "clips": [
+    {
+      "id": "specialhi",
+      "category": "native_supplement",
+      "target_motion": "SpecialHi",
+      "source": "motion/body/c00/d02specialhi.nuanmb",
+      "body_scale": "rigid",
+      "root_motion_joint": "Trans"
+    },
+    {
+      "id": "specialairhi",
+      "category": "native_supplement",
+      "target_motion": "SpecialAirHi",
+      "source": "motion/body/c00/d02specialairhi.nuanmb",
+      "body_scale": "rigid",
+      "root_motion_joint": "Trans"
+    },
+    {
+      "id": "specials1",
+      "category": "explicit_slot_reuse",
+      "target_motion": "SpecialS1",
+      "source": "motion/body/c00/d01specials.nuanmb",
+      "body_scale": "rigid",
+      "root_motion_joint": "Trans"
+    },
+    {
+      "id": "specialairs1",
+      "category": "explicit_slot_reuse",
+      "target_motion": "SpecialAirS1",
+      "source": "motion/body/c00/d01specialairs.nuanmb",
+      "body_scale": "rigid",
+      "root_motion_joint": "Trans"
+    },
+    {
+      "id": "specials2hi",
+      "category": "explicit_slot_reuse",
+      "target_motion": "SpecialS2Hi",
+      "source": "motion/body/c00/d01specialairsfall.nuanmb",
+      "body_scale": "rigid",
+      "root_motion_joint": "Trans"
+    },
+    {
+      "id": "specials2lw",
+      "category": "explicit_slot_reuse",
+      "target_motion": "SpecialS2Lw",
+      "source": "motion/body/c00/d01specialslanding.nuanmb",
+      "body_scale": "rigid",
+      "root_motion_joint": "Trans"
+    },
+    {
+      "id": "specials3hi",
+      "category": "explicit_slot_reuse",
+      "target_motion": "SpecialS3Hi",
+      "source": "motion/body/c00/d02specialhiadd.nuanmb",
+      "body_scale": "rigid",
+      "root_motion_joint": "Trans"
+    }
+  ]
+}

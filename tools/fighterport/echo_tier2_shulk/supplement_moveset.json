@@ -1,0 +1,802 @@
+{
+  "schema": 1,
+  "skeleton": "model/body/c00/model.nusktb",
+  "landmarks": "ultimate_landmarks.json",
+  "allow_unbound": [
+    "S_Hip_hit"
+  ],
+  "attachments": [
+    {
+      "source": "SwordR",
+      "source_anchor": "HandR",
+      "target": "JOBJ_75",
+      "target_anchor": "JOBJ_73"
+    }
+  ],
+  "clips": [
+    {
+      "id": "walldamage",
+      "category": "native_supplement",
+      "target_motion": "WallDamage",
+      "source": "motion/body/c00/g00walldamage.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "damagefall",
+      "category": "native_supplement",
+      "target_motion": "DamageFall",
+      "source": "motion/body/c00/a04damagefall.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "waititem",
+      "category": "native_supplement",
+      "target_motion": "WaitItem",
+      "source": "motion/body/c00/a00waititem.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "squatwaititem",
+      "category": "native_supplement",
+      "target_motion": "SquatWaitItem",
+      "source": "motion/body/c00/a05squatwaititem.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "rebound",
+      "category": "native_supplement",
+      "target_motion": "Rebound",
+      "source": "motion/body/c00/b02rebound.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "lightget",
+      "category": "native_supplement",
+      "target_motion": "LightGet",
+      "source": "motion/body/c00/h00lightget.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "lightthrowf",
+      "category": "native_supplement",
+      "target_motion": "LightThrowF",
+      "source": "motion/body/c00/h01lightthrowf.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "lightthrowb",
+      "category": "native_supplement",
+      "target_motion": "LightThrowB",
+      "source": "motion/body/c00/h01lightthrowb.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "lightthrowhi",
+      "category": "native_supplement",
+      "target_motion": "LightThrowHi",
+      "source": "motion/body/c00/h01lightthrowhi.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "lightthrowlw",
+      "category": "native_supplement",
+      "target_motion": "LightThrowLw",
+      "source": "motion/body/c00/h01lightthrowlw.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "lightthrowdash",
+      "category": "native_supplement",
+      "target_motion": "LightThrowDash",
+      "source": "motion/body/c00/h01lightthrowdash.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "lightthrowdrop",
+      "category": "native_supplement",
+      "target_motion": "LightThrowDrop",
+      "source": "motion/body/c00/h01lightthrowdrop.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "lightthrowairf",
+      "category": "native_supplement",
+      "target_motion": "LightThrowAirF",
+      "source": "motion/body/c00/h02lightthrowairf.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "lightthrowairb",
+      "category": "native_supplement",
+      "target_motion": "LightThrowAirB",
+      "source": "motion/body/c00/h02lightthrowairb.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "lightthrowairhi",
+      "category": "native_supplement",
+      "target_motion": "LightThrowAirHi",
+      "source": "motion/body/c00/h02lightthrowairhi.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "lightthrowairlw",
+      "category": "native_supplement",
+      "target_motion": "LightThrowAirLw",
+      "source": "motion/body/c00/h02lightthrowairlw.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "heavyget",
+      "category": "native_supplement",
+      "target_motion": "HeavyGet",
+      "source": "motion/body/c00/h03heavyget.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "heavythrowf",
+      "category": "native_supplement",
+      "target_motion": "HeavyThrowF",
+      "source": "motion/body/c00/h03heavythrowf.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "heavythrowb",
+      "category": "native_supplement",
+      "target_motion": "HeavyThrowB",
+      "source": "motion/body/c00/h03heavythrowb.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "heavythrowhi",
+      "category": "native_supplement",
+      "target_motion": "HeavyThrowHi",
+      "source": "motion/body/c00/h03heavythrowhi.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "heavythrowlw",
+      "category": "native_supplement",
+      "target_motion": "HeavyThrowLw",
+      "source": "motion/body/c00/h03heavythrowlw.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "swing1",
+      "category": "native_supplement",
+      "target_motion": "Swing1",
+      "source": "motion/body/c00/h04swing1.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "swing3",
+      "category": "native_supplement",
+      "target_motion": "Swing3",
+      "source": "motion/body/c00/h04swing3.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "swing4",
+      "category": "native_supplement",
+      "target_motion": "Swing4",
+      "source": "motion/body/c00/h04swing4.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "swingdash",
+      "category": "native_supplement",
+      "target_motion": "SwingDash",
+      "source": "motion/body/c00/h04swingdash.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "itemhammerwait",
+      "category": "native_supplement",
+      "target_motion": "ItemHammerWait",
+      "source": "motion/body/c00/h05itemhammerwait.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "itemhammermove",
+      "category": "native_supplement",
+      "target_motion": "ItemHammerMove",
+      "source": "motion/body/c00/h05itemhammermove.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "itemshoot",
+      "category": "native_supplement",
+      "target_motion": "ItemShoot",
+      "source": "motion/body/c00/h11itemshoot.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "itemshootair",
+      "category": "native_supplement",
+      "target_motion": "ItemShootAir",
+      "source": "motion/body/c00/h11itemshootair.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "itemscrew",
+      "category": "native_supplement",
+      "target_motion": "ItemScrew",
+      "source": "motion/body/c00/h07itemscrew.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "itemscopestart",
+      "category": "native_supplement",
+      "target_motion": "ItemScopeStart",
+      "source": "motion/body/c00/h12itemscopestart.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "itemscoperapid",
+      "category": "native_supplement",
+      "target_motion": "ItemScopeRapid",
+      "source": "motion/body/c00/h12itemscoperapid.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "itemscopefire",
+      "category": "native_supplement",
+      "target_motion": "ItemScopeFire",
+      "source": "motion/body/c00/h12itemscopefire.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "itemscopeend",
+      "category": "native_supplement",
+      "target_motion": "ItemScopeEnd",
+      "source": "motion/body/c00/h12itemscopeend.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "itemscopeairstart",
+      "category": "native_supplement",
+      "target_motion": "ItemScopeAirStart",
+      "source": "motion/body/c00/h12itemscopeairstart.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "itemscopeairrapid",
+      "category": "native_supplement",
+      "target_motion": "ItemScopeAirRapid",
+      "source": "motion/body/c00/h12itemscopeairrapid.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "itemscopeairfire",
+      "category": "native_supplement",
+      "target_motion": "ItemScopeAirFire",
+      "source": "motion/body/c00/h12itemscopeairfire.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "itemscopeairend",
+      "category": "native_supplement",
+      "target_motion": "ItemScopeAirEnd",
+      "source": "motion/body/c00/h12itemscopeairend.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "damagehi1",
+      "category": "native_supplement",
+      "target_motion": "DamageHi1",
+      "source": "motion/body/c00/f00damagehi1.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "damagehi2",
+      "category": "native_supplement",
+      "target_motion": "DamageHi2",
+      "source": "motion/body/c00/f00damagehi2.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "damagehi3",
+      "category": "native_supplement",
+      "target_motion": "DamageHi3",
+      "source": "motion/body/c00/f00damagehi3.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "damagen1",
+      "category": "native_supplement",
+      "target_motion": "DamageN1",
+      "source": "motion/body/c00/f00damagen1.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "damagen2",
+      "category": "native_supplement",
+      "target_motion": "DamageN2",
+      "source": "motion/body/c00/f00damagen2.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "damagen3",
+      "category": "native_supplement",
+      "target_motion": "DamageN3",
+      "source": "motion/body/c00/f00damagen3.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "damagelw1",
+      "category": "native_supplement",
+      "target_motion": "DamageLw1",
+      "source": "motion/body/c00/f00damagelw1.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "damagelw2",
+      "category": "native_supplement",
+      "target_motion": "DamageLw2",
+      "source": "motion/body/c00/f00damagelw2.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "damagelw3",
+      "category": "native_supplement",
+      "target_motion": "DamageLw3",
+      "source": "motion/body/c00/f00damagelw3.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "damageair1",
+      "category": "native_supplement",
+      "target_motion": "DamageAir1",
+      "source": "motion/body/c00/f01damageair1.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "damageair2",
+      "category": "native_supplement",
+      "target_motion": "DamageAir2",
+      "source": "motion/body/c00/f01damageair2.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "damageair3",
+      "category": "native_supplement",
+      "target_motion": "DamageAir3",
+      "source": "motion/body/c00/f01damageair3.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "damageflyhi",
+      "category": "native_supplement",
+      "target_motion": "DamageFlyHi",
+      "source": "motion/body/c00/f01damageflyhi.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "damageflyn",
+      "category": "native_supplement",
+      "target_motion": "DamageFlyN",
+      "source": "motion/body/c00/f01damageflyn.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "damageflylw",
+      "category": "native_supplement",
+      "target_motion": "DamageFlyLw",
+      "source": "motion/body/c00/f01damageflylw.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "damageflytop",
+      "category": "native_supplement",
+      "target_motion": "DamageFlyTop",
+      "source": "motion/body/c00/f01damageflytop.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "damageflyroll",
+      "category": "native_supplement",
+      "target_motion": "DamageFlyRoll",
+      "source": "motion/body/c00/f01damageflyroll.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "downboundu",
+      "category": "native_supplement",
+      "target_motion": "DownBoundU",
+      "source": "motion/body/c00/f03downboundu.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "downwaitu",
+      "category": "native_supplement",
+      "target_motion": "DownWaitU",
+      "source": "motion/body/c00/f03downwaitu.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "downdamageu",
+      "category": "native_supplement",
+      "target_motion": "DownDamageU",
+      "source": "motion/body/c00/f03downdamageu.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "downstandu",
+      "category": "native_supplement",
+      "target_motion": "DownStandU",
+      "source": "motion/body/c00/f03downstandu.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "downattacku",
+      "category": "native_supplement",
+      "target_motion": "DownAttackU",
+      "source": "motion/body/c00/f03downattacku.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "downbacku",
+      "category": "native_supplement",
+      "target_motion": "DownBackU",
+      "source": "motion/body/c00/f03downbacku.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "downboundd",
+      "category": "native_supplement",
+      "target_motion": "DownBoundD",
+      "source": "motion/body/c00/f04downboundd.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "downwaitd",
+      "category": "native_supplement",
+      "target_motion": "DownWaitD",
+      "source": "motion/body/c00/f04downwaitd.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "downdamaged",
+      "category": "native_supplement",
+      "target_motion": "DownDamageD",
+      "source": "motion/body/c00/f04downdamaged.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "downstandd",
+      "category": "native_supplement",
+      "target_motion": "DownStandD",
+      "source": "motion/body/c00/f04downstandd.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "downattackd",
+      "category": "native_supplement",
+      "target_motion": "DownAttackD",
+      "source": "motion/body/c00/f04downattackd.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "downbackd",
+      "category": "native_supplement",
+      "target_motion": "DownBackD",
+      "source": "motion/body/c00/f04downbackd.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "passive",
+      "category": "native_supplement",
+      "target_motion": "Passive",
+      "source": "motion/body/c00/f05passive.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "passivestandf",
+      "category": "native_supplement",
+      "target_motion": "PassiveStandF",
+      "source": "motion/body/c00/f05passivestandf.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "passivestandb",
+      "category": "native_supplement",
+      "target_motion": "PassiveStandB",
+      "source": "motion/body/c00/f05passivestandb.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "passivewall",
+      "category": "native_supplement",
+      "target_motion": "PassiveWall",
+      "source": "motion/body/c00/f05passivewall.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "passivewalljump",
+      "category": "native_supplement",
+      "target_motion": "PassiveWallJump",
+      "source": "motion/body/c00/f05passivewalljump.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "passiveceil",
+      "category": "native_supplement",
+      "target_motion": "PassiveCeil",
+      "source": "motion/body/c00/f05passiveceil.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "furafura",
+      "category": "native_supplement",
+      "target_motion": "FuraFura",
+      "source": "motion/body/c00/f06furafura.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "pass",
+      "category": "native_supplement",
+      "target_motion": "Pass",
+      "source": "motion/body/c00/g00pass.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "ottotto",
+      "category": "native_supplement",
+      "target_motion": "Ottotto",
+      "source": "motion/body/c00/g00ottotto.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "ottottowait",
+      "category": "native_supplement",
+      "target_motion": "OttottoWait",
+      "source": "motion/body/c00/g00ottottowait.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "stopwall",
+      "category": "native_supplement",
+      "target_motion": "StopWall",
+      "source": "motion/body/c00/g00stopwall.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "stopceil",
+      "category": "native_supplement",
+      "target_motion": "StopCeil",
+      "source": "motion/body/c00/g00stopceil.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "missfoot",
+      "category": "native_supplement",
+      "target_motion": "MissFoot",
+      "source": "motion/body/c00/g00missfoot.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "cliffcatch",
+      "category": "native_supplement",
+      "target_motion": "CliffCatch",
+      "source": "motion/body/c00/g01cliffcatch.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "cliffwait",
+      "category": "native_supplement",
+      "target_motion": "CliffWait",
+      "source": "motion/body/c00/g01cliffwait.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "catchwait",
+      "category": "native_supplement",
+      "target_motion": "CatchWait",
+      "source": "motion/body/c00/e00catchwait.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "catchcut",
+      "category": "native_supplement",
+      "target_motion": "CatchCut",
+      "source": "motion/body/c00/e00catchcut.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "capturepulledhi",
+      "category": "native_supplement",
+      "target_motion": "CapturePulledHi",
+      "source": "motion/body/c00/e02capturepulledhi.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "capturewaithi",
+      "category": "native_supplement",
+      "target_motion": "CaptureWaitHi",
+      "source": "motion/body/c00/e02capturewaithi.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "capturedamagehi",
+      "category": "native_supplement",
+      "target_motion": "CaptureDamageHi",
+      "source": "motion/body/c00/e02capturedamagehi.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "capturepulledlw",
+      "category": "native_supplement",
+      "target_motion": "CapturePulledLw",
+      "source": "motion/body/c00/e03capturepulledlw.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "capturewaitlw",
+      "category": "native_supplement",
+      "target_motion": "CaptureWaitLw",
+      "source": "motion/body/c00/e03capturewaitlw.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "capturedamagelw",
+      "category": "native_supplement",
+      "target_motion": "CaptureDamageLw",
+      "source": "motion/body/c00/e03capturedamagelw.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "capturecut",
+      "category": "native_supplement",
+      "target_motion": "CaptureCut",
+      "source": "motion/body/c00/e03capturecut.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "capturejump",
+      "category": "native_supplement",
+      "target_motion": "CaptureJump",
+      "source": "motion/body/c00/e03capturejump.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "specialnstart",
+      "category": "native_supplement",
+      "target_motion": "SpecialNStart",
+      "source": "motion/body/c00/d00specialnstart.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "specialnloop",
+      "category": "native_supplement",
+      "target_motion": "SpecialNLoop",
+      "source": "motion/body/c00/d00specialnloop.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "specialnend",
+      "category": "native_supplement",
+      "target_motion": "SpecialNEnd",
+      "source": "motion/body/c00/d00specialnend.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "specialairnstart",
+      "category": "native_supplement",
+      "target_motion": "SpecialAirNStart",
+      "source": "motion/body/c00/d00specialairnstart.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "specialairnloop",
+      "category": "native_supplement",
+      "target_motion": "SpecialAirNLoop",
+      "source": "motion/body/c00/d00specialairnloop.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "specialairnend",
+      "category": "native_supplement",
+      "target_motion": "SpecialAirNEnd",
+      "source": "motion/body/c00/d00specialairnend.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "specialhi",
+      "category": "native_supplement",
+      "target_motion": "SpecialHi",
+      "source": "motion/body/c00/d02specialhi.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "specialairhi",
+      "category": "native_supplement",
+      "target_motion": "SpecialAirHi",
+      "source": "motion/body/c00/d02specialairhi.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "speciallw",
+      "category": "native_supplement",
+      "target_motion": "SpecialLw",
+      "source": "motion/body/c00/d03speciallw.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "speciallwhit",
+      "category": "native_supplement",
+      "target_motion": "SpecialLwHit",
+      "source": "motion/body/c00/d03speciallwhit.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "specialairlw",
+      "category": "native_supplement",
+      "target_motion": "SpecialAirLw",
+      "source": "motion/body/c00/d03specialairlw.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "specialairlwhit",
+      "category": "native_supplement",
+      "target_motion": "SpecialAirLwHit",
+      "source": "motion/body/c00/d03specialairlwhit.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "specials1",
+      "category": "explicit_slot_reuse",
+      "target_motion": "SpecialS1",
+      "source": "motion/body/c00/d01specials.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "specialairs1",
+      "category": "explicit_slot_reuse",
+      "target_motion": "SpecialAirS1",
+      "source": "motion/body/c00/d01specialairs.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "specials2hi",
+      "category": "explicit_slot_reuse",
+      "target_motion": "SpecialS2Hi",
+      "source": "motion/body/c00/d01specialairsfall.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "specials2lw",
+      "category": "explicit_slot_reuse",
+      "target_motion": "SpecialS2Lw",
+      "source": "motion/body/c00/d01specialslanding.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "specials3hi",
+      "category": "explicit_slot_reuse",
+      "target_motion": "SpecialS3Hi",
+      "source": "motion/body/c00/d02specialhiadd.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "specials3s",
+      "category": "explicit_slot_reuse",
+      "target_motion": "SpecialS3S",
+      "source": "motion/body/c00/c00attack13.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "downfowardu",
+      "category": "explicit_slot_reuse",
+      "target_motion": "DownFowardU",
+      "source": "motion/body/c00/f03downforwardu.nuanmb",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "downfowardd",
+      "category": "explicit_slot_reuse",
+      "target_motion": "DownFowardD",
+      "source": "motion/body/c00/f04downforwardd.nuanmb",
+      "body_scale": "rigid"
+    }
+  ]
+}

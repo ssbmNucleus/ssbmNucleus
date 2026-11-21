@@ -1,0 +1,144 @@
+/* Extras mode: costume-list scrollbars, Extras toggle, extras header, vanilla extra card, color swatch — split from MexPanel.css 2026-08-22 */
+/* Rules copied verbatim; loaded right after MexPanel.css from MexPanel.jsx so the cascade order is unchanged. */
+
+/* ─────────────────────────────────────────
+   SCROLLBAR STYLING
+   ───────────────────────────────────────── */
+
+.fighter-items::-webkit-scrollbar,
+.costume-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.fighter-items::-webkit-scrollbar-track,
+.costume-list::-webkit-scrollbar-track {
+  background: var(--color-bg-deep);
+  border-radius: var(--radius-sm);
+}
+
+.fighter-items::-webkit-scrollbar-thumb,
+.costume-list::-webkit-scrollbar-thumb {
+  background: var(--color-bg-hover);
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--color-bg-deep);
+}
+
+.fighter-items::-webkit-scrollbar-thumb:hover,
+.costume-list::-webkit-scrollbar-thumb:hover {
+  background: var(--color-cyan);
+}
+
+/* =============================================================================
+   EXTRAS MODE STYLES
+   ============================================================================= */
+
+.btn-extras-mode {
+  background: var(--gradient-gold);
+  color: var(--color-bg-deep);
+  border: none;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    filter var(--transition-fast);
+}
+
+.btn-extras-mode:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--glow-gold-sm);
+  filter: brightness(1.1);
+}
+
+.btn-extras-mode:active {
+  transform: scale(0.98);
+}
+
+/* Extras header with back button */
+.extras-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.extras-header h3 {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.btn-back-small {
+  background: var(--color-bg-hover);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.2s ease;
+}
+
+.btn-back-small:hover {
+  background: var(--color-bg-elevated);
+  border-color: var(--color-cyan);
+  color: var(--color-text);
+}
+
+/* Vanilla extra card */
+.vanilla-extra .costume-preview {
+  background: linear-gradient(135deg, #4a5568, #2d3748);
+}
+
+.vanilla-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a0aec0;
+  font-style: italic;
+  font-size: 14px;
+  height: 100%;
+  min-height: 80px;
+}
+
+/* Small explanatory line under the "Currently in MEX" card heading */
+.extras-current-note {
+  display: block;
+  font-size: 11px;
+  color: #888;
+}
+
+/* Installed image effect in the "Currently in MEX" card */
+.extras-current-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #0a0a12 0%, #0d0d18 100%);
+  color: #777;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  overflow: hidden;
+}
+
+.extras-current-image img {
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+/* Extra mod color preview */
+
+.color-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}

@@ -1,0 +1,559 @@
+{
+  "_README": [
+    "The model import's tools, which the app downloads on the user's request (Settings > AI > Model",
+    "import tools, or the Download button on Randall's import card) instead of the installer carrying them:",
+    "Blender 4 for rigswap's Collada -> GLB step, a CPython 3.13 for rigswap itself, and the wheels it needs",
+    "(bpy, numpy, pillow...). docs/dev/MODEL_IMPORT_TOOLS.md is the design.",
+    "",
+    "Everything comes from the official sources, each file pinned by URL, sha256 and size and checked before it",
+    "is unpacked (backend/randall/model_import/tools/assemble.py): download.blender.org, python.org (Windows) or",
+    "python-build-standalone (macOS, Linux), and files.pythonhosted.org. Nothing is hosted by us.",
+    "",
+    "`platforms` is GENERATED: edit `pin` (or pass versions) and run",
+    "    python tools/build/pin_model_import_tools.py",
+    "which reads every URL, sha256 and size from the publishers. Nobody types a hash. The wheel versions are",
+    "utility/rigswap.requirements.txt's, the one list. The layout of each platform's downloads (archive root,",
+    "entrypoint, trim list, the paths that must survive the unpack) is LAYOUT in that script.",
+    "",
+    "Installed under the user's data folder, tools/model-import/: blender/<version>/ and runtime/<key>/ (key: a",
+    "hash of the python entry and the wheels list, so an app update that changes neither downloads nothing), and",
+    "receipt.json.",
+    "",
+    "`on_disk` (per platform) is what a real install measured on disk per piece, the Settings card's size before the",
+    "download: Blender by its sha256, the runtime by its key, each from an install's receipt.json, recorded with",
+    "    python tools/build/pin_model_import_tools.py --measured <receipt.json>...",
+    "A re-pin keeps a piece's size while its downloads stay the same and drops it when they move; the app then",
+    "estimates that piece from per-format ratios (assemble.ON_DISK) until a new install is measured.",
+    "",
+    "BLENDER VERSION PIN: 4.3 is what rigswap is developed and measured with: its Collada->GLB conversion runs",
+    "here (RIGSWAP_BLENDER4). 4.2.23 crashed natively inside its Collada import on 4 of 24 conversions of the",
+    "vanilla Samus, Ganondorf and Kirby exports, 4.3.2 on none (2026-10-29). Do not move it without a real import",
+    "on every platform and preparing every fighter target from scratch with it (rigswap's melee.prepare).",
+    "PYTHON: 3.13 and bpy 5.2.2 are what rigswap's pyproject requires.",
+    "",
+    "BLENDER TRIM (Windows and Linux): whole files and folders deleted after the unpack: debug symbols, UI",
+    "translations, the Cycles addon's Python/kernel tree and Blender's own python executable. rigswap only",
+    "converts DAE to GLB in it; nothing raytraces. Measured on Windows: 971 MB unpacked -> 729 MB. MEASURED AND",
+    "REVERTED, do not re-add: oslexec.dll, oslcomp.dll, the OpenImageDenoise_* DLLs, cycles_kernel_oneapi_aot.dll",
+    "and anything in blender.shared/ sit in blender.exe's import table (official builds compile Cycles into the",
+    "executable; the addon folder is only its UI), and deleting any one stops Blender from starting. Everything",
+    "the pipeline touches stays: numpy and the rest of python/lib, io_scene_gltf2, colormanagement (Blender will",
+    "not start without config.ocio), fonts, studiolights. macOS keeps Blender.app whole: deleting files inside a",
+    "signed bundle breaks its seal."
+  ],
+  "schema": 1,
+  "pin": {
+    "blender": "4.3.2",
+    "python": {
+      "win-x64": "3.13.17",
+      "linux-x64": "3.13.18",
+      "osx-arm64": "3.13.18"
+    },
+    "python_build_standalone": "20261110",
+    "requirements": "utility/rigswap.requirements.txt"
+  },
+  "license": {
+    "notice": "THIRD_PARTY_NOTICES.md",
+    "redistributed": false,
+    "blender": {
+      "spdx": "GPL-2.0-or-later",
+      "binary_as_a_whole": "GPL-3.0-or-later",
+      "holder": "Blender Foundation / Blender Developers",
+      "source": "https://download.blender.org/source/",
+      "use": "Run unmodified as a separate process (--background --factory-startup), downloaded by the user's own app from download.blender.org."
+    },
+    "python": {
+      "win-x64": "PSF-2.0 (python.org's embeddable CPython)",
+      "linux-x64": "PSF-2.0 and the licences python-build-standalone lists (BSD-3-Clause build scripts)",
+      "osx-arm64": "PSF-2.0 and the licences python-build-standalone lists (BSD-3-Clause build scripts)"
+    },
+    "packages": {
+      "bpy": "GPL-3.0-or-later (Blender as a Python module, run inside rigswap's own process)",
+      "numpy": "BSD-3-Clause",
+      "pillow": "MIT-CMU",
+      "requests": "Apache-2.0",
+      "urllib3": "MIT",
+      "idna": "BSD-3-Clause",
+      "certifi": "MPL-2.0",
+      "charset-normalizer": "MIT",
+      "cattrs": "MIT",
+      "attrs": "MIT",
+      "Cython": "Apache-2.0",
+      "zstandard": "BSD-3-Clause",
+      "typing-extensions": "PSF-2.0"
+    }
+  },
+  "platforms": {
+    "win-x64": {
+      "blender": {
+        "version": "4.3.2",
+        "url": "https://download.blender.org/release/Blender4.3/blender-4.3.2-windows-x64.zip",
+        "sha256": "933a62a770c941e316535f893629ff106ddd2aa5a956f0081ec557439073d4f6",
+        "size": 405138423,
+        "format": "zip",
+        "root": "blender-4.3.2-windows-x64",
+        "entrypoint": "blender.exe",
+        "trim": [
+          "blender.pdb",
+          "4.3/datafiles/locale",
+          "4.3/scripts/addons_core/cycles",
+          "4.3/python/bin"
+        ],
+        "verify": [
+          "4.3/python/lib/site-packages/numpy/__init__.py",
+          "4.3/scripts/addons_core/io_scene_gltf2/__init__.py",
+          "4.3/datafiles/colormanagement/config.ocio",
+          "4.3/datafiles/studiolights"
+        ]
+      },
+      "python": {
+        "version": "3.13.17",
+        "url": "https://www.python.org/ftp/python/3.13.17/python-3.13.17-embed-amd64.zip",
+        "sha256": "9e35319bffedab8b36ad44d8f377cb4f1733bcec257a0b6d04d94f01486ddb38",
+        "size": 11441267,
+        "format": "zip",
+        "kind": "embeddable",
+        "root": "",
+        "entrypoint": "python.exe",
+        "site_packages": "Lib/site-packages",
+        "verify": [
+          "python313.zip",
+          "python313._pth"
+        ],
+        "wheel_verify": [
+          "bpy/__init__.pyd",
+          "numpy/__init__.py",
+          "PIL/__init__.py"
+        ]
+      },
+      "wheels": [
+        {
+          "name": "attrs",
+          "version": "26.1.0",
+          "filename": "attrs-26.1.0-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/64/b4/17d4b0b2a2dc85a6df63d1157e028ed19f90d4cd97c36717afef2bc2f395/attrs-26.1.0-py3-none-any.whl",
+          "sha256": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309",
+          "size": 67548
+        },
+        {
+          "name": "bpy",
+          "version": "5.2.2",
+          "filename": "bpy-5.2.2-cp313-cp313-win_amd64.whl",
+          "url": "https://files.pythonhosted.org/packages/3f/43/07ffaf5f8cc23a02258d03d972784e93e1fdacbd5422fd75fc9dd7c1738b/bpy-5.2.2-cp313-cp313-win_amd64.whl",
+          "sha256": "a2d29dca205e094f8f501544c73009ab15b643fb611a27ddc1155dce2fc6995d",
+          "size": 338211575
+        },
+        {
+          "name": "cattrs",
+          "version": "26.2.1",
+          "filename": "cattrs-26.2.1-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/e8/cf/22794a399d99480486120e26e879ef008e21f5e85274c2ed591d568bb326/cattrs-26.2.1-py3-none-any.whl",
+          "sha256": "a12aaa3453dc8f633a815293179f08b7421ed18d2575c459c3c736f840beac24",
+          "size": 74843
+        },
+        {
+          "name": "certifi",
+          "version": "2026.10.23",
+          "filename": "certifi-2026.10.23-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/32/d1/a3652fe2c19134d0d15922177821d863cbd7e842d53a21bbe7e8e3a1b5ac/certifi-2026.10.23-py3-none-any.whl",
+          "sha256": "e9b54de76e530bb6cf0ccd036787103acb58fd42ba930ea8bf948ddbaa2f61d1",
+          "size": 135082
+        },
+        {
+          "name": "charset-normalizer",
+          "version": "3.5.2",
+          "filename": "charset_normalizer-3.5.2-cp313-cp313-win_amd64.whl",
+          "url": "https://files.pythonhosted.org/packages/9c/76/b8ec57f4e9ee3253541abf95e4a462c0175fe8032dcd070f1f2421240942/charset_normalizer-3.5.2-cp313-cp313-win_amd64.whl",
+          "sha256": "78456a747de8dc58360ffa581f30a002baf5aa28cb262536545e91f113ed7639",
+          "size": 206489
+        },
+        {
+          "name": "Cython",
+          "version": "3.3.0",
+          "filename": "cython-3.3.0-cp313-cp313-win_amd64.whl",
+          "url": "https://files.pythonhosted.org/packages/d8/d7/376572ff69ef39a9bdcd727124f6c38aa066300e97734a4902a3ae0d2af0/cython-3.3.0-cp313-cp313-win_amd64.whl",
+          "sha256": "ab24d1a4fb6aaf0b5b6fcd75a6d70255fbd3130fa78884c26991f8d5502616b5",
+          "size": 2866216
+        },
+        {
+          "name": "idna",
+          "version": "3.20",
+          "filename": "idna-3.20-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/58/a2/bb081bab032533a855d44de1d56f8e8426114ff1ba5d1f07a438a0a654f8/idna-3.20-py3-none-any.whl",
+          "sha256": "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c",
+          "size": 69583
+        },
+        {
+          "name": "numpy",
+          "version": "2.5.3",
+          "filename": "numpy-2.5.3-cp313-cp313-win_amd64.whl",
+          "url": "https://files.pythonhosted.org/packages/f3/ec/100f2b1794ede74a9b3d7ec6b9736927f56713414c1dfe19ab6c383494bf/numpy-2.5.3-cp313-cp313-win_amd64.whl",
+          "sha256": "71cad2b2a7451ab79d8f5e71b453485b6775963d5cf794179144a7463fe6e8ec",
+          "size": 12560965
+        },
+        {
+          "name": "pillow",
+          "version": "13.0.0",
+          "filename": "pillow-13.0.0-cp313-cp313-win_amd64.whl",
+          "url": "https://files.pythonhosted.org/packages/d7/ed/1b16fb66a37e1b9e41370b93b2c614c7da761a5b2a41dc333f7af4639962/pillow-13.0.0-cp313-cp313-win_amd64.whl",
+          "sha256": "9dda0788a9932776a75d8bcc020076edc308ce2508b51f6739a45e3158b3fc42",
+          "size": 7284777
+        },
+        {
+          "name": "requests",
+          "version": "2.34.2",
+          "filename": "requests-2.34.2-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/a0/f4/c67b0b3f1b9245e8d266f0f112c500d50e5b4e83cb6f3b71b6528104182a/requests-2.34.2-py3-none-any.whl",
+          "sha256": "2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0",
+          "size": 73075
+        },
+        {
+          "name": "typing-extensions",
+          "version": "4.16.0",
+          "filename": "typing_extensions-4.16.0-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl",
+          "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+          "size": 45571
+        },
+        {
+          "name": "urllib3",
+          "version": "2.8.0",
+          "filename": "urllib3-2.8.0-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/92/9d/c4e665119135114480843e7ab388fa94d8480650450e6f8e26b70d323a4c/urllib3-2.8.0-py3-none-any.whl",
+          "sha256": "0cf3cae568d36aa9576b28dfb35f11328f1cb974ca7647d9475ebb86c75ac6e3",
+          "size": 135717
+        },
+        {
+          "name": "zstandard",
+          "version": "0.25.0",
+          "filename": "zstandard-0.25.0-cp313-cp313-win_amd64.whl",
+          "url": "https://files.pythonhosted.org/packages/d9/82/b9c06c870f3bd8767c201f1edbdf9e8dc34be5b0fbc5682c4f80fe948475/zstandard-0.25.0-cp313-cp313-win_amd64.whl",
+          "sha256": "1f830a0dac88719af0ae43b8b2d6aef487d437036468ef3c2ea59c51f9d55fd5",
+          "size": 506232
+        }
+      ],
+      "on_disk": {
+        "blender": {
+          "sha256": "933a62a770c941e316535f893629ff106ddd2aa5a956f0081ec557439073d4f6",
+          "bytes": 779823617
+        },
+        "runtime": {
+          "key": "b0bd61fab5f858d4",
+          "bytes": 761981130
+        }
+      }
+    },
+    "linux-x64": {
+      "blender": {
+        "version": "4.3.2",
+        "url": "https://download.blender.org/release/Blender4.3/blender-4.3.2-linux-x64.tar.xz",
+        "sha256": "4da1c956673c0485e63054e563ee69198cc8f80d8157dd7592dffc8a6a5592e6",
+        "size": 368852356,
+        "format": "tar.xz",
+        "root": "blender-4.3.2-linux-x64",
+        "entrypoint": "blender",
+        "trim": [
+          "4.3/datafiles/locale",
+          "4.3/scripts/addons_core/cycles",
+          "4.3/python/bin"
+        ],
+        "verify": [
+          "4.3/python/lib/python3.11/site-packages/numpy/__init__.py",
+          "4.3/scripts/addons_core/io_scene_gltf2/__init__.py",
+          "4.3/datafiles/colormanagement/config.ocio",
+          "4.3/datafiles/studiolights"
+        ]
+      },
+      "python": {
+        "version": "3.13.18",
+        "url": "https://github.com/astral-sh/python-build-standalone/releases/download/20261110/cpython-3.13.18+20261110-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz",
+        "sha256": "f2d2199eb25880e07863b391cf7124e7ffa1338b0d65600dfcec117c4223a7fb",
+        "size": 35596130,
+        "release": "20261110",
+        "format": "tar.gz",
+        "kind": "standalone",
+        "root": "python",
+        "entrypoint": "bin/python3",
+        "site_packages": "lib/python3.13/site-packages",
+        "verify": [
+          "lib/python3.13/os.py"
+        ],
+        "wheel_verify": [
+          "bpy/__init__.so",
+          "numpy/__init__.py",
+          "PIL/__init__.py"
+        ]
+      },
+      "wheels": [
+        {
+          "name": "attrs",
+          "version": "26.1.0",
+          "filename": "attrs-26.1.0-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/64/b4/17d4b0b2a2dc85a6df63d1157e028ed19f90d4cd97c36717afef2bc2f395/attrs-26.1.0-py3-none-any.whl",
+          "sha256": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309",
+          "size": 67548
+        },
+        {
+          "name": "bpy",
+          "version": "5.2.2",
+          "filename": "bpy-5.2.2-cp313-cp313-manylinux_2_28_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/e0/a7/a26dc1a04934445b1f549969dee2ad3313d4ee1df5205c166df0e336a9ae/bpy-5.2.2-cp313-cp313-manylinux_2_28_x86_64.whl",
+          "sha256": "3dfd1a9e7a5aec0f0fe95a1b01d10cd66e212b16ea38b77d132159dc9a666d45",
+          "size": 401697653
+        },
+        {
+          "name": "cattrs",
+          "version": "26.2.1",
+          "filename": "cattrs-26.2.1-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/e8/cf/22794a399d99480486120e26e879ef008e21f5e85274c2ed591d568bb326/cattrs-26.2.1-py3-none-any.whl",
+          "sha256": "a12aaa3453dc8f633a815293179f08b7421ed18d2575c459c3c736f840beac24",
+          "size": 74843
+        },
+        {
+          "name": "certifi",
+          "version": "2026.10.23",
+          "filename": "certifi-2026.10.23-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/32/d1/a3652fe2c19134d0d15922177821d863cbd7e842d53a21bbe7e8e3a1b5ac/certifi-2026.10.23-py3-none-any.whl",
+          "sha256": "e9b54de76e530bb6cf0ccd036787103acb58fd42ba930ea8bf948ddbaa2f61d1",
+          "size": 135082
+        },
+        {
+          "name": "charset-normalizer",
+          "version": "3.5.2",
+          "filename": "charset_normalizer-3.5.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/4b/85/41d27f234b82e47c167a5f6c0f62501dc0c640585ff4aba79e08a390336a/charset_normalizer-3.5.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "sha256": "7218e8f32b0956cfcd048fd42d9d5779809745ca1d86113ca56f66e7ae1549c4",
+          "size": 254660
+        },
+        {
+          "name": "Cython",
+          "version": "3.3.0",
+          "filename": "cython-3.3.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/bc/b8/fc595c60a7b6f5f08b4f6ad65e60688e8c61f76064ebe847eaf85d0c59fa/cython-3.3.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "sha256": "23942b0662642927a55676e4b26e6840fb166dd7d76436384685227e7e8619a4",
+          "size": 3407705
+        },
+        {
+          "name": "idna",
+          "version": "3.20",
+          "filename": "idna-3.20-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/58/a2/bb081bab032533a855d44de1d56f8e8426114ff1ba5d1f07a438a0a654f8/idna-3.20-py3-none-any.whl",
+          "sha256": "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c",
+          "size": 69583
+        },
+        {
+          "name": "numpy",
+          "version": "2.5.3",
+          "filename": "numpy-2.5.3-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/3a/1b/3b16a9bc514a440a7a0883684111dcb1ef1aee960af2ca95da8fc775f124/numpy-2.5.3-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+          "sha256": "a5fa86b80fd24bcd1aff83ad23be44ea323de3f787be8f8b15d4a65621e25321",
+          "size": 16708577
+        },
+        {
+          "name": "pillow",
+          "version": "13.0.0",
+          "filename": "pillow-13.0.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/ef/fe/f5cdaa2d1c4086e757430f368c271a58ee29cfe7378e7ae7b9d964015c25/pillow-13.0.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+          "sha256": "5f56499c1a74d2b862beb0c33b8016f99d095858455df9d21583bbbc1c15b582",
+          "size": 7142544
+        },
+        {
+          "name": "requests",
+          "version": "2.34.2",
+          "filename": "requests-2.34.2-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/a0/f4/c67b0b3f1b9245e8d266f0f112c500d50e5b4e83cb6f3b71b6528104182a/requests-2.34.2-py3-none-any.whl",
+          "sha256": "2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0",
+          "size": 73075
+        },
+        {
+          "name": "typing-extensions",
+          "version": "4.16.0",
+          "filename": "typing_extensions-4.16.0-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl",
+          "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+          "size": 45571
+        },
+        {
+          "name": "urllib3",
+          "version": "2.8.0",
+          "filename": "urllib3-2.8.0-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/92/9d/c4e665119135114480843e7ab388fa94d8480650450e6f8e26b70d323a4c/urllib3-2.8.0-py3-none-any.whl",
+          "sha256": "0cf3cae568d36aa9576b28dfb35f11328f1cb974ca7647d9475ebb86c75ac6e3",
+          "size": 135717
+        },
+        {
+          "name": "zstandard",
+          "version": "0.25.0",
+          "filename": "zstandard-0.25.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/63/4b/e3678b4e776db00f9f7b2fe58e547e8928ef32727d7a1ff01dea010f3f13/zstandard-0.25.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+          "sha256": "8e735494da3db08694d26480f1493ad2cf86e99bdd53e8e9771b2752a5c0246a",
+          "size": 5547173
+        }
+      ],
+      "on_disk": {
+        "blender": {
+          "sha256": "4da1c956673c0485e63054e563ee69198cc8f80d8157dd7592dffc8a6a5592e6",
+          "bytes": 1206851569
+        },
+        "runtime": {
+          "key": "4bc2efdf687e6039",
+          "bytes": 1113277867
+        }
+      }
+    },
+    "osx-arm64": {
+      "blender": {
+        "version": "4.3.2",
+        "url": "https://download.blender.org/release/Blender4.3/blender-4.3.2-macos-arm64.dmg",
+        "sha256": "32297d20fae74683052267b9171945712c0aeb8a499d8e677e44740d3e30a034",
+        "size": 320758177,
+        "format": "dmg",
+        "root": "Blender.app",
+        "entrypoint": "Blender.app/Contents/MacOS/Blender",
+        "trim": [],
+        "verify": [
+          "Blender.app/Contents/Resources/4.3/python/lib/python3.11/site-packages/numpy/__init__.py",
+          "Blender.app/Contents/Resources/4.3/scripts/addons_core/io_scene_gltf2/__init__.py",
+          "Blender.app/Contents/Resources/4.3/datafiles/colormanagement/config.ocio",
+          "Blender.app/Contents/Resources/4.3/datafiles/studiolights"
+        ]
+      },
+      "python": {
+        "version": "3.13.18",
+        "url": "https://github.com/astral-sh/python-build-standalone/releases/download/20261110/cpython-3.13.18+20261110-aarch64-apple-darwin-install_only_stripped.tar.gz",
+        "sha256": "7a2384641584ab9984221fcb0fc9265df465922af71be71410529e2a9c3f0540",
+        "size": 25479437,
+        "release": "20261110",
+        "format": "tar.gz",
+        "kind": "standalone",
+        "root": "python",
+        "entrypoint": "bin/python3",
+        "site_packages": "lib/python3.13/site-packages",
+        "verify": [
+          "lib/python3.13/os.py"
+        ],
+        "wheel_verify": [
+          "bpy/__init__.so",
+          "numpy/__init__.py",
+          "PIL/__init__.py"
+        ]
+      },
+      "wheels": [
+        {
+          "name": "attrs",
+          "version": "26.1.0",
+          "filename": "attrs-26.1.0-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/64/b4/17d4b0b2a2dc85a6df63d1157e028ed19f90d4cd97c36717afef2bc2f395/attrs-26.1.0-py3-none-any.whl",
+          "sha256": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309",
+          "size": 67548
+        },
+        {
+          "name": "bpy",
+          "version": "5.2.2",
+          "filename": "bpy-5.2.2-cp313-cp313-macosx_11_0_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/a7/a9/12e3c22933ab3320767cf1bdc48bab61d6fc106492fd1872cdea7c9f02ab/bpy-5.2.2-cp313-cp313-macosx_11_0_arm64.whl",
+          "sha256": "e447dba63ea14ac6a3f10ea23fa7828c6af2a3d5b2ba206ad2262a54d5aa7cf7",
+          "size": 245172189
+        },
+        {
+          "name": "cattrs",
+          "version": "26.2.1",
+          "filename": "cattrs-26.2.1-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/e8/cf/22794a399d99480486120e26e879ef008e21f5e85274c2ed591d568bb326/cattrs-26.2.1-py3-none-any.whl",
+          "sha256": "a12aaa3453dc8f633a815293179f08b7421ed18d2575c459c3c736f840beac24",
+          "size": 74843
+        },
+        {
+          "name": "certifi",
+          "version": "2026.10.23",
+          "filename": "certifi-2026.10.23-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/32/d1/a3652fe2c19134d0d15922177821d863cbd7e842d53a21bbe7e8e3a1b5ac/certifi-2026.10.23-py3-none-any.whl",
+          "sha256": "e9b54de76e530bb6cf0ccd036787103acb58fd42ba930ea8bf948ddbaa2f61d1",
+          "size": 135082
+        },
+        {
+          "name": "charset-normalizer",
+          "version": "3.5.2",
+          "filename": "charset_normalizer-3.5.2-cp313-cp313-macosx_10_13_universal2.whl",
+          "url": "https://files.pythonhosted.org/packages/91/da/3c5a7798c046df7d2d68ad653cf5b6c5a8bfee225055a843c6f2f42aac1a/charset_normalizer-3.5.2-cp313-cp313-macosx_10_13_universal2.whl",
+          "sha256": "6045373d5a89a5ec71afde535db987ca28e76dfa276c2d4c818265b375d4b055",
+          "size": 366626
+        },
+        {
+          "name": "Cython",
+          "version": "3.3.0",
+          "filename": "cython-3.3.0-cp313-cp313-macosx_11_0_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/2f/cc/abc977cf683140e372714acea42164ecfc5cd3d3984ed025860e6d830ee4/cython-3.3.0-cp313-cp313-macosx_11_0_arm64.whl",
+          "sha256": "03056533fe4fdbc4f1d34a39178f9a4937ff35196f8bcdde2a67b5b5809c61fe",
+          "size": 3134892
+        },
+        {
+          "name": "idna",
+          "version": "3.20",
+          "filename": "idna-3.20-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/58/a2/bb081bab032533a855d44de1d56f8e8426114ff1ba5d1f07a438a0a654f8/idna-3.20-py3-none-any.whl",
+          "sha256": "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c",
+          "size": 69583
+        },
+        {
+          "name": "numpy",
+          "version": "2.5.3",
+          "filename": "numpy-2.5.3-cp313-cp313-macosx_11_0_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/2f/06/9dc9e48b5e5e941c8b10350c5ff2d721da42a20517d911d15544246775ff/numpy-2.5.3-cp313-cp313-macosx_11_0_arm64.whl",
+          "sha256": "92f30e89b8ee0ecf363033576c422b2f58fed6a80bed0aa48dff6d14c654663e",
+          "size": 12003676
+        },
+        {
+          "name": "pillow",
+          "version": "13.0.0",
+          "filename": "pillow-13.0.0-cp313-cp313-macosx_11_0_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/98/c8/ccede3dcc4f274b80fb49199eed1ef34ba05566c8b71976b9d1f111da2e3/pillow-13.0.0-cp313-cp313-macosx_11_0_arm64.whl",
+          "sha256": "f11a3c1358bb3c68012a7b1f41b223c3db9f7bfde90b481df028cfe1c3363313",
+          "size": 4852187
+        },
+        {
+          "name": "requests",
+          "version": "2.34.2",
+          "filename": "requests-2.34.2-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/a0/f4/c67b0b3f1b9245e8d266f0f112c500d50e5b4e83cb6f3b71b6528104182a/requests-2.34.2-py3-none-any.whl",
+          "sha256": "2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0",
+          "size": 73075
+        },
+        {
+          "name": "typing-extensions",
+          "version": "4.16.0",
+          "filename": "typing_extensions-4.16.0-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl",
+          "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+          "size": 45571
+        },
+        {
+          "name": "urllib3",
+          "version": "2.8.0",
+          "filename": "urllib3-2.8.0-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/92/9d/c4e665119135114480843e7ab388fa94d8480650450e6f8e26b70d323a4c/urllib3-2.8.0-py3-none-any.whl",
+          "sha256": "0cf3cae568d36aa9576b28dfb35f11328f1cb974ca7647d9475ebb86c75ac6e3",
+          "size": 135717
+        },
+        {
+          "name": "zstandard",
+          "version": "0.25.0",
+          "filename": "zstandard-0.25.0-cp313-cp313-macosx_11_0_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/3f/06/9ae96a3e5dcfd119377ba33d4c42a7d89da1efabd5cb3e366b156c45ff4d/zstandard-0.25.0-cp313-cp313-macosx_11_0_arm64.whl",
+          "sha256": "a1a4ae2dec3993a32247995bdfe367fc3266da832d82f8438c8570f989753de1",
+          "size": 640440
+        }
+      ],
+      "on_disk": {
+        "blender": {
+          "sha256": "32297d20fae74683052267b9171945712c0aeb8a499d8e677e44740d3e30a034",
+          "bytes": 862289765
+        },
+        "runtime": {
+          "key": "0241e7197d525dd8",
+          "bytes": 841682055
+        }
+      }
+    }
+  }
+}

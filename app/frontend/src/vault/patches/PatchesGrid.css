@@ -1,0 +1,523 @@
+/* Patches grid: import button, patch rows, play overlay, cover cards, xdelta modal fields — split from StorageViewer.css 2026-08-22 (phase 3) */
+/* Rules copied verbatim; loaded right after StorageViewer.css from StorageViewer.jsx so the cascade order is unchanged. */
+
+/* Import file button container */
+.import-file-container {
+  position: fixed;
+  /* Stack above the global "+ Import" FAB (which sits at bottom/right
+     --space-6 and is ~56px tall) so the two fixed buttons never overlap.
+     Right edge is aligned to the FAB's for a clean vertical stack. */
+  bottom: calc(var(--space-6) + 56px + var(--space-3));
+  right: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-3);
+  z-index: 100;
+}
+
+.import-file-container .intake-import-btn {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 30px rgba(125, 211, 232, 0.2);
+}
+
+.import-file-container .import-message {
+  text-align: right;
+}
+
+.patches-section {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  width: min(100%, var(--page-shell-max-width-narrow));
+  margin: 0 auto;
+  padding: var(--panel-block-padding) 0;
+  gap: var(--space-4);
+}
+
+
+/* Stagger animation for patch rows */
+
+
+.btn-build-iso {
+  background: var(--gradient-cyan);
+  color: var(--color-bg-deep);
+  border: none;
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    filter var(--transition-fast);
+}
+
+.btn-build-iso:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), var(--glow-cyan-sm);
+  filter: brightness(1.05);
+}
+
+.btn-build-iso:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-build-iso:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* Play progress overlay */
+.play-overlay {
+  position: fixed;
+  /* below the app header (it stacks above in-tree overlays) */
+  inset: var(--app-header-h, 0px) 0 0 0;
+  background: rgba(10, 20, 32, 0.82);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+}
+
+.play-card {
+  background: var(--color-bg-base, #0d1929);
+  border: 1px solid var(--color-border, #3d4f5c);
+  border-radius: 14px;
+  padding: 2rem;
+  width: min(100%, 22rem);
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.play-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.play-icon.error {
+  color: var(--color-danger, #ff4757);
+}
+
+.play-card-msg {
+  color: var(--color-text-primary, #f5f5f5);
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.play-card-pct {
+  color: var(--color-teal, #00d4aa);
+  font-weight: 700;
+  margin: 0.5rem 0 0 0;
+}
+
+.play-bar {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--color-bg-surface, #283544);
+  overflow: hidden;
+}
+
+.play-bar-fill {
+  height: 100%;
+  background: var(--gradient-teal, linear-gradient(135deg, #00d4aa, #00b894));
+  border-radius: 4px;
+  transition: width 0.25s ease;
+}
+
+.play-spinner {
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 1rem;
+  border: 4px solid var(--color-bg-surface, #283544);
+  border-top-color: var(--color-teal, #00d4aa);
+  border-radius: 50%;
+  animation: play-spin 0.8s linear infinite;
+}
+
+@keyframes play-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* =========================================================================
+   Vault cover-card library (Steam-style grid)
+   ========================================================================= */
+
+.vault-section-title {
+  margin: 0 0 var(--space-4);
+  color: var(--color-text-secondary);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+}
+
+.patches-section .vault-section-title:not(:first-child) {
+  margin-top: var(--space-8);
+}
+
+.cover-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: var(--space-5);
+}
+
+.cover-card {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--color-bg-elevated, #1a2332);
+  border: 1px solid var(--color-border, #3d4f5c);
+  box-shadow: var(--shadow-md);
+  transition:
+    transform var(--transition-spring),
+    box-shadow var(--transition-normal),
+    border-color var(--transition-normal);
+  animation: cover-pop var(--duration-normal) var(--ease-out) backwards;
+}
+
+@keyframes cover-pop {
+  from { opacity: 0; transform: translateY(10px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+.cover-card:hover {
+  transform: translateY(-6px) scale(1.025);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--color-text-tertiary, #8896a4);
+}
+
+.cover-card.bundle:hover {
+  box-shadow: var(--shadow-xl), var(--glow-gold-sm);
+  border-color: var(--color-gold, #ffc700);
+}
+
+.cover-card.patch:hover {
+  box-shadow: var(--shadow-xl), var(--glow-cyan-sm);
+  border-color: var(--color-cyan, #7dd3e8);
+}
+
+/* --- cover art (blurred backdrop + letterboxed image) --- */
+.cover-art {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--color-bg-deep, #0a1420);
+}
+
+.cover-art-blur {
+  position: absolute;
+  inset: -12%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(22px) brightness(0.45) saturate(1.1);
+  transform: scale(1.12);
+}
+
+.cover-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 1;
+  transition: transform var(--transition-slow);
+}
+
+.cover-card:hover .cover-img { transform: scale(1.04); }
+
+.cover-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    radial-gradient(130% 90% at 50% -10%, rgba(255, 255, 255, 0.16), transparent 55%),
+    var(--gradient-cyan, linear-gradient(135deg, #00bcd4, #00838f));
+}
+
+.cover-card.bundle .cover-placeholder {
+  background:
+    radial-gradient(130% 90% at 50% -10%, rgba(255, 255, 255, 0.18), transparent 55%),
+    var(--gradient-gold, linear-gradient(135deg, #ffc700, #ff9500));
+}
+
+.cover-placeholder::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.07) 0 14px,
+    transparent 14px 28px
+  );
+  mix-blend-mode: overlay;
+}
+
+.cover-monogram {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-weight: var(--font-extrabold);
+  color: rgba(10, 20, 32, 0.82);
+  letter-spacing: var(--tracking-tight);
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
+  z-index: 1;
+}
+
+/* --- overlays --- */
+.cover-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(8, 14, 24, 0.96) 0%,
+    rgba(8, 14, 24, 0.55) 32%,
+    rgba(8, 14, 24, 0) 58%
+  );
+}
+
+
+/* --- body / actions --- */
+.cover-body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.cover-title {
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: var(--font-bold);
+  font-size: var(--text-base);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
+}
+
+.cover-meta {
+  margin: 0;
+  color: var(--color-text-secondary, #b8c5d0);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cover-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+/* Primary Play button — the app's cyan brand CTA (matches .btn-build-iso /
+   the Save action), not the old off-brand teal. */
+.cover-play {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--gradient-cyan);
+  color: var(--color-bg-deep, #0a1420);
+  font-family: var(--font-display);
+  font-weight: var(--font-bold);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-tight);
+  cursor: pointer;
+  transition: filter var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.cover-play:hover:not(:disabled) {
+  filter: brightness(1.08);
+  box-shadow: var(--glow-cyan-sm);
+}
+
+.cover-play:active:not(:disabled) { transform: scale(0.97); }
+.cover-play:disabled { cursor: progress; }
+
+/* Secondary Export action — a clean bordered button sized to match Play,
+   consistent with the app's secondary button treatment. */
+.cover-secondary {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.2));
+  border-radius: var(--radius-md);
+  background: rgba(8, 14, 24, 0.55);
+  backdrop-filter: blur(6px);
+  color: var(--color-text-primary, #f5f5f5);
+  font-family: var(--font-display);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.cover-secondary:hover {
+  background: var(--color-bg-surface);
+  color: var(--color-cyan, #7dd3e8);
+  border-color: var(--color-cyan, #7dd3e8);
+}
+
+/* --- create-new tile --- */
+.cover-create {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  border-style: dashed;
+  background: var(--color-bg-surface, #283544);
+  color: var(--color-text-secondary, #b8c5d0);
+  cursor: pointer;
+  font-family: var(--font-display);
+}
+
+.cover-create:hover {
+  border-color: var(--color-cyan, #7dd3e8);
+  color: var(--color-text-primary, #f5f5f5);
+}
+
+.cover-create-plus {
+  font-size: 2.75rem;
+  font-weight: var(--font-light);
+  line-height: 1;
+  color: var(--color-cyan, #7dd3e8);
+}
+
+.cover-create-label { font-size: var(--text-base); font-weight: var(--font-semibold); }
+.cover-create-sub { font-size: var(--text-xs); color: var(--color-text-tertiary, #8896a4); }
+
+.btn-download-iso {
+  background: var(--gradient-cyan);
+  color: var(--color-bg-deep);
+  border: none;
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    filter var(--transition-fast);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: var(--shadow-sm);
+  }
+  50% {
+    box-shadow: var(--shadow-md), 0 0 20px rgba(125, 211, 232, 0.4);
+  }
+}
+
+.btn-download-iso:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), 0 0 20px rgba(125, 211, 232, 0.4);
+  filter: brightness(1.05);
+}
+
+.btn-download-iso:active {
+  transform: translateY(0) scale(0.98);
+}
+
+
+/* Edit field for modals */
+.edit-field {
+  margin-bottom: var(--space-4);
+}
+
+.edit-field label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+.edit-field input[type="text"],
+.edit-field textarea {
+  width: 100%;
+  padding: var(--space-3);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-md);
+  color: var(--color-text-primary);
+  transition: border-color var(--transition-fast);
+}
+
+.edit-field input[type="text"]:focus,
+.edit-field textarea:focus {
+  outline: none;
+  border-color: var(--color-cyan);
+}
+
+.edit-field textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.edit-field input[type="file"] {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+
+/* Modal buttons for xdelta build */
+.iso-builder-modal .btn-download,
+.iso-builder-modal .btn-secondary {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition:
+    transform var(--transition-fast),
+    filter var(--transition-fast);
+}
+
+.iso-builder-modal .btn-download:hover,
+.iso-builder-modal .btn-secondary:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+.iso-builder-modal .btn-download:active,
+.iso-builder-modal .btn-secondary:active {
+  transform: translateY(0) scale(0.98);
+}

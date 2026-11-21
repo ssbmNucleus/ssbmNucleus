@@ -1,0 +1,81 @@
+{
+ "character": "Samus",
+ "source": "PlSsNr",
+ "verified": true,
+ "notes": "Every index probed individually. helmet: 0 front dome, 3 top, 4 sides, 14 red back-of-helmet/neck guard; 12 = the two hex vents on the helmet back; 1/2 = grey visor frame. visor: 44 is a layered sheen over the visor - painting it only tints the green (the base green is material colour), so visor recolours are partial. 9 = red chest/torso sides under the arms. bodysuit (yellow): 10 abdomen, 15 back, 33 waist band, 34 pelvis, 36 inner thighs. shoulders: 25 outer shell, 26 front shell, 21 back shell, 24 the small red fins; 22 = grey ribbed ring under each pauldron. armor (orange plates): 35/37/38 thighs, 13/16 shins, 39 upper arms, 41 forearm; 37 also covers the upper-arm front, so it is a generic orange-plate texture. 5 = knee pads. joints: 7 dark ribbing at neck/armpits/knees, 42 elbow/wrist bands. 6 = the bare left hand (glove). boots: 11 foot, 18 ankle front, 19 sole rim, 17 soles (the dark object behind the body in the back view is the raised foot's sole). arm cannon: 46 top plate, 47 back ring, 48 side, 50 muzzle. low detail: 27 (whole-body composite), 28, 29 (helmet composite), 30, 31 - mapped but nothing renders on the high-poly model. UNLABELLED (probed, no visible change in either view): 8 and 23 (white stripe masks), 20 (blurry Samus image, 854 tris - likely a reflection/env layer), 32 (1936 tris, likely a specular/env layer), 40, 43 (cyan env map), 45 (grey square), 49 (cannon-bounds, not visible).",
+ "groups": {
+  "helmet": [
+   0,
+   3,
+   4,
+   14
+  ],
+  "helmet vents": [
+   12
+  ],
+  "helmet trim": [
+   1,
+   2
+  ],
+  "visor": [
+   44
+  ],
+  "chest": [
+   9
+  ],
+  "bodysuit": [
+   10,
+   15,
+   33,
+   34,
+   36
+  ],
+  "shoulders": [
+   21,
+   24,
+   25,
+   26
+  ],
+  "shoulder rings": [
+   22
+  ],
+  "armor": [
+   13,
+   16,
+   35,
+   37,
+   38,
+   39,
+   41
+  ],
+  "knee pads": [
+   5
+  ],
+  "joints": [
+   7,
+   42
+  ],
+  "gloves": [
+   6
+  ],
+  "boots": [
+   11,
+   17,
+   18,
+   19
+  ],
+  "arm cannon": [
+   46,
+   47,
+   48,
+   50
+  ],
+  "low detail": [
+   27,
+   28,
+   29,
+   30,
+   31
+  ]
+ }
+}

@@ -1,0 +1,42 @@
+{
+  "character": "Falco",
+  "basis": {"costumeCode": "PlFcNr", "textureCount": 25},
+  "regions": {
+    "fur": [11, 12, 15, 18, 24],
+    "cloth": [1, 2, 8, 9, 19, 20, 21],
+    "armor": [0, 3, 5, 6, 7, 10, 22],
+    "eyes": [13, 23],
+    "face_detail": [14, 16, 17]
+  },
+  "protected": [13, 23],
+  "liveHints": ["fur"],
+  "maskHints": {
+    "fur": {"hueMin": 200, "hueMax": 265, "satMin": 18},
+    "eyes": {"hueMin": 175, "hueMax": 260, "satMin": 12}
+  },
+  "notes": {
+    "0": "gray metal sheet (hidden in viewer; likely low-poly boots)",
+    "1": "rust pants back",
+    "2": "rust pants front",
+    "5": "white metal boots",
+    "6": "small gray shine near beak",
+    "8": "rust vest front (dark collar)",
+    "9": "red neckerchief",
+    "10": "belt buckle",
+    "11": "blue feathers (body)",
+    "12": "blue feathers (patterned, head)",
+    "13": "eye texture (red marking background) - protected",
+    "14": "beak + eye surround",
+    "15": "hand: tan palm + blue feather fringe (fur mask hits feathers only)",
+    "16": "beak side",
+    "17": "beak side dark",
+    "18": "head feathers incl red marking + lips (256x256)",
+    "19": "cream jacket",
+    "20": "cream jacket sleeve",
+    "21": "cream jacket back",
+    "22": "zipper strip",
+    "23": "eye texture duplicate - protected",
+    "24": "tail feathers",
+    "cloth_masking": "cloth/armor textures are single-purpose: liveHints limited to fur so cloth+armor ops cover every opaque pixel (cream jacket is pale and a computed hue band would miss it)"
+  }
+}

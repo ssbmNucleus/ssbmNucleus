@@ -1,0 +1,151 @@
+﻿/* IsoScanModal - wider modal with CSP grid for ISO skin ripping */
+
+.iso-scan-modal {
+  max-width: min(100%, 60rem);
+}
+
+.iso-scan-help {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  margin: 0 0 var(--space-4) 0;
+}
+
+.iso-scan-help code {
+  background: var(--color-bg-surface);
+  padding: 0.1em 0.4em;
+  border-radius: var(--radius-sm);
+  font-size: 0.92em;
+}
+
+.iso-scan-warning {
+  background: rgba(255, 180, 50, 0.08);
+  border: 1px solid rgba(255, 180, 50, 0.35);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+}
+
+.iso-scan-warning strong {
+  color: rgb(255, 200, 90);
+}
+
+.iso-scan-warning p {
+  margin: var(--space-2) 0 0 0;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+.iso-scan-warning code {
+  background: var(--color-bg-surface);
+  padding: 0.1em 0.4em;
+  border-radius: var(--radius-sm);
+  font-size: 0.9em;
+}
+
+.iso-scan-link {
+  color: var(--color-text-primary);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.9em;
+}
+
+/* â”€â”€ File list (idle phase) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+.iso-scan-file-list {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  min-height: 6rem;
+  max-height: 16rem;
+  overflow-y: auto;
+  padding: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.iso-scan-empty {
+  text-align: center;
+  color: var(--color-text-tertiary);
+  font-size: var(--text-sm);
+  padding: var(--space-6) 0;
+  font-style: italic;
+}
+
+.iso-scan-file-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+
+.iso-scan-file-row:hover {
+  background: var(--color-bg-hover);
+}
+
+.iso-scan-file-name {
+  flex: 1;
+  font-family: var(--font-mono, monospace);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.iso-scan-remove {
+  background: transparent;
+  border: none;
+  color: var(--color-text-tertiary);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.iso-scan-remove:hover {
+  color: var(--color-error);
+  background: rgba(255, 80, 80, 0.1);
+}
+
+.iso-scan-actions {
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+/* â”€â”€ Scanning phase â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+
+
+/* â”€â”€ Results phase â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+.iso-scan-targets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3) var(--space-5);
+  margin-bottom: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.iso-scan-targets label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.iso-scan-targets input[type="checkbox"] {
+  accent-color: #7dd3e8;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}

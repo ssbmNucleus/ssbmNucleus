@@ -1,0 +1,749 @@
+{
+  "_comment": "Mods copied from an existing vault into the guide's scratch vault. Paths are globs relative to --vault. Pick things that are public and look good in a screenshot; never unreleased content.",
+  "items": [
+    {
+      "path": "Ice Climbers/Monochrome Animelee-plppgr.zip",
+      "name": "Monochrome Animelee"
+    },
+    {
+      "path": "Ice Climbers/Monochrome Animelee-plppor.zip",
+      "name": "Monochrome Animelee 2"
+    },
+    {
+      "path": "Ice Climbers/Monochrome Animelee-plppnr.zip",
+      "name": "Monochrome Animelee 3"
+    },
+    {
+      "path": "Ice Climbers/Monochrome Animelee-plppre.zip",
+      "name": "Monochrome Animelee 4"
+    },
+    {
+      "path": "Ice Climbers/Monochrome Animelee-plnnye.zip",
+      "name": "Monochrome Animelee 5"
+    },
+    {
+      "path": "Ice Climbers/Monochrome Animelee-plnnaq.zip",
+      "name": "Monochrome Animelee 6"
+    },
+    {
+      "path": "Pikachu/Monochrome Animelee-plpknr.zip",
+      "name": "Monochrome Animelee 7"
+    },
+    {
+      "path": "Pikachu/Monochrome Animelee-plpkre.zip",
+      "name": "Monochrome Animelee 8"
+    },
+    {
+      "path": "Pikachu/Monochrome Animelee-plpkbu.zip",
+      "name": "Monochrome Animelee 9"
+    },
+    {
+      "path": "Pikachu/Monochrome Animelee-plpkgr.zip",
+      "name": "Monochrome Animelee 10"
+    },
+    {
+      "path": "Pikachu/Genesis color scheme SkinPack-pikaover-red-costume.zip",
+      "name": "Genesis color scheme SkinPack"
+    },
+    {
+      "path": "Pikachu/Pirate-chu-plpkre-pirate.zip",
+      "name": "Pirate-chu"
+    },
+    {
+      "path": "Pichu/Monochrome Animelee-plpcre.zip",
+      "name": "Monochrome Animelee 11"
+    },
+    {
+      "path": "Pichu/Monochrome Animelee-plpcgr.zip",
+      "name": "Monochrome Animelee 12"
+    },
+    {
+      "path": "Pichu/Monochrome Animelee-plpcbu.zip",
+      "name": "Monochrome Animelee 13"
+    },
+    {
+      "path": "Pichu/Monochrome Animelee-plpcnr.zip",
+      "name": "Monochrome Animelee 14"
+    },
+    {
+      "path": "Pichu/Animelee Spikey Ear Pichu-plpcgr-segreenpichua.zip",
+      "name": "Animelee Spikey Ear Pichu"
+    },
+    {
+      "path": "Pichu/Animelee Spikey Ear Pichu-plpcre-seredpichua.zip",
+      "name": "Animelee Spikey Ear Pichu 2"
+    },
+    {
+      "path": "Dr. Mario/Monochrome Animelee-pldrre.zip",
+      "name": "Monochrome Animelee 15"
+    },
+    {
+      "path": "Dr. Mario/Monochrome Animelee-pldrnr.zip",
+      "name": "Monochrome Animelee 16"
+    },
+    {
+      "path": "Dr. Mario/Monochrome Animelee-pldrbk.zip",
+      "name": "Monochrome Animelee 17"
+    },
+    {
+      "path": "Dr. Mario/Monochrome Animelee-pldrbu.zip",
+      "name": "Monochrome Animelee 18"
+    },
+    {
+      "path": "Dr. Mario/Monochrome Animelee-pldrgr.zip",
+      "name": "Monochrome Animelee 19"
+    },
+    {
+      "path": "Dr. Mario/Genesis color scheme SkinPack-dr-mario.zip",
+      "name": "Genesis color scheme SkinPack 2"
+    },
+    {
+      "path": "Mario/Monochrome Animelee-plmrbk.zip",
+      "name": "Monochrome Animelee 20"
+    },
+    {
+      "path": "Mario/Monochrome Animelee-plmrnr.zip",
+      "name": "Monochrome Animelee 21"
+    },
+    {
+      "path": "Mario/Monochrome Animelee-plmrbu.zip",
+      "name": "Monochrome Animelee 22"
+    },
+    {
+      "path": "Mario/Monochrome Animelee-plmrye.zip",
+      "name": "Monochrome Animelee 23"
+    },
+    {
+      "path": "Mario/Monochrome Animelee-plmrgr.zip",
+      "name": "Monochrome Animelee 24"
+    },
+    {
+      "path": "Mario/Genesis color scheme SkinPack-mario.zip",
+      "name": "Genesis color scheme SkinPack 3"
+    },
+    {
+      "path": "Sheik/Monochrome Animelee-plsknr.zip",
+      "name": "Monochrome Animelee 25"
+    },
+    {
+      "path": "Sheik/Monochrome Animelee-plskwh.zip",
+      "name": "Monochrome Animelee 26"
+    },
+    {
+      "path": "Sheik/Monochrome Animelee-plskbu.zip",
+      "name": "Monochrome Animelee 27"
+    },
+    {
+      "path": "Sheik/Monochrome Animelee-plskre.zip",
+      "name": "Monochrome Animelee 28"
+    },
+    {
+      "path": "Sheik/Monochrome Animelee-plskgr.zip",
+      "name": "Monochrome Animelee 29"
+    },
+    {
+      "path": "Sheik/Lazlo's Remaster Pack-plskre-ryuh.zip",
+      "name": "Lazlo's Remaster Pack"
+    },
+    {
+      "path": "Ness/Monochrome Animelee-plnsbu.zip",
+      "name": "Monochrome Animelee 30"
+    },
+    {
+      "path": "Ness/Monochrome Animelee-plnsnr.zip",
+      "name": "Monochrome Animelee 31"
+    },
+    {
+      "path": "Ness/Monochrome Animelee-plnsye.zip",
+      "name": "Monochrome Animelee 32"
+    },
+    {
+      "path": "Ness/Monochrome Animelee-plnsgr.zip",
+      "name": "Monochrome Animelee 33"
+    },
+    {
+      "path": "Ness/Mew over Ness v2-plnsye-mew-v2-animelee-yellow.zip",
+      "name": "Mew over Ness v2"
+    },
+    {
+      "path": "Ness/Mew over Ness v2-plnsbu-mew-v2-animelee-shiny.zip",
+      "name": "Mew over Ness v2 2"
+    },
+    {
+      "path": "Falco/Monochrome Animelee-plfcnr.zip",
+      "name": "Monochrome Animelee 34"
+    },
+    {
+      "path": "Falco/Monochrome Animelee-plfcgr.zip",
+      "name": "Monochrome Animelee 35"
+    },
+    {
+      "path": "Falco/Monochrome Animelee-plfcre.zip",
+      "name": "Monochrome Animelee 36"
+    },
+    {
+      "path": "Falco/Monochrome Animelee-plfcbu.zip",
+      "name": "Monochrome Animelee 37"
+    },
+    {
+      "path": "Falco/Agent Spacies-plfcnr-agent.zip",
+      "name": "Agent Spacies"
+    },
+    {
+      "path": "Falco/Agent Spacies-plfcre-agent.zip",
+      "name": "Agent Spacies 2"
+    },
+    {
+      "path": "Peach/Monochrome Animelee-plpewh.zip",
+      "name": "Monochrome Animelee 38"
+    },
+    {
+      "path": "Peach/Monochrome Animelee-plpenr.zip",
+      "name": "Monochrome Animelee 39"
+    },
+    {
+      "path": "Peach/Monochrome Animelee-plpebu.zip",
+      "name": "Monochrome Animelee 40"
+    },
+    {
+      "path": "Peach/Monochrome Animelee-plpeye.zip",
+      "name": "Monochrome Animelee 41"
+    },
+    {
+      "path": "Peach/Monochrome Animelee-plpegr.zip",
+      "name": "Monochrome Animelee 42"
+    },
+    {
+      "path": "Peach/Cloud & Aerith-plpebu-aerith.zip",
+      "name": "Cloud & Aerith"
+    },
+    {
+      "path": "C. Falcon/Monochrome Animelee-plcabu.zip",
+      "name": "Monochrome Animelee 43"
+    },
+    {
+      "path": "C. Falcon/Monochrome Animelee-plcagr.zip",
+      "name": "Monochrome Animelee 44"
+    },
+    {
+      "path": "C. Falcon/Monochrome Animelee-plcanr.zip",
+      "name": "Monochrome Animelee 45"
+    },
+    {
+      "path": "C. Falcon/Monochrome Animelee-plcawh.zip",
+      "name": "Monochrome Animelee 46"
+    },
+    {
+      "path": "C. Falcon/Monochrome Animelee-plcagy.zip",
+      "name": "Monochrome Animelee 47"
+    },
+    {
+      "path": "C. Falcon/Monochrome Animelee-plcare.zip",
+      "name": "Monochrome Animelee 48"
+    },
+    {
+      "path": "Roy/Monochrome Animelee-plfebu.zip",
+      "name": "Monochrome Animelee 49"
+    },
+    {
+      "path": "Roy/Monochrome Animelee-plfenr.zip",
+      "name": "Monochrome Animelee 50"
+    },
+    {
+      "path": "Roy/Monochrome Animelee-plfere.zip",
+      "name": "Monochrome Animelee 51"
+    },
+    {
+      "path": "Roy/Monochrome Animelee-plfegr.zip",
+      "name": "Monochrome Animelee 52"
+    },
+    {
+      "path": "Roy/Monochrome Animelee-plfeye.zip",
+      "name": "Monochrome Animelee 53"
+    },
+    {
+      "path": "Roy/Medabots Melee-plfebu-rokusho-animelee.zip",
+      "name": "Medabots Melee"
+    },
+    {
+      "path": "DK/Monochrome Animelee-pldkbk.zip",
+      "name": "Monochrome Animelee 54"
+    },
+    {
+      "path": "DK/Monochrome Animelee-pldknr.zip",
+      "name": "Monochrome Animelee 55"
+    },
+    {
+      "path": "DK/Monochrome Animelee-pldkbu.zip",
+      "name": "Monochrome Animelee 56"
+    },
+    {
+      "path": "DK/Monochrome Animelee-pldkre.zip",
+      "name": "Monochrome Animelee 57"
+    },
+    {
+      "path": "DK/Monochrome Animelee-pldkgr.zip",
+      "name": "Monochrome Animelee 58"
+    },
+    {
+      "path": "DK/Custom Funky Kong Costume with CSPs-plfkre.zip",
+      "name": "Custom Funky Kong Costume with CSPs"
+    },
+    {
+      "path": "Mewtwo/Monochrome Animelee-plmtgr.zip",
+      "name": "Monochrome Animelee 59"
+    },
+    {
+      "path": "Mewtwo/Monochrome Animelee-plmtre.zip",
+      "name": "Monochrome Animelee 60"
+    },
+    {
+      "path": "Mewtwo/Monochrome Animelee-plmtbu.zip",
+      "name": "Monochrome Animelee 61"
+    },
+    {
+      "path": "Mewtwo/Monochrome Animelee-plmtnr.zip",
+      "name": "Monochrome Animelee 62"
+    },
+    {
+      "path": "Mewtwo/Armored Mewtwo Version 2-plmtnr-neutral-armor-v2.zip",
+      "name": "Armored Mewtwo Version 2"
+    },
+    {
+      "path": "Mewtwo/Armored Mewtwo Version 2-plmtre-red-armor-v2.zip",
+      "name": "Armored Mewtwo Version 2 2"
+    },
+    {
+      "path": "Fox/Monochrome Animelee-plfxnr.zip",
+      "name": "Monochrome Animelee 63"
+    },
+    {
+      "path": "Fox/Monochrome Animelee-plfxor.zip",
+      "name": "Monochrome Animelee 64"
+    },
+    {
+      "path": "Fox/Monochrome Animelee-plfxla.zip",
+      "name": "Monochrome Animelee 65"
+    },
+    {
+      "path": "Fox/Monochrome Animelee-plfxgr.zip",
+      "name": "Monochrome Animelee 66"
+    },
+    {
+      "path": "Fox/Agent Spacies-plfxnr-agent.zip",
+      "name": "Agent Spacies 3"
+    },
+    {
+      "path": "Fox/Agent Spacies-plfxla-agent.zip",
+      "name": "Agent Spacies 4"
+    },
+    {
+      "path": "Bowser/Monochrome Animelee-plkpnr.zip",
+      "name": "Monochrome Animelee 67"
+    },
+    {
+      "path": "Bowser/Monochrome Animelee-plkpre.zip",
+      "name": "Monochrome Animelee 68"
+    },
+    {
+      "path": "Bowser/Monochrome Animelee-plkpbu.zip",
+      "name": "Monochrome Animelee 69"
+    },
+    {
+      "path": "Bowser/Monochrome Animelee-plkpbk.zip",
+      "name": "Monochrome Animelee 70"
+    },
+    {
+      "path": "Bowser/Blastoise over Bowser-plkpbu-animelee-blastoise-bowser.zip",
+      "name": "Blastoise over Bowser"
+    },
+    {
+      "path": "Bowser/Blastoise over Bowser-plkpnr-blastoise-bowser.zip",
+      "name": "Blastoise over Bowser 2"
+    },
+    {
+      "path": "Jigglypuff/Monochrome Animelee-plprye.zip",
+      "name": "Monochrome Animelee 71"
+    },
+    {
+      "path": "Jigglypuff/Monochrome Animelee-plprnr.zip",
+      "name": "Monochrome Animelee 72"
+    },
+    {
+      "path": "Jigglypuff/Monochrome Animelee-plprgr.zip",
+      "name": "Monochrome Animelee 73"
+    },
+    {
+      "path": "Jigglypuff/Monochrome Animelee-plprre.zip",
+      "name": "Monochrome Animelee 74"
+    },
+    {
+      "path": "Jigglypuff/Monochrome Animelee-plprbu.zip",
+      "name": "Monochrome Animelee 75"
+    },
+    {
+      "path": "Jigglypuff/Genesis color scheme SkinPack-jigglypuffover-green-costume.zip",
+      "name": "Genesis color scheme SkinPack 4"
+    },
+    {
+      "path": "Link/Monochrome Animelee-pllkwh.zip",
+      "name": "Monochrome Animelee 76"
+    },
+    {
+      "path": "Link/Monochrome Animelee-pllkre.zip",
+      "name": "Monochrome Animelee 77"
+    },
+    {
+      "path": "Link/Monochrome Animelee-pllkbu.zip",
+      "name": "Monochrome Animelee 78"
+    },
+    {
+      "path": "Link/Monochrome Animelee-pllkbk.zip",
+      "name": "Monochrome Animelee 79"
+    },
+    {
+      "path": "Link/Monochrome Animelee-pllknr.zip",
+      "name": "Monochrome Animelee 80"
+    },
+    {
+      "path": "Link/Burritopher's Link Pack-pllkwh.zip",
+      "name": "Burritopher's Link Pack"
+    },
+    {
+      "path": "Luigi/Monochrome Animelee-pllgnr.zip",
+      "name": "Monochrome Animelee 81"
+    },
+    {
+      "path": "Luigi/Monochrome Animelee-pllgpi.zip",
+      "name": "Monochrome Animelee 82"
+    },
+    {
+      "path": "Luigi/Monochrome Animelee-pllgwh.zip",
+      "name": "Monochrome Animelee 83"
+    },
+    {
+      "path": "Luigi/Monochrome Animelee-pllgaq.zip",
+      "name": "Monochrome Animelee 84"
+    },
+    {
+      "path": "Luigi/Genesis color scheme SkinPack-luigi.zip",
+      "name": "Genesis color scheme SkinPack 5"
+    },
+    {
+      "path": "Luigi/Krillin over Luigi-krillinnr.zip",
+      "name": "Krillin over Luigi"
+    },
+    {
+      "path": "Yoshi/Monochrome Animelee-plysnr.zip",
+      "name": "Monochrome Animelee 85"
+    },
+    {
+      "path": "Yoshi/Monochrome Animelee-plysye.zip",
+      "name": "Monochrome Animelee 86"
+    },
+    {
+      "path": "Yoshi/Monochrome Animelee-plysbu.zip",
+      "name": "Monochrome Animelee 87"
+    },
+    {
+      "path": "Yoshi/Monochrome Animelee-plysaq.zip",
+      "name": "Monochrome Animelee 88"
+    },
+    {
+      "path": "Yoshi/Monochrome Animelee-plysre.zip",
+      "name": "Monochrome Animelee 89"
+    },
+    {
+      "path": "Yoshi/Monochrome Animelee-plyspi.zip",
+      "name": "Monochrome Animelee 90"
+    },
+    {
+      "path": "Ganondorf/Monochrome Animelee-plgnre.zip",
+      "name": "Monochrome Animelee 91"
+    },
+    {
+      "path": "Ganondorf/Monochrome Animelee-plgnla.zip",
+      "name": "Monochrome Animelee 92"
+    },
+    {
+      "path": "Ganondorf/Monochrome Animelee-plgngr.zip",
+      "name": "Monochrome Animelee 93"
+    },
+    {
+      "path": "Ganondorf/Monochrome Animelee-plgnbu.zip",
+      "name": "Monochrome Animelee 94"
+    },
+    {
+      "path": "Ganondorf/Monochrome Animelee-plgnnr.zip",
+      "name": "Monochrome Animelee 95"
+    },
+    {
+      "path": "Ganondorf/DBZ Pack _ Piccolo-plgngr-piccolo-ganon.zip",
+      "name": "DBZ Pack | Piccolo"
+    },
+    {
+      "path": "Samus/Monochrome Animelee-plsspi.zip",
+      "name": "Monochrome Animelee 96"
+    },
+    {
+      "path": "Samus/Monochrome Animelee-plssgr.zip",
+      "name": "Monochrome Animelee 97"
+    },
+    {
+      "path": "Samus/Monochrome Animelee-plssnr.zip",
+      "name": "Monochrome Animelee 98"
+    },
+    {
+      "path": "Samus/Monochrome Animelee-plssbk.zip",
+      "name": "Monochrome Animelee 99"
+    },
+    {
+      "path": "Samus/Monochrome Animelee-plssla.zip",
+      "name": "Monochrome Animelee 100"
+    },
+    {
+      "path": "Samus/Dark Samus Final Form (Metroid Prime 2)-plssnr-animelee-dark-samus-final-form.zip",
+      "name": "Dark Samus Final Form (Metroid Prime 2)"
+    },
+    {
+      "path": "Young Link/Monochrome Animelee-plclre.zip",
+      "name": "Monochrome Animelee 101"
+    },
+    {
+      "path": "Young Link/Monochrome Animelee-plclwh.zip",
+      "name": "Monochrome Animelee 102"
+    },
+    {
+      "path": "Young Link/Monochrome Animelee-plclbk.zip",
+      "name": "Monochrome Animelee 103"
+    },
+    {
+      "path": "Young Link/Monochrome Animelee-plclnr.zip",
+      "name": "Monochrome Animelee 104"
+    },
+    {
+      "path": "Young Link/Monochrome Animelee-plclbu.zip",
+      "name": "Monochrome Animelee 105"
+    },
+    {
+      "path": "Young Link/Castle Crashers YoungLink-plclwh-castlecrasher.zip",
+      "name": "Castle Crashers YoungLink"
+    },
+    {
+      "path": "Zelda/Monochrome Animelee-plzdre.zip",
+      "name": "Monochrome Animelee 106"
+    },
+    {
+      "path": "Zelda/Monochrome Animelee-plzdwh.zip",
+      "name": "Monochrome Animelee 107"
+    },
+    {
+      "path": "Zelda/Monochrome Animelee-plzdgr.zip",
+      "name": "Monochrome Animelee 108"
+    },
+    {
+      "path": "Zelda/Monochrome Animelee-plzdbu.zip",
+      "name": "Monochrome Animelee 109"
+    },
+    {
+      "path": "Zelda/Monochrome Animelee-plzdnr.zip",
+      "name": "Monochrome Animelee 110"
+    },
+    {
+      "path": "Zelda/Brawl Zelda-plzdwh-brawl-zelda-white.zip",
+      "name": "Brawl Zelda"
+    },
+    {
+      "path": "Marth/Monochrome Animelee-plmsre.zip",
+      "name": "Monochrome Animelee 111"
+    },
+    {
+      "path": "Marth/Monochrome Animelee-plmsgr.zip",
+      "name": "Monochrome Animelee 112"
+    },
+    {
+      "path": "Marth/Monochrome Animelee-plmsbk.zip",
+      "name": "Monochrome Animelee 113"
+    },
+    {
+      "path": "Marth/Monochrome Animelee-plmswh.zip",
+      "name": "Monochrome Animelee 114"
+    },
+    {
+      "path": "Marth/Monochrome Animelee-plmsnr.zip",
+      "name": "Monochrome Animelee 115"
+    },
+    {
+      "path": "Marth/Hooded Marth FIX-plmsre.zip",
+      "name": "Hooded Marth FIX"
+    },
+    {
+      "path": "Kirby/Genesis color scheme SkinPack-kirby.zip",
+      "name": "Genesis color scheme SkinPack 6"
+    },
+    {
+      "path": "Kirby/Animelee CE _ Kirby-plkbnr-ace-kirby.zip",
+      "name": "Animelee CE | Kirby"
+    },
+    {
+      "path": "Kirby/Animelee CE _ Kirby-plkbwh-ace-kirby.zip",
+      "name": "Animelee CE | Kirby 2"
+    },
+    {
+      "path": "Kirby/Animelee CE _ Kirby-plkbgr-ace-kirby.zip",
+      "name": "Animelee CE | Kirby 3"
+    },
+    {
+      "path": "Kirby/Animelee CE _ Kirby-plkbye-ace-kirby.zip",
+      "name": "Animelee CE | Kirby 4"
+    },
+    {
+      "path": "Kirby/Animelee CE _ Kirby-plkbbu-ace-kirby.zip",
+      "name": "Animelee CE | Kirby 5"
+    },
+    {
+      "path": "Mr. Game & Watch/Greg Heffley G&W skin-plgwnr.zip",
+      "name": "Greg Heffley G&W skin"
+    },
+    {
+      "path": "Mr. Game & Watch/Banana G&W-plgwnr.zip",
+      "name": "Banana G&W"
+    },
+    {
+      "path": "Mr. Game & Watch/Mr Game & Watch Halo-plgwnr.zip",
+      "name": "Mr Game & Watch Halo"
+    },
+    {
+      "path": "Mr. Game & Watch/Bomberman G&W Skin-plgwnr.zip",
+      "name": "Bomberman G&W Skin"
+    },
+    {
+      "path": "Mr. Game & Watch/Bomberman G&W Skin-plgwnr01.zip",
+      "name": "Bomberman G&W Skin 2"
+    },
+    {
+      "path": "das/pokemon_stadium/pokemon-st.zip",
+      "name": "pokemon-st"
+    },
+    {
+      "path": "das/pokemon_stadium/pokemon-st-001.zip",
+      "name": "pokemon-st-001"
+    },
+    {
+      "path": "das/pokemon_stadium/pokemon-st-002.zip",
+      "name": "pokemon-st-002"
+    },
+    {
+      "path": "das/pokemon_stadium/pokemon-st-003.zip",
+      "name": "pokemon-st-003"
+    },
+    {
+      "path": "das/pokemon_stadium/pokemon-st-004.zip",
+      "name": "pokemon-st-004"
+    },
+    {
+      "path": "das/final_destination/blade-runn.zip",
+      "name": "blade-runn"
+    },
+    {
+      "path": "das/final_destination/super-mari.zip",
+      "name": "super-mari"
+    },
+    {
+      "path": "das/final_destination/super-mari-001.zip",
+      "name": "super-mari-001"
+    },
+    {
+      "path": "das/final_destination/super-mari-002.zip",
+      "name": "super-mari-002"
+    },
+    {
+      "path": "das/final_destination/minecraft-.zip",
+      "name": "minecraft-"
+    },
+    {
+      "path": "das/battlefield/hollow-kni.zip",
+      "name": "hollow-kni"
+    },
+    {
+      "path": "das/battlefield/void-battl.zip",
+      "name": "void-battl"
+    },
+    {
+      "path": "das/battlefield/void-battl-001.zip",
+      "name": "void-battl-001"
+    },
+    {
+      "path": "das/battlefield/void-battl-002.zip",
+      "name": "void-battl-002"
+    },
+    {
+      "path": "das/battlefield/void-battl-003.zip",
+      "name": "void-battl-003"
+    },
+    {
+      "path": "das/fountain_of_dreams/wind-waker.zip",
+      "name": "wind-waker"
+    },
+    {
+      "path": "das/fountain_of_dreams/mountain-o.zip",
+      "name": "mountain-o"
+    },
+    {
+      "path": "das/fountain_of_dreams/cave-of-dr.zip",
+      "name": "cave-of-dr"
+    },
+    {
+      "path": "das/fountain_of_dreams/ganon's-to.zip",
+      "name": "ganon's-to"
+    },
+    {
+      "path": "das/fountain_of_dreams/ganon's-to-001.zip",
+      "name": "ganon's-to-001"
+    },
+    {
+      "path": "das/dreamland/night-cher.zip",
+      "name": "night-cher"
+    },
+    {
+      "path": "das/dreamland/night-cher-001.zip",
+      "name": "night-cher-001"
+    },
+    {
+      "path": "das/dreamland/lake-of-ra.zip",
+      "name": "lake-of-ra"
+    },
+    {
+      "path": "das/dreamland/unlimitedc.zip",
+      "name": "unlimitedc"
+    },
+    {
+      "path": "das/dreamland/moon-dream.zip",
+      "name": "moon-dream"
+    },
+    {
+      "path": "custom_stages/donkey-kong/stage.zip",
+      "name": "Donkey Kong"
+    },
+    {
+      "path": "custom_stages/icicle-smashville/stage.zip",
+      "name": "Icicle Smashville"
+    },
+    {
+      "path": "custom_stages/just-a-platform/stage.zip",
+      "name": "Just A Platform"
+    },
+    {
+      "path": "custom_stages/omega-battlefield/stage.zip",
+      "name": "Omega Battlefield"
+    },
+    {
+      "path": "custom_stages/tartarus-lobby/stage.zip",
+      "name": "Tartarus Lobby"
+    },
+    {
+      "path": "custom_stages/vs.-andross/stage.zip",
+      "name": "Vs Andross"
+    }
+  ]
+}

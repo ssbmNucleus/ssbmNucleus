@@ -1,0 +1,273 @@
+/* Folder cards, skin-in-folder, create-new mod card — split from StorageViewer.css 2026-08-22 (phase 3) */
+/* Rules copied verbatim; loaded right after StorageViewer.css from StorageViewer.jsx so the cascade order is unchanged. */
+
+/* Folder icon */
+.folder-icon {
+  width: 36px;
+  height: 36px;
+  color: var(--color-gold);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.folder-card:hover .folder-icon {
+  transform: scale(1.1);
+  color: var(--color-gold-light, #f5d078);
+}
+
+.folder-card.expanded .folder-icon {
+  transform: scale(1.05);
+}
+
+.folder-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+  width: 100%;
+}
+
+.folder-chevron {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
+  margin-top: var(--space-1);
+}
+
+.folder-card.expanded .folder-chevron {
+  color: var(--color-gold);
+  transform: rotate(180deg);
+}
+
+.folder-name {
+  font-family: var(--font-display);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: var(--tracking-tight);
+}
+
+.folder-name-input {
+  background: var(--color-bg-deep);
+  border: 2px solid var(--color-gold);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-display);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  outline: none;
+  width: 100%;
+  max-width: 140px;
+  text-align: center;
+  box-shadow: var(--glow-gold-sm);
+}
+
+.folder-count {
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  background: var(--color-bg-deep);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.folder-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.folder-card:hover .folder-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.folder-actions button {
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  padding: var(--space-1);
+  font-size: var(--text-sm);
+  transition: all 0.15s ease;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-tertiary);
+}
+
+.folder-actions button:hover {
+  border-color: var(--color-cyan);
+  background: var(--color-cyan-muted);
+  color: var(--color-cyan);
+  transform: scale(1.1);
+}
+
+.folder-actions button:last-child:hover {
+  border-color: var(--color-danger);
+  background: var(--color-danger-muted);
+  color: var(--color-danger);
+}
+
+/* Skin card in folder - subtle left border indicator */
+.skin-card.in-folder {
+  border-left: 3px solid var(--color-cyan);
+}
+
+
+/* Create New Mod Card */
+.skins-grid .create-mod-card {
+  cursor: pointer;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, var(--color-bg-elevated) 0%, var(--color-bg-base) 100%);
+  padding: var(--space-4);
+  position: relative;
+  overflow: visible;
+  transition:
+    transform var(--transition-normal),
+    box-shadow var(--transition-normal),
+    border-color var(--transition-normal);
+}
+
+/* Subtle grid pattern background */
+.create-mod-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(125, 211, 232, 0.03) 0%, transparent 60%),
+    linear-gradient(rgba(125, 211, 232, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 211, 232, 0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 16px 16px, 16px 16px;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.create-mod-card:hover::before {
+  opacity: 1;
+}
+
+/* Accent line at top */
+.create-mod-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-cyan) 0%, var(--color-teal) 100%);
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+}
+
+.create-mod-card:hover::after {
+  opacity: 1;
+}
+
+.create-mod-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: var(--color-cyan);
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.4),
+    0 0 0 1px var(--color-cyan-muted),
+    0 0 30px rgba(125, 211, 232, 0.12);
+}
+
+.create-mod-card:active {
+  transform: translateY(-4px) scale(1.01);
+  transition-duration: 0.1s;
+}
+
+/* Image area matches .skin-image-container */
+.create-mod-image-area {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Info area matches .skin-info */
+.create-mod-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) 0;
+  width: 100%;
+}
+
+.create-mod-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--color-text-muted);
+  background: var(--color-bg-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-full);
+  transition:
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.create-mod-card:hover .create-mod-icon {
+  color: var(--color-cyan);
+  border-color: var(--color-cyan);
+  background: var(--color-cyan-muted);
+  transform: scale(1.15);
+  box-shadow: 0 0 20px rgba(125, 211, 232, 0.35);
+}
+
+.create-mod-label {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  text-align: center;
+  transition: color 0.2s ease;
+}
+
+/* Label placed inside the image box (character "Create New Mod" card): anchor
+   it to the bottom so the card stays the same height as the skin cards, while
+   the + icon remains centered in the box. */
+.create-mod-image-area > .create-mod-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--space-3);
+  pointer-events: none;
+}
+
+.create-mod-card:hover .create-mod-label {
+  color: var(--color-cyan);
+}

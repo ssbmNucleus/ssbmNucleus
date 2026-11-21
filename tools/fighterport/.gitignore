@@ -1,0 +1,13 @@
+__pycache__/
+bin/
+obj/
+upstream-pinned/
+*.log
+*.iso
+*.dat
+*.usd
+*.rdat
+*.zip
+# Historical generated artwork / copied reference pages are not source code.
+/echo_tier2_shulk/src/native_art_pixels.h
+/echo_tier2_shulk/dragdown_*.txt

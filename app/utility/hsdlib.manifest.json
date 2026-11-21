@@ -1,0 +1,47 @@
+{
+  "_comment": [
+    "Pinned prebuilt HSDRawViewer (win: WinForms viewer; linux/mac: headless) from the fork's GitHub Releases.",
+    "Fetch: python tools/build/fetch_native.py hsdlib [--platform win-x64|linux-x64|osx-arm64|host]",
+    "To bump: publish a new tag on the fork, update `tag` and every sha256 here (from the release's SHA256SUMS.txt)."
+  ],
+  "repo": "ssbmNucleus/HSDLib",
+  "tag": "nucleus-v0.9.0",
+  "platforms": {
+    "win-x64": {
+      "asset": "hsdrawviewer-win-x64.zip",
+      "sha256": "f51a3a5bcc98eb818903a4779d2f3e7faf6e0321a4965673e3a2ea96dc928482",
+      "unpack_to": "utility/hsdraw/win-x64",
+      "entrypoint": "HSDRawViewer.exe",
+      "verify_after_unpack": [
+        "HSDRawViewer.exe",
+        "HSDRaw.dll",
+        "HSDRawViewer.dll",
+        "Scripts/command_fighter.yml"
+      ]
+    },
+    "linux-x64": {
+      "asset": "hsdrawheadless-linux-x64.zip",
+      "sha256": "dcc29349e9e021863684c19e26bb841b8ecac775b288d941df58ae554bd1b5ad",
+      "unpack_to": "utility/hsdraw/linux-x64",
+      "entrypoint": "hsdrawviewer",
+      "verify_after_unpack": [
+        "hsdrawviewer",
+        "hsdrawviewer.dll"
+      ]
+    },
+    "osx-arm64": {
+      "asset": "hsdrawheadless-osx-arm64.zip",
+      "sha256": "dca139f3685a844daeafc27509e3cf3663fed8c985f4a5edc3361847cb329617",
+      "unpack_to": "utility/hsdraw/osx-arm64",
+      "entrypoint": "hsdrawviewer",
+      "verify_after_unpack": [
+        "hsdrawviewer",
+        "hsdrawviewer.dll"
+      ]
+    }
+  },
+  "license": {
+    "spdx": "MIT",
+    "note": "Fork of HSDLib / HSDRawViewer (Ploaj); source lives in the fork repo."
+  }
+}

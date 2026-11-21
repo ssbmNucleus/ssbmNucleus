@@ -1,0 +1,439 @@
+/* ─────────────────────────────────────────
+   COMMUNITY ACCOUNT
+   ───────────────────────────────────────── */
+
+.account-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.account-form input {
+  width: 100%;
+  font-size: var(--text-sm);
+}
+
+.account-error {
+  margin: 0;
+  color: var(--color-danger);
+  font-size: var(--text-xs);
+}
+
+.account-signin {
+  align-self: flex-start;
+  padding: var(--space-2) var(--space-6);
+  background: var(--gradient-gold);
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--color-bg-deep);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  cursor: pointer;
+  box-shadow: var(--glow-gold-sm);
+  transition:
+    transform var(--transition-fast),
+    filter var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.account-signin:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+.account-signin:disabled {
+  box-shadow: none;
+}
+
+.account-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+}
+
+.account-links button {
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--color-cyan);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.account-links button:hover {
+  color: var(--color-cyan-light);
+}
+
+.account-signed-in {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+}
+
+/* Two separate-account rows: Nucleus + Patreon */
+.account-provider {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.account-provider + .account-provider {
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.account-provider-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.account-patreon-provider .account-provider-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.account-patreon-status {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Patreon avatar mirrors the Nucleus one; solid Patreon orange for the fallback
+   initial. Compound selector so it beats the base .account-avatar accent (green). */
+.account-avatar.account-patreon-avatar {
+  background: #f96854;
+  color: #fff;
+}
+
+.account-patreon-sub {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+
+/* Each provider card is a fully STANDALONE brand island — solid Patreon
+   coral / start.gg red with white-only controls inside. Deliberately out of
+   place next to the app's green: these are someone else's brands. */
+.account-patreon-provider .account-signed-in,
+.account-patreon-provider .account-provider-body {
+  background: #f96854;
+  border-color: #f96854;
+}
+
+.account-patreon-provider .account-signed-in strong,
+.account-patreon-provider .account-patreon-status {
+  color: #fff;
+}
+
+.account-patreon-provider .account-patreon-sub {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.account-patreon-provider .account-signed-in .account-signout {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  color: #fff;
+}
+
+.account-patreon-provider .account-signed-in .account-signout:hover {
+  background: #fff;
+  border-color: #fff;
+  color: #f96854;
+}
+
+/* black behind the Patreon PFP — transparent avatar images stay legible on
+   the solid coral card */
+.account-patreon-provider .account-avatar {
+  background: #000;
+  color: #fff;
+  border-color: transparent;
+}
+
+.account-startgg-provider .account-signed-in,
+.account-startgg-provider .account-startgg-form {
+  background: #eb0043;
+  border: 1px solid #eb0043;
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+}
+
+.account-startgg-provider .account-signed-in strong {
+  color: #fff;
+}
+
+.account-startgg-provider .account-patreon-sub {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.account-startgg-provider .account-signed-in .account-signout {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  color: #fff;
+}
+
+.account-startgg-provider .account-signed-in .account-signout:hover {
+  background: #fff;
+  border-color: #fff;
+  color: #eb0043;
+}
+
+.account-startgg-provider .account-startgg-form input {
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  color: #fff;
+}
+
+.account-startgg-provider .account-startgg-form input::placeholder {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.account-startgg-provider .account-startgg-form input:focus {
+  border-color: #fff;
+  outline: none;
+  box-shadow: none;
+}
+
+.account-avatar.account-startgg-avatar {
+  background: #eb0043;
+  color: #fff;
+}
+
+/* start.gg connect: input + red button inline */
+.account-startgg-form {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.account-startgg-form input { flex: 1; min-width: 0; }
+
+.account-startgg-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-3);
+  background: #eb0043;
+  border: 1px solid #eb0043;
+  border-radius: var(--radius-md);
+  color: #fff;
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  transition: filter var(--transition-fast);
+}
+
+.account-startgg-btn:hover:not(:disabled) { filter: brightness(1.12); }
+.account-startgg-btn:disabled { opacity: 0.5; cursor: default; }
+
+/* Patreon-branded link button */
+.account-patreon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-3);
+  background: #f96854;
+  border: 1px solid #f96854;
+  border-radius: var(--radius-md);
+  color: #fff;
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  transition: filter var(--transition-fast), background var(--transition-fast);
+}
+
+.account-patreon-btn:hover {
+  filter: brightness(1.12);
+}
+
+.account-patreon-btn.is-linked {
+  background: transparent;
+  border-color: rgba(249, 104, 84, 0.5);
+  color: #f96854;
+}
+
+/* Discord row — blurple, same shape as the Patreon row (the session lives in
+   the backend). */
+.account-discord-provider .account-signed-in,
+.account-discord-provider .account-provider-body {
+  background: #5865f2;
+  border-color: #5865f2;
+}
+
+.account-discord-provider .account-provider-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid #5865f2;
+  border-radius: var(--radius-md);
+}
+
+.account-discord-provider .account-signed-in strong,
+.account-discord-provider .account-patreon-status {
+  color: #fff;
+}
+
+.account-discord-provider .account-patreon-sub {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.account-discord-provider .account-signed-in .account-signout {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  color: #fff;
+}
+
+.account-discord-provider .account-signed-in .account-signout:hover {
+  background: #fff;
+  border-color: #fff;
+  color: #5865f2;
+}
+
+.account-discord-provider .account-avatar {
+  background: #000;
+  color: #fff;
+  border-color: transparent;
+}
+
+.account-discord-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-3);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: var(--radius-md);
+  color: #fff;
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.account-discord-btn:hover:not(:disabled) {
+  background: #fff;
+  color: #5865f2;
+}
+
+.account-discord-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* linked Patreon account name — keep long names from blowing up the row */
+
+.account-avatar {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: var(--gradient-cyan);
+  border-radius: var(--radius-full);
+  color: var(--color-bg-deep);
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: var(--font-extrabold);
+}
+
+.account-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.account-identity {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.account-identity strong,
+.account-identity span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-identity strong {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+}
+
+.account-identity span {
+  color: var(--color-text-tertiary);
+  font-size: var(--text-xs);
+}
+
+/* Email stays hidden until clicked (stream-safe) */
+.account-email {
+  align-self: flex-start;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.account-email:hover {
+  color: var(--color-text-secondary);
+  text-decoration: underline dotted;
+}
+
+.account-signout {
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-3);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.account-signout:hover {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+  background: var(--color-danger-muted);
+}

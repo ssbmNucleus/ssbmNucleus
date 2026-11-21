@@ -1,0 +1,110 @@
+/* Shared look for the nucleome filter dropdowns (IconSelect + FilterSelect).
+   Lived in ReplaysPage.css originally; extracted so any page using the
+   components gets the styles without depending on ReplaysPage loading. */
+
+.icon-select {
+  position: relative;
+}
+
+.icon-select-button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  font-family: var(--font-body);
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 11rem;
+  transition: border-color var(--transition-fast);
+}
+
+.icon-select.is-open .icon-select-button,
+.icon-select-button:hover {
+  border-color: var(--color-border-focus);
+}
+
+.icon-select-caret {
+  margin-left: auto;
+  color: var(--color-text-muted);
+  font-size: 10px;
+}
+
+/* Base size suits the stock-icon filters on Replays/Combos. Callers that show
+   CSPs or stage screenshots size up via the portal list class — see
+   `listClassName` in IconSelect.jsx and .watchmods-*-list in WatchModsModal.css. */
+.icon-select-img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  flex: 0 0 auto;
+}
+
+.icon-select-img--spacer {
+  display: inline-block;
+}
+
+/* The box look lives on the BASE class — FilterSelect renders a plain
+   (non-portalled) .icon-select-list and must stay opaque too. */
+.icon-select-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: var(--z-dropdown);
+  min-width: 100%;
+  width: max-content;
+  max-height: 22rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-1);
+  box-shadow: var(--shadow-lg);
+}
+/* portalled to body so a scrolling parent can't clip it — must sit above modals.
+   NB: portalled to <body>, so % widths resolve against the viewport, not the
+   button. min-width comes from the inline style (the button's width); here we
+   only grow to content and cap it, never stretch to the whole window. */
+.icon-select-list--portal {
+  z-index: 5000;
+  min-width: 0;
+  max-width: min(90vw, 22rem);
+}
+
+.icon-select-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  font-family: var(--font-body);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  text-align: left;
+}
+
+.icon-select-option:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.icon-select-option.is-selected {
+  color: var(--color-accent);
+}
+
+.icon-select-count {
+  margin-left: auto;
+  padding-left: var(--space-4);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}

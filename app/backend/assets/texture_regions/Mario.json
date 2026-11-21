@@ -1,0 +1,24 @@
+{
+  "character": "Mario",
+  "basis": {"costumeCode": "PlMrNr", "textureCount": 32},
+  "regions": {
+    "cloth": [5, 7, 8, 15, 16, 17, 20, 21],
+    "overalls": [0, 1, 2, 4, 29, 30],
+    "skin": [6, 9, 12, 13, 14, 25, 31],
+    "fur": [11, 18, 19],
+    "armor": [3, 22, 23, 26, 27, 28],
+    "face_detail": [10]
+  },
+  "protected": [9, 10],
+  "liveHints": [],
+  "maskHints": {},
+  "notes": {
+    "cloth": "red shirt + cap (7 = main, 17 = back)",
+    "overalls": "blue denim overalls (4 = main 256x256); 29/30 hidden low-poly",
+    "skin": "face (9 = 190x190, protected), ears/hands; 25/31 hidden low-poly",
+    "fur": "brown hair (11, back-heavy) + mustache (19) + sideburn (18)",
+    "armor": "gold buttons (3), brown shoes (22/23), white gloves (26/27/28)",
+    "10": "the M cap emblem - protected (signature art)",
+    "unmapped": "24 gray shading overlay"
+  }
+}

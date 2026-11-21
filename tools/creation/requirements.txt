@@ -1,0 +1,12 @@
+# The creation toolkit's packages on top of app/requirements.txt: what native_port (tools/fighterport) and
+# stage_workbench (tools/stages) import that the app itself does not ship. tools/creation/setup.ps1 installs both
+# files into app/venv. Not here on purpose: torch, modal and huggingface tooling (the cloud and ML experiments
+# in tools/fighterport are not part of the toolkit).
+UnityPy                  # Slap City reader (echo_slapcity: Unity assets)
+fmod_toolkit             # Slap City sound banks (echo_slapcity/unity.py)
+ssbh_data_py             # Smash Ultimate models, skeletons and animations (echo_ultimate)
+scipy                    # fits, curves and audio in fighter_port (the app itself dropped scipy)
+shapely                  # series emblem outlines (fighter_port/series_emblem.py)
+pyfqmr                   # mesh decimation (fighter_port/skin_cost.py, preflight)
+PyYAML                   # port configs (fighter_port/pipeline.py)
+opencv-python-headless   # series emblem pictures (fighter_port/series_emblem.py)

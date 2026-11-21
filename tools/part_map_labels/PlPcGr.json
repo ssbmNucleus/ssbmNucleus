@@ -1,0 +1,4 @@
+{"character": "Pichu", "source": "PlPcGr", "verified": true,
+ "notes": "Body: fur 0, neck ruff 1 (also the nose), eyes 15/17 (+ blink frames 24-26 of 15, 27-28 of 17), cheeks 16, mouth 18, ears 19/20 (19 also skins the tail), feet 21. Backpack: 8 = pack body on the back; straps 4 (shoulder straps) and 2 (strap ends/buckles on the belly). Scarf: 13 = neck wrap, 14 = knot. UNLABELLED 3,5,6,7,9,10,11,12,22 (greyscale/alternate backpack textures sharing bounds with 2/4/6/8/10) and 23 (eye-ball, 8 tris): none renders in either view even when probed individually - likely hidden/alternate meshes or secondary layers; not confirmed.",
+ "groups": {"fur": [0], "neck ruff": [1], "eyes": [15,17,24,25,26,27,28], "cheeks": [16], "mouth": [18], "ears": [19,20], "feet": [21],
+            "backpack": [8], "backpack straps": [2,4], "scarf": [13,14]}}

@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "skeleton": "model/body/c00/model.nusktb",
+  "landmarks": "ultimate_landmarks.json",
+  "allow_unbound": [
+    "S_Hip_hit"
+  ],
+  "attachments": [
+    {
+      "source": "SwordR",
+      "source_anchor": "HandR",
+      "target": "JOBJ_75",
+      "target_anchor": "JOBJ_73"
+    }
+  ],
+  "clips": [
+    {
+      "id": "vision_forward",
+      "category": "special",
+      "target_motion": "SpecialS3Lw",
+      "source": "motion/body/c00/d03speciallwf.nuanmb",
+      "body_scale": "rigid",
+      "root_motion_joint": "Trans"
+    }
+  ]
+}

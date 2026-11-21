@@ -1,0 +1,538 @@
+/* Extra editor modal internals: laser preview, mode toggle, preset row, layer cards, color rows, shine combo, footer — split from StorageViewer.css 2026-08-22 (phase 3) */
+/* Rules copied verbatim; loaded right after StorageViewer.css from StorageViewer.jsx so the cascade order is unchanged. */
+
+/* Laser Preview */
+.laser-preview {
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+.laser-preview-label {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-3);
+}
+
+.laser-preview-display {
+  position: relative;
+  height: 60px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: linear-gradient(180deg, #0a0a12 0%, #0d0d18 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* New laser beam styles - realistic layered effect */
+.laser-beam {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 100px;
+}
+
+.laser-beam-wide {
+  height: 36px;
+  opacity: 0.5;
+}
+
+.laser-beam-thin {
+  height: 20px;
+  opacity: 0.7;
+}
+
+.laser-beam-outline {
+  height: 10px;
+  opacity: 0.9;
+}
+
+.laser-beam-center {
+  height: 3px;
+  opacity: 1;
+}
+
+
+/* Legacy crops provide move context; verified layer references and schematic
+   guides identify individual controls. The badge distinguishes the two. */
+.layer-pictogram {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: var(--radius-sm);
+  object-fit: contain;
+  border: 1px solid var(--color-border);
+  background: #101018;
+  image-rendering: auto;
+}
+
+.layer-pictogram-button { position: relative; flex: 0 0 auto; padding: 0; border: 0; background: none; cursor: zoom-in; line-height: 0; }
+.layer-pictogram-expand { position: absolute; right: 2px; top: 2px; background: #101018; color: #a5f3fc; padding: 2px; line-height: 1; font-size: 10px; border-radius: 3px; }
+.layer-pictogram-kind { position: absolute; left: 2px; right: 2px; bottom: 2px; background: #101018e8; color: #c9d7e6; padding: 2px 0; line-height: 1.1; font-size: 9px; border-radius: 2px; }
+.layer-pictogram-reference-kind { display: block; color: #a6b5c8; font-size: 12px; font-weight: normal; margin-top: 4px; }
+.layer-pictogram-button:focus-visible { outline: 2px solid #67e8f9; outline-offset: 3px; border-radius: 4px; }
+.layer-pictogram-dialog { padding: 0; border: 1px solid #465569; border-radius: 12px; background: #111923; color: #eff6ff; width: min(460px, 90vw); max-height: 85vh; }
+.layer-pictogram-dialog::backdrop { background: #000a; }
+.layer-pictogram-detail { padding: 20px; }
+.layer-pictogram-detail header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+.layer-pictogram-detail header button { color: inherit; background: #263241; border: 0; border-radius: 6px; font-size: 24px; width: 32px; cursor: pointer; }
+.layer-pictogram-detail > img { display: block; width: 100%; max-height: 55vh; object-fit: contain; background: #080d14; border-radius: 8px; }
+.layer-pictogram-detail p { color: #a6b5c8; font-size: 12px; line-height: 1.5; margin: 14px 0 0; }
+
+/* Simple/Advanced mode toggle */
+.extra-mode-toggle {
+  display: flex;
+  gap: 0;
+  margin-bottom: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  width: fit-content;
+}
+.extra-mode-toggle button {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  color: var(--color-text-muted);
+  background: var(--color-bg-elevated);
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.extra-mode-toggle button.active {
+  color: #fff;
+  background: var(--color-accent, #4a9eff);
+}
+.extra-mode-hint {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-3);
+}
+
+
+.laser-preset {
+  width: 24px;
+  height: 24px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.laser-preset:hover {
+  transform: scale(1.1);
+}
+
+.laser-preset.active {
+  border-color: #fff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   EXTRAS EDITOR REDESIGN (2026-07)
+   Shared shell for the mod-creation editors: responsive top area (name +
+   preview side by side), ONE unified preset row, Advanced-mode per-element
+   layer cards in an auto-fill grid, and the obviously-clickable color swatch.
+   Components: extras/EditorControls.jsx.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Top area: mod name + preview share a row on wide screens, wrap on narrow. */
+.extra-editor-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  align-items: stretch;
+}
+
+.extra-editor-top .laser-editor-name-group {
+  flex: 1 1 16rem;
+  min-width: 0;
+  justify-content: center;
+}
+
+.extra-editor-top .laser-preview {
+  flex: 1.4 1 20rem;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.extra-editor-top .laser-preview-display {
+  flex: 1;
+  min-height: 96px;
+}
+
+/* Scale the fixed 120x60 effect SVGs up with the bigger shell (they all
+   carry a viewBox, so this is lossless). */
+.laser-preview-display svg {
+  height: 84px;
+  width: auto;
+}
+
+/* Mode toggle + unified preset row share one line, wrapping on narrow. */
+.extra-editor-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.extra-editor-controls .extra-mode-toggle {
+  margin-bottom: 0;
+}
+
+/* Unified preset row (the ONE preset strip per editor) */
+.extra-preset-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.extra-preset-row-label {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.extra-preset-row-swatches {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+/* Advanced-mode per-element layer cards */
+.extra-layer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr));
+  gap: var(--space-3);
+}
+
+/* ColorRow: label/description + hex readout + clickable swatch */
+.extra-color-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+/* Hero variant (Simple mode's single picker) gets its own container card */
+.extra-color-row-lg {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+.extra-color-row .layer-pictogram {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+}
+
+.extra-color-row-lg .layer-pictogram {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+}
+
+.extra-color-row-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.extra-color-row-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: #fff;
+}
+
+.extra-color-row-desc {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.extra-color-row-value {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.extra-color-row-hex {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: #fff;
+}
+
+.extra-color-row-readout {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-text-muted);
+}
+
+/* The obviously-clickable current-color swatch: hover ring + corner edit
+   badge; the native color input is stretched invisibly over the control so
+   a click anywhere opens the full picker. */
+.extra-swatch {
+  position: relative;
+  display: block;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--color-border);
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.extra-swatch input[type='color'] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  padding: 0;
+  border: none;
+}
+
+.extra-swatch-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: calc(var(--radius-md) - 2px);
+  pointer-events: none;
+}
+
+.extra-swatch-edit {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.extra-swatch:hover,
+.extra-swatch:focus-within {
+  border-color: var(--color-cyan, #4a9eff);
+  box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.25);
+  transform: scale(1.04);
+}
+
+.extra-swatch:hover .extra-swatch-edit,
+.extra-swatch:focus-within .extra-swatch-edit {
+  color: #fff;
+  border-color: var(--color-cyan, #4a9eff);
+}
+
+.extra-swatch-lg {
+  width: 56px;
+  height: 56px;
+  flex: 0 0 56px;
+}
+
+/* Shine preset combo - two-color diagonal gradient */
+.shine-preset-combo {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-md);
+}
+
+/* Editor Error */
+.laser-editor-error {
+  background: rgba(220, 53, 69, 0.1);
+  border: 1px solid rgba(220, 53, 69, 0.3);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  color: #ff6b6b;
+  font-size: var(--text-sm);
+}
+
+/* Editor Footer */
+.laser-editor-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 1px solid var(--color-border);
+}
+
+.laser-editor-footer-right {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.laser-editor-delete {
+  background: #5c2b2b;
+  color: #ff8888;
+  border: 1px solid #7a3d3d;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.laser-editor-delete:hover:not(:disabled) {
+  background: #7a3d3d;
+  color: #ffaaaa;
+}
+
+.laser-editor-delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.laser-editor-cancel {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-4);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  transition: all 0.15s ease;
+}
+
+.laser-editor-cancel:hover {
+  border-color: var(--color-text-muted);
+  color: #fff;
+}
+
+.laser-editor-save {
+  background: linear-gradient(135deg, var(--color-cyan) 0%, #0ea5e9 100%);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-4);
+  color: #000;
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  transition: all 0.15s ease;
+}
+
+.laser-editor-save:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.laser-editor-save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+/* Shared effect note */
+.shared-note {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-xs);
+  color: #a5b4fc;
+  text-align: center;
+  margin-bottom: var(--space-3);
+}
+
+/* Folder card - styled as accordion trigger, same grid cell as skin cards */
+.folder-card {
+  background: linear-gradient(145deg, var(--color-bg-elevated) 0%, var(--color-bg-surface) 100%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition:
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+  user-select: none;
+  min-height: 180px;
+  gap: var(--space-3);
+  position: relative;
+  box-shadow: var(--shadow-sm);
+}
+
+.folder-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-gold) 0%, var(--color-gold-muted) 100%);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.folder-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-gold-muted);
+  box-shadow:
+    var(--shadow-md),
+    0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.folder-card:hover::before {
+  opacity: 1;
+}
+
+.folder-card:active {
+  transform: translateY(-2px);
+}
+
+.folder-card.drop-target {
+  border-color: var(--color-cyan);
+  background: linear-gradient(145deg, rgba(125, 211, 232, 0.15) 0%, rgba(125, 211, 232, 0.05) 100%);
+  box-shadow:
+    0 0 0 2px rgba(125, 211, 232, 0.3),
+    0 8px 32px rgba(125, 211, 232, 0.15);
+}
+
+.folder-card.drop-target::before {
+  background: linear-gradient(90deg, var(--color-cyan) 0%, var(--color-cyan-muted) 100%);
+  opacity: 1;
+}
+
+/* Note: .folder-card.dragging styles are defined in the DRAG & DROP section above */
+
+.folder-card.expanded {
+  border-color: var(--color-gold);
+  background: linear-gradient(145deg, var(--color-bg-elevated) 0%, var(--color-bg-deep) 100%);
+}
+
+.folder-card.expanded::before {
+  opacity: 1;
+}

@@ -1,0 +1,88 @@
+# Ignores relative to app/. Repo-level rules (venv, node_modules, caches, *.log, .env,
+# *.iso, installers, secrets) are in the root .gitignore. One block per data folder;
+# each says who writes it. tools/clean.py clears the regenerable ones.
+
+# app/storage: the Vault (backend core/config STORAGE_PATH): skins, stages, vault.db,
+# test-runs, test-builds
+/storage/
+# app/storage-sample: curated demo vault used by `run.bat --record` (tools/dev/launch.cjs)
+/storage-sample/
+
+# app/scratch: TMP for the backend, pytest basetemp (scratch/pytest), Dolphin driver and
+# smoke-runner output (scratch/ingame)
+/scratch/
+
+# app/output, app/projects, app/logs: core/config OUTPUT_PATH, PROJECTS_PATH, LOGS_PATH
+# (logs/ also matches utility/tools/logs, written by the CSP processor)
+/output/
+/projects/
+logs/
+user_settings.json
+
+
+# Build outputs: build.bat / build_mac.sh / electron-builder / release scripts
+/build/
+/dist/
+dist-electron/
+dist-backend/
+frontend/dist/
+build-package-staging/
+ship-report.txt
+releases/
+backend/shared/ingame/engine_digest.json
+frontend/.vite-port
+*.exe
+# The bundled UnRAR ships in the installer (THIRD_PARTY_NOTICES.md).
+!utility/unrar/UnRAR.exe
+# start.gg API token: bundled at build, never committed
+backend/tracker/startgg_token.txt
+
+# Pinned toolchains fetched by tools/build (manifests are tracked, the unpack is not):
+# fetch_rigswap.py (utility/rigswap/app) and fetch_ffmpeg.py. utility/blender/ and
+# utility/rigswap/python/ were the bundled model import tools until 0.9.0 (now a download
+# from Settings); a checkout that still has them can delete them.
+/utility/blender/
+/utility/rigswap/
+/utility/ffmpeg/
+# fetch_native.py: prebuilt MexCLI and HSDRawViewer from the fork repos' GitHub Releases
+/utility/mex/
+/utility/hsdraw/
+
+# Vanilla game assets extracted from the user's ISO at first run (vanilla_extract)
+utility/assets/vanilla/*
+!utility/assets/vanilla/Sheik/
+utility/assets/vanilla/Sheik/**/*.dat
+utility/assets/stages/
+utility/assets/menu_refs/
+# CSP processor: ISO-derived data in csp_data, lighting-pass backups and sweep outputs
+utility/tools/processor/csp_data/**/Pl*.dat
+utility/tools/processor/csp_data/**/Ty*.dat
+utility/tools/processor/csp_data/**/MnSlChr*
+utility/tools/processor/csp_data/CSP_2.zip
+utility/tools/processor/csp_data/**/*.yml.orig
+utility/tools/processor/csp_regression/_calib/
+utility/tools/processor/csp_regression/_sweep/
+
+# app/backend: generated working data
+# model-import and costume-pipeline run folders (huge, full of game-derived DATs)
+/backend/artifacts/
+# backend/data: the five files mex_backend.spec ships (expected_backend_data) are
+# tracked, so clean release checkouts (the Linux and Mac builders) have them.
+# Anything else written here, e.g. vault/climbers/engine/gen_engine_code.py
+# scratch, stays ignored.
+/backend/data/*
+!/backend/data/any_climbers.ini
+!/backend/data/clone_engine.dat
+!/backend/data/texture_filename_table_seed.json
+!/backend/data/vanilla_geom_hashes.json
+!/backend/data/menus/
+/backend/data/menus/*
+!/backend/data/menus/compatibility_manifest.json
+# test scratch kept beside the tests (the tmp roots proper are under scratch/)
+/backend/.tmp*/
+# Stray captures dropped at app/ by probe scripts run with cwd=app/
+/*.png
+/*.jpg
+/*.dat
+/*.usd
+/*.zip

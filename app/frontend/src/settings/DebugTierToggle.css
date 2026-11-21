@@ -1,0 +1,23 @@
+/* DebugTierToggle.jsx: the DEV-only tier debug chip in the header. */
+
+/* ── DEV-only tier debug chip (header) ── */
+.debug-tier {
+  margin-left: var(--space-3);
+  padding: 2px var(--space-2);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.debug-tier:hover { color: var(--color-text-secondary); }
+
+.debug-tier--forced {
+  border-style: solid;
+  border-color: var(--color-warning, #e6b95f);
+  color: var(--color-warning, #e6b95f);
+}

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="-115 -115 230 230">
+  <defs>
+    <filter id="atom" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3"></feGaussianBlur></filter>
+    <clipPath id="disc"><circle r="112"></circle></clipPath>
+    <mask id="cut">
+      <rect x="-115" y="-115" width="230" height="230" fill="#ffffff"></rect>
+      <rect x="-72.2" y="-115" width="52.4" height="230" fill="#000000"></rect>
+      <rect x="-115" y="15.7" width="230" height="21.3" fill="#000000"></rect>
+    </mask>
+  </defs>
+  <g mask="url(#cut)">
+    <circle r="112" fill="#2b2f3b"></circle>
+    <g fill="none" clip-path="url(#disc)">
+      <g stroke="#5273e0" stroke-width="15" filter="url(#atom)">
+        <ellipse rx="37" ry="98"></ellipse>
+        <ellipse rx="37" ry="98" transform="rotate(60)"></ellipse>
+        <ellipse rx="37" ry="98" transform="rotate(120)"></ellipse>
+      </g>
+      <g stroke="#ade2ff" stroke-width="9">
+        <ellipse rx="37" ry="98"></ellipse>
+        <ellipse rx="37" ry="98" transform="rotate(60)"></ellipse>
+        <ellipse rx="37" ry="98" transform="rotate(120)"></ellipse>
+      </g>
+    </g>
+    <circle r="12" fill="#ade2ff"></circle>
+  </g>
+</svg>

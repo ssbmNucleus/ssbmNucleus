@@ -1,0 +1,190 @@
+{
+  "manifest_version": 2,
+  "generated_utc": "2026-09-22",
+  "note": "Known menu packages and the build targets they were actually observed to work on. Seeded from the 2026-09-22 harness experiment fixtures (backend/artifacts/harness-experiment-20260922). Independent of modellab: nothing here describes a costume or a fit.",
+  "policy": {
+    "target_pass_requires": "an entry in the package's `targets` whose required_signature_fields are ALL reported by the build and ALL equal, AND whose observation recorded which menu file it replaced (observed_base_menu_sha256). An observation that did not record its base menu certifies nothing beyond itself: one m-ex build behaving does not certify every customized m-ex menu, so that case is unknown. A vanilla-shaped menu file, matching root symbols, a filename or an author screenshot are NEVER sufficient evidence.",
+    "structure_pass_requires": "the file's own header, relocation table and root pointers all resolve inside its data section, the menu table carries a RELOCATED background-model pointer, and the native menu reader reopens it. A matching root NAME is not a structure check.",
+    "codes_pass_requires": "every required code resolved and valid, the COMPLETE final enabled set free of two codes writing one address different values, no code silently enabled, and no unmodelled opcode.",
+    "unknown_is_not_pass": true,
+    "unlisted_packages": "may still be inspected, prepared and installed with an explicit override; they inherit nothing from a similar-looking package.",
+    "background_semantics": "The installed background is compared against roundtrip_background_sha256, the measured re-export digest. A package with no recorded re-export digest yields unknown for that check - never a failure, because DAT reserialization changing byte count does not mean the replacement failed."
+  },
+  "menu_roots": {
+    "css": "MnSelectChrDataTable",
+    "sss": "MnSelectMapDataTable"
+  },
+  "packages": [
+    {
+      "package_id": "halo3-matchmaking-lobby",
+      "name": "Halo 3 Matchmaking Lobby",
+      "menu_type": "css",
+      "kind": "full_menu_file",
+      "source": {
+        "site": "ssbmnucleus.net",
+        "post": 14063,
+        "published_file": "Halo3CSS.dat",
+        "published_file_type": "other"
+      },
+      "digests": {
+        "published_file_sha256": "e05d9baedf598f0447510ad4e7f8cdb05a4b91114a0ddd8d3ff38f9d7c9575d8",
+        "published_file_bytes": 4139845,
+        "published_archive_sha256": "ad887ca17360669fdce3284637956438b492d22fda0f0bca3c490235d66d484a",
+        "background_bundle_sha256": "f167de1601eba59f78b81c07b71d21fa63c7298216842eae19aed8986cbc0d4b",
+        "background_bundle_bytes": 359202,
+        "installed_menu_file_sha256": "4a110599f38d0e1b7540efbaffc0598b7a16472c30528e200f777526fe450652",
+        "installed_menu_file_bytes": 4127593,
+        "roundtrip_background_sha256": "ed79b59ad649dad1c63ccce05564a14f4a941e664793a38becb2ce8db71a3df4",
+        "roundtrip_background_bytes": 359190,
+        "roundtrip_note": "What the installed menu file's background bundle hashes to when the native reader exports it again. It is NOT the published bundle's digest: HSDRaw re-serializes, and that is harmless. Measured from runs/openrouter_z-ai_glm-5.3-flash/T5-halo-css/out/verify-roundtrip-background.dat."
+      },
+      "structure": {
+        "required_roots": [
+          "MnSelectChrDataTable"
+        ],
+        "evidence": "dat_root_symbols over the published Halo3CSS.dat returns exactly ['MnSelectChrDataTable']; the bundle re-exports at 359,190 B after DAT reserialization (backend/artifacts/harness-experiment-20260922/runs/*/T5-halo-css/out/)"
+      },
+      "targets": [
+        {
+          "label": "dev m-ex build, 2026-09-14",
+          "game_code": "GALE01",
+          "disc_revision": 2,
+          "menu_variant": "mex",
+          "required_signature_fields": [
+            "game_code",
+            "disc_revision",
+            "menu_variant"
+          ],
+          "observed_base_menu_sha256": [],
+          "observation": {
+            "date": "2026-09-14",
+            "method": "installed into a MEX project, exported to an ISO, booted in Dolphin, character-select screen photographed",
+            "observed": "the Halo globe renders on the right of the CSS, with and without the scene toggle; vanilla has no globe at all",
+            "install_parameters": {
+              "operation": "HSDRaw --css-bg import",
+              "include_scene": [
+                false,
+                true
+              ]
+            },
+            "gecko_codes_present": [
+              "Disable Hardcoded CSS BG Anim 04263384 48000010"
+            ],
+            "images": [
+              "tests/artifacts/css_bg_shot/halo-scene-build.png",
+              "tests/artifacts/css_bg_shot/plain-vanilla.png"
+            ],
+            "not_recorded": [
+              "the sha256 of the MnSlChr.usd that was replaced (so which base menu this covers is unknown)",
+              "the MexCLI / HSDRaw build ids used that day",
+              "the exported ISO digest"
+            ]
+          },
+          "evidence": "Installed into the m-ex project and booted on 2026-09-14: the Halo globe renders on the right of the character-select screen, with and without the scene toggle (memory css-background-install-verified). The build read GALE01 disc revision 0x02. The observation did NOT record which menu file it replaced, so it cannot certify a customized menu."
+        }
+      ],
+      "required_codes": [
+        {
+          "name": "Disable Hardcoded CSS Animations",
+          "creator": "",
+          "source": "04263384 48000010",
+          "content_hash": "d06dc322dd537a90f13bc7e3f6d100d1e702f74ac60dc680d3f1235f64cee828",
+          "origin": "ssbmnucleus.net post 14063 (the mod's own description)",
+          "reason": "Melee's hardcoded character-select backdrop animation draws over the replacement; without the code the new backdrop is installed but invisible.",
+          "evidence": "The app's own CSS background install injects the same write (blueprints/menus/backgrounds.py install_bg_to_mex) and the 2026-09-14 boot check confirmed the backdrop renders with it."
+        }
+      ],
+      "reference_images": [
+        {
+          "sha256": "e1e0e93c2aa5efb5fe504751ddccf3c904ac5ad79fe16073b4b34f9cd76202f7",
+          "role": "reference",
+          "attribution": "author screenshot published with ssbmnucleus.net post 14063",
+          "note": "An author screenshot is NOT a preview of what this build will render."
+        }
+      ]
+    },
+    {
+      "package_id": "dvd-menu-css-background",
+      "name": "DVD Menu CSS Background",
+      "menu_type": "css",
+      "kind": "full_menu_file",
+      "source": {
+        "site": "ssbmnucleus.net",
+        "published_file": "DvdMenu/dvdmenuMnSlChr.dat",
+        "published_file_type": "archive_member"
+      },
+      "digests": {
+        "published_file_sha256": "3f5669e1755173cb83d9f31d427318b80a798fb6f2375b4cd207308f311c221d",
+        "published_file_bytes": 3788173,
+        "published_archive_sha256": "4cca08f2765b0fa6818c7b47d5905e54d23c010a56065cdf33b81ef7c68eea7a",
+        "background_bundle_sha256": "b6d98c137c63347898e89dbcf5b18a2d5a7a8510b1b92727bb945361a0e654c6",
+        "background_bundle_bytes": 19738,
+        "roundtrip_background_sha256": "d48504b187b27e540f8012d1a42a5e901bd8406d519fd1c19e6fd2cb1138581c",
+        "roundtrip_background_bytes": 19726,
+        "roundtrip_note": "What the installed menu file's background bundle hashes to when the native reader exports it again. It is NOT the published bundle's digest: HSDRaw re-serializes, and that is harmless. Measured from runs/openrouter_z-ai_glm-5.3-flash/T2-menu-edit/out/verify-dvd-roundtrip.dat."
+      },
+      "structure": {
+        "required_roots": [
+          "MnSelectChrDataTable"
+        ],
+        "evidence": "dat_root_symbols over the published dvdmenuMnSlChr.dat returns exactly ['MnSelectChrDataTable']; the extracted bundle re-exports at 19,726 B after reserialization (runs/openrouter_z-ai_glm-5.3-flash/T2-menu-edit/out/verify-dvd-roundtrip.dat)"
+      },
+      "targets": [],
+      "targets_note": "No build was ever booted with this bundle. `target` therefore resolves to unknown, not pass, for every build.",
+      "required_codes": [
+        {
+          "name": "Disable Hardcoded CSS Animations",
+          "creator": "",
+          "source": "04263384 48000010",
+          "content_hash": "d06dc322dd537a90f13bc7e3f6d100d1e702f74ac60dc680d3f1235f64cee828",
+          "origin": "the same community code every CSS backdrop replacement needs",
+          "reason": "Melee's hardcoded character-select backdrop animation draws over the replacement.",
+          "evidence": "Recorded in the T2 run beside the bundle (runs/openrouter_z-ai_glm-5.3-flash/T2-menu-edit/out/fd-css-background-gecko.txt) and injected by the app's own install route."
+        }
+      ]
+    },
+    {
+      "package_id": "final-destination-css-background",
+      "name": "Final Destination Background CSS",
+      "menu_type": "css",
+      "kind": "full_menu_file",
+      "source": {
+        "site": "ssbmnucleus.net",
+        "post": 16824,
+        "published_file": "Final Destination Background CSS/MnSlChr.dat",
+        "published_file_type": "archive_member"
+      },
+      "digests": {
+        "published_file_sha256": "7c445e8163737a5a36e76a037ef27208f4ae7dfad231d7fa6d8c873a77496f95",
+        "published_file_bytes": 3843041,
+        "published_archive_sha256": "080460dd755ccedfb3b923a29aeb5be25bc7c52d51974ac4e37f5333a59da5fd",
+        "background_bundle_sha256": "31f2152c4ab27c5eab8306e0e53c71cbac359ee27e703f920b5d6d349129b22e",
+        "background_bundle_bytes": 74606,
+        "installed_menu_file_sha256": "ec93af2a092e9458950147ef80805c12d21c0ec61b479a199f70fabfcb71fa5f",
+        "installed_menu_file_bytes": 3842997,
+        "roundtrip_background_sha256": "632ce933fe28f33d1b2183e6a805efb1dd73147a8ce3c28a632cc52732033e92",
+        "roundtrip_background_bytes": 74594,
+        "roundtrip_note": "What the installed menu file's background bundle hashes to when the native reader exports it again. It is NOT the published bundle's digest: HSDRaw re-serializes, and that is harmless. Measured from runs/openrouter_z-ai_glm-5.3-flash/T2-menu-edit/out/verify-roundtrip-background.dat."
+      },
+      "structure": {
+        "required_roots": [
+          "MnSelectChrDataTable"
+        ],
+        "evidence": "dat_root_symbols over the published MnSlChr.dat returns exactly ['MnSelectChrDataTable']; the bundle re-exports at 74,594 B after reserialization (runs/openrouter_z-ai_glm-5.3-flash/T2-menu-edit/out/verify-roundtrip-background.dat)"
+      },
+      "targets": [],
+      "targets_note": "Prepared in a workspace copy only; never installed into a build and never booted.",
+      "required_codes": [
+        {
+          "name": "Disable Hardcoded CSS Animations",
+          "creator": "",
+          "source": "04263384 48000010",
+          "content_hash": "d06dc322dd537a90f13bc7e3f6d100d1e702f74ac60dc680d3f1235f64cee828",
+          "origin": "ssbmnucleus.net post 16824 (the mod's own description)",
+          "reason": "Melee's hardcoded character-select backdrop animation draws over the replacement.",
+          "evidence": "runs/openrouter_z-ai_glm-5.3-flash/T2-menu-edit/out/fd-css-background-gecko.txt"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+[
+ {"id": "normal", "kind": "normal", "slp": "2026-10/Game_20261020T225732.slp", "frame": 3849, "subject": {"port": 0}, "attacker": 1,
+  "why": "Falco's laser hits Ganon (normal element, 3 damage): EfCoData model 10, effect scale 0.42"},
+ {"id": "strong", "kind": "strong", "slp": "2026-10/Game_20261020T225958.slp", "frame": 3120, "subject": {"port": 1}, "attacker": 0,
+  "why": "Falcon's bair hits Falco at 135%: knockback >= 180, generator 11"},
+ {"id": "electric", "kind": "electric", "slp": "2026-10/Game_20261021T132313.slp", "frame": 321, "subject": {"port": 1}, "attacker": 0,
+  "why": "Falco's shine hits Falcon (electric element): generator 12"},
+ {"id": "fire", "kind": "fire", "slp": "2026-10/Game_20261021T132313.slp", "frame": 648, "subject": {"port": 1}, "attacker": 0,
+  "why": "Falco's Fire Bird hits Falcon (fire element): generator 20"},
+ {"id": "slash", "kind": "slash", "slp": "2026-10/Game_20261021T141729.slp", "frame": 248, "subject": {"port": 1}, "attacker": 0,
+  "why": "Marth's down tilt hits Falco (slash element): EfCoData model 8"},
+ {"id": "dark", "kind": "dark", "slp": "2026-10/Game_20261020T225445.slp", "frame": 276, "subject": {"port": 1}, "attacker": 0,
+  "why": "Ganon's side B hits Falco (dark element): generator 406"},
+ {"id": "ice", "kind": "ice", "slp": "2026-10/Game_20261006T145917.slp", "frame": 8941, "subject": {"port": 1}, "attacker": 0,
+  "why": "The Ice Climbers' ice shot hits Marth (ice element): generators 80 and 84"},
+ {"id": "shield", "kind": "shield", "slp": "2026-10/Game_20261020T225958.slp", "frame": 355, "subject": {"port": 0}, "attacker": 1,
+  "why": "Falco's jab hits Falcon's shield: generator 93"},
+ {"id": "tech", "kind": "tech", "slp": "2026-10/Game_20261021T142042.slp", "frame": 282, "subject": {"port": 1}, "attacker": null,
+  "why": "Falco techs in place: effect 1053 (EfCoData model 15), the tech flash"}
+]

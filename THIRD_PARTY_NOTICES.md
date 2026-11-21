@@ -91,7 +91,7 @@ This project uses the following open source software:
 - **Repository**: https://github.com/Ploaj/HSDLib
 - **Description**: Library for working with HAL DAT files
 - **Note**: Used for CSP generation and model/texture work via HSDRawViewer.
-  We distribute a prebuilt, modified build of our fork, https://github.com/sc00ppp/ssbmNucleus-hsdlib
+  We distribute a prebuilt, modified build of our fork, https://github.com/ssbmNucleus/HSDLib
   (release tag pinned in `utility/hsdlib.manifest.json`; the complete source is in that repository).
 
 ### Avalonia UI (MexManager GUI)
@@ -190,33 +190,39 @@ linked into the application.
 - **Repository**: https://projects.blender.org/blender/blender
 - **Source**: https://download.blender.org/source/ — the corresponding source for
   this exact release is `blender-4.3.2.tar.xz` in that directory.
-- **Note**: Version 4.3.2, the official portable Windows x64 build
-  (`blender-4.3.2-windows-x64.zip`, sha256
-  `933a62a770c941e316535f893629ff106ddd2aa5a956f0081ec557439073d4f6`),
-  distributed unmodified and invoked as a separate process with
-  `--background --factory-startup --disable-autoexec`. It is never linked into
-  the application. Ships at `utility/blender/` and is used by the model
-  importer (rigswap) for its Collada conversion. Debug symbols, UI translations and the Cycles renderer's
-  script tree are deleted from the shipped copy; no file is patched. Full
-  license texts ship beside the binary: `utility/blender/copyright.txt`,
-  `utility/blender/license/spdx/GPL-2.0-or-later.txt`,
-  `utility/blender/license/spdx/GPL-3.0-or-later.txt`, and
-  `utility/blender/license/license.md` for Blender's own bundled dependencies.
+- **Note**: Version 4.3.2, used by the model importer (rigswap) for its Collada
+  conversion. It is **not shipped** in any installer since 0.9.0: it is one of the
+  model import tools the user downloads from Settings > AI > Model
+  import tools. The app fetches Blender's official build for the computer
+  (`blender-4.3.2-windows-x64.zip`, `blender-4.3.2-linux-x64.tar.xz` or
+  `blender-4.3.2-macos-arm64.dmg`) straight from download.blender.org, checks it
+  against the sha256 pinned in `utility/model_import_tools.json`, and unpacks it
+  into the user's data folder (`tools/model-import/blender/`). It runs unmodified
+  as a separate process with `--background --factory-startup --disable-autoexec`
+  and is never linked into the application. On Windows and Linux the debug
+  symbols, UI translations, the Cycles renderer's script tree and Blender's own
+  Python executables are deleted after unpacking; no file is patched. Blender's
+  license texts stay beside it (`copyright.txt`, `license/`).
 
 ### The model importer's Python (rigswap's runtime)
-- **What**: the official embeddable CPython 3.13.17 for Windows x64
-  (`python-3.13.17-embed-amd64.zip` from python.org, PSF-2.0) with these
-  unmodified wheels from PyPI, each pinned by version and sha256 in
-  `utility/rigswap.requirements.txt`: bpy 5.2.2 (Blender as a Python module,
-  GPL-3.0-or-later; source at https://download.blender.org/source/), NumPy
-  2.5.3 (BSD-3-Clause), Pillow 12.3.0 (MIT-CMU), requests 2.34.2 (Apache-2.0),
-  urllib3 2.8.0 (MIT), idna 3.20 (BSD-3-Clause), certifi 2026.7.22 (MPL-2.0),
-  charset-normalizer 3.5.2 (MIT), attrs 26.1.0 (MIT), cattrs 26.2.1 (MIT),
-  Cython 3.3.0 (Apache-2.0), zstandard 0.25.0 (BSD-3-Clause) and
-  typing-extensions 4.16.0 (PSF-2.0).
-- **Note**: Ships at `utility/rigswap/python/` and runs only as the model
-  importer's own process, started by the app. Each package's license text
-  ships inside its `*.dist-info` folder.
+- **What**: a CPython 3.13 with rigswap's packages, also one of the model import
+  tools the user downloads from Settings (**not shipped** since 0.9.0): python.org's
+  official embeddable CPython 3.13.17 on Windows x64 (PSF-2.0), and
+  python-build-standalone's CPython 3.13.18 (`install_only_stripped`, release
+  20261110; PSF-2.0, plus the licences that project lists for its build) on
+  Linux x64 and macOS arm64. With it, these unmodified wheels from PyPI, each
+  pinned by version in `utility/rigswap.requirements.txt` and by sha256 per
+  platform in `utility/model_import_tools.json`: bpy 5.2.2 (Blender as a Python
+  module, GPL-3.0-or-later; source at https://download.blender.org/source/),
+  NumPy 2.5.3 (BSD-3-Clause), Pillow 13.0.0 (MIT-CMU), requests 2.34.2
+  (Apache-2.0), urllib3 2.8.0 (MIT), idna 3.20 (BSD-3-Clause), certifi
+  2026.10.23 (MPL-2.0), charset-normalizer 3.5.2 (MIT), attrs 26.1.0 (MIT),
+  cattrs 26.2.1 (MIT), Cython 3.3.0 (Apache-2.0), zstandard 0.25.0
+  (BSD-3-Clause) and typing-extensions 4.16.0 (PSF-2.0).
+- **Note**: Unpacked into the user's data folder (`tools/model-import/runtime/`)
+  and run only as the model importer's own process, started by the app. The
+  wheels are unpacked as files (no installer of theirs runs). Each package's
+  license text stays inside its `*.dist-info` folder.
 
 ### FFmpeg
 - **License**: GPL-3.0-or-later. FFmpeg is configured with `--enable-gpl
@@ -316,11 +322,18 @@ linked into the application.
 - **Note**: Community Melee extension framework. No license is published by the
   upstream project.
 
+### clone_engine (m-ex function patch)
+- **Author**: Team Akaneia
+- **Source**: the `clone_engine` function patch in the ACE Build's `MxPt.dat`
+- **Note**: `backend/data/clone_engine.dat` is a cut of it: 4 of its 13 hooks, the ones that
+  let a clone fighter spawn its base fighter's items (`core/clone_patch.py`). Install adds it
+  to clone fighters' packages. No license is published for it.
+
 ### MexManager / MexCLI
 - **Author**: Ploaj
 - **Repository**: https://github.com/Ploaj/MexManager
 - **Note**: No license is published by the upstream project. We distribute a prebuilt build of our
-  fork, https://github.com/sc00ppp/ssbmNucleus-mex (release tag pinned in `utility/mex.manifest.json`;
+  fork, https://github.com/ssbmNucleus/m-ex (release tag pinned in `utility/mex.manifest.json`;
   the source is in that repository).
 
 ### MeleeMedia
@@ -349,7 +362,8 @@ Two notes recorded honestly rather than glossed:
    licensed components of this application, which invoke HSDRawViewer as an external
    process.
 2. **Several Melee community upstreams publish no license at all** (m-ex,
-   MexManager/MexCLI, MeleeMedia, GCILib, and the peppi-py bindings). They are used
+   Team Akaneia's clone_engine patch, MexManager/MexCLI, MeleeMedia, GCILib, and the
+   peppi-py bindings). They are used
    and redistributed here by community convention, not by an express grant.
 3. **slippi-js is LGPL-3.0 and the combo-detection code here is a port of it.** A
    translation is a derivative work, so that portion carries slippi-js's terms.
@@ -360,12 +374,12 @@ Two notes recorded honestly rather than glossed:
 ### Super Smash Bros. Melee Assets
 - **Copyright**: © Nintendo / HAL Laboratory, Inc.
 - **Note**: Vanilla character portraits, stock icons, and other game assets are property of Nintendo. This software is designed for use with legally obtained copies of Super Smash Bros. Melee.
-- **Distribution**: No Nintendo game data is distributed with this software. Vanilla assets are extracted at first run from the user's own ISO, on the user's machine.
+- **Distribution**: Game data comes from the user's own Super Smash Bros. Melee 1.02 ISO, extracted on the user's machine; Nintendo's game files are not distributed with this software. Pokémon Stadium's alternate-stage loader is rebuilt from the user's own stage file with a small patch. A few small items made from the game still ship: the backdrops of the character- and stage-select layout editors (screenshots of the game), the effect pictograms and reference screenshots in Extras (gameplay captures), the stage parameter tables inside the five Dynamic Alternate Stages loaders, the HUD texture slot manifests (sizes and checksums, no images), and Watch Lite's per-character data tables.
 
 ## Additional Tools
 
 ### DAT Processing Tools
-- **Origin**: Adapted from the author's own [meleeWebsite](https://github.com/davidfeira/meleeWebsite) project
+- **Origin**: Adapted from the author's own [meleeWebsite](https://ssbmnucleus.net) project
 - **Description**: Character detection and DAT file processing utilities
 
 ---

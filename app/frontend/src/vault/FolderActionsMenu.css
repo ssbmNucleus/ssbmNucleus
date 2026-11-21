@@ -1,0 +1,73 @@
+/* Folder actions menu — one folder-icon trigger + popover menu in the
+   character detail header. Trigger reuses .character-action-button
+   (ExtrasPage.css) for size/colour; only the icon layout is local. */
+
+.folder-menu {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.folder-menu-btn {
+  gap: 4px;
+}
+
+.folder-menu.is-open .folder-menu-btn {
+  color: var(--color-text-primary);
+  border-color: var(--color-border-hover);
+  background: var(--color-bg-surface);
+}
+
+.folder-menu-icon {
+  font-size: 1.05em;
+  line-height: 1;
+}
+
+.folder-menu-caret {
+  font-size: 10px;
+  line-height: 1;
+  color: var(--color-text-muted);
+}
+
+.folder-menu-popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: var(--z-dropdown);
+  min-width: 100%;
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-1);
+  box-shadow: var(--shadow-lg);
+}
+
+.folder-menu-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  font-size: var(--text-xs);
+  font-family: var(--font-display);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.folder-menu-option:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+
+/* Trailing folder glyph — pushed to the row's right edge so both items line up. */
+.folder-menu-option-icon {
+  margin-left: auto;
+  line-height: 1;
+}

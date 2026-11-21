@@ -1,0 +1,185 @@
+/* Randall's workbench: the thing being made, beside the chat. A flex sibling
+   of .coach-page inside .coach-layout, so the chat column simply narrows. */
+.workbench {
+  flex: 0 0 clamp(340px, 42%, 820px);
+  min-width: 0;
+  margin: 12px 12px 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-bg-surface);
+  animation: workbench-in 260ms var(--ease-out, ease-out) both;
+}
+@keyframes workbench-in { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+
+.workbench-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.workbench-title { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.workbench-title strong { font-size: var(--text-base); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.workbench-step { display: flex; align-items: center; gap: 6px; font-size: var(--text-xs); color: var(--color-text-tertiary); overflow-wrap: anywhere; }
+.workbench-step .assistant-work-pulse { margin-left: 0; }
+.workbench-close { flex-shrink: 0; display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid var(--color-border);
+  border-radius: var(--radius-md); background: var(--color-bg-elevated); color: var(--color-text-secondary); cursor: pointer; }
+.workbench-close:hover { color: var(--color-text-primary); background: var(--color-bg-hover); }
+
+.workbench-tabs { display: flex; gap: 6px; }
+.workbench-tabs button { position: relative; padding: 6px 14px; border: 0; border-radius: var(--radius-md); background: transparent;
+  color: var(--color-text-tertiary); font-size: var(--text-xs); cursor: pointer; }
+.workbench-tabs button:hover:not(:disabled) { color: var(--color-text-primary); }
+.workbench-tabs button.is-active { background: var(--color-bg-elevated); color: var(--color-text-primary); }
+.workbench-tabs button:disabled { opacity: .4; cursor: default; }
+.workbench-dot { position: absolute; top: 4px; right: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--color-cyan); }
+
+.workbench-body { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.workbench-pane { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 8px; }
+.workbench-pane[hidden] { display: none; }
+.workbench-empty { flex: 1; display: grid; place-items: center; padding: 24px; text-align: center; color: var(--color-text-tertiary);
+  font-size: var(--text-sm); border-radius: var(--radius-lg); background: var(--color-bg-deep); }
+
+.workbench-viewer { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 8px; }
+.workbench-viewport { position: relative; flex: 1; min-height: 220px; border-radius: var(--radius-lg); background: var(--color-bg-deep); }
+.workbench-status { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  color: var(--color-text-tertiary); font-size: var(--text-sm); text-align: center; padding: 20px; }
+.workbench-status--error { color: var(--color-warning); background: color-mix(in srgb, var(--color-bg-deep) 88%, transparent); }
+.workbench-badge { position: absolute; top: 10px; left: 10px; display: flex; align-items: center; gap: 6px; padding: 4px 10px 4px 6px;
+  border-radius: 999px; background: color-mix(in srgb, var(--color-bg-deep) 80%, transparent); color: var(--color-text-secondary); font-size: var(--text-xs); }
+.workbench-badge .assistant-work-pulse { margin-left: 0; }
+.workbench-controls { display: flex; align-items: center; gap: 8px; }
+.workbench-play { display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid var(--color-border); border-radius: var(--radius-md);
+  background: var(--color-bg-elevated); color: var(--color-text-primary); cursor: pointer; }
+.workbench-controls select { flex: 1; min-width: 0; height: 30px; padding: 0 8px; border: 1px solid var(--color-border); border-radius: var(--radius-md);
+  background: var(--color-bg-elevated); color: var(--color-text-primary); font-size: var(--text-xs); }
+
+.workbench-picture { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 0; border: 0;
+  border-radius: var(--radius-lg); background: var(--color-bg-deep); cursor: zoom-in; overflow: hidden; }
+.workbench-picture img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.workbench-caption { display: flex; justify-content: space-between; gap: 10px; margin: 0; font-size: var(--text-xs);
+  color: var(--color-text-tertiary); overflow-wrap: anywhere; }
+.workbench-caption span:last-child { flex-shrink: 0; }
+.workbench-count { margin-left: 6px; font-size: 10px; color: var(--color-text-tertiary); }
+
+/* Every picture of the chat, grouped by the step that made it. A group's header stays whole at the top of the list
+   while its pictures scroll under it (it was cut in half under the caption line above), and a picture scrolled into
+   view leaves room for that header (scroll-padding-top). */
+.workbench-gallery { flex: 0 0 auto; max-height: 34%; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 2px;
+  scroll-padding-top: 24px; }
+.workbench-group h4 { position: sticky; top: 0; z-index: 1; margin: 0; padding: 2px 0 4px; font-size: 11px; line-height: 16px;
+  font-weight: 500; color: var(--color-text-tertiary); background: var(--color-bg-surface);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.workbench-strip { display: flex; flex-wrap: wrap; gap: 6px; }
+.workbench-strip button { flex: 0 0 auto; width: 64px; height: 48px; padding: 2px; border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+  background: var(--color-bg-deep); cursor: pointer; opacity: .65; }
+.workbench-strip button.is-active, .workbench-strip button:hover { opacity: 1; border-color: var(--color-cyan); }
+.workbench-strip img { width: 100%; height: 100%; object-fit: contain; }
+.workbench-game { overflow: hidden; }
+
+/* In game: the game is the picture. A quiet title row (status pill, two small actions), the capture at Melee's 4:3
+   with Dolphin's window frame cropped away, one hint line under it. Same language as the import card. */
+.workbench-game-test { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+.workbench-game-head { display: flex; align-items: center; gap: var(--space-2); min-width: 0; min-height: 28px; }
+.workbench-game-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-display);
+  font-size: var(--text-sm); font-weight: var(--font-semibold); color: var(--color-text-primary); letter-spacing: -.005em; }
+.workbench-game-pill { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; padding: 2px 9px 2px 8px; border-radius: var(--radius-full);
+  font-size: 11px; font-weight: var(--font-medium); color: var(--color-text-tertiary); white-space: nowrap;
+  background: color-mix(in srgb, var(--color-text-primary) 7%, transparent); }
+.workbench-game-pill i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .7; }
+.workbench-game-test.is-live .workbench-game-pill { color: var(--color-cyan); background: color-mix(in srgb, var(--color-cyan) 14%, transparent); }
+.workbench-game-test.is-live .workbench-game-pill i { opacity: 1; animation: workbench-game-pulse 2s ease-out infinite; }
+.workbench-game-test.is-failed .workbench-game-pill { color: var(--color-danger); background: color-mix(in srgb, var(--color-danger) 12%, transparent); }
+.workbench-game-test.is-starting .workbench-game-pill i,
+.workbench-game-test.is-stopping .workbench-game-pill i { animation: workbench-game-breathe 1.4s ease-in-out infinite; }
+@keyframes workbench-game-pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-cyan) 55%, transparent); }
+  70%, 100% { box-shadow: 0 0 0 6px transparent; } }
+@keyframes workbench-game-breathe { 50% { opacity: .25; } }
+.workbench-game-actions { margin-left: auto; flex: 0 0 auto; display: flex; gap: 6px; }
+.workbench-game-action { height: 28px; padding: 0 10px; border: 1px solid var(--color-border); border-radius: var(--radius-md);
+  background: var(--color-bg-elevated); color: var(--color-text-secondary); font-size: var(--text-xs); white-space: nowrap; cursor: pointer;
+  transition: color 120ms ease, background-color 120ms ease; }
+.workbench-game-action:hover:not(:disabled) { color: var(--color-text-primary); background: var(--color-bg-hover); }
+.workbench-game-action:disabled { opacity: .55; cursor: default; }
+.workbench-game-action:focus-visible { outline: 2px solid var(--color-cyan); outline-offset: 1px; }
+
+/* The stage is as wide as the tab, 4:3, and never taller than the room the tab has (the fit box is the size container;
+   26px is the hint line under the picture). */
+.workbench-game-fit { flex: 1; min-height: 0; container-type: size; display: flex; flex-direction: column; align-items: center; gap: var(--space-2); }
+.workbench-game-stage { position: relative; flex: 0 0 auto; width: min(100cqw, calc((100cqh - 26px) * 4 / 3)); aspect-ratio: 4 / 3;
+  overflow: hidden; border-radius: var(--radius-lg); background: var(--color-bg-deep);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-text-primary) 6%, transparent); }
+.workbench-game-stage video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
+.workbench-game-stage video.is-cropped { right: auto; bottom: auto; }
+.workbench-game-note { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; padding: var(--space-4); text-align: center;
+  color: var(--color-text-tertiary); font-size: var(--text-sm); }
+.workbench-game-fallback { position: absolute; inset: 0; display: flex; flex-direction: column; }
+.workbench-game-hint { width: min(100cqw, calc((100cqh - 26px) * 4 / 3)); margin: 0; font-size: var(--text-xs); color: var(--color-text-tertiary);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Building and booting: the import card's spinner and bar, one plain line, the percentage small. */
+.workbench-game-progress { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: var(--space-3); padding: var(--space-4) 12%; animation: workbench-game-in 240ms ease-out both; }
+.workbench-game-spinner { width: 18px; height: 18px; border-radius: 50%; border: 2px solid color-mix(in srgb, var(--color-cyan) 25%, transparent);
+  border-top-color: var(--color-cyan); animation: workbench-game-spin .9s linear infinite; }
+.workbench-game-bar { position: relative; width: 100%; max-width: 320px; height: 4px; overflow: hidden; border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--color-text-primary) 10%, transparent); }
+.workbench-game-bar span { position: absolute; top: 0; bottom: 0; left: 0; border-radius: inherit; background: var(--color-cyan);
+  transition: width 500ms var(--ease-out, ease-out); }
+.workbench-game-bar.is-indeterminate span { width: 100%; background: linear-gradient(90deg, transparent, var(--color-cyan), transparent);
+  animation: workbench-game-sweep 1.6s ease-in-out infinite; }
+.workbench-game-now { display: flex; align-items: baseline; justify-content: center; gap: var(--space-2); width: 100%; max-width: 320px; margin: 0;
+  font-size: var(--text-sm); color: var(--color-text-secondary); text-align: center; }
+.workbench-game-now span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.workbench-game-percent { flex: 0 0 auto; color: var(--color-text-tertiary); font-size: var(--text-xs); font-variant-numeric: tabular-nums; }
+@keyframes workbench-game-spin { to { transform: rotate(360deg); } }
+@keyframes workbench-game-sweep { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+@keyframes workbench-game-in { from { opacity: 0; } to { opacity: 1; } }
+
+.workbench-game-ended { margin: 0; font-size: var(--text-sm); color: var(--color-text-tertiary); }
+.workbench-game-test.is-failed .workbench-game-ended { color: var(--color-warning); overflow-wrap: anywhere; }
+.workbench-game-problem { margin: 0; font-size: var(--text-xs); color: var(--color-warning); overflow-wrap: anywhere; }
+@media (prefers-reduced-motion: reduce) {
+  .workbench-game-pill i, .workbench-game-test.is-live .workbench-game-pill i, .workbench-game-test.is-starting .workbench-game-pill i,
+  .workbench-game-test.is-stopping .workbench-game-pill i, .workbench-game-progress, .workbench-game-spinner,
+  .workbench-game-bar.is-indeterminate span { animation: none; }
+  .workbench-game-bar span, .workbench-game-action { transition: none; }
+}
+
+/* Full screen: portalled to <body>, so it covers the whole window. */
+.workbench-zoom { position: fixed; inset: 0; z-index: 10050; display: flex; align-items: center; justify-content: center;
+  padding: 56px 72px 24px; background: rgba(0, 0, 0, .9); cursor: zoom-out; }
+.workbench-zoom img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: default; }
+.workbench-zoom-bar { position: absolute; top: 0; left: 0; right: 0; display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+  color: #eee; font-size: var(--text-sm); cursor: default; }
+.workbench-zoom-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.workbench-zoom-meta { color: #aaa; font-size: var(--text-xs); white-space: nowrap; }
+.workbench-zoom-bar button { width: 32px; height: 32px; border: 0; border-radius: var(--radius-md); background: rgba(255, 255, 255, .1);
+  color: #eee; font-size: 20px; line-height: 1; cursor: pointer; }
+.workbench-zoom-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 72px; border: 0; border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, .08); color: #eee; font-size: 34px; cursor: pointer; }
+.workbench-zoom-nav:hover, .workbench-zoom-bar button:hover { background: rgba(255, 255, 255, .18); }
+.workbench-zoom-nav.is-prev { left: 14px; }
+.workbench-zoom-nav.is-next { right: 14px; }
+.workbench-menu { z-index: 10060; }
+.workbench-notice { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 10070; padding: 8px 14px;
+  border-radius: var(--radius-md); background: var(--color-bg-elevated); border: 1px solid var(--color-border);
+  color: var(--color-text-primary); font-size: var(--text-sm); box-shadow: var(--shadow-lg); pointer-events: none; }
+
+/* Collapsed: a slim tab on the right edge that reopens it. */
+.workbench-reopen { flex: 0 0 auto; align-self: flex-start; margin: 12px 12px 0 0; display: flex; align-items: center; gap: 6px; writing-mode: vertical-rl;
+  padding: 14px 7px; border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-bg-surface);
+  color: var(--color-text-secondary); font-size: var(--text-xs); cursor: pointer; }
+.workbench-reopen:hover { color: var(--color-text-primary); }
+.workbench-reopen .assistant-work-pulse { margin-left: 0; }
+
+/* The workbench is for the full Randall page, not the Texture Lab sidebar. */
+.assistant-host--editor .workbench, .assistant-host--editor .workbench-reopen { display: none; }
+
+/* Narrow windows: it floats over the chat instead of squeezing it. */
+@container (max-width: 900px) {
+  /* Stops above the message bar so typing and Send stay reachable. */
+  .workbench { position: absolute; top: 12px; right: 0; bottom: 120px; width: min(460px, calc(100% - 24px));
+    z-index: 5; box-shadow: 0 18px 50px rgba(0, 0, 0, .45); }
+}
+@media (prefers-reduced-motion: reduce) { .workbench { animation: none; } }
+
+.assistant-game-moved { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--color-text-tertiary); }

@@ -1,0 +1,22 @@
+{
+  "character": "Nana",
+  "basis": {"costumeCode": "PlNnNr", "textureCount": 25},
+  "regions": {
+    "cloth": [3, 4, 8, 12, 17, 18, 20, 21],
+    "trim": [5, 7, 9, 11, 14, 15, 19],
+    "skin": [0, 13],
+    "armor": [6, 10, 16, 22, 23, 24],
+    "face_detail": [1, 2]
+  },
+  "protected": [0, 1, 2],
+  "liveHints": [],
+  "maskHints": {},
+  "notes": {
+    "cloth": "the parka (pink for Nana): torso (3), hood back (4), panels (8/12/17/18/20/21)",
+    "trim": "white fur fluff on hood + cuffs + hem (grays)",
+    "skin": "0 = face sheet with painted eyes+blush (protected); legs (24) read as armor leather here",
+    "armor": "tan leather gear: mittens (6), boots/legs (10/22/23/24), straps (16)",
+    "face_detail": "mouth interior (1) + lips (2) - protected",
+    "layout": "identical texture layout to Ice Climbers (Popo); paired-skin mods should apply matching ops to both"
+  }
+}

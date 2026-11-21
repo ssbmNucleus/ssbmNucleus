@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "skeleton": "model/body/c00/model.nusktb",
+  "landmarks": "ultimate_landmarks.json",
+  "allow_unbound": [
+    "S_Hip_hit"
+  ],
+  "attachments": [
+    {
+      "source": "SwordR",
+      "source_anchor": "HandR",
+      "target": "JOBJ_75",
+      "target_anchor": "JOBJ_73"
+    },
+    {
+      "source": "Throw",
+      "source_anchor": "Trans",
+      "target": "JOBJ_88",
+      "target_anchor": "JOBJ_3"
+    }
+  ],
+  "clips": [
+    {
+      "id": "fthrow",
+      "category": "grab",
+      "target_motion": "ThrowF",
+      "source": "motion/body/c00/e01throwf.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "last_frame": 38
+    },
+    {
+      "id": "bthrow",
+      "category": "grab",
+      "target_motion": "ThrowB",
+      "source": "motion/body/c00/e01throwb.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "last_frame": 46
+    },
+    {
+      "id": "uthrow",
+      "category": "grab",
+      "target_motion": "ThrowHi",
+      "source": "motion/body/c00/e01throwhi.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "last_frame": 48
+    },
+    {
+      "id": "dthrow",
+      "category": "grab",
+      "target_motion": "ThrowLw",
+      "source": "motion/body/c00/e01throwlw.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "last_frame": 44
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "skeleton": "model/body/c00/model.nusktb",
+  "landmarks": "ultimate_landmarks.json",
+  "allow_unbound": [
+    "S_Hip_hit"
+  ],
+  "attachments": [
+    {
+      "source": "SwordR",
+      "source_anchor": "HandR",
+      "target": "JOBJ_75",
+      "target_anchor": "JOBJ_73"
+    }
+  ],
+  "clips": [
+    {
+      "id": "win1",
+      "category": "results",
+      "target_motion": "Win1",
+      "source": "motion/body/c00/j02win1.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "win1wait",
+      "category": "results",
+      "target_motion": "Win1Wait",
+      "source": "motion/body/c00/j02win1wait.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "win2",
+      "category": "results",
+      "target_motion": "Win2",
+      "source": "motion/body/c00/j02win2.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "win2wait",
+      "category": "results",
+      "target_motion": "Win2Wait",
+      "source": "motion/body/c00/j02win2wait.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "win3",
+      "category": "results",
+      "target_motion": "Win3",
+      "source": "motion/body/c00/j02win3.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "win3wait",
+      "category": "results",
+      "target_motion": "Win3Wait",
+      "source": "motion/body/c00/j02win3wait.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "selected",
+      "category": "results",
+      "target_motion": "Selected",
+      "source": "motion/body/c00/j02win3wait.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "selectedwait",
+      "category": "results",
+      "target_motion": "SelectedWait",
+      "source": "motion/body/c00/j02win3wait.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid"
+    },
+    {
+      "id": "lose",
+      "category": "results",
+      "target_motion": "Lose",
+      "source": "motion/body/c00/j02lose.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid"
+    }
+  ]
+}

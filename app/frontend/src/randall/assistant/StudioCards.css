@@ -1,0 +1,108 @@
+/* The model import in the chat (StudioCards.jsx). Built on the generic tool
+   card (.assistant-tool, .assistant-tool-heading) and the workbench's
+   full-size picture view; only what those do not already cover lives here. */
+.assistant-studio { display: flex; flex-direction: column; gap: 8px; }
+.assistant-studio p { margin: 0; }
+.assistant-studio-heading { flex-wrap: wrap; row-gap: 4px; }
+.assistant-studio-heading strong { min-width: 0; font-size: 13px; font-weight: 600; color: var(--color-text-primary); overflow-wrap: anywhere; }
+/* The stage chip sits on the right, before the status. */
+.assistant-studio .assistant-studio-heading > .assistant-studio-stage { margin-left: auto; }
+.assistant-studio .assistant-studio-heading > span.assistant-studio-status { flex-shrink: 0; }
+.assistant-studio .assistant-studio-heading > .assistant-studio-stage + span.assistant-studio-status { margin-left: 0; }
+.assistant-studio.is-failed .assistant-studio-heading > span:first-child { color: var(--color-warning); }
+.assistant-studio.is-refused .assistant-studio-heading > span:first-child { color: var(--color-text-tertiary); }
+.assistant-studio.is-failed .assistant-studio-status { color: var(--color-warning); }
+/* Waiting on the user (a model without its textures): a warning, not an error. */
+.assistant-studio.is-waiting .assistant-studio-heading > span:first-child,
+.assistant-studio.is-waiting .assistant-studio-status { color: var(--color-warning); }
+.assistant-studio-stage { flex-shrink: 0; padding: 2px 8px; border-radius: 999px; background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle); color: var(--color-text-secondary); font-size: 10px; font-style: normal;
+  white-space: nowrap; }
+
+/* What the call changed: one compact line each. */
+.assistant-studio-changes { display: flex; flex-direction: column; gap: 4px; }
+.assistant-studio-change, .assistant-studio-question, .assistant-studio-next { display: flex; align-items: baseline;
+  gap: 8px; min-width: 0; font-size: 12px; color: var(--color-text-secondary); }
+.assistant-studio-key { flex: 0 0 auto; min-width: 58px; font-size: 10px; letter-spacing: .02em; text-transform: uppercase;
+  color: var(--color-text-tertiary); }
+.assistant-studio-value { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.assistant-studio-change code { flex: 0 0 auto; padding: 1px 6px; border-radius: var(--radius-sm); background: var(--color-bg-deep);
+  color: var(--color-cyan); font: 11px/1.5 var(--font-mono); }
+.assistant-studio-why > span:last-child { color: var(--color-text-tertiary); font-style: italic; overflow-wrap: anywhere; }
+.assistant-studio-facts, .assistant-studio-hint { font-size: 12px; color: var(--color-text-secondary); }
+.assistant-studio-hint { color: var(--color-text-tertiary); font-size: 11px; }
+.assistant-studio-next { color: var(--color-text-tertiary); font-size: 11px; overflow-wrap: anywhere; }
+.assistant-studio-question em { margin-left: 6px; color: var(--color-text-tertiary); }
+
+/* A failure, said plainly: the same left-rule block as a settled task. */
+.assistant-studio-error { padding: 8px 12px; border-left: 3px solid var(--color-warning); border-radius: 0 8px 8px 0;
+  background: var(--color-bg-deep); font-size: 12px; overflow-wrap: anywhere; }
+.assistant-studio-error p:first-child { color: var(--color-text-primary); }
+.assistant-studio-fix { margin-top: 4px !important; color: var(--color-text-secondary); }
+.assistant-studio-warnings { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.assistant-studio-warnings li { padding: 6px 10px; border-radius: var(--radius-md); background: var(--color-warning-muted, #e7947914);
+  color: var(--color-text-secondary); font-size: 12px; overflow-wrap: anywhere; }
+.assistant-studio-notes { margin: 0 !important; font-size: 11px; color: var(--color-text-tertiary); }
+.assistant-studio-notes summary { width: fit-content; }
+.assistant-studio-notes ul { margin: 6px 0 0; padding-left: 18px; max-height: 200px; overflow-y: auto; overflow-wrap: anywhere; }
+.assistant-studio-notes li + li { margin-top: 3px; }
+
+/* Pictures: thumbnails that open over the whole window. */
+.assistant-studio-pictures { list-style: none; margin: 2px 0; padding: 0; display: grid; gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(132px, 176px)); }
+.assistant-studio-pictures.is-grid.is-few { grid-template-columns: repeat(auto-fill, minmax(180px, 260px)); }
+.assistant-studio-pictures.is-triptych { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.assistant-studio-pictures li { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.assistant-studio-thumb { display: block; width: 100%; aspect-ratio: 1; padding: 3px; border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md); background: var(--color-bg-deep); cursor: zoom-in; overflow: hidden;
+  transition: border-color 140ms ease; }
+.assistant-studio-thumb:hover, .assistant-studio-thumb:focus-visible { border-color: var(--color-cyan); }
+.assistant-studio-thumb img { display: block; width: 100%; height: 100%; object-fit: contain; border-radius: var(--radius-sm); }
+.assistant-studio-caption { font-size: 10px; line-height: 1.35; color: var(--color-text-tertiary); overflow: hidden;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow-wrap: anywhere; }
+.assistant-studio-pair > div { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+
+/* fresh_eyes: the verdict in its own words, then what it saw wrong. */
+.assistant-studio-verdict { margin: 0; padding: 8px 12px; border-left: 3px solid var(--color-cyan); border-radius: 0 8px 8px 0;
+  background: var(--color-bg-deep); color: var(--color-text-primary); font-size: 12px; line-height: 1.55; }
+.assistant-studio-problems { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px;
+  font-size: 12px; color: var(--color-text-secondary); }
+.assistant-studio-problems strong { margin-right: 6px; font-weight: 500; color: var(--color-text-primary); }
+
+/* import_status: every stage at a glance. */
+.assistant-studio-stages { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); }
+.assistant-studio-stages li { display: grid; grid-template-columns: auto 1fr; column-gap: 8px; align-items: baseline;
+  padding: 6px 8px; border-radius: var(--radius-md); background: var(--color-bg-deep); font-size: 12px;
+  border: 1px solid var(--color-border-subtle); }
+.assistant-studio-stages small { grid-column: 2; font-size: 10px; color: var(--color-text-tertiary); }
+.assistant-studio-stage-number { grid-row: span 2; font: 600 13px/1 var(--font-mono); color: var(--color-text-tertiary); }
+.assistant-studio-stages li.is-done .assistant-studio-stage-number { color: var(--color-cyan); }
+.assistant-studio-stages li.is-failed { border-color: var(--color-warning); }
+.assistant-studio-stages li.is-failed .assistant-studio-stage-number { color: var(--color-warning); }
+
+/* import_model: the whole import as one card. */
+.assistant-studio-saved { font-size: 12px; color: var(--color-text-primary); }
+
+/* needs_tools: the download box (ImportToolsDownload.jsx), the same job as Settings > Model import tools. */
+.assistant-studio-tools { display: flex; flex-direction: column; gap: 6px; }
+.assistant-studio-tools-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.assistant-studio-tools-button, .assistant-studio-tools-cancel { padding: 5px 12px; border-radius: var(--radius-md);
+  font-size: 12px; cursor: pointer; border: 1px solid var(--color-border-subtle); }
+.assistant-studio-tools-button { background: var(--color-cyan); color: var(--color-bg-deep); border-color: transparent;
+  font-weight: 600; }
+.assistant-studio-tools-cancel { background: var(--color-bg-elevated); color: var(--color-text-secondary); }
+.assistant-studio-tools-button:disabled, .assistant-studio-tools-cancel:disabled { opacity: .5; cursor: not-allowed; }
+.assistant-studio-tools-track { height: 4px; border-radius: 999px; background: var(--color-bg-elevated); overflow: hidden; }
+.assistant-studio-tools-fill { height: 100%; background: var(--color-cyan); transition: width .3s ease; }
+.assistant-studio-tools-error { color: var(--color-warning); }
+
+.assistant-studio-running { max-width: 100%; flex-wrap: wrap; }
+.assistant-studio-running .assistant-studio-stage { margin: 0; }
+
+@container (max-width: 650px) {
+  .assistant-studio-pictures.is-triptych { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .assistant-studio-thumb { transition: none; }
+}

@@ -1,0 +1,290 @@
+/* Post-page-accurate preview for the Upload Review step.
+   Colors are ssbmnucleus.net's theme values (frontend/src/index.css), NOT the
+   app's tokens — the point is looking like the website. */
+
+.upload-postpreview {
+  border: 1px solid #3d4f5c;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #0d1929;
+}
+
+.upload-postpreview-chrome {
+  padding: 6px 14px;
+  background: #0a1118;
+  border-bottom: 1px solid #2a3a47;
+  color: #8896a4;
+  font-size: 11px;
+  font-family: 'Courier New', Courier, monospace;
+  letter-spacing: 0.04em;
+}
+
+.pp-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  max-height: 640px;
+  overflow: hidden;
+}
+
+.pp-info {
+  background: #1a2332;
+  border-right: 1px solid #3d4f5c;
+  padding: 28px 32px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(125, 211, 232, 0.25) transparent;
+}
+
+.pp-title {
+  margin: 0 0 12px;
+  color: #f5f5f5;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.pp-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  color: #8896a4;
+  font-size: 13px;
+  margin-bottom: 18px;
+}
+
+.pp-author {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pp-avatar {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #3d4f5c;
+  color: #f5f5f5;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.pp-avatar img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pp-author-link {
+  color: #ffc700;
+  font-weight: 600;
+}
+
+.pp-description {
+  color: #b8c5d0;
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.pp-description p { margin: 0 0 8px; }
+.pp-description h2, .pp-description h3, .pp-description h4 {
+  color: #f5f5f5;
+  margin: 12px 0 6px;
+}
+.pp-description li { margin-left: 18px; }
+
+.pp-section { margin-bottom: 20px; }
+
+.pp-section h3 {
+  color: #f5f5f5;
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+
+.pp-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pp-tag {
+  display: inline-block;
+  padding: 6px 12px;
+  background: #3d4f5c;
+  border: 1px solid #3d4f5c;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #b8c5d0;
+}
+
+.pp-tag--category {
+  background: #ffc700;
+  border-color: #ffc700;
+  color: #0d1929;
+  font-weight: 600;
+}
+
+.pp-files {
+  background: #0a1118;
+  border: 1px solid #2a3a47;
+  border-radius: 4px;
+  padding: 12px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 12px;
+  color: #b8c5d0;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.pp-file-row { padding: 2px 0; }
+
+.pp-download { margin-bottom: 20px; }
+
+.pp-download-button {
+  display: inline-block;
+  padding: 14px 44px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0d1929;
+  background: #7dd3e8;
+  border-radius: 8px;
+  opacity: 0.85;
+}
+
+.pp-mods-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.pp-mod-card {
+  background: #3d4f5c;
+  border: 1px solid #3d4f5c;
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pp-mod-csp {
+  display: flex;
+  justify-content: center;
+  background: #1a2332;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.pp-mod-csp img {
+  max-width: 100%;
+  max-height: 150px;
+  object-fit: contain;
+}
+
+.pp-mod-shot img {
+  width: 100%;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.pp-mod-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #f5f5f5;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.pp-badge-color {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #0d1929;
+}
+
+.pp-mod-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pp-mod-stock {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.pp-badge-nucleus {
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: rgba(125, 211, 232, 0.15);
+  border: 1px solid rgba(125, 211, 232, 0.4);
+  color: #7dd3e8;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.pp-shots {
+  background: #0d1929;
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pp-shot-main img {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #2a3a47;
+}
+
+.pp-shot-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pp-shot-thumbs button {
+  width: 96px;
+  height: 64px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  overflow: hidden;
+  background: none;
+  cursor: pointer;
+}
+
+.pp-shot-thumbs button.active { border-color: #7dd3e8; }
+
+.pp-shot-thumbs img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pp-shot-empty {
+  color: #8896a4;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}

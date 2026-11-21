@@ -1,0 +1,3 @@
+# peppi-py pins pyarrow~=21. PYSEC-2026-113 concerns a C++ pre-buffer
+# API that Apache documents as not exposed through Python bindings.
+peppi-py

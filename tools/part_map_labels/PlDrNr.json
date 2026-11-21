@@ -1,0 +1,83 @@
+{
+ "character": "Dr. Mario",
+ "source": "PlDrNr",
+ "verified": true,
+ "notes": "eyes (11 + blink/expression frames 38-42) cover the whole upper face incl. eyebrows and the skin around the eyes - recolouring eyes recolours that skin too. 34 is reported unmapped but IS the head-mirror disc (renders); 37 is its thin rim. 2 = the shirt visible at the open collar; 4 = inner coat cuffs; 31 = small coat collar piece. stethoscope: 6 tube, 10 earpieces around the neck, 7/8/9 chest-piece held in the hand. 32/33 are low-poly head composites. Verified with a zoomed-out/zoomed-in camera (default verify framing crops the feet).",
+ "groups": {
+  "coat": [
+   0,
+   1,
+   3,
+   31
+  ],
+  "coat buttons": [
+   5
+  ],
+  "coat cuffs": [
+   4
+  ],
+  "shirt": [
+   2
+  ],
+  "stethoscope": [
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "head mirror": [
+   34,
+   37
+  ],
+  "headband": [
+   35,
+   36
+  ],
+  "skin": [
+   12,
+   13,
+   15,
+   16
+  ],
+  "hair": [
+   14,
+   18,
+   19
+  ],
+  "eyes": [
+   11,
+   38,
+   39,
+   40,
+   41,
+   42
+  ],
+  "mustache": [
+   20
+  ],
+  "mouth": [
+   17
+  ],
+  "gloves": [
+   24,
+   25,
+   26
+  ],
+  "pants": [
+   27,
+   28,
+   29,
+   30
+  ],
+  "shoes": [
+   21,
+   22,
+   23
+  ],
+  "low detail": [
+   32,
+   33
+  ]
+ }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "boot-and-hold-a",
+  "description": "Launch an ISO, wait for Dolphin to open, then hold A briefly during boot.",
+  "steps": [
+    {
+      "type": "wait",
+      "ms": 5000
+    },
+    {
+      "type": "checkpoint",
+      "name": "boot-before-input"
+    },
+    {
+      "type": "keyDown",
+      "key": "X"
+    },
+    {
+      "type": "wait",
+      "ms": 2000
+    },
+    {
+      "type": "keyUp",
+      "key": "X"
+    },
+    {
+      "type": "wait",
+      "ms": 2000
+    },
+    {
+      "type": "checkpoint",
+      "name": "after-hold-a"
+    },
+    {
+      "type": "wait",
+      "ms": 6000
+    }
+  ]
+}

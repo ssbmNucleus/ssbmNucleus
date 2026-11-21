@@ -1,0 +1,237 @@
+/* Deep stats panel — per-character frame-mined stats on the Stats page. */
+
+.deep-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  height: 100%;
+}
+
+/* ---- empty state / call to action ---- */
+.deep-panel-empty {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-4) var(--space-3);
+}
+
+.deep-empty-blurb {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  max-width: 34ch;
+  margin: 0;
+}
+
+.deep-analyze-btn {
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 14%, transparent);
+  color: var(--color-accent);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.deep-analyze-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-accent) 26%, transparent);
+}
+
+.deep-analyze-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.deep-empty-eta {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* ---- mining progress ---- */
+.deep-progress-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  justify-content: center;
+  height: 100%;
+  padding: var(--space-4);
+}
+
+.deep-progress-label {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+  text-align: center;
+}
+
+.deep-progress {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-surface-sunken, rgba(255, 255, 255, 0.06));
+  overflow: hidden;
+}
+
+.deep-progress > div {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--color-accent);
+  transition: width 0.9s var(--ease-out);
+}
+
+/* ---- the panel proper ---- */
+/* Spread head / statline / bottom group across the full card height so the
+   panel doesn't hug the top of a tall grid cell. */
+.deep-panel > .deep-head { flex: 0 0 auto; }
+
+.deep-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.deep-head-left {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.deep-head-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+.deep-head-n {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.deep-refresh-btn {
+  padding: 2px var(--space-3);
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 55%, transparent);
+  background: transparent;
+  color: var(--color-accent);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+
+.deep-refresh-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+}
+
+/* Boxscore rows, same typographic language as .stats-statline: big value +
+   quiet label on one baseline, hairline rules between columns. Grows to eat
+   the card's spare height, keeping the rows vertically centered. */
+.deep-statline {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-content: space-evenly;
+  row-gap: var(--space-4);
+}
+
+.deep-stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  white-space: nowrap;
+  padding-right: var(--space-3);
+}
+
+/* hairline column rules (not on the first column) */
+.deep-stat:not(:nth-child(3n + 1)) {
+  border-left: 1px solid var(--color-border-subtle);
+  padding-left: var(--space-4);
+}
+
+.deep-stat-num {
+  font-family: var(--font-display);
+  font-weight: var(--font-bold);
+  font-size: var(--text-2xl);
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-primary);
+}
+
+.deep-stat-num small {
+  font-weight: var(--font-normal);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-left: 2px;
+}
+
+.deep-stat-label {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+}
+
+/* causes + recovery pinned to the card bottom as one group */
+.deep-bottom {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.deep-causes-bar {
+  display: flex;
+  height: 22px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.deep-causes-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.deep-causes-legend i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  margin-right: 6px;
+}
+
+.deep-footline {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.deep-footnote {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.deep-causes-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.deep-causes-n {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.deep-failed {
+  margin: 0;
+  color: var(--color-danger, #e66);
+  font-size: var(--text-sm);
+}

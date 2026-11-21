@@ -1,0 +1,92 @@
+/* Ported from o3code/src/App.css composer and send/stop controls. */
+.ozone-composer {
+  display: flex;
+  gap: var(--space-2);
+  /* Bottom-aligned so the send button stays pinned when the textarea grows. */
+  align-items: flex-end;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-5);
+  margin-bottom: var(--space-4);
+  transition: border-color var(--transition-fast);
+}
+.ozone-composer:focus-within { border-color: var(--color-accent-ring); }
+
+.ozone-composer textarea {
+  flex: 1;
+  resize: none;
+  /* Grows with content (WebView2 is evergreen Chromium, so this is safe);
+     past the cap it falls back to scrolling. */
+  field-sizing: content;
+  min-height: 24px;
+  max-height: 160px;
+  background: transparent;
+  color: var(--color-text-primary);
+  border: none;
+  outline: none;
+  /* No vertical padding: border-box means it would eat the 24px line box and
+     shove the text down. The margin centers the single 24px line against the
+     38px button; when the textarea grows, the button stays at the bottom. */
+  padding: 0;
+  margin-block: 7px;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 24px;
+  caret-color: var(--color-accent);
+  overflow-y: auto;
+}
+.ozone-composer textarea::placeholder { color: var(--color-text-muted); }
+
+.ozone-send, .ozone-stop, .ozone-lead {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-lg);
+  transition: color var(--transition-fast), background var(--transition-fast), opacity var(--transition-fast);
+}
+.ozone-send { color: var(--color-accent); }
+@media (hover: hover) { .ozone-send:hover:not(:disabled) { background: var(--color-bg-hover); } }
+.ozone-send:disabled { color: var(--color-text-muted); opacity: 0.4; cursor: default; }
+/* Quiet grey, not alarm-red: stopping a turn is routine, not destructive. */
+.ozone-stop { color: var(--color-text-secondary); }
+@media (hover: hover) { .ozone-stop:hover { background: var(--color-bg-hover); color: var(--color-text-primary); } }
+
+/* The attach button (Randall's control row) is styled as the send button's
+   sibling: same box, same radius, same hover. As a smaller circle holding a text
+   glyph it read as a stray character rather than a control. */
+.ozone-lead { color: var(--color-text-secondary); }
+@media (hover: hover) { .ozone-lead:hover:not(:disabled) { background: var(--color-bg-hover); color: var(--color-text-primary); } }
+.ozone-lead:disabled { color: var(--color-text-muted); opacity: 0.4; cursor: default; }
+.ozone-lead-spin { animation: ozone-lead-spin 0.9s linear infinite; transform-origin: 50% 50%; }
+@keyframes ozone-lead-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .ozone-lead-spin { animation: none; } }
+
+
+/* Flatten Nucleus global textarea styling around the ported Ozone composer. */
+.ozone-composer textarea, .ozone-composer textarea:focus { border: 0; border-radius: 0; box-shadow: none; outline: none; background: transparent; width: 100%; min-width: 0; }
+.coach-inputarea .ozone-composer { margin: 0; }
+.ozone-composer button { cursor: pointer; }
+.ozone-composer:focus-within { border-color: color-mix(in srgb, var(--color-accent) 45%, transparent); }
+
+/* The stacked box (ChatInput with `controls`, Randall's): the textarea across
+   the top, then the control row inside the same border, as the Claude app lays
+   out its composer. Positioned so a popover in the control row (the starting
+   pick) anchors to the box's edges rather than to the button that opened it. */
+.ozone-composer.ozone-composer--stacked { position: relative; flex-direction: column; align-items: stretch; gap: 2px;
+  padding: var(--space-3) var(--space-2) var(--space-2); }
+/* Vertical room as margin, not padding (see the textarea rule above); the side
+   inset as padding, which border-box keeps inside `width: 100%`. */
+.ozone-composer--stacked textarea { margin: 2px 0 6px; padding: 0 var(--space-3); }
+.ozone-composer-controls { display: flex; align-items: center; gap: var(--space-2); min-width: 0; }
+.ozone-composer-tools { display: flex; align-items: center; gap: 6px; flex: 1 1 auto; min-width: 0; }
+.ozone-composer--stacked .ozone-lead { width: 34px; height: 34px; flex-basis: 34px; }
+
+.chat-unlock-group { display: flex; flex-shrink: 0; gap: 6px; }
+.chat-unlock { flex-shrink: 0; padding: 8px 12px; border: 1px solid var(--color-border); border-radius: 8px; background: transparent; color: var(--color-accent); white-space: nowrap; font: inherit; font-size: 12px; }

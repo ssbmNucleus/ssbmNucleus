@@ -1,0 +1,9 @@
+{
+  "name": "boot-idle",
+  "description": "Boot the ISO and idle at whatever menu the build lands on, leaving Dolphin running (use with --keep-open). Intended as the launch step for control.js so the game can then be driven interactively, one input at a time.",
+  "steps": [
+    { "type": "wait", "ms": 13000 },
+    { "type": "focus" },
+    { "type": "checkpoint", "name": "boot-idle" }
+  ]
+}

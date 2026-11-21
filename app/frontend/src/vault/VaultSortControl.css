@@ -1,0 +1,97 @@
+/* Vault sort control — one trigger button + popover menu
+   (skin/stage detail headers). Loaded after StorageViewer.css via the
+   owning component. */
+
+.vault-sort {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.vault-sort-label {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-right: 2px;
+}
+
+.vault-sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  font-family: var(--font-display);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition-fast);
+}
+
+.vault-sort-btn:hover,
+.vault-sort.is-open .vault-sort-btn {
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+/* A non-Custom sort is "active" — same cyan as the old toggle row. */
+.vault-sort-btn.active {
+  border-color: var(--color-cyan);
+  color: var(--color-cyan);
+  background: var(--color-bg-deep);
+}
+
+.vault-sort-arrow {
+  font-size: 0.9em;
+  line-height: 1;
+}
+
+.vault-sort-caret {
+  margin-left: 4px;
+  font-size: 10px;
+  line-height: 1;
+  color: var(--color-text-muted);
+}
+
+.vault-sort-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: var(--z-dropdown);
+  min-width: 100%;
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-1);
+  box-shadow: var(--shadow-lg);
+}
+
+.vault-sort-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  font-size: var(--text-xs);
+  font-family: var(--font-display);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.vault-sort-option:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.vault-sort-option.is-selected {
+  color: var(--color-cyan);
+}

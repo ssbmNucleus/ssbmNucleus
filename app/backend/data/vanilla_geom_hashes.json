@@ -1,0 +1,4 @@
+{
+  "note": "FNV-1a body-geometry fingerprints (geomHash) of retail v1.02 vanilla costume DATs. A vault costume whose detect-outline geomHash matches one of these uses vanilla/recolor geometry and is never Animelee (defensive guard for the Find Animelee detector). Regenerate with scratchpad extract_vanilla.py + `mexcli detect-outline --batch` if the geomHash algorithm changes.",
+  "hashes": ["133b18f4dbe998ae", "184db2114aaf8726", "228c4c79e6263a25", "325f2a4e8016fc99", "32a93d1ae4599912", "34cde407031c0812", "35e41a3d593665e1", "3649fabcb24766bb", "3e721be1adc252cb", "4009ec9935493b26", "5693adf89805c2cc", "5f51e016e225a631", "791bbdbdcb42ea91", "7a56f4f57a239418", "80316c8ccd519a43", "8d72678ab9ecf47a", "8f110576ae16fc99", "9a63cb52870b40dd", "9d52ce9d5c028172", "a261fd4ad2efcbc2", "ac33200e212c977a", "b1191535a756fc99", "cb3c07c42992b613", "d21b49398e50ecd5", "d3f7127feccb24a8", "e7dfb6b4d3acbe5c", "f85c9f9d2876fc99"]
+}

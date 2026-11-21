@@ -1,0 +1,351 @@
+/* Settings > Cloud: the Cloud library card — see VaultSection.jsx */
+
+.vault-mobile-guide { margin-top: var(--space-3); }
+
+.vault-mobile-guide-toggle {
+  max-width: 100%;
+  white-space: normal;
+  text-align: left;
+}
+
+.vault-mobile-guide-toggle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.vault-mobile-guide-panel {
+  margin-top: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-deep);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.vault-mobile-guide-panel h4 {
+  margin: 0 0 var(--space-2);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+}
+
+.vault-mobile-guide-panel p { margin: 0 0 var(--space-3); }
+.vault-mobile-guide-panel p:last-child { margin-bottom: 0; }
+.vault-mobile-guide-panel strong { color: var(--color-text-primary); }
+.vault-mobile-guide-panel ol { margin: 0 0 var(--space-3); padding-left: 1.5em; }
+.vault-mobile-guide-panel li + li { margin-top: var(--space-3); }
+.vault-mobile-guide-address { user-select: text; color: var(--color-accent); }
+.vault-mobile-guide-note { font-size: var(--text-xs); }
+
+.vault-summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.vault-count {
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+}
+
+.vault-unsyncable {
+  color: var(--color-text-tertiary, var(--color-text-secondary));
+  font-weight: var(--font-normal);
+  cursor: help;
+}
+
+.vault-last-sync {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  margin-right: auto;
+}
+
+.vault-activity { margin-top: var(--space-3); }
+
+.vault-activity-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: var(--text-xs);
+}
+
+.vault-activity-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-primary);
+}
+
+/* A pulse, because these phases can sit on one file for a while and a static
+   row is indistinguishable from a stalled one. */
+.vault-activity-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  animation: vault-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes vault-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+.vault-activity-count {
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.vault-progress {
+  position: relative;
+  height: 6px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: var(--color-bg-deep);
+  overflow: hidden;
+}
+
+.vault-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--color-accent);
+  opacity: 0.55;
+  transition: width 0.3s ease;
+}
+
+/* Counting phase: no total yet, so sweep instead of claiming a percentage. */
+.vault-progress.is-indeterminate .vault-progress-fill {
+  width: 35%;
+  animation: vault-sweep 1.1s ease-in-out infinite;
+}
+
+@keyframes vault-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(285%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vault-activity-dot,
+  .vault-progress.is-indeterminate .vault-progress-fill { animation: none; }
+}
+
+.vault-sync-result {
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.vault-failed { color: var(--color-danger); }
+.vault-stalled { color: var(--color-warning); }
+
+.vault-error {
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-sm);
+  color: var(--color-danger);
+  font-size: var(--text-xs);
+}
+
+.vault-notice {
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-tertiary);
+  font-size: var(--text-xs);
+}
+
+.vault-block {
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.vault-block h4 {
+  margin: 0 0 var(--space-2) 0;
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+}
+
+/* Plain explanatory line under a block heading (e.g. why pairing is paid).
+   Quieter than .vault-notice: it isn't a problem, just context. */
+.vault-hint {
+  margin: 0 0 var(--space-3) 0;
+  max-width: 56ch;
+  color: var(--color-text-tertiary);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+}
+
+.vault-pair-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.vault-input {
+  flex: 1 1 140px;
+  min-width: 0;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+}
+
+.vault-input:disabled { opacity: 0.5; }
+
+.vault-qr-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-warning);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-elevated);
+}
+
+.vault-qr-warning {
+  color: var(--color-warning);
+  font-size: var(--text-xs);
+  text-align: center;
+}
+
+/* Padding is part of the code: the white quiet zone must not touch the panel. */
+.vault-qr {
+  display: block;
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+}
+
+.vault-qr-meta {
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+}
+
+.vault-qr-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.vault-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.vault-link-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: var(--space-2);
+  background: var(--color-bg-deep);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  word-break: break-all;
+}
+
+.vault-devices {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.vault-device {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-deep);
+  border-radius: var(--radius-sm);
+}
+
+.vault-device-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin-right: auto;
+}
+
+.vault-device-label {
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vault-device-seen {
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+}
+
+.vault-empty {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+}
+
+.vault-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  cursor: pointer;
+}
+
+/* A locked toggle stays readable: only the box greys out, so its note can
+   still say what unlocks it. */
+.vault-toggle--disabled { cursor: not-allowed; }
+.vault-toggle--disabled input { opacity: 0.4; }
+.vault-toggle--disabled .vault-toggle-label { color: var(--color-text-secondary); }
+
+.vault-toggle-label {
+  color: var(--color-text-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+}
+
+.cloud-activity-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cloud-activity-heading h3 { margin-bottom: 0; }
+.cloud-activity-card h4 { margin: 20px 0 8px; }
+.vault-history-list { list-style: none; padding: 0; margin: 0; max-height: 320px; overflow-y: auto; }
+.vault-history-list li { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--color-border-subtle); }
+.vault-history-list time { color: var(--color-text-muted); font-size: 12px; flex-shrink: 0; }
+.vault-history-list a { color: var(--color-success); overflow-wrap: anywhere; }
+
+/* Settings > Cloud with no Patreon linked has no activity card beside it. */
+.settings-cloud-cards > .cloud-library--wide { grid-column: 1 / -1; }
+
+.vault-toggle { align-items: flex-start; }
+.vault-toggle input { margin-top: 3px; }
+.vault-toggle-copy { display: flex; flex-direction: column; gap: 2px; }
+.vault-toggle-note { color: var(--color-text-secondary); font-size: var(--text-sm); line-height: 1.45; }
+
+.vault-error-action {
+  margin-left: var(--space-2);
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: var(--font-semibold);
+  text-decoration: underline;
+  cursor: pointer;
+}

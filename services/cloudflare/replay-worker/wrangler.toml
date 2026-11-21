@@ -1,0 +1,11 @@
+name = "nucleus-replay"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+workers_dev = true
+
+# A Workers route beats the Pages project serving the rest of ssbmnucleus.net,
+# so this claims /replay/* without the website repo knowing it exists. Deploy:
+#   npx wrangler deploy
+[[routes]]
+pattern = "ssbmnucleus.net/replay/*"
+zone_name = "ssbmnucleus.net"

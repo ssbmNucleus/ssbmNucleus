@@ -1,0 +1,7 @@
+# Dev/test dependencies (not shipped with the app). Install with:
+#   pip install -r requirements-dev.txt
+-r requirements.txt
+pytest>=8
+pytest-xdist>=3.6   # tests/backend runs in parallel by default (pytest.ini: -n auto --dist loadfile)
+jsonschema==4.26.0  # eval/randall/routing_benchmark.py checks tool-call arguments
+vgamepad; sys_platform == "win32"  # devtools/netrig.py virtual pads (needs the ViGEmBus driver)

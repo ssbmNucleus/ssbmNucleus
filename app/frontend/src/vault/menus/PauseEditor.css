@@ -1,0 +1,204 @@
+/* Pause texture + percent font editors styles — split from StorageViewer.css 2026-08-22 */
+/* Rules copied verbatim; loaded after StorageViewer.css via the owning component. */
+
+/* ── Pause texture editor ──────────────────────────────────────────────── */
+
+.pause-editor {
+  width: min(100%, 56rem);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.pause-editor-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.pause-editor-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--color-text-primary);
+}
+
+.pause-editor-hint {
+  margin-left: auto;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+/* The in-game-style canvas the slots sit on */
+.pause-editor-canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-subtle);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 20%, #1c2a4a 0%, #0d1426 70%, #080d1a 100%);
+}
+
+.pause-editor-slot {
+  position: absolute;
+  padding: 0;
+  border: 1px dashed rgba(125, 211, 232, 0.35);
+  border-radius: var(--radius-xs);
+  background: rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.pause-editor-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.pause-editor-slot:hover {
+  border-color: var(--color-cyan);
+  border-style: solid;
+  background: rgba(125, 211, 232, 0.12);
+  box-shadow: 0 0 12px rgba(125, 211, 232, 0.35);
+  z-index: 2;
+}
+
+.pause-editor-slot.replaced {
+  border-color: rgba(125, 211, 232, 0.7);
+  border-style: solid;
+}
+
+.pause-editor-slot.busy {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+/* Slot strip below the canvas: one chip per texture */
+.pause-editor-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-2);
+}
+
+.pause-editor-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-2);
+}
+
+.pause-editor-chip.replaced {
+  border-color: rgba(125, 211, 232, 0.5);
+}
+
+.pause-editor-chip-preview {
+  width: 44px;
+  height: 36px;
+  flex-shrink: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.pause-editor-chip-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  image-rendering: pixelated;
+}
+
+.pause-editor-chip-preview:hover {
+  border-color: var(--color-cyan);
+}
+
+.pause-editor-chip-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.pause-editor-chip-name {
+  font-size: var(--text-xs);
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pause-editor-chip-meta {
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+}
+
+/* Percent font editor: one large tile per glyph (0-9, %, HP) */
+.percent-editor-glyphs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-3);
+}
+
+.percent-editor-glyph {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.percent-editor-glyph .pause-editor-chip-info {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.percent-editor-glyph-preview {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  padding: var(--space-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-deep);
+  border: 1px dashed rgba(125, 211, 232, 0.35);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.percent-editor-glyph-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.percent-editor-glyph-preview:hover {
+  border-color: var(--color-cyan);
+  border-style: solid;
+  background: rgba(125, 211, 232, 0.08);
+}
+
+.percent-editor-glyph.replaced .percent-editor-glyph-preview {
+  border-color: rgba(125, 211, 232, 0.7);
+  border-style: solid;
+}
+
+.percent-editor-glyph-preview.busy {
+  opacity: 0.5;
+  cursor: wait;
+}

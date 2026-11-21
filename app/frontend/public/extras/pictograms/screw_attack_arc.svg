@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="112" viewBox="0 0 160 112" role="img" aria-label="Screw Attack electrical arcs layer guide">
+<rect x="1" y="1" width="158" height="110" rx="12" fill="#141b26" stroke="#354356"/>
+<circle cx="73" cy="57" r="18" fill="#263142" stroke="#8491a3" stroke-width="2"/>
+<g fill="none" stroke="#677386" stroke-linecap="round"><path d="M41 69C26 45 49 20 79 26C99 30 110 44 105 62" stroke-width="8"/><path d="M100 72C92 92 58 92 44 77" stroke-width="7"/><path d="M33 51C33 32 48 20 64 18M96 88C113 80 122 62 116 47" stroke-width="3" opacity=".65"/></g>
+<g fill="none" stroke="#52e5ec" stroke-width="3" stroke-linejoin="round"><path d="M93 41L108 30 104 44 122 38 115 52 139 46"/><path d="M98 62L114 58 108 73 127 67 124 82 145 75"/></g>
+</svg>

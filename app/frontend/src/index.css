@@ -1,0 +1,826 @@
+@font-face {
+  font-family: 'Folk Pro B';
+  src: url('/fonts/A-OTF-Folk-Pro-B.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================
+   SSBM NUCLEUS - Design Token System
+   A premium dark theme for the Melee modding community
+   ============================================ */
+
+:root {
+  /* ─────────────────────────────────────────
+     COLOR PALETTE
+     ───────────────────────────────────────── */
+
+  /* Background layers (darkest to lightest) */
+  --color-bg-deep: #0a1420;
+  --color-bg-base: #0d1929;
+  --color-bg-primary: #0d1929;
+  --color-bg-elevated: #1a2332;
+  --color-bg-surface: #283544;
+  --color-bg-hover: #3d4f5c;
+
+  /* Gold accent - the signature color */
+  --color-gold: #ffc700;
+  --color-gold-light: #ffd84d;
+  --color-gold-dark: #e6b300;
+  --color-gold-muted: rgba(255, 199, 0, 0.15);
+  --gradient-gold: linear-gradient(135deg, #ffc700 0%, #ff9500 100%);
+  --gradient-gold-hover: linear-gradient(135deg, #ffd84d 0%, #ffaa00 100%);
+
+  /* Teal secondary accent */
+  --color-teal: #00d4aa;
+  --color-teal-light: #00ffcc;
+  --color-teal-dark: #00b894;
+  --color-teal-muted: rgba(0, 212, 170, 0.15);
+  --gradient-teal: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
+
+  /* Nucleus cyan - brand color matching logo */
+  --color-cyan: #7dd3e8;
+  --color-cyan-light: #a5e4f3;
+  --color-cyan-dark: #5bc0d8;
+  --color-cyan-muted: rgba(125, 211, 232, 0.15);
+  --gradient-cyan: linear-gradient(135deg, #7dd3e8 0%, #5bc0d8 100%);
+
+  /* nucleOME green - Slippi green (sampled from the launcher's PLAY button)
+     so nucleome mode reads as part of the Slippi ecosystem. Distinct from
+     --color-success; success semantics must not follow brand re-theming. */
+  --color-green: #38e07c;
+  --color-green-light: #6ceb9f;
+  --color-green-dark: #21ba45;
+  --color-green-muted: rgba(56, 224, 124, 0.15);
+  --gradient-green: linear-gradient(135deg, #38e07c 0%, #21ba45 100%);
+
+  /* nucleOME purple - replaces gold in nucleome mode. Two scales:
+     lavender for gold-as-text/icon accents (readable on dark bg), and the
+     deep violet/plum pair for gold-as-button-face gradients. */
+  --color-purple: #a78bfa;
+  --color-purple-light: #c4b5fd;
+  --color-purple-dark: #8b5cf6;
+  --color-purple-muted: rgba(167, 139, 250, 0.15);
+  --color-purple-deep: #5314c4;
+  --color-purple-plum: #36026e;
+  --gradient-purple: linear-gradient(135deg, #5314c4 0%, #36026e 100%);
+  --gradient-purple-hover: linear-gradient(135deg, #6d35d9 0%, #4c14a8 100%);
+
+  /* Accent aliases (for compatibility) */
+  --color-accent: var(--color-cyan);
+  --color-accent-hover: var(--color-cyan-light);
+
+  /* Text hierarchy */
+  --color-text-primary: #f5f5f5;
+  --color-text-secondary: #b8c5d0;
+  --color-text-tertiary: #8896a4;
+  --color-text-muted: #5a6872;
+  --color-text-disabled: #4a5560;
+
+  /* Semantic colors */
+  --color-success: #4ade80;
+  --color-success-dark: #22c55e;
+  --color-success-muted: rgba(74, 222, 128, 0.15);
+
+  --color-danger: #ff4757;
+  --color-danger-dark: #ee3b4a;
+  --color-danger-muted: rgba(255, 71, 87, 0.15);
+
+  --color-warning: #ffa502;
+  --color-warning-muted: rgba(255, 165, 2, 0.15);
+
+  --color-info: #3b82f6;
+  --color-info-muted: rgba(59, 130, 246, 0.15);
+
+  /* Borders */
+  --color-border: #3d4f5c;
+  --color-border-subtle: #2d3d4c;
+  --color-border-focus: var(--color-cyan);
+
+  /* ─────────────────────────────────────────
+     TYPOGRAPHY
+     ───────────────────────────────────────── */
+
+  /* Font families */
+  --font-display: 'Exo 2', 'Segoe UI', sans-serif;
+  --font-body: 'DM Sans', 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+
+  /* Font sizes */
+  --text-xs: 0.75rem;      /* 12px */
+  --text-sm: 0.8125rem;    /* 13px */
+  --text-base: 0.9375rem;  /* 15px */
+  --text-md: 1rem;         /* 16px */
+  --text-lg: 1.125rem;     /* 18px */
+  --text-xl: 1.25rem;      /* 20px */
+  --text-2xl: 1.5rem;      /* 24px */
+  --text-3xl: 2rem;        /* 32px */
+  --text-4xl: 2.5rem;      /* 40px */
+
+  /* Font weights */
+  --font-light: 300;
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-extrabold: 800;
+
+  /* Line heights */
+  --leading-none: 1;
+  --leading-tight: 1.2;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+
+  /* Letter spacing */
+  --tracking-tighter: -0.02em;
+  --tracking-tight: -0.01em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.02em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 0.1em;
+
+  /* ─────────────────────────────────────────
+     SPACING SCALE
+     Base unit: 4px
+     ───────────────────────────────────────── */
+
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+
+  /* ─────────────────────────────────────────
+     BORDER RADIUS
+     ───────────────────────────────────────── */
+
+  --radius-xs: 3px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* ─────────────────────────────────────────
+     SHADOWS & GLOWS
+     ───────────────────────────────────────── */
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4), 0 4px 8px rgba(0, 0, 0, 0.2);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.5), 0 8px 16px rgba(0, 0, 0, 0.3);
+
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-inner-lg: inset 0 4px 8px rgba(0, 0, 0, 0.4);
+
+  --glow-gold: 0 0 20px rgba(255, 199, 0, 0.3), 0 0 40px rgba(255, 199, 0, 0.1);
+  --glow-gold-sm: 0 0 10px rgba(255, 199, 0, 0.25);
+  --glow-gold-intense: 0 0 30px rgba(255, 199, 0, 0.5), 0 0 60px rgba(255, 199, 0, 0.2);
+
+  --glow-teal: 0 0 20px rgba(0, 212, 170, 0.3), 0 0 40px rgba(0, 212, 170, 0.1);
+  --glow-teal-sm: 0 0 10px rgba(0, 212, 170, 0.25);
+
+  --glow-cyan: 0 0 20px rgba(125, 211, 232, 0.3), 0 0 40px rgba(125, 211, 232, 0.1);
+  --glow-cyan-sm: 0 0 10px rgba(125, 211, 232, 0.25);
+  --glow-cyan-intense: 0 0 30px rgba(125, 211, 232, 0.5), 0 0 60px rgba(125, 211, 232, 0.2);
+
+  --glow-green: 0 0 20px rgba(56, 224, 124, 0.3), 0 0 40px rgba(56, 224, 124, 0.1);
+  --glow-green-sm: 0 0 10px rgba(56, 224, 124, 0.25);
+  --glow-green-intense: 0 0 30px rgba(56, 224, 124, 0.5), 0 0 60px rgba(56, 224, 124, 0.2);
+
+  --glow-danger: 0 0 20px rgba(255, 71, 87, 0.3);
+
+  /* ─────────────────────────────────────────
+     TRANSITIONS
+     ───────────────────────────────────────── */
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+  --duration-slower: 600ms;
+
+  --transition-fast: var(--duration-fast) var(--ease-out);
+  --transition-normal: var(--duration-normal) var(--ease-out);
+  --transition-slow: var(--duration-slow) var(--ease-out);
+  --transition-spring: var(--duration-normal) var(--ease-spring);
+
+  /* ─────────────────────────────────────────
+     Z-INDEX SCALE
+     ───────────────────────────────────────── */
+
+  --z-base: 0;
+  --z-above: 10;
+  --z-dropdown: 100;
+  --z-sticky: 500;
+  --z-overlay: 1000;
+  --z-modal: 1100;
+  --z-toast: 1200;
+  --z-tooltip: 1300;
+
+  /* Layout tokens */
+  --viewport-height: 100vh;
+  /* Measured height of .app-header (set from App.jsx via ResizeObserver).
+     The header stacks ABOVE in-tree modal overlays (.app-content is a
+     stacking context at z 0, header is z 500), so overlays offset their top
+     by this and modal height caps subtract it — otherwise a tall modal
+     centers under the header and its top edge is buried. */
+  --app-header-h: 0px;
+  --page-shell-max-width: 88rem;
+  --page-shell-max-width-wide: 96rem;
+  --page-shell-max-width-narrow: 64rem;
+  --page-inline-padding: clamp(var(--space-4), 2.2vw, var(--space-8));
+  --page-block-padding: clamp(var(--space-4), 2.8vh, var(--space-8));
+  --panel-block-padding: clamp(var(--space-4), 2vh, var(--space-6));
+  --modal-inline-padding: clamp(var(--space-3), 2vw, var(--space-6));
+  --modal-max-height: min(calc(var(--viewport-height) - var(--app-header-h) - (2 * var(--space-6))), 60rem);
+  --modal-max-width: min(100%, 68rem);
+  --modal-medium-width: min(100%, 54rem);
+}
+
+@supports (height: 100dvh) {
+  :root {
+    --viewport-height: 100dvh;
+  }
+}
+
+/* ============================================
+   nucleOME MODE
+   Set as data-mode="nucleome" on <html> when the app is switched into the
+   replay-analysis sibling app. The ENTIRE token world re-themes:
+   - backgrounds/borders/text tints: blue-grays -> green twins. Every value
+     is the source hex with its G and B channels swapped, which mirrors the
+     hue from ~210° (blue) to ~150° (green) at identical saturation and
+     lightness — a true green shadow of the nucleus theme, not a new palette.
+   - cyan family -> green (so components using --color-cyan directly follow)
+   - gold signature -> purple
+   Components with hardcoded hex values are out of scope for v1.
+   ============================================ */
+
+[data-mode="nucleome"] {
+  /* brand accent */
+  --color-accent: var(--color-green);
+  --color-accent-hover: var(--color-green-light);
+  --color-border-focus: var(--color-green);
+
+  /* background layers: "deep forest" — much darker than the nucleus blues,
+     with a rich but still dark green undertone (user-picked from 3
+     screenshot candidates) */
+  --color-bg-deep: #06150c;
+  --color-bg-base: #081b10;
+  --color-bg-primary: #081b10;
+  --color-bg-elevated: #12271a;
+  --color-bg-surface: #1a3424;
+  --color-bg-hover: #2b4d38;
+
+  /* borders */
+  --color-border: #2b4d38;
+  --color-border-subtle: #203c2a;
+
+  /* text hierarchy: same lightness, subtle green undertone instead of blue */
+  --color-text-secondary: #b6c2ba;
+  --color-text-tertiary: #87958c;
+  --color-text-muted: #5c6b62;
+  --color-text-disabled: #4a574f;
+
+  /* cyan family follows green so direct var(--color-cyan) users flood too */
+  --color-cyan: var(--color-green);
+  --color-cyan-light: var(--color-green-light);
+  --color-cyan-dark: var(--color-green-dark);
+  --color-cyan-muted: var(--color-green-muted);
+  --gradient-cyan: var(--gradient-green);
+  --glow-cyan: var(--glow-green);
+  --glow-cyan-sm: var(--glow-green-sm);
+  --glow-cyan-intense: var(--glow-green-intense);
+
+  /* gold signature -> purple. Text/icon uses of gold get readable lavender;
+     button-face gradients get the deep violet/plum pair. */
+  --color-gold: var(--color-purple);
+  --color-gold-light: var(--color-purple-light);
+  --color-gold-dark: var(--color-purple-dark);
+  --color-gold-muted: var(--color-purple-muted);
+  --gradient-gold: var(--gradient-purple);
+  --gradient-gold-hover: var(--gradient-purple-hover);
+  --glow-gold: 0 0 20px rgba(139, 92, 246, 0.3), 0 0 40px rgba(139, 92, 246, 0.1);
+  --glow-gold-sm: 0 0 10px rgba(139, 92, 246, 0.25);
+  --glow-gold-intense: 0 0 30px rgba(139, 92, 246, 0.5), 0 0 60px rgba(139, 92, 246, 0.2);
+}
+
+/* Gold button faces use dark text (color: var(--color-bg-deep)) — fine on
+   bright gold, unreadable on the deep purple faces. These are the gold
+   surfaces reachable in nucleome mode (header tabs + shared Settings). */
+[data-mode="nucleome"] .tab.active,
+[data-mode="nucleome"] .backup-button,
+[data-mode="nucleome"] .account-signin {
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   GLOBAL RESET & BASE STYLES
+   ============================================ */
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Disable text selection app-wide; re-enable for editable fields and code */
+*, *::before, *::after {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+input, textarea, [contenteditable="true"], [contenteditable=""], code, pre {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Desktop app, not a web page: never let Chromium start a native drag from a
+   picture or link. Without this, dragging a card that contains an <img>
+   (reorder grids) makes Chromium drag the IMAGE FILE, and the window-wide
+   import listener then tries to import the card's own thumbnail. Elements
+   with draggable="true" are unaffected; their drag payload is whatever the
+   app sets in onDragStart. */
+img, svg, video, canvas, a {
+  -webkit-user-drag: none;
+}
+
+/* Scrollbar styling - hidden but functional */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-bg-hover) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--color-bg-hover);
+  border-radius: var(--radius-full);
+  transition: background var(--transition-fast);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--color-cyan);
+}
+
+/* Hide scrollbar on main containers but keep functionality */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  height: 100%;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--font-regular);
+  line-height: var(--leading-normal);
+  color: var(--color-text-primary);
+  background: var(--color-bg-base);
+  min-height: var(--viewport-height);
+  overflow-x: hidden;
+}
+
+/* Headings use display font */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text-primary);
+}
+
+h1 { font-size: var(--text-3xl); }
+h2 { font-size: var(--text-2xl); }
+h3 { font-size: var(--text-xl); }
+h4 { font-size: var(--text-lg); }
+h5 { font-size: var(--text-md); }
+h6 { font-size: var(--text-base); }
+
+/* Links */
+a {
+  color: var(--color-cyan);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-cyan-light);
+}
+
+/* Code */
+code, pre {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+code {
+  background: var(--color-bg-surface);
+  padding: 0.125em 0.375em;
+  border-radius: var(--radius-sm);
+  color: var(--color-cyan);
+}
+
+pre {
+  background: var(--color-bg-deep);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  border: 1px solid var(--color-border-subtle);
+}
+
+/* Selection */
+::selection {
+  background: var(--color-cyan);
+  color: var(--color-bg-deep);
+}
+
+/* Focus styles */
+:focus-visible {
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 2px;
+}
+
+/* Remove default button styles */
+button {
+  font-family: inherit;
+  font-size: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Form inputs base */
+input, textarea, select {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  background: var(--color-bg-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background var(--transition-fast);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--color-cyan);
+  box-shadow: var(--glow-cyan-sm);
+  background: var(--color-bg-elevated);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* Image defaults */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ============================================
+   ANIMATION KEYFRAMES
+   ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: var(--glow-cyan-sm);
+  }
+  50% {
+    box-shadow: var(--glow-cyan);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* Subtle background animation for the app */
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ============================================
+   UTILITY ANIMATION CLASSES
+   ============================================ */
+
+.animate-fade-in {
+  animation: fadeIn var(--duration-normal) var(--ease-out) forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp var(--duration-normal) var(--ease-out) forwards;
+}
+
+.animate-slide-down {
+  animation: slideDown var(--duration-normal) var(--ease-out) forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn var(--duration-normal) var(--ease-out) forwards;
+}
+
+.animate-card-entrance {
+  animation: cardEntrance var(--duration-slow) var(--ease-out) backwards;
+}
+
+/* Staggered animation delays for card grids */
+.stagger-1 { animation-delay: 0.03s; }
+.stagger-2 { animation-delay: 0.06s; }
+.stagger-3 { animation-delay: 0.09s; }
+.stagger-4 { animation-delay: 0.12s; }
+.stagger-5 { animation-delay: 0.15s; }
+.stagger-6 { animation-delay: 0.18s; }
+.stagger-7 { animation-delay: 0.21s; }
+.stagger-8 { animation-delay: 0.24s; }
+.stagger-9 { animation-delay: 0.27s; }
+.stagger-10 { animation-delay: 0.30s; }
+.stagger-11 { animation-delay: 0.33s; }
+.stagger-12 { animation-delay: 0.36s; }
+
+/* ============================================
+   SKELETON LOADING COMPONENT
+   ============================================ */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-surface) 0%,
+    var(--color-bg-hover) 50%,
+    var(--color-bg-surface) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-md);
+}
+
+.skeleton-text {
+  height: 1em;
+  margin-bottom: var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-text:last-child {
+  width: 60%;
+}
+
+.skeleton-card {
+  height: 200px;
+  border-radius: var(--radius-lg);
+}
+
+.skeleton-circle {
+  border-radius: var(--radius-full);
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Text colors */
+.text-primary { color: var(--color-text-primary); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-tertiary { color: var(--color-text-tertiary); }
+.text-muted { color: var(--color-text-muted); }
+.text-gold { color: var(--color-gold); }
+.text-teal { color: var(--color-teal); }
+.text-success { color: var(--color-success); }
+.text-danger { color: var(--color-danger); }
+
+/* Text transforms */
+.uppercase {
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+/* Font weights */
+.font-light { font-weight: var(--font-light); }
+.font-regular { font-weight: var(--font-regular); }
+.font-medium { font-weight: var(--font-medium); }
+.font-semibold { font-weight: var(--font-semibold); }
+.font-bold { font-weight: var(--font-bold); }
+
+/* Display font */
+.font-display { font-family: var(--font-display); }
+
+/* Truncate text */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

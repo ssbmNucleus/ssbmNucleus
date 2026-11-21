@@ -1,0 +1,4 @@
+{"character": "Pichu", "source": "PlPcRe", "verified": true,
+ "notes": "Body indices identical to PlPcNr: fur 0, neck ruff 1 (also the nose), eyes 2/4 (+ blink frames 12-14 of 2, 15-16 of 4), cheeks 3, mouth 5, ears 6/7 (6 also skins the tail), feet 8. Scarf: 11 = neck wrap; 10 = the scarf knot AND the red ribbon tied round the ear (one texture for both, grouped as scarf). UNLABELLED 9 (eye-ball, 8 tris): does not render even when probed.",
+ "groups": {"fur": [0], "neck ruff": [1], "eyes": [2,4,12,13,14,15,16], "cheeks": [3], "mouth": [5], "ears": [6,7], "feet": [8],
+            "scarf": [10,11]}}

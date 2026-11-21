@@ -1,0 +1,627 @@
+{
+  "metadata": {
+    "source": "Smashboards Thread 313177 - Changing Color Effects in Melee",
+    "note": "Offsets are in hex. Format types: CF_##, 07_07_07, 42_48, 98_00_##_##, random"
+  },
+  "formats": {
+    "CF_##": {
+      "description": "Color effect format with AD DF markers",
+      "structure": "CF [count] [color1 RGBA] AD DF [flags] [color2 RGB]",
+      "note": "AD DF appears to be a separator/marker"
+    },
+    "07_07_07": {
+      "description": "Basic two-color format",
+      "structure": "[04|07] [R1] [G1] [B1] 00 [R2] [G2] [B2]",
+      "note": "First byte is 04 or 07, then two RGB colors"
+    },
+    "42_48": {
+      "description": "Three-color gradient/material format",
+      "structure": "[R1][G1][B1][A1] [R2][G2][B2][A2] [R3][G3][B3][A3] [3E|3F] [??] [??] [??] 42 48",
+      "note": "Three RGBA colors, marker bytes, then 42 48 terminator"
+    },
+    "98_00_##_##": {
+      "description": "Matrix format with RGBY 16-bit colors",
+      "structure": "98 00 [count_hi] [count_lo] [color] FC 00 [color] FC 00 ...",
+      "note": "Used for lasers, shine, complex multi-color effects"
+    },
+    "random": {
+      "description": "Non-standard format, often just RGB values",
+      "structure": "Varies per effect"
+    }
+  },
+  "characters": {
+    "C. Falcon": {
+      "EfCaData.dat": {
+        "CF_##": [
+          {"offset": "0x12F", "data": "FF FF FF FF AD DF 00 D2 CE 9E", "desc": "Trailing Smoke Down B"},
+          {"offset": "0x14A", "data": "FF FF FF FF AD DF 00 6F 66 39", "desc": "Trailing Smoke Down B"},
+          {"offset": "0x15A", "data": "FF FF FF FF AD DF 00 6F 66 39", "desc": "Trailing Smoke Down B"},
+          {"offset": "0x16C", "data": "FF FF FF B4 AD DF 00 00 00 00", "desc": "Trailing Smoke Down B"},
+          {"offset": "0x17C", "data": "FF FF FF 64 AD DF 00 00 00 00", "desc": "Trailing Smoke Down B"},
+          {"offset": "0x1DA", "data": "FF FF FF FF AD DF 00 FF C2 57", "desc": "Trailing Smoke Neutral B"},
+          {"offset": "0x1E7", "data": "FF 5A 07 FF AD DF 05 CA 00 0D", "desc": "Trailing Smoke Neutral B"},
+          {"offset": "0x219", "data": "00 00 00 64 AD DF 09 FF 11 19", "desc": "Trailing Smoke Neutral B"},
+          {"offset": "0x29C", "data": "FF 05 1A FF AD DF 00 FF FF 82", "desc": "Square Dots Neutral B"},
+          {"offset": "0x2AC", "data": "FF FF 6E FF AD DF 00 FF 0C 14", "desc": "Square Dots Neutral B"},
+          {"offset": "0x3AC", "data": "FE FF E1 FF AD DF 00 A6 04 01", "desc": "Smoke on wings of Neutral B"},
+          {"offset": "0x3B9", "data": "FF A8 51 FF AD DF 09 CC 0A 0D", "desc": "Smoke on wings of Neutral B"},
+          {"offset": "0x3EF", "data": "FF 61 0C 00 AD DF 09 00 00 00", "desc": "Smoke on wings of Neutral B"},
+          {"offset": "0x474", "data": "FF 29 0C FF AD DF 00 FF FF 82", "desc": "Square Dots Down B"},
+          {"offset": "0x484", "data": "FF FF 6E FF AD DF 00 FF 0C 14", "desc": "Square Dots Down B"},
+          {"offset": "0x4DA", "data": "FF FF FF FF AD DF 00 FC FF 19", "desc": "Circle Dots Down B"},
+          {"offset": "0x4E6", "data": "F8 62 11 00 AD DF 06 C5 09 10", "desc": "Circle Dots Down B"},
+          {"offset": "0x539", "data": "FF F9 DE FF AD DF 00 FF F0 11", "desc": "Circle Dots Down B"},
+          {"offset": "0x58E", "data": "FF FF FF FF AD DF 00 D2 CE 9E", "desc": "Trailing Smoke Down B"},
+          {"offset": "0x5A9", "data": "FF FF FF FF AD DF 00 6F 66 39", "desc": "Trailing Smoke Down B"},
+          {"offset": "0x5B9", "data": "FF FF FF FF AD DF 00 00 00 00", "desc": "Trailing Smoke Down B"},
+          {"offset": "0x5CC", "data": "FF FF FF B4 AD DF 00 00 00 00", "desc": "Trailing Smoke Down B"},
+          {"offset": "0x5DC", "data": "FF FF FF 64 AD DF 00 00 00 00", "desc": "Trailing Smoke Down B"},
+          {"offset": "0x640", "data": "F3 F0 94 00 AD DF 00 FF 78 17", "desc": "Trailing Smoke Down B and After Smoke of Over B"},
+          {"offset": "0x64E", "data": "AD 40 05 50 AD DF 07 62 06 03", "desc": "Trailing Smoke Down B and After Smoke of Over B"},
+          {"offset": "0x65C", "data": "DE 5A 26 00 AD DF 0F 00 00 00", "desc": "Trailing Smoke Down B and After Smoke of Over B"},
+          {"offset": "0x6AF", "data": "FF FF FF FF AD DF 00 FF F3 07", "desc": "Front of Down B"},
+          {"offset": "0x76F", "data": "CA CA CA C8 AD DF 00 C5 1D 00", "desc": "Smoke of Over B large"},
+          {"offset": "0x77F", "data": "FF DB 0C 64 AD DF 00 A1 08 0D", "desc": "Smoke of Over B small"},
+          {"offset": "0x78F", "data": "C7 C6 B9 C8 AD DF 00 E1 D2 04", "desc": "Smoke Behind Falcon Over B"},
+          {"offset": "0x79F", "data": "FF AF 19 64 AD DF 00 A3 0B 0E", "desc": "Smoke Behind Falcon Over B"},
+          {"offset": "0x82C", "data": "FF 05 1A FF AD DF 00 FF FF 82", "desc": "Square Dots Over B"},
+          {"offset": "0x83C", "data": "FF FF 6E FF AD DF 00 FF 0C 14", "desc": "Square Dots Over B"},
+          {"offset": "0x8A0", "data": "F3 F0 94 00 AD DF 00 FF 78 17", "desc": "Square Smoke after Over B"},
+          {"offset": "0x8AE", "data": "AE 6F 57 50 AD DF 07 63 32 30", "desc": "Smoke after Over B"},
+          {"offset": "0x8BC", "data": "DE D4 CF 00 AD DF 0F 00 00 00", "desc": "Smoke after Over B"},
+          {"offset": "0x91A", "data": "DE 8E 2B FF AD DF 00 FF 07 07", "desc": "Smoke after neutral B"},
+          {"offset": "0x927", "data": "FD 51 26 FF AD DF 09 A4 04 09", "desc": "Smoke after neutral B"},
+          {"offset": "0x958", "data": "00 00 00 64 AD DF 09 75 00 03", "desc": "Smoke after neutral B"}
+        ],
+        "07_07_07": [
+          {"offset": "0x1DE00", "data": "04 FF FF E5 00 FF B2 00", "desc": "Tip of falcon kick"},
+          {"offset": "0x202E0", "data": "04 FF 7F 00 00 FF 00 00", "desc": "Tip of falcon punch"},
+          {"offset": "0x22D60", "data": "04 FF FF FF 00 00 7F FF", "desc": "Falcon punch lens flare extending lines"},
+          {"offset": "0x22E30", "data": "07 FF FF FF 00 00 7F FF", "desc": "Falcon punch lens flare extending lines"},
+          {"offset": "0x22EF0", "data": "04 FF FF FF 00 00 7F FF", "desc": "Falcon punch lens flare extending lines"},
+          {"offset": "0x22FC0", "data": "04 FF FF FF 00 00 7F FF", "desc": "Falcon punch lens flare extending lines"},
+          {"offset": "0x23090", "data": "04 FF FF FF 00 00 7F FF", "desc": "Falcon punch lens flare extending lines"},
+          {"offset": "0x23160", "data": "04 FF FF FF 00 00 7F FF", "desc": "Falcon punch lens flare extending lines"},
+          {"offset": "0x23220", "data": "04 FF FF FF 00 00 7F FF", "desc": "Falcon punch lens flare extending lines"},
+          {"offset": "0x232F0", "data": "04 FF FF FF 00 00 7F FF", "desc": "Falcon punch lens flare extending lines"},
+          {"offset": "0x233C0", "data": "04 FF FF FF 00 00 7F FF", "desc": "Falcon punch lens flare extending lines"},
+          {"offset": "0x23490", "data": "04 FF FF FF 00 00 7F FF", "desc": "Falcon punch lens flare extending lines"},
+          {"offset": "0x24B70", "data": "04 F9 FF B2 00 FF B2 00", "desc": "Raptor Boost Hand Lens Flare"}
+        ],
+        "42_48": [
+          {"offset": "0x22D00", "data": "80 80 80 FF FF CC 00 FF FF FF FF FF 00 00 00 00", "desc": "Falcon Punch Small Lens Flare Beginning"},
+          {"offset": "0x235C0", "data": "80 80 80 FF FF 99 00 FF FF FF FF FF 00 00 00 00", "desc": "Falcon Punch Big Lens Flare Beginning"},
+          {"offset": "0x25440", "data": "80 80 80 FF FF FF FF FF FF FF FF FF 00 00 00 00", "desc": "Part of Raptor Boost Smoke"}
+        ]
+      }
+    },
+    "Dr. Mario": {
+      "PlDr.dat": {
+        "42_48": [
+          {"offset": "0x19CA0", "data": "FF FF FF FF FF FF FF FF 33 33 33 FF 3F 80 00 00", "desc": "Cape Color"}
+        ]
+      }
+    },
+    "Falco": {
+      "PlFc.dat": {
+        "42_48": [
+          {"offset": "0x7C00", "data": "80 48 1F FF F7 87 2C FF FF FF FF FF 3F 80 00 00", "desc": "Inside of Falco's jacket"},
+          {"offset": "0x1EC40", "data": "00 99 FF FF CC E6 FF FF FF FF FF FF 3E 99 99 9A", "desc": "Side B illusion"}
+        ],
+        "98_00_##_##": [
+          {"offset": "0x13440", "end": "0x13490", "desc": "Laser: wide, transparent"},
+          {"offset": "0x134E0", "end": "0x13530", "desc": "Laser: thin, semi-transparent"},
+          {"offset": "0x13580", "end": "0x135D0", "desc": "Laser: outline opaque"},
+          {"offset": "0x13640", "end": "0x13680", "desc": "Laser: white center line"}
+        ]
+      }
+    },
+    "Fox": {
+      "PlFx.dat": {
+        "42_48": [
+          {"offset": "0x22050", "data": "00 99 FF FF CC E6 FF FF FF FF FF FF 3E 99 99 9A", "desc": "Side B Illusion"}
+        ],
+        "98_00_##_##": [
+          {"offset": "0x13E20", "end": "0x13E70", "desc": "Laser: wide, transparent"},
+          {"offset": "0x13EC0", "end": "0x13F10", "desc": "Laser: thin, semi-transparent"},
+          {"offset": "0x13F60", "end": "0x13FB0", "desc": "Laser: outline opaque"},
+          {"offset": "0x14000", "end": "0x14022", "desc": "Laser: Tip of middle white line"},
+          {"offset": "0x14023", "end": "0x14060", "desc": "Laser: white center line"}
+        ]
+      }
+    },
+    "Fox_Falco_Shared": {
+      "EfFxData.dat": {
+        "CF_##": [
+          {"offset": "0x125", "data": "CF 00 FF FF FF FF AD DF 00 2A A3 EE", "desc": "Shine Sparkles"},
+          {"offset": "0x2EE", "data": "CF 00 FF FF FF", "desc": "Trailing Fire Large Up B"},
+          {"offset": "0x2F4", "data": "CF 18 FF FF FF", "desc": "Trailing Fire Large Up B"},
+          {"offset": "0x324", "data": "CF 08 FF FF FF", "desc": "Trailing Fire Large Up B"},
+          {"offset": "0x32B", "data": "CF 08 FF FF FF", "desc": "Trailing Fire Large Up B"},
+          {"offset": "0x383", "data": "CF 00 FF F8 8F FF AD DF 00 FF A9 07", "desc": "Trailing Fire Small Up B"},
+          {"offset": "0x393", "data": "CF 00 FF 71 11 FF AD DF 00 91 07 0B", "desc": "Trailing Fire Small Up B"},
+          {"offset": "0x3A3", "data": "CF 00 FF FD EE FF AD DF 00 FF EF 05", "desc": "Trailing Fire Small Up B"},
+          {"offset": "0x3B3", "data": "CF 00 FF 76 14 FF AD DF 00 FF 94 19", "desc": "Trailing Fire Small Up B"},
+          {"offset": "0x3C4", "data": "CF 08 FA 91 19 00 AD DF 08 87 05 0B", "desc": "Trailing Fire Small Up B"},
+          {"offset": "0x43A", "data": "CF 00 FF 29 0C FF AD DF 00 FF FF 82", "desc": "Square Dots Up B"},
+          {"offset": "0x44A", "data": "CF 00 FF FF 6E FF AD DF 00 FF 0C 14", "desc": "Square Dots Up B"},
+          {"offset": "0x4A9", "data": "CF 00 7F 7F 7F B4 AD DF 00 0C 05 C1", "desc": "Trailing Smoke Over B"},
+          {"offset": "0x5AF", "data": "CF 00 FF FF FF 64 AD DF 00 86 0A FA", "desc": "Lines Coming Off Up B Charge"},
+          {"offset": "0x52E", "data": "CF 00 FF FF FF", "desc": "Trailing Fire Big Up B"},
+          {"offset": "0x536", "data": "CF 18 FF FF FF", "desc": "Trailing Fire Big Up B"}
+        ],
+        "07_07_07": [
+          {"offset": "0x1A500", "data": "04 FF E5 4C 00 FF 33 00", "desc": "Lens Flare of Up B in motion"},
+          {"offset": "0x1B450", "data": "04 FF FF CC 00 FF 7F 00", "desc": "Fire Ring for Up B"},
+          {"offset": "0x1B520", "data": "04 FF FF 00 00 FF 33 00", "desc": "Fire Ring for Up B"}
+        ],
+        "98_00_##_##": [
+          {"offset": "0x1AC80", "end": "0x1AD00", "desc": "Tip of Firefox"},
+          {"offset": "0x1C2A0", "end": "0x1C340", "desc": "Shine main effect"},
+          {"offset": "0x1C8E0", "end": "0x1C990", "desc": "First Frames of Shine (inner hex, outer glow, outer border)"}
+        ]
+      }
+    },
+    "Jigglypuff": {
+      "EfPrData.dat": {
+        "07_07_07": [
+          {"offset": "0x5440", "data": "07 07 07 04 FF FF FF 00 FF 00 00", "desc": "Red note of Sing"},
+          {"offset": "0x55C0", "data": "07 07 07 04 FF FF FF 00 00 FF 00", "desc": "Green note of Sing"},
+          {"offset": "0x5500", "data": "07 07 07 04 FF FF FF 00 00 00 FF", "desc": "Blue note of Sing"}
+        ]
+      }
+    },
+    "Kirby": {
+      "PlKb.dat": {
+        "07_07_07": [
+          {"offset": "0x117D0", "data": "07 07 07 04 FF FF FF 00 00 B2 FF", "desc": "Up B projectile front/trail"},
+          {"offset": "0x11890", "data": "07 07 07 04 FF FF FF 00 00 B2 FF", "desc": "Up B other half"}
+        ],
+        "42_48": [
+          {"offset": "0x12ABC", "data": "80 80 80 FF FF FF FF FF FF FF FF FF 3F 80 00 00 42 48", "desc": "Side B hammer handle"},
+          {"offset": "0x12B5C", "data": "80 80 80 FF FF FF FF FF FF FF FF FF 3F 80 00 00 42 48", "desc": "Side B hammer head wood"},
+          {"offset": "0x12BFC", "data": "80 80 80 FF FF FF FF FF FF FF FF FF 3F 80 00 00 42 48", "desc": "Side B hammer head star"}
+        ]
+      },
+      "EfKbData.dat": {
+        "07_07_07": [
+          {"offset": "0xD15C", "data": "07 07 07 04 FF FF FF 00 00 B2 FF", "desc": "Up B falling effect"},
+          {"offset": "0xF50C", "data": "07 07 07 04 FF FF FF 00 00 CC FF", "desc": "Jab rapid color"}
+        ],
+        "42_48": [
+          {"offset": "0xC17C", "data": "80 80 80 FF FF FF FF FF FF FF FF FF 00 00 00 00 42 48", "desc": "Up B spin at top"},
+          {"offset": "0xD1CC", "data": "80 80 80 FF 00 FF FF FF FF FF FF FF 00 00 00 00 42 48", "desc": "Up B falling colors"},
+          {"offset": "0xEC94", "data": "80 80 80 FF FF FF FF FF FF FF FF FF 00 00 00 00 42 48", "desc": "Side B end effect"}
+        ],
+        "CF_##": [
+          {"offset": "0x1C8", "desc": "Dash Attack smoke"},
+          {"offset": "0x1D5", "desc": "Dash Attack smoke"},
+          {"offset": "0x1FD", "desc": "Dash Attack faint smoke"},
+          {"offset": "0x27A", "desc": "Dash Attack square particles"},
+          {"offset": "0x28A", "desc": "Dash Attack square particles"},
+          {"offset": "0x37F", "desc": "Neutral B swallow particle"},
+          {"offset": "0x38C", "desc": "Neutral B swallow particles"},
+          {"offset": "0x3A7", "desc": "Neutral B particles"},
+          {"offset": "0x3AD", "desc": "Neutral B particles"},
+          {"offset": "0x42C", "desc": "Neutral B swallow particles"},
+          {"offset": "0x439", "desc": "Neutral B swallow particles"},
+          {"offset": "0x454", "desc": "Neutral B particles"},
+          {"offset": "0x45A", "desc": "Neutral B particles"},
+          {"offset": "0x51C", "desc": "Down B rocks"},
+          {"offset": "0x529", "desc": "Down B rocks"},
+          {"offset": "0x530", "desc": "Down B rocks"},
+          {"offset": "0x589", "desc": "Down B halo effect"},
+          {"offset": "0x596", "desc": "Down B inner halo"},
+          {"offset": "0x5F1", "desc": "Down B line effect"},
+          {"offset": "0x5FE", "desc": "Down B lines"},
+          {"offset": "0x605", "desc": "Down B lines"},
+          {"offset": "0x664", "desc": "Down B rocks"},
+          {"offset": "0x671", "desc": "Down B rocks"},
+          {"offset": "0x678", "desc": "Down B rocks"},
+          {"offset": "0x6D4", "desc": "Down B rocks"},
+          {"offset": "0x6E1", "desc": "Down B rocks"},
+          {"offset": "0x6E8", "desc": "Down B rocks"},
+          {"offset": "0x794", "desc": "Down B leaving rock"},
+          {"offset": "0x7A1", "desc": "Down B leaving rock"},
+          {"offset": "0x7A8", "desc": "Down B leaving rock"},
+          {"offset": "0x801", "desc": "Down B halo leaving"},
+          {"offset": "0x80E", "desc": "Down B halo"},
+          {"offset": "0x815", "desc": "Down B halo"},
+          {"offset": "0x869", "desc": "Down B ray effect"},
+          {"offset": "0x876", "desc": "Down B ray"},
+          {"offset": "0x87D", "desc": "Down B ray"},
+          {"offset": "0x8DC", "desc": "Down B rocks"},
+          {"offset": "0x8E9", "desc": "Down B rocks"},
+          {"offset": "0x8F0", "desc": "Down B rocks"},
+          {"offset": "0x94C", "desc": "Down B rocks"},
+          {"offset": "0x959", "desc": "Down B rocks"},
+          {"offset": "0x960", "desc": "Down B rocks"}
+        ],
+        "98_00_##_##": [
+          {"offset": "0xB580", "end": "0xB5F5", "desc": "Dash attack front column"},
+          {"offset": "0xB5F6", "end": "0xB657", "desc": "Dash attack second column"},
+          {"offset": "0xB658", "end": "0xB6A5", "desc": "Dash attack last column"},
+          {"offset": "0xC3C0", "end": "0xC416", "desc": "Up B blade 1 trailing"},
+          {"offset": "0xC417", "end": "0xC46D", "desc": "Up B blade 1 solid"},
+          {"offset": "0xC4C0", "end": "0xC576", "desc": "Up B blade 2"},
+          {"offset": "0xC5C0", "end": "0xC5DE", "desc": "Up B blade 3 tip"},
+          {"offset": "0xC5DF", "end": "0xC675", "desc": "Up B blade 3 rest"},
+          {"offset": "0xC6C0", "end": "0xC716", "desc": "Up B blade 4 trailing"},
+          {"offset": "0xC717", "end": "0xC75D", "desc": "Up B blade 4 solid"},
+          {"offset": "0xC7A0", "end": "0xC7EE", "desc": "Up B shadow spin"},
+          {"offset": "0xDA80", "end": "0xDB5A", "desc": "Up B sword color"},
+          {"offset": "0xDB5B", "end": "0xDB99", "desc": "Up B sword handle"},
+          {"offset": "0xDB9A", "end": "0xDBC0", "desc": "Up B handle back"}
+        ]
+      }
+    },
+    "Ice Climbers": {
+      "PlPp.dat": {
+        "42_48": [
+          {"offset": "0xE840", "data": "B3 B3 B3 FF FF FF FF FF FF FF FF FF 3F 80 00 00", "desc": "Up B Rope"}
+        ]
+      }
+    },
+    "Link": {
+      "PlLk.dat": {
+        "random": [
+          {"offset": "0x35EC", "data": "FF 00 00 FF FF 00 FF FF FF", "desc": "Sword Swing", "note": "Older notes sometimes cite 0x35E0 as the line start, but the editable color bytes begin at 0x35EC"}
+        ]
+      }
+    },
+    "Luigi": {
+      "PlLg.dat": {
+        "07_07_07": [
+          {"offset": "0xF3B8", "data": "07 07 07 04 FF 66 00 00 FF 33 00", "desc": "Fireball aura inner/outer", "note": "constrained by 42_48 at F428"}
+        ],
+        "42_48": [
+          {"offset": "0xF428", "data": "80 80 80 FF 00 FF 00 FF FF FF FF FF 3F 00 00 00 42 48", "desc": "Fireball aura"},
+          {"offset": "0xF4C8", "data": "00 00 00 FF FF FF FF FF FF FF FF FF 00 00 00 00 42 48", "desc": "Fireball color"}
+        ]
+      },
+      "EfLgData.dat": {
+        "07_07_07": [
+          {"offset": "0x111E0", "data": "07 07 07 04 CC FF E5 00 19 B2 00", "desc": "Neutral B ring"},
+          {"offset": "0x11A70", "data": "07 07 07 04 FF FF B2 00 FF B2 00", "desc": "Tornado outer"},
+          {"offset": "0x11B48", "data": "07 07 07 04 FF FF B2 00 FF CC 00", "desc": "Tornado upper"},
+          {"offset": "0x11C14", "data": "07 07 07 04 FF FF E5 00 FF FF 00", "desc": "Tornado inner side 1"},
+          {"offset": "0x11CE0", "data": "07 07 07 04 FF FF CC 00 FF FF 00", "desc": "Tornado inner side 2"},
+          {"offset": "0x11DAC", "data": "07 07 07 04 FF FF CC 00 FF B2 00", "desc": "Tornado underneath"}
+        ],
+        "CF_##": [
+          {"offset": "0xE8", "desc": "Fireball hand smoke"},
+          {"offset": "0xFD", "desc": "Fireball hand smoke"},
+          {"offset": "0x10A", "desc": "Fireball smoke trail"},
+          {"offset": "0x192", "desc": "Smoke behind fireball"},
+          {"offset": "0x1A5", "desc": "Smoke behind fireball"},
+          {"offset": "0x1B2", "desc": "Faint smoke behind fireball"},
+          {"offset": "0x26B", "desc": "Fireball wall collision particles"},
+          {"offset": "0x278", "desc": "Fireball wall collision particles"},
+          {"offset": "0x2DB", "desc": "Fireball wall collision particles"},
+          {"offset": "0x2E8", "desc": "Fireball particles"},
+          {"offset": "0x350", "desc": "Fireball collision dust"},
+          {"offset": "0x363", "desc": "Fireball collision dust"},
+          {"offset": "0x370", "desc": "Fireball collision dust"},
+          {"offset": "0x3FC", "desc": "Square particles behind fireball"}
+        ],
+        "42_48": [
+          {"offset": "0x1125C", "data": "80 80 80 FF 66 FF 99 FF FF FF FF FF 00 00 00 00 42 48", "desc": "Ring around hand after fireball"},
+          {"offset": "0x11AEC", "data": "80 80 80 FF FF FF D0 FF FF FF FF FF 00 00 00 00 42 48", "desc": "Tornado outer ring finish"},
+          {"offset": "0x11BB8", "data": "80 80 80 FF FF FF D0 FF FF FF FF FF 00 00 00 00 42 48", "desc": "Tornado finish"},
+          {"offset": "0x11C84", "data": "80 80 80 FF FF FF D0 FF FF FF FF FF 00 00 00 00 42 48", "desc": "Tornado finish side 1"},
+          {"offset": "0x11D50", "data": "80 80 80 FF FF FF D0 FF FF FF FF FF 00 00 00 00 42 48", "desc": "Tornado finish side 2"},
+          {"offset": "0x11E20", "data": "80 80 80 FF FF FF E3 FF FF FF FF FF 00 00 00 00 42 48", "desc": "Tornado below Luigi"}
+        ]
+      }
+    },
+    "Mario": {
+      "PlMr.dat": {
+        "07_07_07": [
+          {"offset": "0xFA40", "data": "07 07 07 04 FF 66 00 00 FF 33 00", "desc": "Fireball aura inner/outer", "note": "constrained by 42_48 at FAB0"}
+        ],
+        "42_48": [
+          {"offset": "0xFAB0", "data": "80 80 80 FF FF 4C 00 FF FF FF FF FF 3F 00 00 00 42 48", "desc": "Fireball aura"},
+          {"offset": "0xFB50", "data": "00 00 00 FF FF FF FF FF FF FF FF FF 00 00 00 00 42 48", "desc": "Fireball color"},
+          {"offset": "0x14EAC", "data": "FF FF FF FF FF FF FF FF 33 33 33 FF 3F 80 00 00", "desc": "Cape back color"}
+        ]
+      },
+      "EfMrData.dat": {
+        "07_07_07": [
+          {"offset": "0x11AF4", "data": "07 07 07 04 FF FF B2 00 FF 66 00", "desc": "Fireball hand circle"},
+          {"offset": "0x1237C", "data": "07 07 07 04 B2 FF FF 00 00 00 FF", "desc": "Tornado outside"},
+          {"offset": "0x12448", "data": "07 07 07 04 B2 FF FF 00 00 00 FF", "desc": "Tornado outside"},
+          {"offset": "0x12514", "data": "07 07 07 04 99 CC FF 00 00 00 FF", "desc": "Tornado inner side 1"},
+          {"offset": "0x125E0", "data": "07 07 07 04 99 CC FF 00 00 00 FF", "desc": "Tornado inner side 2"},
+          {"offset": "0x126AC", "data": "07 07 07 04 CC FF FF 00 00 33 FF", "desc": "Tornado underneath"}
+        ],
+        "CF_##": [
+          {"offset": "0x160", "desc": "Fireball hand smoke"},
+          {"offset": "0x175", "desc": "Fireball hand smoke"},
+          {"offset": "0x182", "desc": "Fireball hand smoke"},
+          {"offset": "0x20A", "desc": "Trailing fire from fireball"},
+          {"offset": "0x21D", "desc": "Trailing fire from fireball"},
+          {"offset": "0x22A", "desc": "Trailing fire from fireball"},
+          {"offset": "0x2E3", "desc": "Ball particles behind fireball"},
+          {"offset": "0x2F0", "desc": "Ball particles behind fireball"},
+          {"offset": "0x353", "desc": "Ball particles behind fireball"},
+          {"offset": "0x360", "desc": "Particles around fireball"},
+          {"offset": "0x3C9", "desc": "Fireball landing dust"},
+          {"offset": "0x3DB", "desc": "Fireball landing dust"},
+          {"offset": "0x3E8", "desc": "Fireball landing dust"},
+          {"offset": "0x474", "desc": "Square particles behind fireball"},
+          {"offset": "0x484", "desc": "Square particles behind fireball"},
+          {"offset": "0x4DE", "desc": "Cape front sparkle"},
+          {"offset": "0x4EC", "desc": "Cape front sparkle"},
+          {"offset": "0x503", "desc": "Cape sparkle faint"},
+          {"offset": "0x567", "desc": "Cape smaller sparkles"},
+          {"offset": "0x62C", "desc": "Up B contact effect"},
+          {"offset": "0x63D", "desc": "Up B contact faint"},
+          {"offset": "0x69C", "desc": "Up B contact rays"},
+          {"offset": "0x6A9", "desc": "Up B contact rays faint"},
+          {"offset": "0x700", "desc": "Up B fist effect"},
+          {"offset": "0x70D", "desc": "Up B fist effect faint"}
+        ],
+        "42_48": [
+          {"offset": "0x11B64", "data": "80 80 80 FF FF FF 99 FF FF FF FF FF 00 00 00 00 42 48", "desc": "Ring around hand after fireball"},
+          {"offset": "0x123EC", "data": "80 80 80 FF FF FF D0 FF FF FF FF FF 00 00 00 00 42 48", "desc": "Tornado outer ending"},
+          {"offset": "0x124B8", "data": "80 80 80 FF FF FF D0 FF FF FF FF FF 00 00 00 00 42 48", "desc": "Tornado outer ending"},
+          {"offset": "0x12584", "data": "80 80 80 FF FF FF D0 FF FF FF FF FF 00 00 00 00 42 48", "desc": "Tornado spin side 1"},
+          {"offset": "0x12650", "data": "80 80 80 FF FF FF D0 FF FF FF FF FF 00 00 00 00 42 48", "desc": "Tornado spin side 2"},
+          {"offset": "0x1271B", "data": "80 80 80 FF FF FF E3 FF FF FF FF FF 00 00 00 00 42 48", "desc": "Tornado below Mario"}
+        ]
+      }
+    },
+    "Marth": {
+      "PlMs.dat": {
+        "random": [
+          {"offset": "0x3948", "data": "FF 00 00 FF FF 00 FF FF FF", "desc": "Sword Swing"}
+        ]
+      }
+    },
+    "Mewtwo": {
+      "PlMt.dat": {
+        "07_07_07": [
+          {"offset": "0x100B0", "data": "FF FF FF 00 00 00 FF 00", "desc": "Shadow Ball center when thrown"},
+          {"offset": "0x102D0", "data": "FF FF FF 00 00 7F FF 00", "desc": "Inner Shadow Ball bolt"},
+          {"offset": "0x10390", "data": "FF FF FF 00 00 7F FF 00", "desc": "Inner Shadow Ball bolt"},
+          {"offset": "0x10450", "data": "FF FF FF 00 00 7F FF 00", "desc": "Inner Shadow Ball bolt"},
+          {"offset": "0x10510", "data": "FF FF FF 00 00 7F FF 00", "desc": "Inner Shadow Ball bolt"},
+          {"offset": "0x105D0", "data": "FF FF FF 00 00 00 FF 00", "desc": "Shadow Ball center charging"}
+        ]
+      },
+      "EfMtData.dat": {
+        "07_07_07": [
+          {"offset": "0xC758", "data": "66 00 CC 00 00 00 00 00", "desc": "Up Smash swirl"},
+          {"offset": "0xCD30", "data": "FF A9 FF 00 33 00 66 00", "desc": "Forward Smash burst"},
+          {"offset": "0xCDFC", "data": "FF 7F FF 00 00 00 00 FF", "desc": "Forward Smash burst"},
+          {"offset": "0xD994", "data": "E5 FF FF 00 66 00 66 00", "desc": "Up B flash"},
+          {"offset": "0xDA54", "data": "E5 FF FF 00 66 00 66 00", "desc": "Up B flash"},
+          {"offset": "0xDBE0", "data": "FF FF FF 00 00 00 FF 00", "desc": "Up B light"}
+        ],
+        "42_48": [
+          {"offset": "0xC7C4", "data": "80 80 80 FF 00 00 00 FF", "desc": "Up Smash mist"},
+          {"offset": "0xDA00", "data": "80 80 80 FF FF FF FF FF", "desc": "Up B flash right side"},
+          {"offset": "0xDAC0", "data": "80 80 80 FF FF FF FF FF", "desc": "Up B flash left side"}
+        ]
+      }
+    },
+    "Ness": {
+      "PlNs.dat": {
+        "07_07_07": [
+          {"offset": "0x10190", "data": "04 FF FF 66 00 FF E5 00", "desc": "PK Fire lens flare"},
+          {"offset": "0x11A80", "data": "04 FF FF FF 00 00 7F FF", "desc": "PK Fire hit bottom ring inside"},
+          {"offset": "0x11B50", "data": "04 FF FF E5 00 FF 99 00", "desc": "PK Fire hit main fire aura"},
+          {"offset": "0x11DF0", "data": "04 FF FF FF 00 00 7F FF", "desc": "PK Fire hit bottom ring outside"},
+          {"offset": "0x16A10", "data": "04 00 CC 00 00 00 99 00", "desc": "PK Flash charge aura"},
+          {"offset": "0x16C10", "data": "04 FF FF FF 00 00 E5 00", "desc": "PK Flash charge center"},
+          {"offset": "0x16CD0", "data": "04 FF FF FF 00 00 E5 00", "desc": "PK Flash charge flash"},
+          {"offset": "0x16D90", "data": "04 FF FF FF 00 00 E5 00", "desc": "PK Flash charge flash"},
+          {"offset": "0x16E50", "data": "04 FF FF FF 00 00 E5 00", "desc": "PK Flash charge flash"},
+          {"offset": "0x16F10", "data": "04 FF FF FF 00 00 E5 00", "desc": "PK Flash charge flash"},
+          {"offset": "0x1D630", "data": "04 00 CC 00 00 00 99 00", "desc": "PK Flash explosion"},
+          {"offset": "0x1D6F0", "data": "04 FF FF FF 00 00 CC 00", "desc": "PK Flash explosion"},
+          {"offset": "0x1D7B0", "data": "04 FF FF FF 00 00 CC 00", "desc": "PK Flash explosion"},
+          {"offset": "0x1D870", "data": "04 FF FF FF 00 00 CC 00", "desc": "PK Flash explosion"},
+          {"offset": "0x1D930", "data": "04 FF FF EF 00 00 CC 00", "desc": "PK Flash explosion"},
+          {"offset": "0x1D9F0", "data": "04 FF FF FF 00 00 CC 00", "desc": "PK Flash explosion"},
+          {"offset": "0x1DAB0", "data": "04 FF FF FF 00 00 CC 00", "desc": "PK Flash explosion"},
+          {"offset": "0x1DB70", "data": "04 FF FF FF 00 00 4C FF", "desc": "PK Flash explosion"},
+          {"offset": "0x1DC30", "data": "04 FF FF FF 00 00 4C FF", "desc": "PK Flash explosion"},
+          {"offset": "0x1DCF0", "data": "04 FF FF FF 00 00 CC 00", "desc": "PK Flash explosion"},
+          {"offset": "0x24030", "data": "04 FF FF FF 00 00 4C FF", "desc": "PK Thunder tip"},
+          {"offset": "0x2C3F7", "data": "04 FF FF FF 00 00 4C FF", "desc": "PK Thunder tail"},
+          {"offset": "0x2C777", "data": "04 FF FF FF 00 00 4C FF", "desc": "PK Thunder tail"},
+          {"offset": "0x2CAF4", "data": "04 FF FF FF 00 00 4C FF", "desc": "PK Thunder tail main"},
+          {"offset": "0x2D3C8", "data": "04 FF FF FF 00 00 00 FF", "desc": "PK Thunder aura"},
+          {"offset": "0x2D528", "data": "04 FF FF FF 00 00 00 FF", "desc": "PK Thunder aura and ball"},
+          {"offset": "0x2D5E8", "data": "04 FF FF FF 00 00 33 FF", "desc": "PK Thunder lightning"},
+          {"offset": "0x2D6A8", "data": "04 FF FF FF 00 00 33 FF", "desc": "PK Thunder lightning"},
+          {"offset": "0x2D768", "data": "04 FF FF FF 00 00 33 FF", "desc": "PK Thunder lightning"},
+          {"offset": "0x2D828", "data": "04 FF FF F9 00 00 66 FF", "desc": "PK Thunder lightning"}
+        ]
+      }
+    },
+    "Peach": {
+      "PlPe.dat": {
+        "42_48": [
+          {"offset": "0x160A0", "data": "B3 B3 B3 FF FF FF FF FF FF FF FF FF 3F 80 00 00", "desc": "Turnip Leaves"},
+          {"offset": "0x16140", "data": "B3 B3 B3 FF FF FF FF FF FF FF FF FF 3F 80 00 00", "desc": "Turnip Leaves"},
+          {"offset": "0x161E0", "data": "B3 B3 B3 FF FF FF FF FF FF FF FF FF 3F 80 00 00", "desc": "Turnip Leaves"},
+          {"offset": "0x16280", "data": "B3 B3 B3 FF FF FF FF FF FF FF FF FF 3F 80 00 00", "desc": "Turnip Leaves"},
+          {"offset": "0x16320", "data": "B3 B3 B3 FF FF FF FF FF FF FF FF FF 3F 80 00 00", "desc": "Turnip Leaves"},
+          {"offset": "0x163C0", "data": "B3 B3 B3 FF FF FF FF FF FF FF FF FF 3F 80 00 00", "desc": "Turnip Leaves"},
+          {"offset": "0x164F0", "data": "AC B3 A6 FF F9 FF F9 FF FF FF FF FF 3F 80 00 00", "desc": "Turnip Color"},
+          {"offset": "0x1D890", "data": "B3 B3 B3 FF FF FF FF FF FF FF FF FF 3F 80 00 00", "desc": "Umbrella Handle"},
+          {"offset": "0x1D940", "data": "80 80 80 FF B3 B3 B3 FF FF FF FF FF 3F 80 00 00", "desc": "Umbrella Handle"},
+          {"offset": "0x1D9D0", "data": "FF FF FF FF FF FF FF FF FF FF FF FF 3F 66 66 66", "desc": "Umbrella Outside Bottom Border"},
+          {"offset": "0x1DA70", "data": "FF FF FF FF FF FF FF FF FF FF FF FF 3F 80 00 00", "desc": "Umbrella Top"},
+          {"offset": "0x1DB10", "data": "FF FF FF FF FF FF FF FF FF FF FF FF 3F 66 66 66", "desc": "Umbrella Inside Bottom Border"}
+        ]
+      },
+      "EfPeData.dat": {
+        "42_48": [
+          {"offset": "0xDC0", "data": "B3 B3 B3 FF FF FF FF FF FF FF FF FF 3F 80 00 00", "desc": "Down B Dirt"}
+        ]
+      }
+    },
+    "Pikachu": {
+      "PlPk.dat": {
+        "07_07_07": [
+          {"offset": "0xC350", "data": "04 FF FF FF 00 FF FF 00", "desc": "Down B Thunder"},
+          {"offset": "0x14DF0", "data": "04 B2 E5 FF 00 00 00 FF", "desc": "Ground Neutral B"},
+          {"offset": "0x14EC0", "data": "04 B2 E5 FF 00 00 00 FF", "desc": "Ground Neutral B"},
+          {"offset": "0x14F90", "data": "04 B2 E5 FF 00 00 00 FF", "desc": "Ground Neutral B"},
+          {"offset": "0x15060", "data": "04 B2 E5 FF 00 00 00 FF", "desc": "Ground Neutral B tail"},
+          {"offset": "0x151E0", "data": "07 FF FF FF 00 00 4C FF", "desc": "Ground Neutral B head"}
+        ]
+      },
+      "EfPkData.dat": {
+        "note": "SHARED WITH PICHU",
+        "CF_##": [
+          {"offset": "0x168", "data": "FF FF FF C8 AD DF 00 66 81 FA", "desc": "Aerial Neutral B middle"},
+          {"offset": "0x1D0", "data": "0B 0B E6 C8 AD DF 00 07 07 8F", "desc": "Aerial Neutral B outer lens flare"},
+          {"offset": "0x238", "data": "8F D6 FF C8 AD DF 00 0C 0C FF", "desc": "Aerial Neutral B middle lens flare"},
+          {"offset": "0x2A0", "data": "FE 06 1B 32 AD DF 00 FB 9E 14", "desc": "Aerial Neutral B inner border"},
+          {"offset": "0x2AC", "data": "FF FF FF FF B1 B6 04 3F C9 0F", "desc": "Aerial Neutral B inner triangles"},
+          {"offset": "0x35D", "data": "FF FF FF FF AD DF 00 F9 68 01", "desc": "Over B smoke majority"},
+          {"offset": "0x36A", "data": "FC 8A 55 00 AD DF 10 84 00 00", "desc": "Over B outline/ending smoke"},
+          {"offset": "0x3D8", "data": "FC F8 8D FF AD DF 00 F8 CF 02", "desc": "Over B middle lens flare"},
+          {"offset": "0x3E5", "data": "F7 03 0B 00 AD DF 08 84 00 00", "desc": "Over B ending lens flare"},
+          {"offset": "0x440", "data": "FF FF FF FF AD DF 00 F8 CF 02", "desc": "Over B starting lens flare"},
+          {"offset": "0x44D", "data": "FD 63 68 00 AD DF 08 84 00 00", "desc": "Over B lines"},
+          {"offset": "0x4A7", "data": "FF FF FF FF AD DF 00 F9 68 01", "desc": "Over B lines"},
+          {"offset": "0x4B0", "data": "FC 8A 55 00 AD DF 0C 84 00 00", "desc": "Over B lines"}
+        ],
+        "07_07_07": [
+          {"offset": "0x148E0", "data": "04 CC E5 FF 00 00 00 FF", "desc": "Pre Forward Smash lightning"},
+          {"offset": "0x14C80", "data": "04 CC E5 FF 00 00 00 FF", "desc": "Forward Smash aura half 1"},
+          {"offset": "0x14D40", "data": "04 CC E5 FF 00 00 00 FF", "desc": "Forward Smash aura half 2"},
+          {"offset": "0x14E00", "data": "04 FF FF FF 00 00 4C FF", "desc": "Forward Smash ball/head"}
+        ],
+        "42_48": [
+          {"offset": "0x13F10", "data": "FF FF FF FF FF FF FF FF FF", "desc": "Down B Aura"}
+        ]
+      }
+    },
+    "Roy": {
+      "PlFe.dat": {
+        "random": [
+          {"offset": "0x3AA0", "data": "FF 00 EB 78 50 00 FF FF FF", "desc": "Sword Swing"}
+        ]
+      }
+    },
+    "Young Link": {
+      "PlCl.dat": {
+        "random": [
+          {"offset": "0x3790", "data": "FF 00 00 FF FF 00 FF FF FF", "desc": "Sword Swing"}
+        ]
+      }
+    }
+  },
+  "ui": {
+    "Menu": {
+      "MnSlChr.usd": {
+        "random": [
+          {"offset": "0x948", "data": "80 80 80 FF 00 0B 1A FF FF FF FF", "desc": "Background"}
+        ],
+        "07_07_07": [
+          {"offset": "0x10050", "data": "07 FF FF FF 00 00 00 33", "desc": "Hand color"},
+          {"offset": "0x10130", "data": "07 FF 33 33 00 00 00 00", "desc": "P# Outline on Hand"},
+          {"offset": "0x348E88", "data": "07 07 07 07 83 8F 94 00 83 8F 94", "desc": "Bottom frame"},
+          {"offset": "0x348F48", "data": "07 07 07 07 92 9E A3 00 92 9E A3", "desc": "Rule"},
+          {"offset": "0x349008", "data": "07 07 07 07 83 8F 94 00 83 8F 94", "desc": "Top frame"}
+        ]
+      },
+      "MnSlMap.usd": {
+        "note": "070707 effects are often constrained by adjacent 4248 effects. Color 2 of the 4248 effect limits both 070707 colors, and setting 4248 color 2 to FFFFFF gives full control. For the 3D preview entries, color 1 only slightly nudges color 2 and is constrained by it.",
+        "07_07_07": [
+          {"offset": "0x95A00", "data": "07 07 07 07 7F 7F 7F 00 7F 7F 7F", "desc": "STAGE SELECT text (color 1) and outline (color 2)", "note": "constrained by 42_48 at 95A70"},
+          {"offset": "0x95B78", "data": "07 07 07 04 66 66 66 00 66 66 66", "desc": "Wires around screen (color 1) and outline (color 2)", "note": "constrained by 42_48 at 95BE8"},
+          {"offset": "0x96C44", "data": "07 07 07 04 FF FF FF 00 FF FF FF", "desc": "Stage name (color 1) and outline (color 2)"},
+          {"offset": "0x9784C", "data": "07 07 07 04 00 00 00 00 00 00 00", "desc": "RANDOM text (color 1) and outline (color 2)"}
+        ],
+        "42_48": [
+          {"offset": "0x6D1B0", "data": "80 80 80 FF FD FB FF FF FF FF FF FF 3F 7F BE 77 42 48", "desc": "Blue background texture layer", "note": "Set alpha to 00 to remove the blue background texture"},
+          {"offset": "0x6D250", "data": "80 80 80 FF B3 B3 B3 FF FF FF FF FF 3E 99 99 9A 42 48", "desc": "Background images on stage select", "note": "Set alpha to 00 to remove the background images"},
+          {"offset": "0x6D2F0", "data": "66 80 80 FF 99 B3 B3 FF E6 FF FF FF 3F 00 00 00 42 48", "desc": "Square grid in background (color 2)", "note": "Change 3F to 00 to hide grid"},
+          {"offset": "0x6EE1C", "data": "80 80 80 FF 99 B3 B3 FF FF FF FF FF 3F 7F BE 77 42 48", "desc": "Stage select cursor (color 2)"},
+          {"offset": "0x6F0FC", "data": "FF FF FF FF FF FF FF FF FF FF FF FF 3F 7F BE 77 42 48", "desc": "Flashing outline around hovered stage icon (color 2)", "note": "Flash 1 uses only the red channel from color 2. Flash 2 uses the full color 2 value. Example: 00FF00 gives a black first flash and green second flash"},
+          {"offset": "0x78B24", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Kongo Jungle wooden poles 3D preview"},
+          {"offset": "0x78BC4", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Kongo Jungle platforms 3D preview"},
+          {"offset": "0x78C64", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Kongo Jungle floor 3D preview"},
+          {"offset": "0x78D04", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Jungle Japes 3D preview"},
+          {"offset": "0x78DA4", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Mushroom Kingdom II 3D preview"},
+          {"offset": "0x78E44", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Mushroom Kingdom 3D preview"},
+          {"offset": "0x78EE4", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Fountain of Dreams top platform 3D preview"},
+          {"offset": "0x78F84", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Fountain of Dreams main platform 3D preview"},
+          {"offset": "0x79024", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Fountain of Dreams flares under platform 3D preview"},
+          {"offset": "0x790C4", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Fountain of Dreams waterfall 3D preview"},
+          {"offset": "0x79164", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Green Greens 3D preview"},
+          {"offset": "0x79204", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Dream Land 3D preview"},
+          {"offset": "0x792A4", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Peach's Castle main 3D preview"},
+          {"offset": "0x79344", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Peach's Castle platform 3D preview"},
+          {"offset": "0x793E4", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Peach's Castle top 3D preview"},
+          {"offset": "0x79484", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Peach's Castle other parts 3D preview"},
+          {"offset": "0x79524", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Peach's Castle drawbridge 3D preview"},
+          {"offset": "0x795C4", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Peach's Castle peak 3D preview"},
+          {"offset": "0x79664", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Onett buildings 3D preview"},
+          {"offset": "0x79704", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Fourside 3D preview"},
+          {"offset": "0x797A4", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Rainbow Cruise 3D preview"},
+          {"offset": "0x79844", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Brinstar 3D preview"},
+          {"offset": "0x798E4", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Brinstar Depths 3D preview"},
+          {"offset": "0x79984", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Temple 3D preview"},
+          {"offset": "0x79A24", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Yoshi's Island 3D preview"},
+          {"offset": "0x79AC4", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Yoshi's Story 3D preview"},
+          {"offset": "0x79B64", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Yoshi's Island 64 3D preview"},
+          {"offset": "0x79C04", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Kongo Jungle 64 3D preview"},
+          {"offset": "0x79CA4", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Big Blue top 3D preview"},
+          {"offset": "0x79D44", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Mute City outer loop 3D preview"},
+          {"offset": "0x79DE4", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Mute City main track 3D preview"},
+          {"offset": "0x79E84", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Flat Zone 3D preview"},
+          {"offset": "0x79F24", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Venom/Corneria 3D preview"},
+          {"offset": "0x79FC4", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Icicle Mountain 3D preview"},
+          {"offset": "0x7A064", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Great Bay sphere 3D preview"},
+          {"offset": "0x7A105", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Great Bay turtle 3D preview"},
+          {"offset": "0x7A1A4", "data": "00 00 66 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "All 3D preview bases"},
+          {"offset": "0x7A264", "data": "FF FF FF FF FF FF FF FF FF FF FF FF 3F 7F BE 77 42 48", "desc": "Loading logo 3D preview"},
+          {"offset": "0x7A304", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Pokemon Stadium 3D preview"},
+          {"offset": "0x7A3A4", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Poke Floats 3D preview"},
+          {"offset": "0x7A444", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Battlefield 3D preview"},
+          {"offset": "0x7A4E4", "data": "00 33 99 FF 00 4C B3 FF 80 CC FF FF 3F 80 00 00 42 48", "desc": "Final Destination 3D preview"},
+          {"offset": "0x95A70", "data": "80 80 80 FF FF FF FF FF FF FF FF FF 00 00 00 00 42 48", "desc": "STAGE SELECT text constraint", "note": "Set color 2 to FFFFFF, then use 95A00 for separate text and outline control"},
+          {"offset": "0x95B1C", "data": "80 80 80 FF CC CC CC FF FF FF FF FF 00 00 00 00 42 48", "desc": "Circular STAGE SELECT"},
+          {"offset": "0x95BE8", "data": "80 80 80 FF FF FF FF FF FF FF FF FF 3F 7F BE 77 42 48", "desc": "Wires around screen constraint", "note": "Set color 2 to FFFFFF, then use 95B78 for separate inner and outer wire control"},
+          {"offset": "0x960D4", "data": "80 80 80 FF FF FF FF FF FF FF FF FF 3F 7F BE 77 42 48", "desc": "Stage icon rows 2 and 4", "note": "Set alpha to 00000000 to gray out rows 2 and 4"},
+          {"offset": "0x96174", "data": "80 80 80 FF CC CC CC FF FF FF FF FF 3F 7F BE 77 42 48", "desc": "Some stage portrait outlines"},
+          {"offset": "0x96234", "data": "80 80 80 FF FF FF FF FF FF FF FF FF 3F 7F BE 77 42 48", "desc": "Stage icon rows 1 and 3", "note": "Set alpha to 00000000 to gray out rows 1 and 3"},
+          {"offset": "0x96CB4", "data": "80 80 80 FF FF FF FF FF FF FF FF FF 3F 7F BE 77 42 48", "desc": "Stage name color"},
+          {"offset": "0x97404", "data": "80 80 80 FF FF FF FF FF FF FF FF FF 3F 7F BE 77 42 48", "desc": "Bottom row icons", "note": "Set alpha to 00000000 to gray out bottom row"},
+          {"offset": "0x974A4", "data": "80 80 80 FF FF FF FF FF FF FF FF FF 3F 7F BE 77 42 48", "desc": "Unknown"},
+          {"offset": "0x978BC", "data": "80 80 80 FF FF FF FF FF FF FF FF FF 3F 7F BE 77 42 48", "desc": "RANDOM text constraint", "note": "Constrains the 070707 text and outline colors at 9784C"},
+          {"offset": "0x9795C", "data": "80 80 80 FF FF CC CC FF FF FF FF FF 3F 7F BE 77 42 48", "desc": "RANDOM box color"},
+          {"offset": "0x97C04", "data": "80 80 80 FF FF FF FF FF FF FF FF FF 3F 7F BE 77 42 48", "desc": "Icicle Mountain/Flat Zone icons", "note": "Set alpha to 00000000 to gray out"},
+          {"offset": "0x97CA4", "data": "80 80 80 FF FF FF FF FF FF FF FF FF 3F 7F BE 77 42 48", "desc": "Unknown"},
+          {"offset": "0x98130", "data": "80 80 80 FF 00 00 00 FF FF FF FF FF 00 00 00 00 42 48", "desc": "NOW LOADING screen tint after stage select (color 2)"},
+          {"offset": "0x981F0", "data": "80 80 80 FF FF FF FF FF FF FF FF FF 3F 7F BE 77 42 48", "desc": "Unknown"}
+        ],
+        "85_80_08": [
+          {"offset": "0x7A1F0", "data": "85 80 08 0F 07 43 04 07 96 96 96 FF 96 96 96", "desc": "Loading logo 3D preview brightness", "note": "Both colors affect the brightness of the loading logo 3D preview at 7A264"},
+          {"offset": "0x98180", "data": "85 80 08 0F 44 43 04 07 FF CC 33 FF 00 00 00", "desc": "NOW LOADING text (color 1) and text box (color 2)"}
+        ]
+      }
+    },
+    "Pause": {
+      "GmPause.usd": {
+        "42_48": [
+          {"offset": "0x1234", "data": "80 80 80 FF FF 00 FF FF FF 00 FF FF 3F 7F BE 77 42 48", "desc": "Bottom Right border"},
+          {"offset": "0x12E0", "data": "80 80 80 FF FF 00 FF FF FF 00 FF FF 3F 7F BE 77 42 48", "desc": "Bottom Left border"},
+          {"offset": "0x138C", "data": "80 80 80 FF FF 00 FF FF FF 00 FF FF 3F 7F BE 77 42 48", "desc": "Top Left border"}
+        ],
+        "98_00_##_##": [
+          {"offset": "0x1FAB", "end": "0x1FAD", "desc": "+ sign between A and St, RESET bar corner"},
+          {"offset": "0x1FDB", "end": "0x1FFF", "desc": "L button"}
+        ]
+      }
+    }
+  }
+}

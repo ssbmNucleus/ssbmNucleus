@@ -1,0 +1,24 @@
+{
+  "character": "Marth",
+  "basis": {"costumeCode": "PlMsNr", "textureCount": 59},
+  "regions": {
+    "cape": [47, 48, 49],
+    "cloth": [1, 2, 3, 5, 6, 7, 8, 9, 16, 18, 34, 35, 36, 39, 45, 46, 50, 58],
+    "fur": [26, 28, 29, 32, 33, 42],
+    "skin": [20, 21, 22, 24, 25, 41, 43, 51, 52],
+    "armor": [0, 4, 10, 11, 12, 13, 14, 15, 17, 19, 31, 37, 38, 53, 54, 55, 56, 57],
+    "eyes": [40, 44]
+  },
+  "protected": [19, 40, 44],
+  "liveHints": [],
+  "maskHints": {},
+  "notes": {
+    "cape": "blue outer with heraldic emblem (47/48, dominate the back) + dark maroon inner lining (49, front-visible)",
+    "cloth": "blue tunic (16 = torso, 7 = skirt), white sleeve puffs (5/58), dark pants (1/3/6/18), trim sheet (2); 34-46 low-poly bits",
+    "fur": "dark blue hair (32 = front main, 29 = back, 28 = fringe)",
+    "skin": "face (24 = main, 20/21/22/25 shading) + hands",
+    "armor": "silver shoulder plate + gold: tiara/belt (10/11), trim (13/15/17), sword grip+guard (54), scabbard (55/57), ruby brooch (19 - protected), leather bits (0/4/12/14)",
+    "eyes": "40 (80x80) + 44 (low-poly) - protected",
+    "unmapped": "23/27/30 leftovers"
+  }
+}

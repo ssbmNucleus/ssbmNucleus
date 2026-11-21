@@ -1,0 +1,61 @@
+{
+ "character": "Falco",
+ "source": "PlFcNr",
+ "verified": true,
+ "notes": "Eyes: 13 (with blink frames 25/26) AND 23 (reported unmapped, but a probe shows it paints the eye too) - the eye texture includes the RED eye-mask feathers around the eye, so recolouring eyes also recolours the red mask. hands = the blue feathered hands (11 left, 12 right). beak = 14 upper, 15 lower, 17 lower-beak rear. leg guards (5) = white shin plating; boots = 0 upper, 3 sole, 7 heel/ankle pieces. Feet were verified with a zoomed-out camera (default verify framing crops below the knee). Unlabelled: 6 (unmapped) and 16 (small beak-area texture) - neither shows in any probe view.",
+ "groups": {
+  "head feathers": [
+   18
+  ],
+  "eyes": [
+   13,
+   23,
+   25,
+   26
+  ],
+  "beak": [
+   14,
+   15,
+   17
+  ],
+  "hands": [
+   11,
+   12
+  ],
+  "jacket": [
+   19,
+   20,
+   21
+  ],
+  "jacket zipper": [
+   22
+  ],
+  "shirt": [
+   8
+  ],
+  "scarf": [
+   9
+  ],
+  "pendant": [
+   10
+  ],
+  "belt": [
+   4
+  ],
+  "pants": [
+   1,
+   2
+  ],
+  "tail feathers": [
+   24
+  ],
+  "leg guards": [
+   5
+  ],
+  "boots": [
+   0,
+   3,
+   7
+  ]
+ }
+}

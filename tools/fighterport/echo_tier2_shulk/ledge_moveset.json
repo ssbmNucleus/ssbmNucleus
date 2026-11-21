@@ -1,0 +1,298 @@
+{
+  "schema": 1,
+  "skeleton": "model/body/c00/model.nusktb",
+  "landmarks": "ultimate_landmarks.json",
+  "allow_unbound": [
+    "S_Hip_hit"
+  ],
+  "attachments": [
+    {
+      "source": "SwordR",
+      "source_anchor": "HandR",
+      "target": "JOBJ_75",
+      "target_anchor": "JOBJ_73"
+    }
+  ],
+  "clips": [
+    {
+      "id": "cliffclimbslow",
+      "category": "ledge",
+      "target_motion": "CliffClimbSlow",
+      "source": "motion/body/c00/g02cliffclimb.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "cliffclimbquick",
+      "category": "ledge",
+      "target_motion": "CliffClimbQuick",
+      "source": "motion/body/c00/g02cliffclimb.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "cliffattackslow",
+      "category": "ledge",
+      "target_motion": "CliffAttackSlow",
+      "source": "motion/body/c00/g02cliffattack.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "cliffattackquick",
+      "category": "ledge",
+      "target_motion": "CliffAttackQuick",
+      "source": "motion/body/c00/g02cliffattack.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "cliffescapeslow",
+      "category": "ledge",
+      "target_motion": "CliffEscapeSlow",
+      "source": "motion/body/c00/g02cliffescape.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "cliffescapequick",
+      "category": "ledge",
+      "target_motion": "CliffEscapeQuick",
+      "source": "motion/body/c00/g02cliffescape.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "cliffjumpslow1",
+      "category": "ledge",
+      "target_motion": "CliffJumpSlow1",
+      "source": "motion/body/c00/g02cliffjump1.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "cliffjumpslow2",
+      "category": "ledge",
+      "target_motion": "CliffJumpSlow2",
+      "source": "motion/body/c00/g02cliffjump2.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "cliffjumpquick1",
+      "category": "ledge",
+      "target_motion": "CliffJumpQuick1",
+      "source": "motion/body/c00/g02cliffjump1.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "cliffjumpquick2",
+      "category": "ledge",
+      "target_motion": "CliffJumpQuick2",
+      "source": "motion/body/c00/g02cliffjump2.nuanmb",
+      "root_motion_joint": "Trans",
+      "body_scale": "rigid",
+      "engine_root": {
+        "target": "JOBJ_1",
+        "basis": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      }
+    }
+  ]
+}

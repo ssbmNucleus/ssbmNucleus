@@ -1,0 +1,54 @@
+{
+ "character": "Mewtwo",
+ "source": "PlMtNr",
+ "verified": true,
+ "notes": "0 = the purple belly/abdomen (texture also carries the white edge). 7 = neck, shoulders and upper chest; 9 = arms; 10 and 11 = the two sides of the hands (10 backs, 11 palms/fronts in the render); 5 = the rounded finger claw tips (its bounds also reach y~1.7, so it may skin the toe tips too - feet are out of frame). 3 = the small mouth line under the nose. 8 = the tube from the back of the head. 13 = head incl. ears/horns; 15 = thighs/legs. Eyes: 2 (+ frames 20-23) and eyelid 14 (+ frames 24-26). UNLABELLED: 16, 17 (bounds y -0.4..3.5 = almost certainly the feet, but the verify cameras crop the feet so no render confirms them); 6 (open-mouth-with-tongue artwork, mouth bounds, but hidden in the render pose); 1, 4, 18, 19 (do not render in either view even when probed; 1 shares 0's torso bounds, 4 shares 3's). Feet [16,17] confirmed after the verify camera was re-framed to the whole body (16 = heel/underside, 17 = top of foot). Claw tips [5] colour BOTH finger and toe claws.",
+ "groups": {
+  "belly": [
+   0
+  ],
+  "chest": [
+   7
+  ],
+  "arms": [
+   9
+  ],
+  "hands": [
+   10,
+   11
+  ],
+  "claw tips": [
+   5
+  ],
+  "head": [
+   13
+  ],
+  "head tube": [
+   8
+  ],
+  "eyes": [
+   2,
+   14,
+   20,
+   21,
+   22,
+   23,
+   24,
+   25,
+   26
+  ],
+  "mouth": [
+   3
+  ],
+  "tail": [
+   12
+  ],
+  "legs": [
+   15
+  ],
+  "feet": [
+   16,
+   17
+  ]
+ }
+}

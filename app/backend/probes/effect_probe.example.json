@@ -1,0 +1,58 @@
+{
+  "iso": "output/extras-audit-Fox-laser_ring-vanilla.iso",
+  "char": "falcon",
+  "color": 0,
+  "stage": "finaldestination",
+  "out": "datram-probe-falcon-kick",
+  "dats": {
+    "efca": "EfCaData.dat"
+  },
+  "moves": {
+    "downb": [10, 16, 24, 34, 46]
+  },
+  "experiments": [
+    { "name": "vanilla" },
+
+    {
+      "name": "kick_tip",
+      "moves": ["downb"],
+      "pokes": [
+        { "dat": "efca", "offset": "0x1DE04", "rgb": "00FF00" },
+        { "dat": "efca", "offset": "0x1DE08", "rgb": "FF00FF" }
+      ]
+    },
+
+    {
+      "name": "kick_smoke",
+      "moves": ["downb"],
+      "pokes": [
+        { "dat": "efca", "offset": "0x12F", "rgb": "00FFFF" },
+        { "dat": "efca", "offset": "0x149", "rgb": "00FFFF" },
+        { "dat": "efca", "offset": "0x159", "rgb": "00FFFF" },
+        { "dat": "efca", "offset": "0x16C", "rgb": "00FFFF" },
+        { "dat": "efca", "offset": "0x17C", "rgb": "00FFFF" },
+        { "dat": "efca", "offset": "0x58F", "rgb": "00FF00" },
+        { "dat": "efca", "offset": "0x5A9", "rgb": "00FF00" },
+        { "dat": "efca", "offset": "0x5B9", "rgb": "00FF00" },
+        { "dat": "efca", "offset": "0x5CC", "rgb": "00FF00" },
+        { "dat": "efca", "offset": "0x5DC", "rgb": "00FF00" },
+        { "dat": "efca", "offset": "0x640", "rgb": "FF00FF" },
+        { "dat": "efca", "offset": "0x64E", "rgb": "FF00FF" },
+        { "dat": "efca", "offset": "0x65C", "rgb": "FF00FF" }
+      ]
+    },
+
+    {
+      "name": "kick_dots",
+      "moves": ["downb"],
+      "pokes": [
+        { "dat": "efca", "offset": "0x474", "rgb": "00FF00" },
+        { "dat": "efca", "offset": "0x484", "rgb": "00FF00" },
+        { "dat": "efca", "offset": "0x4D9", "rgb": "FF00FF" },
+        { "dat": "efca", "offset": "0x4E6", "rgb": "FF00FF" },
+        { "dat": "efca", "offset": "0x539", "rgb": "FF00FF" },
+        { "dat": "efca", "offset": "0x6AF", "rgb": "00FFFF" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,184 @@
+/* GalleryGrid.jsx: the search box, thumbnail grid and cells shared by the
+   GallerySelect popup and the inline starting-point picker. Moved here from
+   GallerySelect.css (2026-10-03) in their original order; GallerySelect.jsx
+   imports this sheet just before its own, so the panel rules that stayed there
+   (.gallery-panel, .gallery-panel--portrait/--landscape .gallery-grid) still
+   come after the base .gallery-grid rule they refine. */
+
+.gallery-search {
+  flex: 0 0 auto;
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-base);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+}
+
+.gallery-search:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.gallery-search::placeholder { color: var(--color-text-tertiary); }
+
+/* The grid scrolls; the panel itself does not. */
+.gallery-grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  gap: var(--space-2);
+  padding-right: var(--space-1);
+}
+
+/* min-width:0 is load-bearing: grid items default to min-width:auto, so the
+   nowrap name below refuses to shrink and bleeds over the neighbouring cells
+   instead of ellipsizing. */
+.gallery-cell {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.gallery-cell:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-border);
+}
+
+.gallery-cell.is-selected {
+  border-color: var(--color-accent);
+  background: var(--color-bg-hover);
+}
+
+/* The thumb fills whatever the fixed grid row leaves after the name line —
+   definite sizes all the way down, nothing width-derived (see .gallery-grid). */
+.gallery-thumb {
+  position: relative;
+  display: block;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-base);
+}
+
+.gallery-thumb img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  image-rendering: auto;
+}
+
+.gallery-thumb--empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-tertiary);
+  font-size: var(--text-xs);
+  text-align: center;
+}
+
+/* Always truncated. The picture carries the meaning; these names are slot-code
+   soup and expanding them on hover just made the grid jump around. The full
+   name is still on the cell's `title` if anyone actually needs it. */
+.gallery-name {
+  display: block;
+  max-width: 100%;
+  color: var(--color-text-tertiary);
+  font-size: var(--text-xs);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gallery-cell:hover .gallery-name { color: var(--color-text-primary); }
+.gallery-cell.is-selected .gallery-name { color: var(--color-accent); }
+
+.gallery-empty {
+  flex: 0 0 auto;
+  padding: var(--space-5) 0;
+  text-align: center;
+  color: var(--color-text-tertiary);
+  font-size: var(--text-sm);
+}
+
+/* ── Inline use (vault/picker/CostumePicker.jsx, StagePicker.jsx) ────────────
+   Everything below is keyed to classes only the inline grid carries
+   (gallery-grid--portrait / --icon / --landscape / --fit / --navigable, gallery-badge), so none of
+   it can match the GallerySelect popup. The popup sizes its grid from
+   .gallery-panel--* in GallerySelect.css instead. Fixed rows for the same
+   reason as the popup's (see .gallery-panel--portrait .gallery-grid). */
+.gallery-grid--portrait {
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  grid-auto-rows: 150px;
+}
+
+/* Character-select icons: small pixel art, wider than tall; never cropped. */
+.gallery-grid--icon {
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  grid-auto-rows: 88px;
+}
+
+.gallery-grid--icon .gallery-thumb img {
+  object-fit: contain;
+}
+
+/* Stages (vault/picker/StagePicker.jsx): wide cells for stage art and variant
+   screenshots. --fit keeps a stage-select icon or a whole stage picture uncropped. */
+.gallery-grid--landscape {
+  grid-template-columns: repeat(auto-fill, minmax(116px, 1fr));
+  grid-auto-rows: 96px;
+}
+
+.gallery-grid--fit .gallery-thumb img {
+  object-fit: contain;
+}
+
+.gallery-grid--navigable .gallery-cell:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.gallery-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 0 6px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--color-bg-base) 82%, transparent);
+  color: var(--color-text-secondary);
+  font-size: 10px;
+  line-height: 16px;
+  pointer-events: none;
+}
+
+/* A tile with no picture (the model import's "AI Choice"): a big glyph on the thumbnail. */
+.gallery-thumb--glyph {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1;
+}
