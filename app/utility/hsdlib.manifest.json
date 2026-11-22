@@ -5,11 +5,11 @@
     "To bump: publish a new tag on the fork, update `tag` and every sha256 here (from the release's SHA256SUMS.txt)."
   ],
   "repo": "ssbmNucleus/HSDLib",
-  "tag": "nucleus-v0.9.0",
+  "tag": "nucleus-v0.9.1",
   "platforms": {
     "win-x64": {
       "asset": "hsdrawviewer-win-x64.zip",
-      "sha256": "f51a3a5bcc98eb818903a4779d2f3e7faf6e0321a4965673e3a2ea96dc928482",
+      "sha256": "5575ff38d9be6b7e000e26bb8b35113015eaa00ba513800d4ccd146e0cec1408",
       "unpack_to": "utility/hsdraw/win-x64",
       "entrypoint": "HSDRawViewer.exe",
       "verify_after_unpack": [
@@ -21,7 +21,7 @@
     },
     "linux-x64": {
       "asset": "hsdrawheadless-linux-x64.zip",
-      "sha256": "dcc29349e9e021863684c19e26bb841b8ecac775b288d941df58ae554bd1b5ad",
+      "sha256": "daab541a3ef4ae1d408f5d37b140c246eb530196d3a79cc1bd3961c8cc6880e4",
       "unpack_to": "utility/hsdraw/linux-x64",
       "entrypoint": "hsdrawviewer",
       "verify_after_unpack": [
@@ -31,7 +31,7 @@
     },
     "osx-arm64": {
       "asset": "hsdrawheadless-osx-arm64.zip",
-      "sha256": "dca139f3685a844daeafc27509e3cf3663fed8c985f4a5edc3361847cb329617",
+      "sha256": "c5ca414d094d1b147479f0482af626b5f3e4ff712489947866d1c35fe08b1191",
       "unpack_to": "utility/hsdraw/osx-arm64",
       "entrypoint": "hsdrawviewer",
       "verify_after_unpack": [

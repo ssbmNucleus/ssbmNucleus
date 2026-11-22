@@ -2,6 +2,15 @@
 
 All notable changes to SSBM Nucleus are documented here.
 
+## 0.9.1 — 2026-11-21
+
+### Fixes
+
+- Model imports work on a Windows that writes decimals with a comma (German, French, Spanish,
+  Portuguese and other number formats). On 0.9.0 they stopped while getting the fighters ready
+  with "could not convert string to float". An import that failed this way works again after
+  the update, with nothing to delete.
+
 ## 0.9.0 — 2026-11-21
 
 Randall, the AI assistant, comes with SSBM Nucleus now, and you can connect your own AI to
