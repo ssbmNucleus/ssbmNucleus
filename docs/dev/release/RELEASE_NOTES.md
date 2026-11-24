@@ -1,11 +1,10 @@
-# SSBM Nucleus 0.9.1
+# SSBM Nucleus 0.9.2
 
-- **Fix**: model imports work on a Windows that writes decimals with a comma
-  (German, French, Spanish, Portuguese and other number formats). On 0.9.0 they
-  stopped while getting the fighters ready with "could not convert string to
-  float". An import that failed this way works again after the update, with
-  nothing to delete.
-
-Windows only: macOS and Linux never had this bug and stay on 0.9.0.
+- **Fix**: the model import tools download (Settings > AI > Model import tools)
+  no longer stops at Blender with "no longer at ... (HTTP 403)". Blender's
+  download site turns some networks away (VPNs especially); Nucleus now gets
+  Blender from one of its mirrors instead.
+- **Fix**: the same download no longer stops with "certificate has expired" on
+  Windows PCs that kept an old, expired certificate.
 
 Full changelog: https://github.com/ssbmNucleus/ssbmNucleus/blob/main/CHANGELOG.md

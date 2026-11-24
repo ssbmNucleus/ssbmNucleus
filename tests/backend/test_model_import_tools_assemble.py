@@ -7,11 +7,14 @@ import io
 import json
 import os
 import re
+import ssl
 import stat
 import subprocess
 import tarfile
 import threading
 import time
+import urllib.error
+import urllib.request
 import zipfile
 from pathlib import Path
 
@@ -28,6 +31,7 @@ class _State:
         self.requests = []          # (name, Range header or None)
         self.ignore_range = False   # answer a Range request with the whole file (200)
         self.fail_once = set()      # names whose next reply stops half way through its body
+        self.status = {}            # name: an HTTP error code it always answers (403: a host that turns us away)
 
 
 class _Handler(http.server.BaseHTTPRequestHandler):
@@ -39,6 +43,9 @@ class _Handler(http.server.BaseHTTPRequestHandler):
         name = self.path.lstrip('/')
         ranged = self.headers.get('Range')
         state.requests.append((name, ranged))
+        if name in state.status:
+            self.send_error(state.status[name])
+            return
         data = state.files.get(name)
         if data is None:
             self.send_error(404)
@@ -314,6 +321,84 @@ def test_fetch_refuses_a_missing_file_at_once(server, tmp_path):
     assert server.state.requests == [('gone.bin', None)]
 
 
+def _mirrored(server, data, *, blocked=(), part=0, tmp_path=None):
+    """``data`` on the main site and two mirrors (``site/``, ``m1/``, ``m2/``); ``blocked`` answer 403."""
+    base = f'http://127.0.0.1:{server.server_address[1]}/'
+    for host in ('site', 'm1', 'm2'):
+        server.state.files[f'{host}/piece.bin'] = data
+    for host in blocked:
+        server.state.status[f'{host}/piece.bin'] = 403
+    item = {'url': base + 'site/piece.bin', 'mirrors': [base + 'm1/piece.bin', base + 'm2/piece.bin'],
+            'sha256': hashlib.sha256(data).hexdigest(), 'size': len(data)}
+    if part:
+        path = assemble._download_path(tmp_path, item)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.with_name(path.name + '.part').write_bytes(data[:part])
+    return item
+
+
+def test_fetch_goes_to_a_mirror_when_the_site_turns_it_away(server, tmp_path):
+    data = _noise(5000)
+    item = _mirrored(server, data, blocked=('site',))
+    final = assemble.fetch(tmp_path, 'Piece', item, sleep=lambda _s: pytest.fail('a 403 is not waited on'))
+    assert final.read_bytes() == data
+    assert server.state.requests == [('site/piece.bin', None), ('m1/piece.bin', None)]
+
+
+def test_fetch_carries_the_part_over_to_the_next_mirror(server, tmp_path):
+    data = _noise(5000)
+    item = _mirrored(server, data, blocked=('site', 'm1'), part=2000, tmp_path=tmp_path)
+    counted = []
+    final = assemble.fetch(tmp_path, 'Piece', item, on_bytes=counted.append)
+    assert final.read_bytes() == data and sum(counted) == 3000
+    assert server.state.requests == [('site/piece.bin', 'bytes=2000-'), ('m1/piece.bin', 'bytes=2000-'),
+                                      ('m2/piece.bin', 'bytes=2000-')]
+
+
+def test_fetch_turned_away_everywhere_says_why_and_how_to_get_it_by_hand(server, tmp_path):
+    data = _noise(5000)
+    item = _mirrored(server, data, blocked=('site', 'm1', 'm2'), part=2000, tmp_path=tmp_path)
+    with pytest.raises(assemble.Refused) as refused:
+        assemble.fetch(tmp_path, 'Blender 4.3.2', item, sleep=lambda _s: pytest.fail('a 403 is not waited on'))
+    message = str(refused.value)
+    assert 'turned this computer away' in message and 'VPN' in message and 'no longer at' not in message
+    assert message.count('HTTP 403') == 3 and str(tmp_path / assemble.DOWNLOADS) in message
+    assert len(server.state.requests) == 3
+    part = assemble._download_path(tmp_path, item)
+    assert part.with_name(part.name + '.part').stat().st_size == 2000      # kept for the next press
+
+
+def test_fetch_missing_everywhere_says_the_tools_list_is_old(server, tmp_path):
+    item = _mirrored(server, b'x')
+    for name in list(server.state.files):
+        server.state.status[name] = 404
+    with pytest.raises(assemble.Refused, match='no longer at .*needs an update of its tools list'):
+        assemble.fetch(tmp_path, 'Gone', item)
+    assert len(server.state.requests) == 3
+
+
+def test_fetch_takes_a_file_saved_by_hand_under_its_own_name(server, tmp_path):
+    data = _noise(5000)
+    item = _mirrored(server, data, blocked=('site', 'm1', 'm2'))
+    downloads = tmp_path / assemble.DOWNLOADS
+    downloads.mkdir()
+    (downloads / 'piece.bin').write_bytes(data)                             # what a browser saves
+    final = assemble.fetch(tmp_path, 'Piece', item)
+    assert final == assemble._download_path(tmp_path, item) and final.read_bytes() == data
+    assert not (downloads / 'piece.bin').exists() and server.state.requests == []
+
+
+def test_fetch_ignores_a_file_by_hand_that_is_not_the_pinned_one(server, tmp_path):
+    data = _noise(5000)
+    item = _mirrored(server, data)
+    downloads = tmp_path / assemble.DOWNLOADS
+    downloads.mkdir()
+    (downloads / 'piece.bin').write_bytes(b'y' * 5000)
+    final = assemble.fetch(tmp_path, 'Piece', item)
+    assert final.read_bytes() == data and (downloads / 'piece.bin').read_bytes() == b'y' * 5000
+    assert server.state.requests == [('site/piece.bin', None)]
+
+
 def test_fetch_reuses_a_finished_download_and_replaces_a_bad_one(server, tmp_path):
     data = _noise(3000)
     item = _serve(server, 'piece.bin', data)
@@ -342,6 +427,50 @@ def test_fetch_cancel_mid_download_keeps_the_part_for_a_resume(server, tmp_path,
     assert part.stat().st_size == 2048
     assert assemble.fetch(tmp_path, 'Piece', item).read_bytes() == data
     assert server.state.requests[-1] == ('piece.bin', 'bytes=2048-')
+
+
+def _expired():
+    return urllib.error.URLError(ssl.SSLCertVerificationError(
+        1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1032)'))
+
+
+def test_fetch_retries_a_certificate_failure_on_roots_only(server, tmp_path, monkeypatch):
+    # The 0.9.1 report: Windows' cached expired ISRG Root X2 cross-sign failed download.blender.org.
+    data = _noise(3000)
+    item = _serve(server, 'piece.bin', data)
+    real, contexts = urllib.request.urlopen, []
+
+    def urlopen(request, *, timeout, context=None):
+        contexts.append(context)
+        if context is None:
+            raise _expired()
+        return real(request, timeout=timeout)
+    monkeypatch.setattr(assemble.urllib.request, 'urlopen', urlopen)
+    final = assemble.fetch(tmp_path, 'Piece', item, sleep=lambda _s: pytest.fail('no wait before the switch'))
+    assert final.read_bytes() == data
+    assert len(contexts) == 2 and contexts[0] is None and isinstance(contexts[1], ssl.SSLContext)
+
+
+def test_fetch_gives_up_on_a_lasting_certificate_failure_with_a_hint(tmp_path, monkeypatch):
+    contexts = []
+
+    def urlopen(_request, *, timeout, context=None):
+        contexts.append(context)
+        raise _expired()
+    monkeypatch.setattr(assemble.urllib.request, 'urlopen', urlopen)
+    item = {'url': 'https://download.blender.org/x.zip', 'sha256': '0' * 64, 'size': 10}
+    with pytest.raises(assemble.Refused, match='date and time'):
+        assemble.fetch(tmp_path, 'Blender', item, sleep=lambda _s: None)
+    assert contexts[0] is None and len(contexts) == assemble.RETRIES + 1      # one switch, then the usual tries
+    assert all(isinstance(context, ssl.SSLContext) for context in contexts[1:])
+
+
+def test_roots_only_context_trusts_roots_and_no_cached_intermediates():
+    context = assemble.roots_only_context()
+    assert context.verify_mode == ssl.CERT_REQUIRED and context.check_hostname
+    cas = context.get_ca_certs()
+    assert cas, 'no roots loaded'
+    assert all(ca['subject'] == ca['issuer'] for ca in cas), 'an intermediate got in as a trust anchor'
 
 
 @pytest.mark.parametrize('url, allowed', [

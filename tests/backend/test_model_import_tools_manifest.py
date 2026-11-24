@@ -61,6 +61,10 @@ def test_every_file_is_pinned_by_https_url_sha256_and_size(manifest):
 def test_the_sources_are_the_official_ones(manifest):
     for platform, entry in manifest['platforms'].items():
         assert entry['blender']['url'].startswith('https://download.blender.org/release/Blender4.3/'), platform
+        name = entry['blender']['url'].rsplit('/', 1)[1]
+        assert len(entry['blender']['mirrors']) >= 2, platform      # its Cloudflare front turns some networks away
+        for mirror in entry['blender']['mirrors']:
+            assert mirror.startswith('https://') and mirror.endswith('/release/Blender4.3/' + name), (platform, mirror)
         for wheel in entry['wheels']:
             assert wheel['url'].startswith('https://files.pythonhosted.org/'), (platform, wheel['name'])
             assert wheel['url'].endswith('/' + wheel['filename']), (platform, wheel['name'])

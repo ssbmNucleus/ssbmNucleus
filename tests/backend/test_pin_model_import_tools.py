@@ -117,6 +117,10 @@ def blender_url(name):
     return pin.BLENDER_DIR.format(series='4.3') + name
 
 
+def mirror_urls(name):
+    return [mirror.format(series='4.3') + name for mirror in pin.BLENDER_MIRRORS]
+
+
 def python_org_url(version=PY_WIN):
     return pin.PYTHON_ORG.format(v=version)
 
@@ -163,7 +167,8 @@ def make_web(*, blender_win_sha=sha(1), pbs_sums=None):
                pin.PBS_API.format(which=f'tags/{TAG}'): release,
                pin.PBS_API.format(which='latest'): release,
                **{pin.PYPI.format(name=n, version=versions[n]): {'urls': f} for n, f in files.items()}},
-        sizes={**{blender_url(n): 100_000_000 + i for i, n in enumerate(names.values())},
+        sizes={**{url: 100_000_000 + i for i, n in enumerate(names.values())
+                  for url in (blender_url(n), *mirror_urls(n))},
                python_org_url(): 11_000_000})
 
 
@@ -320,6 +325,18 @@ def test_blender_sums_reads_the_checksum_file_and_refuses_an_empty_one():
 def test_pin_blender_refuses_a_platform_the_checksum_file_lacks():
     with pytest.raises(SystemExit, match='has no blender-4.3.2-linux-x64.tar.xz'):
         pin.pin_blender(make_web(), 'linux-x64', BLENDER, {f'blender-{BLENDER}-windows-x64.zip': sha(1)})
+
+
+def test_pin_blender_lists_the_mirrors_and_refuses_one_that_is_another_file():
+    name = f'blender-{BLENDER}-windows-x64.zip'
+    sums = {name: sha(1)}
+    entry = pin.pin_blender(make_web(), 'win-x64', BLENDER, sums)
+    assert entry['url'] == blender_url(name) and entry['mirrors'] == mirror_urls(name)
+    assert all(url.startswith('https://') for url in entry['mirrors'])
+    web = make_web()
+    web.sizes[mirror_urls(name)[1]] += 1
+    with pytest.raises(SystemExit, match='size differs'):
+        pin.pin_blender(web, 'win-x64', BLENDER, sums)
 
 
 def test_pin_pbs_refuses_an_asset_without_a_checksum():

@@ -4,7 +4,8 @@ The model import's tools (Blender 4, a Python 3.13 and the wheels rigswap needs)
 official sources on the user's request (docs/dev/MODEL_IMPORT_TOOLS.md). Every file is pinned by URL, sha256 and
 size, and nobody types a hash: this script reads each from the publisher.
 
-    Blender            download.blender.org: the release's own blender-<v>.sha256 file
+    Blender            download.blender.org: the release's own blender-<v>.sha256 file; ``mirrors`` are the same
+                       file on BLENDER_MIRRORS (checked by size here, by sha256 in the app)
     Python (Windows)   python.org's embeddable zip; the digest is the one in python.org's signed .sigstore bundle
     Python (macOS, Linux)  python-build-standalone's release SHA256SUMS (install_only_stripped)
     wheels             PyPI's JSON API, at the versions app/utility/rigswap.requirements.txt lists (the one list)
@@ -48,6 +49,13 @@ AGENT = 'ssbmNucleus-pin/1.0'
 PLATFORMS = ('win-x64', 'linux-x64', 'osx-arm64')
 
 BLENDER_DIR = 'https://download.blender.org/release/Blender{series}/'
+# Mirrors of download.blender.org's release tree, tried in order when it refuses a download. Since mid-2026 its
+# Cloudflare front sometimes answers a scripted download with a challenge (HTTP 403, ``cf-mitigated: challenge``),
+# depending on the network (VPNs above all); a browser passes it, the app cannot. These three are not behind
+# Cloudflare: US, Netherlands, Singapore. The pinned sha256 decides what is installed, never the host.
+BLENDER_MIRRORS = ('https://mirror.clarkson.edu/blender/release/Blender{series}/',
+                   'https://ftp.nluug.nl/pub/graphics/blender/release/Blender{series}/',
+                   'https://mirror.freedif.org/blender/release/Blender{series}/')
 PYTHON_ORG = 'https://www.python.org/ftp/python/{v}/python-{v}-embed-amd64.zip'
 PBS_REPO = 'astral-sh/python-build-standalone'
 PBS_API = 'https://api.github.com/repos/' + PBS_REPO + '/releases/{which}'
@@ -150,7 +158,12 @@ def pin_blender(web, platform, version, sums):
     if name not in sums:
         raise SystemExit(f"Blender {version}'s checksum file has no {name}")
     url = BLENDER_DIR.format(series=series(version)) + name
-    return {'version': version, 'url': url, 'sha256': sums[name], 'size': web.size(url),
+    size = web.size(url)
+    mirrors = [mirror.format(series=series(version)) + name for mirror in BLENDER_MIRRORS]
+    for mirror in mirrors:
+        if web.size(mirror) != size:
+            raise SystemExit(f'{mirror} is not the same file as {url} (its size differs); fix BLENDER_MIRRORS')
+    return {'version': version, 'url': url, 'mirrors': mirrors, 'sha256': sums[name], 'size': size,
             'format': layout['format'], 'root': _fill(layout['root'], **values),
             'entrypoint': layout['entrypoint'], 'trim': _fill(layout['trim'], **values),
             'verify': _fill(layout['verify'], **values)}

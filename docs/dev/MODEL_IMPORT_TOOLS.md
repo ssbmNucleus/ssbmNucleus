@@ -17,7 +17,7 @@ From 0.9.0 on:
 | Piece | Where it comes from | Where it lives |
 |---|---|---|
 | rigswap's own package (bytecode + `source_kept`) | the installer, as now (`tools/build/fetch_rigswap.py`, pinned by `rigswap.manifest.json` `rigswap.commit`) | `resources/utility/rigswap/app` |
-| Blender 4.3.2 for this platform | downloaded by the app from **download.blender.org**, sha256-pinned | the user's data folder, `tools/model-import/blender/<version>/` |
+| Blender 4.3.2 for this platform | downloaded by the app from **download.blender.org** (or one of its mirrors when that turns the computer away), sha256-pinned | the user's data folder, `tools/model-import/blender/<version>/` |
 | Python 3.13 for this platform | downloaded by the app: python.org's embeddable zip on Windows, python-build-standalone (`install_only_stripped`) on macOS and Linux, sha256-pinned | `tools/model-import/runtime/<key>/` |
 | The wheels rigswap needs (bpy, numpy, pillow…) for this platform | downloaded by the app from **files.pythonhosted.org**, each by URL and sha256 | inside that runtime's site-packages |
 
@@ -81,6 +81,20 @@ the rigswap code pin. Platform keys are the ones `hsdlib.manifest.json` uses: `w
   - It checks free disk space first.
   - It resumes with HTTP Range, verifies each file's sha256, and unpacks into a temp folder beside the target. It
     renames that folder into place only when everything has checked out, then writes `receipt.json`.
+  - A certificate failure switches that file, once, to `roots_only_context()`: certifi's roots plus Windows' trusted
+    roots, without the intermediates Windows caches. Python's default loads that cache, and OpenSSL takes a cached
+    expired cross-sign over the valid chain the server sends (blender.org's 2026-11-21 move to Let's Encrypt's
+    YE1/Root YE chain failed "certificate has expired" on PCs holding the X2-by-X1 cross-sign that expired
+    2025-09-15). The sha256 pins still decide what gets installed.
+  - A file may list `mirrors` (Blender's do: mirror.clarkson.edu, ftp.nluug.nl, mirror.freedif.org, from
+    `pin_model_import_tools.py` `BLENDER_MIRRORS`, each checked there to serve the same size). When a source answers
+    401/403/451 (it turns this computer away) or 404/410, the next one carries on from the same part. Since mid-2026
+    download.blender.org's Cloudflare front sometimes answers a scripted download with a challenge (403,
+    `cf-mitigated: challenge`), depending on the user's network (VPNs above all); a browser passes it, urllib cannot
+    (user report, 2026-11-23). When every source refuses, the error says so: all 404/410 means the tools list is old;
+    anything else names the VPN and the way round by hand.
+  - By hand: the file saved under its own name (as a browser saves it, e.g. `blender-4.3.2-windows-x64.zip`) in
+    `tools/model-import/downloads/` is taken at the next Download when its sha256 is the pinned one.
   - Archive extraction is path-safe (tarfile `filter='data'`, zip members checked). The Blender trim list is applied
     after unpacking.
   - Wheels are installed by unpacking them into site-packages (the `.data/purelib|platlib` dirs moved in). No pip,

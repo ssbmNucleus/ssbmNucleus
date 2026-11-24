@@ -2,6 +2,19 @@
 
 All notable changes to SSBM Nucleus are documented here.
 
+## 0.9.2 — 2026-11-23
+
+### Fixes
+
+- The model import tools download no longer stops with "certificate has expired" on PCs that
+  have an old Let's Encrypt certificate saved. download.blender.org moved to a new certificate
+  chain on 2026-11-21, and Windows' saved copy of an expired certificate broke the check.
+- The model import tools download no longer stops with "Blender 4.3.2 is no longer at ...
+  (HTTP 403)". The file never moved: download.blender.org's protection turns some networks
+  away (VPNs especially). Nucleus now gets Blender from one of its mirrors instead. If every
+  source turns the computer away, the message says so and how to get the file in a browser;
+  a Blender download saved in the tools' `downloads` folder is used as it is.
+
 ## 0.9.1 — 2026-11-21
 
 ### Fixes

@@ -32,6 +32,7 @@ import json
 import os
 import re
 import shutil
+import ssl
 import stat
 import subprocess
 import sys
@@ -188,9 +189,13 @@ def measured(entry):
     return found
 
 
+def _file_name(item):
+    """The file's own name, as its URL ends (and as a browser saves it)."""
+    return re.sub(r'[^A-Za-z0-9._+-]', '_', PurePosixPath(urllib.parse.urlparse(item['url']).path).name) or 'file'
+
+
 def _download_path(root, item):
-    name = re.sub(r'[^A-Za-z0-9._+-]', '_', PurePosixPath(urllib.parse.urlparse(item['url']).path).name) or 'file'
-    return Path(root) / DOWNLOADS / f"{item['sha256'][:16]}-{name}"
+    return Path(root) / DOWNLOADS / f"{item['sha256'][:16]}-{_file_name(item)}"
 
 
 def _have(root, item):
@@ -258,10 +263,67 @@ def sha256_of(path, cancelled=None):
     return digest.hexdigest()
 
 
+SERVER_AUTH = '1.3.6.1.5.5.7.3.1'
+
+
+def roots_only_context():
+    """A TLS context that trusts root certificates only: certifi's bundle (when this Python has it) plus, on
+    Windows, the system's trusted roots.
+
+    Python's default context on Windows also loads Windows' intermediate store, where Windows keeps old
+    intermediates it has seen, and OpenSSL takes a cached expired one over the valid one the server sends. On
+    2026-11-21 download.blender.org moved to Let's Encrypt's YE1 -> Root YE -> ISRG Root X2 -> X1 chain, and a PC
+    that still had the X2-by-X1 cross-sign that expired 2025-09-15 failed with "certificate has expired". Every file
+    is checked against its pinned sha256, so which roots vouch for the host never decides what gets installed."""
+    context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)      # checks the chain and the host name, as the default does
+    try:
+        import certifi
+        context.load_verify_locations(cafile=certifi.where())
+    except (ImportError, OSError):
+        pass
+    if sys.platform == 'win32':
+        roots = b''.join(cert for cert, encoding, trust in ssl.enum_certificates('ROOT')
+                         if encoding == 'x509_asn' and (trust is True or SERVER_AUTH in trust))
+        if roots:
+            context.load_verify_locations(cadata=roots)
+    else:
+        context.set_default_verify_paths()
+    return context
+
+
+def _certificate_failure(error):
+    return isinstance(getattr(error, 'reason', error), ssl.SSLCertVerificationError)
+
+
+BLOCKED = frozenset({401, 403, 451})    # this host turns this computer away (a Cloudflare challenge is a 403)
+GONE = frozenset({404, 410})
+
+
+def _host(url):
+    return urllib.parse.urlparse(url).hostname
+
+
+def _turned_down(label, item, final, refused):
+    """The Refused for a file every source turned down; ``refused`` is [(host, HTTP code)], one per source."""
+    told = '; '.join(f'{host}: HTTP {code}' for host, code in refused)
+    if all(code in GONE for _, code in refused):
+        return Refused(f'{label} is no longer at {item["url"]} ({told}). This app version needs an update of its '
+                       'tools list.')
+    return Refused(f'{label} could not be downloaded: the download site and its mirrors turned this computer away '
+                   f'({told}). A VPN or proxy usually causes this; turn it off and press Download again. Or open '
+                   f'{item["url"]} in a web browser, put the downloaded {_file_name(item)} in {final.parent} and '
+                   'press Download again: the app checks the file and uses it.')
+
+
 def fetch(root, label, item, *, on_bytes=None, cancelled=None, allow_hosts=(), sleep=time.sleep):
-    """``item`` (url, sha256, size) into ``root/downloads``, resuming a part left by an earlier try; refused (and
-    the part deleted) when its sha256 is not the pinned one. -> the finished file."""
-    _check_url(item['url'], allow_hosts)
+    """``item`` (url, sha256, size, optional mirrors) into ``root/downloads``, resuming a part left by an earlier
+    try; refused (and the part deleted) when its sha256 is not the pinned one. When a source turns the download
+    down (``BLOCKED`` or ``GONE``) the next of ``mirrors`` carries on from the same part. A certificate failure
+    switches, once, to ``roots_only_context``. The file saved by hand under its own name in ``downloads/`` (a
+    browser download) is taken when its sha256 is the pinned one. -> the finished file."""
+    sources = [item['url'], *(item.get('mirrors') or ())]
+    for url in sources:
+        _check_url(url, allow_hosts)
     size, final = int(item['size']), _download_path(root, item)
     final.parent.mkdir(parents=True, exist_ok=True)
     part = final.with_name(final.name + '.part')
@@ -269,6 +331,10 @@ def fetch(root, label, item, *, on_bytes=None, cancelled=None, allow_hosts=(), s
         if final.stat().st_size == size and sha256_of(final, cancelled) == item['sha256']:
             return final
         final.unlink()
+    by_hand = final.with_name(_file_name(item))
+    if by_hand.is_file() and by_hand.stat().st_size == size and sha256_of(by_hand, cancelled) == item['sha256']:
+        os.replace(by_hand, final)
+        return final
     report = on_bytes or (lambda _bytes: None)
     have = part.stat().st_size if part.is_file() else 0
     if have > size:
@@ -278,19 +344,25 @@ def fetch(root, label, item, *, on_bytes=None, cancelled=None, allow_hosts=(), s
     # ``best``: the furthest any try got. Only beating it earns fresh tries: a file shorter than its pin otherwise
     # cycles forever (download it all, 416 on the rest, start over, ...).
     tries, last, best = 0, None, have
+    context = None                                  # Python's default, until a certificate failure
+    source, refused = 0, []                         # refused: (host, HTTP code) of each source that turned it down
     while have < size:
         if cancelled is not None and cancelled():
             raise Cancelled()
+        url = sources[source]
         if tries >= RETRIES:
-            raise Refused(f'{label} could not be downloaded from {urllib.parse.urlparse(item["url"]).hostname}: '
-                          f'{last}. Check the connection and press Download again; it carries on where it stopped.')
+            hint = (" If it is about a certificate, check that this computer's date and time are right; an "
+                    'antivirus or proxy that inspects secure connections can cause it too.'
+                    if 'CERTIFICATE' in str(last).upper() else '')
+            raise Refused(f'{label} could not be downloaded from {_host(url)}: {last}. Check the connection and '
+                          f'press Download again; it carries on where it stopped.{hint}')
         tries += 1
         headers = {'User-Agent': AGENT, 'Accept-Encoding': 'identity'}
         if have:
             headers['Range'] = f'bytes={have}-'
         try:
-            with urllib.request.urlopen(urllib.request.Request(item['url'], headers=headers),
-                                        timeout=TIMEOUT) as response:
+            with urllib.request.urlopen(urllib.request.Request(url, headers=headers),
+                                        timeout=TIMEOUT, context=context) as response:
                 if have:
                     start = re.match(r'bytes (\d+)-', response.headers.get('Content-Range') or '')
                     if response.status != 206 or not start or int(start.group(1)) != have:
@@ -315,11 +387,19 @@ def fetch(root, label, item, *, on_bytes=None, cancelled=None, allow_hosts=(), s
                 part.unlink(missing_ok=True)
                 report(-have)
                 have = 0
-            elif error.code in (403, 404, 410):
-                raise Refused(f'{label} is no longer at {item["url"]} ({last}). This app version needs an '
-                              'update of its tools list.') from error
+            elif error.code in BLOCKED | GONE:      # not this host: the next source carries on from the part
+                refused.append((_host(url), error.code))
+                source += 1
+                if source == len(sources):
+                    raise _turned_down(label, item, final, refused) from error
+                tries, best = 0, have
+                continue
         except (urllib.error.URLError, http.client.HTTPException, OSError) as error:
             last = f'{type(error).__name__}: {error}'
+            if context is None and _certificate_failure(error):
+                context = roots_only_context()      # nothing was read: go again at once, on a fresh try
+                tries -= 1
+                continue
         if have > size:
             break
         if have > best:

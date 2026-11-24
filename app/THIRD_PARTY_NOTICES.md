@@ -195,7 +195,8 @@ linked into the application.
   model import tools the user downloads from Settings > AI > Model
   import tools. The app fetches Blender's official build for the computer
   (`blender-4.3.2-windows-x64.zip`, `blender-4.3.2-linux-x64.tar.xz` or
-  `blender-4.3.2-macos-arm64.dmg`) straight from download.blender.org, checks it
+  `blender-4.3.2-macos-arm64.dmg`) from download.blender.org (or, when that site
+  turns the computer away, from one of its public mirrors), checks it
   against the sha256 pinned in `utility/model_import_tools.json`, and unpacks it
   into the user's data folder (`tools/model-import/blender/`). It runs unmodified
   as a separate process with `--background --factory-startup --disable-autoexec`
