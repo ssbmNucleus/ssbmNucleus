@@ -84,7 +84,7 @@ gate is off.
 | `GET /chats`, `GET/DELETE /chats/<id>` | History from `chats.db`; each row carries its `task`. |
 | `POST /chats/<id>/inputs`, `PATCH/DELETE .../inputs/<input_id>`, `POST .../inputs/batch` | The queue of messages sent while a turn runs (queue and steering). |
 | `POST /runs/<run_id>/cancel` | Stop. |
-| `POST /chats/<id>/approvals/<approval_id>`, `GET .../approvals/<id>/files` | Approve or deny a prepared action; page a download's file inventory. |
+| `POST /chats/<id>/approvals/<approval_id>`, `GET .../approvals/<id>/files` | Approve or deny a prepared action (window only: the window-only key `X-Nucleus-UI-Key`, `core/ui_channel.py`, so an MCP client or script cannot answer one); page a download's file inventory. |
 | `POST /website/download`, `/website/vault-status`, `/website/like`, `/website/like-status` | Direct download from a website card (no model round), vault presence, account likes. |
 | `POST /files`, `GET /files/<id>`, `GET /previews/<id>`, `GET/DELETE /chats/<id>/game-tests/<session>`, `POST /actions/<id>/undo` | Files and previews, play-session status and Stop, undo of a vault organization. |
 | `POST /destination`, `POST /destination/<id>/activation`, `GET /deliveries`, `POST /deliveries/<id>/undo` | "My game" and delivery receipts. |
@@ -485,8 +485,8 @@ Available on three surfaces: assistant, Tracker coach and the mobile vault's Ran
 - **UI.** A flag icon in the chat header (`ChatReportModal.jsx`, `chatReport.js`), disabled mid-turn. The
   modal shows exactly what will be sent; one checkbox includes attached files and preview pictures.
 - **Flow.** `POST /api/mex/chat-reports/review` freezes a scrubbed ZIP under
-  `<storage>/assistant/chat_reports/` and returns an `approval_hash`; `POST .../submit` sends exactly the
-  frozen bytes (`randall/routes/chat_reports.py`, `reports/chat_report.py`,
+  `<storage>/assistant/chat_reports/` and returns an `approval_hash`; `POST .../submit` (window only, the
+  window-only key `X-Nucleus-UI-Key`: the consent is the person's) sends exactly the frozen bytes (`randall/routes/chat_reports.py`, `reports/chat_report.py`,
   `chat_report_files.py`). Transport is the bug-report worker (R2 bucket and a private Discord post):
   `randall/reports/report_transport.py` creates the remote report and uploads the frozen ZIP to the worker
   URL in `shared/diagnostics/bug_report.py` (the in-app bug report's module).

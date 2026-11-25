@@ -74,16 +74,7 @@
   transition: color var(--transition-normal);
 }
 
-/* ============================================
-   Mode transition — nucleus <-> nucleOME
-   The wordmark morph + accent flood already animate in the header; this
-   carries the same beat into the content area. The nucleOME <main> mounts
-   fresh on entry (animation on mount); the nucleus <main> stays mounted
-   (state preserved), so App.jsx flashes a short-lived .mode-enter class.
-   ============================================ */
-.app-content.mode-enter {
-  animation: modeContentIn 0.4s var(--ease-out) both;
-}
+/* Mode transition: .app-content.mode-enter lives in App.css (shared by every mode). */
 
 /* Coach stays mounted across tab switches (so an in-flight turn keeps
    streaming); when it isn't the active tab we hide it rather than unmount.
@@ -91,15 +82,4 @@
    stylesheet load order. */
 .app-content.app-content--hidden {
   display: none;
-}
-
-@keyframes modeContentIn {
-  /* Transform/filter here would make the content a containing block for
-     viewport-fixed controls such as Import, moving them during mode switches. */
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }

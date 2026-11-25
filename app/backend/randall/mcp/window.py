@@ -21,7 +21,7 @@ import time
 import uuid
 from pathlib import Path
 
-from core.path_safety import is_network_path
+from core.path_safety import NotLocalPath, local_path
 
 MAX_PATH = 1024
 
@@ -32,8 +32,13 @@ _state = {}
 def set_slippi_dolphin_path(value):
     if value is not None and (not isinstance(value, str) or len(value) > MAX_PATH):
         raise ValueError(f'slippi_dolphin_path must be a folder path of at most {MAX_PATH} characters, or null.')
-    if is_network_path(value):
-        raise ValueError('slippi_dolphin_path must be a folder on this computer, not a network path.')
+    if value is not None and value.strip():
+        try:
+            value = local_path(value, field='slippi_dolphin_path')      # the request-path gate
+        except NotLocalPath as refused:
+            if refused.reason == 'network':
+                raise ValueError('slippi_dolphin_path must be a folder on this computer, not a network path.')
+            raise ValueError('slippi_dolphin_path must be a full folder path on this computer.')
     with _lock:
         _state['slippi_dolphin_path'] = (value or '').strip() or None
 

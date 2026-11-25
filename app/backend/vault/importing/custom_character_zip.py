@@ -241,6 +241,20 @@ def import_custom_character_zip_bytes(zip_data, fallback_name, budget=None):
                     pass
             victory_theme = {'name': victory_name}
 
+        # The fighter's own C (a `code/` folder in the package): kept in the vault folder so the
+        # Melee Unlocked export can build the fighter's plugin from it
+        # (projects/install/melee_unlocked.py). It came in a package, so it is recorded as
+        # untrusted, with where the package came from (fighter_source.import_origin, set by the
+        # import entry point): the export builds it only after the user confirms it in the window.
+        # A package without it imports as before.
+        try:
+            from projects.install import melee_unlocked
+            source = melee_unlocked.source_from_zip_members(zf, names)
+            if source:
+                melee_unlocked.keep_imported_source(char_dir, source)
+        except Exception as e:
+            logger.warning(f"Fighter source in the package was not kept: {e}")
+
         costume_count = len(fighter_meta.get('costumes', []))
 
     entry = {

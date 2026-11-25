@@ -1,7 +1,7 @@
 // Feature gates for surfaces that are built but not publicly released.
 //
 // nucleOME shipped in 0.7.0 — the flag stays as the single choke point for the
-// mode toggle (App.jsx), the wordmark affordance (BrandWordmark.jsx), and the
+// mode cycle (App.jsx, shared/ui/modeCycle.js), the wordmark affordance (BrandWordmark.jsx), and the
 // Patreon + start.gg rows in Settings (AccountSection.jsx), in case a future
 // build ever needs to gate it again. Premium (Patreon) gating is a separate
 // layer and is unaffected by this flag.
@@ -36,3 +36,11 @@ export const COMBO_VIDEO_ENABLED = import.meta.env.DEV && !SHIP_GATES
 // the Stats page's deep-stats panels read them too.
 export const RANDALL_ENABLED = import.meta.env.DEV && !SHIP_GATES
   && Object.keys(import.meta.glob('../../randall/coach/CoachPage.jsx')).length > 0
+
+// Unlocked ships in Windows stable packages and local Play test packages.
+// build.bat sets VITE_PLAY_PREVIEW=1 when `ship_guard.py gate play` passes.
+// The flag controls the mode cycle, the PlayApp chunk and "Add to shelf".
+// Electron opens the matching backend gate from the packaged manifest.
+const PLAY_PREVIEW = import.meta.env.VITE_PLAY_PREVIEW === '1'
+export const PLAY_ENABLED = (import.meta.env.DEV || PLAY_PREVIEW) && !SHIP_GATES
+  && Object.keys(import.meta.glob('../../play/PlayApp.jsx')).length > 0

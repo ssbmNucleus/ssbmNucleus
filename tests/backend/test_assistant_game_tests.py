@@ -56,7 +56,7 @@ def game(vault, monkeypatch, tmp_path):
     app = Flask(__name__)
     app.register_blueprint(assistant_bp)
     app.config['TESTING'] = True
-    runtime = {'app': app, 'settings': {'vanillaIsoPath': str(iso), 'slippiDolphinPath': 'fixture-dolphin'}}
+    runtime = {'app': app, 'settings': {'vanillaIsoPath': str(iso), 'slippiDolphinPath': 'C:/fixture-dolphin'}}
     chat = uuid.uuid4().hex
     return types.SimpleNamespace(app=app, runtime=runtime, chat=chat, jobs=jobs, vault=vault)
 

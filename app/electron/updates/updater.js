@@ -284,14 +284,34 @@ function spawnDetachedOnce(executable, args, spawnImpl = spawn) {
   });
 }
 
+// The SHA-256 of a file as it is on disk now, read in chunks and synchronously, so nothing else runs between this
+// and the spawn that follows it.
+function hashFileSync(file, fsImpl = fs) {
+  const hash = crypto.createHash('sha256');
+  const fd = fsImpl.openSync(file, 'r');
+  try {
+    const chunk = Buffer.allocUnsafe(1024 * 1024);
+    for (let read; (read = fsImpl.readSync(fd, chunk, 0, chunk.length, null)) > 0;) {
+      hash.update(chunk.subarray(0, read));
+    }
+  } finally {
+    fsImpl.closeSync(fd);
+  }
+  return hash.digest('hex');
+}
+
+// `beforeRetry` runs before each attempt after the first (the installer's checksum again: a retry waits, and the
+// file could change while it does).
 async function spawnDetachedWithRetry(
   executable,
   args = [],
   spawnImpl = spawn,
   retryDelays = WINDOWS_SPAWN_RETRY_DELAYS_MS,
+  beforeRetry = null,
 ) {
   for (let attempt = 0; ; attempt++) {
     try {
+      if (attempt > 0 && beforeRetry) beforeRetry();
       return await spawnDetachedOnce(executable, args, spawnImpl);
     } catch (error) {
       if (!IS_WINDOWS || error.code !== 'EBUSY' || attempt >= retryDelays.length) {
@@ -590,6 +610,7 @@ async function installSelected(selected, onProgress, overrides = {}) {
     spawnDetachedWithRetry,
     trackCompletedUpdate,
     shellOpenPath: (file) => require('electron').shell.openPath(file),
+    hashFile: (file) => hashFileSync(file),
     schedule: setTimeout,
     platform: process.platform,
     appImage: process.env.APPIMAGE,
@@ -610,6 +631,15 @@ async function installSelected(selected, onProgress, overrides = {}) {
     if (!crypto.timingSafeEqual(actualHash, expectedHash)) {
       throw new Error('Downloaded installer failed checksum verification');
     }
+    // The checksum above is of the bytes as they were downloaded. The file is hashed again right before it is
+    // started or opened, so what runs is what was verified even if the file changed in between (the report
+    // below is awaited, and Windows may retry a busy installer after a wait).
+    const verifyOnDisk = (file) => {
+      const onDisk = Buffer.from(String(runtime.hashFile(file) || ''), 'hex');
+      if (onDisk.length !== expectedHash.length || !crypto.timingSafeEqual(onDisk, expectedHash)) {
+        throw new Error('The downloaded installer changed after it was verified; nothing was started');
+      }
+    };
 
     // Production only: development update harnesses must not pollute the real
     // admin totals. This is awaited for at most 1.5s so app.quit cannot abort a
@@ -621,11 +651,13 @@ async function installSelected(selected, onProgress, overrides = {}) {
       // Defender/SmartScreen can briefly reopen a freshly downloaded EXE.
       // Retry sharing violations instead of turning a transient scan into a
       // failed update.
-      await runtime.spawnDetachedWithRetry(destPath);
+      verifyOnDisk(destPath);
+      await runtime.spawnDetachedWithRetry(destPath, [], runtime.spawn, undefined, () => verifyOnDisk(destPath));
       downloadDir = null;
       runtime.schedule(() => runtime.app.quit(), 1500);
     } else if (isMac) {
       console.log(`[Updater] Verified - revealing ${destPath}`);
+      verifyOnDisk(destPath);
       const openError = await runtime.shellOpenPath(destPath);
       if (openError) throw new Error(`Could not open downloaded update: ${openError}`);
       downloadDir = null;
@@ -641,6 +673,12 @@ async function installSelected(selected, onProgress, overrides = {}) {
       const staged = path.join(path.dirname(target), `.${path.basename(target)}.new`);
       runtime.fs.copyFileSync(destPath, staged);
       runtime.fs.chmodSync(staged, 0o755);
+      try {
+        verifyOnDisk(staged);       // the bytes that become the app, checked before they replace it
+      } catch (error) {
+        runtime.fs.rmSync(staged, { force: true });
+        throw error;
+      }
       runtime.fs.renameSync(staged, target);
       runtime.fs.rmSync(downloadDir, { recursive: true, force: true });
       downloadDir = null;
@@ -689,6 +727,7 @@ module.exports = {
     allowedNetworkUrl,
     downloadFile,
     spawnDetachedWithRetry,
+    hashFileSync,
     trackCompletedUpdate,
     installSelected,
     setCachedUpdateForTest,

@@ -63,6 +63,7 @@ import time
 import uuid
 from pathlib import Path
 
+from core.child_env import child_environment
 from shared import mod_files
 
 from . import rigswap_temp, textures
@@ -521,16 +522,16 @@ def _environment(key, files=None, relay=None, temp=None):
     files' folder), unbuffered UTF-8 output, no Python path of the app's, and the turn's key as OPENROUTER_API_KEY
     (``openrouter_key``: the turn's own, else the machine's). No key found: none is passed, and rigswap looks for its
     own. ``relay``: the folder rigswap's asks go through instead (RELAY_ENV), with no key at all. ``temp``: the run's
-    own temp folder (``rigswap_temp.make``), as its TMPDIR, TEMP and TMP, and so its tools' (Blender's)."""
-    env = dict(os.environ)
+    own temp folder (``rigswap_temp.make``), as its TMPDIR, TEMP and TMP, and so its tools' (Blender's).
+    Nothing else of Nucleus's (core/child_env.py): no backend token, window key or other credential, since rigswap
+    and Blender read the downloaded model; the OpenRouter key below is the one secret it is given on purpose."""
+    env = child_environment(python=True)
     for name, value in {**_defaults(), **({FILES_ENV: str(files)} if files else {})}.items():
         if not (env.get(name) or '').strip():
             env[name] = value
-    for name in ('PYTHONPATH', 'PYTHONHOME'):
-        env.pop(name, None)
     # No bytecode: rigswap's package sits inside the install (a signed macOS bundle, a read-only AppImage), and
     # the loose .py files Blender 4 needs (load/convert.py, materials.py) got __pycache__ written beside them.
-    env.update(PYTHONUNBUFFERED='1', PYTHONIOENCODING='utf-8', PYTHONDONTWRITEBYTECODE='1')
+    env.update(PYTHONDONTWRITEBYTECODE='1')
     if temp is not None:
         env.update(TMPDIR=str(temp), TEMP=str(temp), TMP=str(temp))
     if relay is not None:
@@ -618,10 +619,11 @@ def rigswap(python, home, download, fighter, out, *, cache, key=None, files=None
 def _run_rigswap(command, home, out, key, files, relay, cancelled, log, started, tail, why, temp=None):
     from core.config import get_subprocess_args
     try:
-        process = subprocess.Popen(command, cwd=str(home), env=_environment(key, files, relay, temp),
-                                   stdin=subprocess.DEVNULL,
+        process = subprocess.Popen(command, cwd=str(home), stdin=subprocess.DEVNULL,
                                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding='utf-8',
-                                   errors='replace', bufsize=1, **get_subprocess_args(), **_own_group())
+                                   errors='replace', bufsize=1,
+                                   **{**get_subprocess_args(), 'env': _environment(key, files, relay, temp)},
+                                   **_own_group())
     except OSError as exc:
         return dict(status='failed', failed=dict(stage=None, cause=None), seconds=0., cost_usd=0.,
                     error=f'rigswap did not start: {type(exc).__name__}: {exc}')

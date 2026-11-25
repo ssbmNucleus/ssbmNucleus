@@ -7,6 +7,9 @@ from randall.assistant import engine, live_runs, store
 from randall.routes.assistant_bp import assistant_bp
 from tests.backend.test_assistant_website import catalog
 from tests.backend.test_assistant_slippi import unsafe_download
+from tests.backend.window_key import WINDOW, as_the_window  # noqa: F401
+
+pytestmark = pytest.mark.usefixtures('as_the_window')
 
 
 @pytest.mark.parametrize('order', ['reply_first', 'download_first', 'cancel_reply', 'cancel_download'])
@@ -32,7 +35,8 @@ def test_download_and_safety_approval_during_reply(vault, unsafe_download, monke
             if event['type'] == 'approval_requested': return event['tool']['approval']
     def approve(approval, choice=None):
         body = {'decision': 'approve', **({'choice': choice} if choice else {})}
-        response = client.post(f"/api/assistant/chats/{reply.chat_id}/approvals/{approval['id']}", json=body)
+        response = client.post(f"/api/assistant/chats/{reply.chat_id}/approvals/{approval['id']}", headers=WINDOW,
+                               json=body)
         assert response.status_code == 200, response.get_json()
     try:
         assert started.wait(5)

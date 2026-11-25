@@ -3,7 +3,8 @@
 Scans the Slippi replay directory (a ``replay_scan`` job: from Replays, or
 from the cloud loop when automatic processing is on) into
 storage/nucleome.db, incrementally: files are re-parsed only when their
-(mtime, size) changed, and rows for deleted files are pruned.
+(mtime, size) changed, or once when their row was written by an older parser
+that this one improves on (PARSE_BASIS), and rows for deleted files are pruned.
 """
 import json
 import os
@@ -13,7 +14,8 @@ import threading
 from core import jobs
 from core.config import STORAGE_PATH
 from .pass_progress import PassProgress
-from .slp_meta import parse_slp, read_final_state, SlpParseError
+from .slp_meta import (GS_NAMES_VERSION, PLAYER_TYPE_HUMAN, SlpParseError,
+                       game_start_names, parse_slp, read_final_state)
 
 # Vanilla stage ids only — replays on modded stages ("Stage 326") are indexed
 # but never surfaced: supporting them isn't worth it (no names, no icons,
@@ -37,6 +39,16 @@ DB_PATH = STORAGE_PATH / "nucleome.db"
 SCAN_KIND = "replay_scan"
 jobs.register_kind(SCAN_KIND, label="Replay scan", keep=5)
 
+# The parser basis each games row was written under (games.parse_basis; NULL
+# on rows from before it existed). A parser change that can fill in what older
+# rows lack bumps PARSE_BASIS and teaches _reparse_candidates which rows those
+# are: the next replay scan (a background job, never startup) re-parses just
+# those, and stamps every row it looks at, so each is looked at once. Never
+# select everything: a library is 30k games.
+#   gs-names-1  names and connect codes from GameStart when the metadata
+#               footer has none (slp_meta, 2026-11)
+PARSE_BASIS = "gs-names-1"
+
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS games (
     id INTEGER PRIMARY KEY,
@@ -55,7 +67,8 @@ CREATE TABLE IF NOT EXISTS games (
     end_method INTEGER,
     lras_initiator INTEGER,
     placements TEXT,
-    players TEXT
+    players TEXT,
+    parse_basis TEXT  -- PARSE_BASIS the row was written under (older stores: ALTER below)
 );
 CREATE TABLE IF NOT EXISTS game_players (
     game_id INTEGER NOT NULL REFERENCES games(id) ON DELETE CASCADE,
@@ -181,6 +194,16 @@ def parse_for_index(path):
         return None, f"unexpected: {type(e).__name__}: {e}"
 
 
+def reparse_for_index(path):
+    """parse_for_index for an unchanged file whose row an older parser wrote
+    (PARSE_BASIS), run in the scan_pool worker. (None, None) is "nothing to
+    change": GameStart names nobody, as in every offline game, which so costs
+    one small read instead of a parse."""
+    if not any(name or code for name, code in game_start_names(path).values()):
+        return None, None
+    return parse_for_index(path)
+
+
 def _init_schema(conn):
     # WAL is persistent in the file; setting it here (not per-connect) keeps
     # later connections from taking even the brief journal-mode check lock.
@@ -195,6 +218,11 @@ def _init_schema(conn):
         # mtime the combo pass last extracted this game at (NULL = never);
         # a mismatch with games.mtime marks the game stale for re-extraction
         conn.execute("ALTER TABLE games ADD COLUMN combos_at REAL")
+        conn.commit()
+    if "parse_basis" not in cols:
+        # PARSE_BASIS a row was written under; NULL = before it existed. An
+        # ADD COLUMN only, no rewrite: the scan does the re-parsing.
+        conn.execute("ALTER TABLE games ADD COLUMN parse_basis TEXT")
         conn.commit()
     combo_cols = {r[1] for r in conn.execute("PRAGMA table_info(combos)")}
     if "start_rf" not in combo_cols:
@@ -250,7 +278,7 @@ def kv_del(conn, key):
 def _upsert_game(conn, path, mtime, size, parsed, error=None):
     if parsed is None:
         row = (path, mtime, size, 0, error, None, None, None, None, None,
-               None, None, None, None, None, None, None)
+               None, None, None, None, None, None, None, PARSE_BASIS)
     else:
         row = (path, mtime, size, 1, None,
                parsed.get("start_at"), parsed.get("played_on"), parsed.get("version"),
@@ -259,12 +287,13 @@ def _upsert_game(conn, path, mtime, size, parsed, error=None):
                parsed.get("end_method"), parsed.get("lras_initiator"),
                json.dumps(parsed.get("placements")) if parsed.get("placements") is not None else None,
                json.dumps(parsed.get("final_state")) if parsed.get("final_state") else None,
-               json.dumps(parsed.get("players")))
+               json.dumps(parsed.get("players")), PARSE_BASIS)
     conn.execute(
         """INSERT INTO games(path, mtime, size, parse_ok, parse_error, start_at,
                played_on, version, stage, is_teams, last_frame, duration_s,
-               end_method, lras_initiator, placements, final_state, players)
-           VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+               end_method, lras_initiator, placements, final_state, players,
+               parse_basis)
+           VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
            ON CONFLICT(path) DO UPDATE SET
                mtime=excluded.mtime, size=excluded.size,
                parse_ok=excluded.parse_ok, parse_error=excluded.parse_error,
@@ -274,7 +303,8 @@ def _upsert_game(conn, path, mtime, size, parsed, error=None):
                duration_s=excluded.duration_s, end_method=excluded.end_method,
                lras_initiator=excluded.lras_initiator,
                placements=excluded.placements,
-               final_state=excluded.final_state, players=excluded.players""",
+               final_state=excluded.final_state, players=excluded.players,
+               parse_basis=excluded.parse_basis""",
         row)
     # SQLite leaves lastrowid unchanged when the conflict branch updates an
     # existing row, so it may identify an unrelated game inserted earlier on
@@ -307,6 +337,54 @@ def _forget_uploads(conn, game_id):
             conn.execute(f"DELETE FROM {table} WHERE game_id=?", (game_id,))
 
 
+def _version(text):
+    try:
+        return tuple(int(x) for x in (text or "").split("."))
+    except ValueError:
+        return ()
+
+
+def _reparse_candidates(conn):
+    """Paths of rows written under an older PARSE_BASIS that this parser can
+    improve, newest game first: parsed, from a replay that carries GameStart
+    names (3.9.0+), with no name and no code for any human player. One query
+    over the index (idx_gp_game), well under a second on 30k games."""
+    rows = conn.execute(
+        """SELECT g.path, g.version FROM games g
+            WHERE g.parse_ok = 1 AND IFNULL(g.parse_basis, '') != ?
+              AND EXISTS (SELECT 1 FROM game_players gp
+                           WHERE gp.game_id = g.id AND gp.type = ?)
+              AND NOT EXISTS (SELECT 1 FROM game_players gp
+                               WHERE gp.game_id = g.id AND gp.type = ?
+                                 AND (gp.name IS NOT NULL OR gp.code IS NOT NULL))
+            ORDER BY g.start_at DESC, g.id DESC""",
+        (PARSE_BASIS, PLAYER_TYPE_HUMAN, PLAYER_TYPE_HUMAN)).fetchall()
+    return [r["path"] for r in rows if _version(r["version"]) >= GS_NAMES_VERSION]
+
+
+def _store_reparse(conn, path, mtime, size, parsed):
+    """Store the re-parse of an unchanged file (PARSE_BASIS); parsed None =
+    nothing new, or it failed. Only when its players changed is the row
+    rewritten, as a fresh scan would write it, and combos_at cleared so the
+    combo pass copies the names into the game's combo rows. The content is
+    the same, so its cloud upload ledgers stay. Every row looked at is
+    stamped, so it is not looked at again. True when the row changed."""
+    row = conn.execute("SELECT id, players FROM games WHERE path=?", (path,)).fetchone()
+    if row is None:
+        return False
+    if parsed is not None:
+        try:
+            same = json.loads(row["players"] or "[]") == parsed.get("players")
+        except ValueError:
+            same = False
+        if not same:
+            _upsert_game(conn, path, mtime, size, parsed)
+            conn.execute("UPDATE games SET combos_at = NULL WHERE id=?", (row["id"],))
+            return True
+    conn.execute("UPDATE games SET parse_basis=? WHERE id=?", (PARSE_BASIS, row["id"]))
+    return False
+
+
 def _scan(job, replay_dir):
     # Inside the job, so a database that cannot open fails the scan instead
     # of leaving it running for the life of the backend (F-J-14).
@@ -315,7 +393,7 @@ def _scan(job, replay_dir):
         progress = PassProgress(job, "files", added=0, updated=0, removed=0, failed=0)
         known = {r["path"]: (r["mtime"], r["size"])
                  for r in conn.execute("SELECT path, mtime, size FROM games")}
-        todo = []
+        todo = []  # (path, mtime, size, existed, reparse)
         seen = set()
         traversal_errors = []
         def walk_error(error):
@@ -333,7 +411,13 @@ def _scan(job, replay_dir):
                     continue
                 prior = known.get(path)
                 if prior is None or prior != (st.st_mtime, st.st_size):
-                    todo.append((path, st.st_mtime, st.st_size, prior is not None))
+                    todo.append((path, st.st_mtime, st.st_size, prior is not None, False))
+        # Unchanged files whose rows an older parser wrote and this one can
+        # improve. A row whose file this walk did not reach keeps its old
+        # stamp and is looked at when a later walk reaches it.
+        queued = {item[0] for item in todo}
+        todo += [(path, *known[path], True, True) for path in _reparse_candidates(conn)
+                 if path in seen and path not in queued]
 
         # os.walk otherwise suppresses enumeration failures. An incomplete
         # traversal cannot prove that absent indexed paths were deleted.
@@ -352,17 +436,32 @@ def _scan(job, replay_dir):
         conn.commit()
 
         from . import scan_pool
-        for i, (path, mtime, size, existed) in enumerate(todo):
+        for i, (path, mtime, size, existed, reparse) in enumerate(todo):
             # parsing is the expensive part -- off-process, so indexing a big
             # replay folder cannot make the app unresponsive
-            parsed, error = scan_pool.run(parse_for_index, path)
-            game_id = _upsert_game(conn, path, mtime, size, parsed, error)
-            if existed:
-                _forget_uploads(conn, game_id)
-            if error:
-                progress.add(failed=1)
+            # A file that crashes or hangs the worker is ScanFailed: recorded
+            # as failed like any unparseable replay (and quarantined, so it is
+            # not tried again until it changes). WorkerUnavailable is not the
+            # file's fault and stops the pass, recording nothing.
+            try:
+                parsed, error = scan_pool.run(
+                    reparse_for_index if reparse else parse_for_index, path)
+            except scan_pool.ScanFailed as e:
+                parsed, error = None, str(e)
+            if reparse:
+                # a failed re-parse keeps the row the old parser wrote
+                if _store_reparse(conn, path, mtime, size, None if error else parsed):
+                    progress.add(updated=1)
+                elif error:
+                    progress.add(failed=1)
             else:
-                progress.add(**{"updated" if existed else "added": 1})
+                game_id = _upsert_game(conn, path, mtime, size, parsed, error)
+                if existed:
+                    _forget_uploads(conn, game_id)
+                if error:
+                    progress.add(failed=1)
+                else:
+                    progress.add(**{"updated" if existed else "added": 1})
             progress.report(done=i + 1)
             if (i + 1) % 200 == 0:
                 conn.commit()

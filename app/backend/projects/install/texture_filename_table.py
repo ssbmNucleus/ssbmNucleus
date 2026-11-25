@@ -36,6 +36,7 @@ from pathlib import Path
 from typing import Callable, Dict, Iterable, List, Optional, Tuple
 
 from core.config import MEXCLI_PATH, PROJECT_ROOT, STORAGE_PATH, BACKEND_DATA_DIR
+from core.child_env import child_environment
 from projects.install.texture_pack import generate_encoded_placeholder
 
 logger = logging.getLogger(__name__)
@@ -103,7 +104,7 @@ def _encoded_bytes(index: int, tmpdir: str) -> Tuple[bytes, bytes, int, int]:
     generate_encoded_placeholder(index).save(png_path, format="PNG")
     out = subprocess.run(
         [str(MEXCLI_PATH), "placeholder-bytes", png_path],
-        capture_output=True, text=True,
+        capture_output=True, text=True, env=child_environment(),
     )
     if out.returncode != 0:
         raise RuntimeError(

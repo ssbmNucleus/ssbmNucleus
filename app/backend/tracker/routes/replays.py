@@ -14,6 +14,7 @@ import threading
 from flask import jsonify, request
 
 from core import jobs
+from core.child_env import child_environment
 from tracker.cloud import vault_client, vault_sync
 from tracker.routes import nucleome
 from tracker.routes.nucleome import _synced_game_ids, nucleome_bp
@@ -225,9 +226,9 @@ def watch_replay():
         if sys.platform == "win32":
             os.startfile(valid)  # opens with the .slp handler (Slippi Launcher)
         elif sys.platform == "darwin":
-            subprocess.Popen(["open", valid])
+            subprocess.Popen(["open", valid], env=child_environment())
         else:
-            subprocess.Popen(["xdg-open", valid])
+            subprocess.Popen(["xdg-open", valid], env=child_environment())
         return jsonify({"ok": True})
     except OSError as e:
         return jsonify({"error": str(e)}), 500
@@ -278,7 +279,7 @@ def reveal_replay():
     if not valid:
         return jsonify({"error": "unknown replay path"}), 404
     if sys.platform == "win32":
-        subprocess.Popen(["explorer", "/select,", os.path.normpath(valid)])
+        subprocess.Popen(["explorer", "/select,", os.path.normpath(valid)], env=child_environment())
     else:
-        subprocess.Popen(["xdg-open", os.path.dirname(valid)])
+        subprocess.Popen(["xdg-open", os.path.dirname(valid)], env=child_environment())
     return jsonify({"ok": True})

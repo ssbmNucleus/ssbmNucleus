@@ -7,6 +7,7 @@ import StorageStatsSection from './StorageStatsSection'
 import AdditionalDataSection from './AdditionalDataSection'
 import IsoPathSection from './IsoPathSection'
 import SlippiPathSection from './SlippiPathSection'
+import MeleeUnlockedSection from './MeleeUnlockedSection'
 import ClearStorageSection from './ClearStorageSection'
 import DiscordSection from './DiscordSection'
 import VolumeSection from './VolumeSection'
@@ -40,6 +41,7 @@ export default function Settings({ metadata, onOpenFirstRunSetup, mode = 'nucleu
     { id: 'setup', label: 'Files & setup', cards: <>
       {!RECORD_MODE && <AccountSection nucleome={nucleome} />}
       <IsoPathSection /><SlippiPathSection />
+      <MeleeUnlockedSection />
       <SetupSection onOpenFirstRunSetup={onOpenFirstRunSetup} />
     </> },
     ...(aiTab ? [{ id: 'ai', label: 'AI', cards: <>

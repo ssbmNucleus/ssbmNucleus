@@ -149,8 +149,10 @@ class _Worker:
             [sys.executable, "app.py"], cwd=BACKEND_DIR,
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
             text=True, encoding="utf-8", errors="replace",
-            env={**os.environ, "NUCLEUS_BACKEND_TOKEN": self.token,
-                 "NUCLEUS_WORKER": "1"},
+            # It is this backend again, so it keeps Nucleus's settings (data root, gates), with a token of its own
+            # and without the window's key: nothing it does is the person's decision in the window.
+            env={**{k: v for k, v in os.environ.items() if k.upper() != "NUCLEUS_UI_APPROVAL_KEY"},
+                 "NUCLEUS_BACKEND_TOKEN": self.token, "NUCLEUS_WORKER": "1"},
             creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0)))
         self.port, boot_error = self._await_port()
         if not self.port:

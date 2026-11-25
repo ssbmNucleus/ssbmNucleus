@@ -3,8 +3,8 @@ The backend's bootstrap: the one entry point Electron starts (dev:
 `python backend/app.py`; packaged: the PyInstaller exe `mex_backend` built from
 this file).
 
-In order: process guards (freeze_support, safe stdio, the storage-maintenance
-and build-smoke dispatches, both of which exit before Flask), imports (core
+In order: process guards (freeze_support, safe stdio, the storage-maintenance,
+Melee Unlocked kit and build-smoke dispatches, which all exit before Flask), imports (core
 configuration and every blueprint object), app creation with its hooks and
 gates (backend token, CORS, socket auth), startup configuration (data dirs,
 logging, feature switches, vault backend), the blueprint registry, launch side
@@ -73,6 +73,13 @@ if '--storage-maintenance' in sys.argv[1:]:
     from storage_relocation import main as _storage_maintenance_main
     raise SystemExit(_storage_maintenance_main(sys.argv[sys.argv.index('--storage-maintenance') + 1:]))
 
+# The Melee Unlocked export runs a fighter kit's driver in a child of its own
+# (projects/install/mu_kit_runner.py): that child is this program with this
+# flag, and it must not boot the backend either.
+if len(sys.argv) > 1 and sys.argv[1] == '--mu-kit':
+    from projects.install.mu_kit_runner import main as _mu_kit_main
+    raise SystemExit(_mu_kit_main(sys.argv[2:]))
+
 # The frozen build's self-check (core/build_smoke.py): build.bat, build-linux.sh
 # and build-macos.sh run the packaged exe with this flag. It imports the packaged
 # tools, then exits before anything below imports Flask.
@@ -120,6 +127,7 @@ from vault.routes.storage_costumes import storage_costumes_bp
 from vault.routes.storage_stages import storage_stages_bp
 from vault.routes.vault_backup import vault_backup_bp
 from projects.routes.mod_export import mod_export_bp
+from projects.routes.melee_unlocked import melee_unlocked_bp
 from vault.routes.import_unified import import_bp
 from vault.routes.das import das_bp
 from projects.routes.stage_slots import stage_slots_bp
@@ -145,6 +153,10 @@ if _gates.enabled('randall'):
 combo_video_bp = None
 if _gates.enabled('combo_video'):
     from tracker.routes.combo_video import combo_video_bp
+play_bp = None
+if _gates.enabled('play'):
+    # Play, the Melee Unlocked launcher (registers its job kinds before recover_interrupted)
+    from play.routes.play import play_bp
 from vault.routes.codes import codes_bp
 from vault.routes.extras import extras_bp
 from vault.extras.helpers import init_extras_api
@@ -184,7 +196,10 @@ CORS(app, resources={
     r"/utility/*": {"origins": _LOCAL_CORS_ORIGINS},
     r"/storage/*": {"origins": _LOCAL_CORS_ORIGINS},
     r"/assets/*": {"origins": _LOCAL_CORS_ORIGINS},
-}, allow_headers=["Content-Type", "X-Nucleus-Token", "X-Nucleus-Project"])
+}, allow_headers=["Content-Type", "X-Nucleus-Token", "X-Nucleus-Project", "X-Nucleus-UI-Key"])
+# X-Nucleus-UI-Key: the window's own key on the requests only the window may make
+# (core/ui_channel.py). The window's page is another origin (file://, or Vite's
+# in development), so without it here the browser's preflight refuses them all.
 
 # Socket connections authenticate with the backend token, not a cloned Flask
 # cookie session. Let Flask own its session; SocketIO's managed-session copy
@@ -219,6 +234,24 @@ def require_backend_token():
     if not _valid_backend_token(candidate):
         return jsonify({"success": False, "error": "Unauthorized"}), 401
     return None
+
+
+@app.before_request
+def refuse_nonlocal_request_paths():
+    """The request-path gate (core/path_safety.local_path) for every key that names a path on this computer
+    (path_safety.REQUEST_PATH_KEYS: slippiPath, vanillaIsoPath, kitPath, ...) in a JSON body or the query string:
+    a share, a device or NT-namespace path, a file: URL or a relative path is a 400 before any route opens it.
+    A form is read only when the request is one (no route reads the raw stream; the form is parsed once)."""
+    if request.method == "OPTIONS" or not request.path.startswith("/api/"):
+        return None
+    from core.path_safety import request_path_refusal
+    body = request.get_json(silent=True) if request.is_json else None
+    form = request.form if request.mimetype in ("multipart/form-data", "application/x-www-form-urlencoded") else None
+    refusal = request_path_refusal(body if isinstance(body, dict) else None, form, request.args)
+    if refusal is None:
+        return None
+    key, error = refusal
+    return jsonify({"success": False, "error": str(error), "code": "not_a_local_path", "field": key}), 400
 
 
 # One request sees one open project from start to end, and a request made for a
@@ -315,6 +348,7 @@ app.register_blueprint(storage_costumes_bp)
 app.register_blueprint(storage_stages_bp)
 app.register_blueprint(vault_backup_bp)
 app.register_blueprint(mod_export_bp)
+app.register_blueprint(melee_unlocked_bp)
 app.register_blueprint(import_bp)
 app.register_blueprint(das_bp)
 app.register_blueprint(stage_slots_bp)
@@ -334,6 +368,8 @@ app.register_blueprint(music_playlists_bp)
 app.register_blueprint(nucleome_bp)
 if combo_video_bp is not None:
     app.register_blueprint(combo_video_bp)
+if play_bp is not None:
+    app.register_blueprint(play_bp)
 app.register_blueprint(test_in_game_bp)
 app.register_blueprint(publish_bp)
 app.register_blueprint(account_bp)
@@ -471,6 +507,23 @@ if __name__ == '__main__':
         from core import jobs as _jobs
         for _record in _jobs.recover_interrupted():
             print(f"Recovered interrupted job: {_record.get('label')} ({_record.get('id')})")
+        # A game Play started that outlived the last run: watch it again (play/launch.py reattach),
+        # only when its pid, start time and program all still match.
+        if _gates.enabled('play'):
+            try:
+                from play import launch as _play_launch
+                if _play_launch.reattach():
+                    print("Play: a game the last run started is still running; watching it again")
+            except Exception as _exc:  # noqa: BLE001 - never blocks startup
+                print(f"WARNING: Play could not look for a game still running: {_exc}")
+            # The installed Nucleus client's earlier versions and unfinished downloads (play/managed.py
+            # purge: never one a game still runs from), after the reattach so a running game counts.
+            try:
+                import threading as _threading
+                from play import managed as _play_managed
+                _threading.Thread(target=_play_managed.startup, name='play-client-tidy', daemon=True).start()
+            except Exception as _exc:  # noqa: BLE001 - never blocks startup
+                print(f"WARNING: Play could not tidy its installed client: {_exc}")
         # What earlier runs left in the data scratch: the 3D viewer's folders (costumes and the
         # workbench's checkpoint copies, shared/routes/viewer.py), and the portrait renderer's debug
         # logs over a few days old or beyond the newest few dozen (processor/csp_logs.py; a clean

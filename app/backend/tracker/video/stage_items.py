@@ -24,7 +24,8 @@ truncated, or still-being-written file returns empty structures, never raises.
 """
 import struct
 
-from ..store.slp_meta import (HEADER, RAW_START, SlpParseError, _parse_payload_sizes)
+from ..store.slp_meta import (HEADER, MAX_SLP_BYTES, RAW_START, SlpParseError,
+                              _parse_payload_sizes)
 
 CMD_ITEM_UPDATE = 0x3B
 CMD_FOD_PLATFORM = 0x3F
@@ -55,6 +56,8 @@ def _read_raw_block(path):
     import os
     try:
         size = os.path.getsize(path)
+        if size > MAX_SLP_BYTES:
+            return None
         with open(path, "rb") as f:
             head = f.read(4096)
             if not head.startswith(HEADER):
@@ -120,8 +123,8 @@ def _scan(path, sizes=None, want_items=True, want_stage=True):
         while pos < end:
             cmd = data[pos]
             sz = sizes.get(cmd)
-            if sz is None:
-                break   # unknown event = can't safely skip; keep what we have
+            if not sz:
+                break   # unknown (or empty) event = can't safely skip; keep what we have
             p = pos + 1
             if p + sz > end:
                 break   # truncated final event

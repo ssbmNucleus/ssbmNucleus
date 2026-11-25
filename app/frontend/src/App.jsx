@@ -5,10 +5,11 @@ import AppDialogHost from './shared/ui/AppDialogHost'
 import BackendStoppedScreen from './shared/ui/BackendStoppedScreen'
 import InterruptedJobsNotice from './shared/jobs/InterruptedJobsNotice'
 import BrandWordmark from './shared/ui/BrandWordmark'
+import { modeCycle, nextMode, startingMode } from './shared/ui/modeCycle'
 import DebugTierToggle from './settings/DebugTierToggle'
 import { RECORD_MODE } from './shared/config/recordMode'
 import { NucleomeTabs } from './tracker/NucleomeTabs'
-import { NUCLEOME_ENABLED, COMBO_VIDEO_ENABLED, RANDALL_ENABLED } from './shared/config/features'
+import { NUCLEOME_ENABLED, COMBO_VIDEO_ENABLED, RANDALL_ENABLED, PLAY_ENABLED } from './shared/config/features'
 import { ASSISTANT_ENABLED } from './shared/config/features'
 import { EditorContext } from './shared/lib/EditorContext'
 import { useDownloadQueue, DOWNLOAD_PHASES } from './vault/import/useDownloadQueue'
@@ -26,6 +27,7 @@ import { clearSignOutPending, signOutPending } from './shared/account/signOutPen
 import { createVaultTokenMirror } from './tracker/cloud/vaultTokenMirror'
 import { createMcpAccountMirror, createMcpConfirmWatcher, createMcpWindowMirror, SLIPPI_PATH_EVENT } from './randall/assistant/mcpAccount'
 import McpImportChip from './randall/assistant/McpImportChip'
+import McpProblemReports from './randall/assistant/McpProblemReports'
 import { useMcpImportSaved, useMcpVaultChanged } from './randall/assistant/mcpImport'
 import { appConfirm } from './shared/ui/appDialogs'
 import { subscribe as subscribeSocket } from './shared/transport/socket'
@@ -51,6 +53,17 @@ const loadAssistantPanel = ASSISTANT_ENABLED
   ? () => import('./randall/assistant/AssistantPanel')
   : null
 const AssistantPanel = ASSISTANT_ENABLED ? lazy(loadAssistantPanel) : null
+// Play (the Melee Unlocked launcher) is unfinished and gated out of packaged
+// builds. Reached only through import.meta.glob behind the literal
+// import.meta.env.DEV (or VITE_PLAY_PREVIEW, set only by a Play test build:
+// features.js), so `vite build` folds the PlayApp chunk away (ship_guard checks
+// dist for it) and a public source checkout, which leaves src/play out, finds
+// nothing. Its tabs come from the same chunk.
+const loadPlay = (import.meta.env.DEV || import.meta.env.VITE_PLAY_PREVIEW === '1') && PLAY_ENABLED
+  ? Object.values(import.meta.glob('./play/PlayApp.jsx'))[0] || null
+  : null
+const PlayApp = loadPlay ? lazy(loadPlay) : null
+const PlayTabs = loadPlay ? lazy(() => loadPlay().then((m) => ({ default: m.PlayTabs }))) : null
 
 function PanelLoading({ children }) {
   return (
@@ -72,14 +85,18 @@ const setupProblemSignature = (problems) =>
 // switching modes and back returns you to where you were.
 const MODE_STORAGE_KEY = 'nucleus_app_mode'
 const NUCLEOME_TAB_KEY = 'nucleome_active_tab'
+// Play mode (gated): the tab it shows.
+const PLAY_TAB_KEY = 'play_active_tab'
+// The modes the wordmark cycles through, in order (shared/ui/modeCycle.js):
+// Nucleus -> Tracker -> Play, skipping any this build leaves out.
+const MODE_CYCLE = modeCycle({ tracker: NUCLEOME_ENABLED, play: PLAY_ENABLED })
 
 // NUCLEOME_ENABLED (shared/config/features.js) shipped true in 0.7.0; the guard
 // stays so a future build that gates Tracker off again can never restore a
 // stored 'nucleome' mode.
-const readStoredMode = () =>
-  NUCLEOME_ENABLED && localStorage.getItem(MODE_STORAGE_KEY) === 'nucleome'
-    ? 'nucleome'
-    : 'nucleus'
+// With no remembered mode (a first run) a build with Play opens on it: startingMode.
+const readStoredMode = () => startingMode(localStorage.getItem(MODE_STORAGE_KEY),
+  { tracker: NUCLEOME_ENABLED, play: PLAY_ENABLED })
 
 function App() {
   const [activeTab, setActiveTab] = useState('storage');
@@ -192,9 +209,26 @@ function App() {
     if (mode === 'nucleome') setNucleomeMounted(true)
   }, [mode])
 
-  const toggleMode = () => {
-    if (!NUCLEOME_ENABLED) return
-    const next = mode === 'nucleus' ? 'nucleome' : 'nucleus'
+  // Play mounts on first open and stays mounted, like nucleOME, so a game it
+  // is watching keeps its card state across mode switches.
+  const [playMounted, setPlayMounted] = useState(mode === 'play')
+  useEffect(() => {
+    if (mode === 'play') setPlayMounted(true)
+  }, [mode])
+  const [playTab, setPlayTab] = useState(() => localStorage.getItem(PLAY_TAB_KEY) === 'settings' ? 'settings' : 'games')
+  const handlePlayTab = (tab) => {
+    if (tab === playTab) return
+    playSound('boop')
+    setPlayTab(tab)
+    localStorage.setItem(PLAY_TAB_KEY, tab)
+  }
+  // A click on the wordmark: the next mode of the cycle (Nucleus -> Tracker -> Play).
+  const cycleMode = () => {
+    const next = nextMode(mode, MODE_CYCLE)
+    if (next !== mode) switchMode(next)
+  }
+
+  const switchMode = (next) => {
     playSound('start')
     setMode(next)
     localStorage.setItem(MODE_STORAGE_KEY, next)
@@ -362,6 +396,19 @@ function App() {
     window.addEventListener('nucleus:open-settings', openSettings)
     return () => window.removeEventListener('nucleus:open-settings', openSettings)
   }, [])
+
+  // "Open in Play" (the export's Add to Play) switches to Play's games.
+  useEffect(() => {
+    if (!PLAY_ENABLED) return undefined
+    const openPlay = () => {
+      setPlayTab('games')
+      localStorage.setItem(PLAY_TAB_KEY, 'games')
+      if (mode === 'play') return
+      switchMode('play')
+    }
+    window.addEventListener('nucleus:open-play', openPlay)
+    return () => window.removeEventListener('nucleus:open-play', openPlay)
+  }, [mode])
 
   // Passive "a new release dropped" signal from Electron's background check:
   // a gold dot on the Settings tab (both modes) plus a one-time banner. The
@@ -646,12 +693,20 @@ function App() {
       <AppDialogHost />
       <BackendStoppedScreen />
       <InterruptedJobsNotice />
+      {/* Problem reports the user's own AI wrote (MCP report_problem): sent only from here. */}
+      {ASSISTANT_ENABLED && <McpProblemReports />}
       {!(mode === 'nucleus' && skinCreatorFullscreen) && (
         <header className="app-header" ref={headerRef}>
-          <BrandWordmark mode={mode} appVersion={RECORD_MODE ? null : appVersion} onToggle={NUCLEOME_ENABLED ? toggleMode : undefined} />
+          <BrandWordmark mode={mode} appVersion={RECORD_MODE ? null : appVersion}
+            onToggle={MODE_CYCLE.length > 1 ? cycleMode : undefined}
+            nextMode={nextMode(mode, MODE_CYCLE)} />
           {ASSISTANT_ENABLED && <McpImportChip />}
           {import.meta.env.DEV && !RECORD_MODE && <DebugTierToggle />}
-          {mode === 'nucleome' ? (
+          {mode === 'play' && PlayTabs ? (
+            <Suspense fallback={null}>
+              <PlayTabs activeTab={playTab} onTabChange={handlePlayTab} />
+            </Suspense>
+          ) : mode === 'nucleome' ? (
             <NucleomeTabs
               activeTab={nucleomeTab}
               onTabChange={handleNucleomeTab}
@@ -739,7 +794,10 @@ function App() {
                 dismissUpdateBanner()
                 setSettingsSection('general')
                 if (mode === 'nucleome') handleNucleomeTab('settings')
-                else setActiveTab('settings')
+                else {
+                  if (mode === 'play') switchMode('nucleus')
+                  setActiveTab('settings')
+                }
               }}
             >
               Open Settings
@@ -825,7 +883,7 @@ function App() {
         checkpoint: assistantCheckpoint, publishCheckpoint,
         hideSidebar: () => setEditorSidebar(false), showSidebar: () => setEditorSidebar(true) }}>
       <main className={`app-content ${nucleusEntering ? 'mode-enter' : ''} ${assistantOpen && !assistantEditor ? 'app-content--assistant-full' : ''} ${assistantEditor && editorSidebar ? 'app-content--assistant-editor' : ''}`}
-            style={mode === 'nucleome' ? { display: 'none' } : undefined}>
+            style={mode !== 'nucleus' ? { display: 'none' } : undefined}>
         {loading ? (
           <div className="app-panel-loading">
             <HexagonLoader size={72} decorative />
@@ -858,7 +916,7 @@ function App() {
                 <Suspense fallback={<PanelLoading>Loading installer...</PanelLoading>}>
                   {/* the vault's Pose Manager (apply a pose to all) is portaled out of this panel too */}
                   <VaultActiveContext.Provider value={activeTab === 'mex' && !(assistantOpen && !assistantEditor)}>
-                    <MexPanel active={activeTab === 'mex'} vaultMetadata={metadata} />
+                    <MexPanel active={activeTab === 'mex'} vaultMetadata={metadata} playEnabled={PLAY_ENABLED} />
                   </VaultActiveContext.Provider>
                 </Suspense>
               </div>
@@ -922,6 +980,18 @@ function App() {
                 />
               }
             />
+          </Suspense>
+        </div>
+      )}
+
+      {playMounted && PlayApp && (
+        <div style={{ display: mode === 'play' ? 'contents' : 'none' }}>
+          <Suspense fallback={
+            <main className="app-content">
+              <PanelLoading>Loading Unlocked...</PanelLoading>
+            </main>
+          }>
+            <PlayApp activeTab={playTab} onTabChange={handlePlayTab} visible={mode === 'play'} />
           </Suspense>
         </div>
       )}

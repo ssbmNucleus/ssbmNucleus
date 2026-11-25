@@ -100,6 +100,14 @@ if (process.platform === 'win32') app.setAppUserModelId('com.ssbm.nucleus');
 // preview opt-in below then opens it for previewFeatures packages, as it did
 // for the 0.9.0 previews.
 //
+// The feature names in a packaged manifest's previewFeatures: build.bat writes a
+// comma-separated string; a list is accepted too. Whole names only, so
+// 'display' never opens 'play'. Mirrors backend/core/gates.py preview_features.
+function packagedPreviewFeatures(value) {
+  const list = typeof value === 'string' ? value.split(',') : Array.isArray(value) ? value : [];
+  return new Set(list.filter((f) => typeof f === 'string' && f.trim()).map((f) => f.trim().toLowerCase()));
+}
+
 // backendEnvironment() is the backend child's environment; runtime/backend.js
 // calls it at spawn time.
 function backendEnvironment() {
@@ -112,6 +120,11 @@ function backendEnvironment() {
     // /api/nucleome/coach/*; the viewer half is RANDALL_ENABLED in
     // frontend/src/shared/config/features.js (tab hidden, CoachPage chunk elided).
     'NUCLEUS_RANDALL',
+    // Unlocked ships in Windows stable builds since 0.10.0. build.bat writes
+    // releaseFeatures=play from the gate in backend/core/gates.py. A local Play
+    // test build opens it through previewFeatures=play. With the gate closed,
+    // /api/play/* returns 404 and the frontend omits Unlocked from the mode cycle.
+    'NUCLEUS_PLAY',
     // Randall downloading ANY published mod (file_type 'other'). The three
     // published export types still download; everything else points at the
     // website's own download button. Held while the 2026-09-22 archive
@@ -139,14 +152,27 @@ function backendEnvironment() {
   backendEnv.NUCLEUS_BACKEND_TOKEN = backendToken;
   backendEnv.NUCLEUS_UI_APPROVAL_KEY = uiApprovalKey;
   if (!isDev) {
-    // Explicitly marked preview packages open the assistant when it is held back
-    // (NUCLEUS_ASSISTANT in the list above). Since 0.9.0 it is not in the list, so
-    // every package has it and this changes nothing.
-    const assistantPreview = require('../package.json').previewFeatures?.includes('assistant');
+    // Explicitly marked preview packages open these gates, each by its own feature
+    // name in the packaged manifest's previewFeatures (build.bat writes it from
+    // NUCLEUS_PREVIEW_FEATURES; the tree's package.json never has it). The
+    // assistant when it is held back (since 0.9.0 it is not in the list above, so
+    // that entry changes nothing); Play for a local Play test build, which
+    // build.bat packages only with a prerelease version. Mirrors
+    // backend/core/gates.py PREVIEW_OPENS; test_preview_policy.py keeps them equal.
+    // releaseFeatures is the stable half: build.bat writes it from gates.py
+    // release_features() (Play on Windows since 0.10.0).
+    const PREVIEW_OPENS = {
+      NUCLEUS_ASSISTANT: 'assistant',
+      NUCLEUS_PLAY: 'play',
+    };
+    const packaged = require('../package.json');
+    const previewFeatures = packagedPreviewFeatures(packaged.previewFeatures);
+    const releaseFeatures = packagedPreviewFeatures(packaged.releaseFeatures);
     for (const gate of PACKAGED_OFF_GATES) {
-      // The assistant chat only: the Tracker coach (NUCLEUS_RANDALL) stays off in
-      // every package, preview included.
-      backendEnv[gate] = gate === 'NUCLEUS_ASSISTANT' && assistantPreview ? '1' : '0';
+      // Everything else stays shut: the Tracker coach (NUCLEUS_RANDALL) and the
+      // write paths are off in every package, preview included.
+      const feature = PREVIEW_OPENS[gate];
+      backendEnv[gate] = previewFeatures.has(feature) || releaseFeatures.has(feature) ? '1' : '0';
     }
     // Vault store: shipped builds default to the SQLite backend (migrated from
     // metadata.json on first launch, with a backup + round-trip validation and

@@ -3,7 +3,8 @@
 Since 0.9.0 a stable build carries the assistant (Randall's chat, its tools and the
 app MCP: `randall`, `nucleus_api`, `shared.aiengine`, `shared.modellab`, the
 build-change approval route) and its model-import runtime, and still leaves out
-Combo Video and the Tracker coach (`randall.coach`, gate "randall"). Every gate can
+Combo Video and the Tracker coach (`randall.coach`, gate "randall"). Windows
+stable builds also carry Play since 0.10.0. Every gate can
 still be closed for a build (core/gates.py packaged_off), so the import rule below
 holds for each of them.
 
@@ -37,7 +38,7 @@ NOT_APP_CODE = ('devtools/', 'scripts/', 'probes/')
 
 #: What a stable build carries, spelled out on purpose: a test that derived it from
 #: gates.py would pass whatever gates.py said.
-STABLE_SHIPS = {'assistant': True, 'combo_video': False, 'randall': False}
+STABLE_SHIPS = {'assistant': True, 'combo_video': False, 'randall': False, 'play': sys.platform == 'win32'}
 
 
 def _under(name, packages):
@@ -123,7 +124,7 @@ def test_every_gate_with_left_out_code_is_a_release_gate():
     assert set(_GATED_PACKAGES) <= set(GATES)
 
 
-def test_a_stable_build_carries_the_assistant_and_no_other_gated_code(monkeypatch):
+def test_a_stable_build_carries_the_expected_gated_code(monkeypatch):
     """The build rule (ship_guard.gate_ships: the spec, the stage, the build scripts)."""
     monkeypatch.delenv('NUCLEUS_PREVIEW_FEATURES', raising=False)
     guard = _ship_guard()
@@ -185,20 +186,23 @@ def _dist(tmp_path, *chunks):
     return tmp_path
 
 
-def test_the_stage_verify_wants_the_assistant_panel_and_no_coach_or_combo_video(tmp_path, monkeypatch):
+def test_the_stage_verifies_gated_chunks_for_the_platform(tmp_path, monkeypatch):
     monkeypatch.delenv('NUCLEUS_PREVIEW_FEATURES', raising=False)
     guard = _ship_guard()
-    good = _dist(tmp_path / 'good', 'index', 'AssistantPanel')
+    play_chunks = ('PlayApp',) if STABLE_SHIPS['play'] else ()
+    good = _dist(tmp_path / 'good', 'index', 'AssistantPanel', *play_chunks)
     assert guard.gated_frontend_leaks(good) == []
     assert guard.gated_frontend_missing(good) == []
 
-    no_panel = _dist(tmp_path / 'no-panel', 'index')
-    assert [m for m in guard.gated_frontend_missing(no_panel) if 'AssistantPanel' in m]
+    missing = guard.gated_frontend_missing(_dist(tmp_path / 'missing', 'index'))
+    assert any('AssistantPanel' in m for m in missing)
+    assert any('PlayApp' in m for m in missing) is STABLE_SHIPS['play']
 
-    leaky = _dist(tmp_path / 'leaky', 'index', 'AssistantPanel', 'CoachPage', 'ComboVideoPage')
+    leaky = _dist(tmp_path / 'leaky', 'index', 'AssistantPanel', 'PlayApp', 'CoachPage', 'ComboVideoPage')
     leaks = guard.gated_frontend_leaks(leaky)
     assert any('CoachPage' in leak for leak in leaks) and any('ComboVideoPage' in leak for leak in leaks)
     assert not any('AssistantPanel' in leak for leak in leaks)
+    assert any('PlayApp' in leak for leak in leaks) is not STABLE_SHIPS['play']
 
 
 def test_a_stable_stage_carries_the_model_import_package_on_every_platform(monkeypatch):

@@ -34,8 +34,7 @@ class ReplayIndexerUpsertTests(unittest.TestCase):
         self.conn = sqlite3.connect(":memory:")
         self.conn.row_factory = sqlite3.Row
         self.conn.execute("PRAGMA foreign_keys=ON")
-        self.conn.executescript(indexer.SCHEMA)
-        self.conn.execute("ALTER TABLE games ADD COLUMN final_state TEXT")
+        indexer._init_schema(self.conn)     # SCHEMA plus the added columns
 
     def tearDown(self):
         self.conn.close()

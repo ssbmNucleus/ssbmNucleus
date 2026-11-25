@@ -27,6 +27,8 @@ const fakeFs = (removed = []) => ({
   rmSync: (target) => removed.push(target),
   copyFileSync: () => {}, chmodSync: () => {}, renameSync: () => {},
 });
+// The file on disk is still the one whose checksum passed (the installer is hashed again before it starts).
+const unchanged = () => 'a'.repeat(64);
 
 test('install snapshots the selected manifest before awaiting download', async () => {
   const app = { isPackaged: true, getPath: () => '/mock', quit: () => {} };
@@ -36,7 +38,7 @@ test('install snapshots the selected manifest before awaiting download', async (
   let downloaded;
   let tracked;
   await updater.install(null, {
-    platform: 'win32', fs: fakeFs(), app,
+    platform: 'win32', fs: fakeFs(), app, hashFile: unchanged,
     downloadFile: async (url, _dest, size) => {
       downloaded = { url, size };
       updater._test.setCachedUpdateForTest(update('9.9.9', 'b'.repeat(64)));
@@ -57,7 +59,7 @@ test('mac openPath error does not schedule quit and cleans download', async () =
   const updater = loadUpdater(app);
   await assert.rejects(
     updater._test.installSelected(update('1.2.3'), null, {
-      platform: 'darwin', fs: fakeFs(removed), app,
+      platform: 'darwin', fs: fakeFs(removed), app, hashFile: unchanged,
       downloadFile: async () => ({ sha256: 'a'.repeat(64), size: 10 }),
       shellOpenPath: async () => 'LaunchServices denied the file',
       schedule: (fn) => quits.push(fn),
@@ -78,7 +80,7 @@ test('linux releases the single-instance lock before replacement spawn', async (
   };
   const updater = loadUpdater(app);
   await updater._test.installSelected(update('1.2.3'), null, {
-    platform: 'linux', appImage: '/apps/Nucleus.AppImage', fs: fakeFs(), app,
+    platform: 'linux', appImage: '/apps/Nucleus.AppImage', fs: fakeFs(), app, hashFile: unchanged,
     downloadFile: async () => ({ sha256: 'a'.repeat(64), size: 10 }),
     spawnDetachedOnce: async () => { order.push('spawn'); },
     schedule: (fn, delay) => { order.push(`schedule:${delay}`); fn(); },
@@ -95,7 +97,7 @@ test('linux reacquires the lock when replacement spawn fails', async () => {
   };
   const updater = loadUpdater(app);
   await assert.rejects(updater._test.installSelected(update('1.2.3'), null, {
-    platform: 'linux', appImage: '/apps/Nucleus.AppImage', fs: fakeFs(), app,
+    platform: 'linux', appImage: '/apps/Nucleus.AppImage', fs: fakeFs(), app, hashFile: unchanged,
     downloadFile: async () => ({ sha256: 'a'.repeat(64), size: 10 }),
     spawnDetachedOnce: async () => { order.push('spawn'); throw new Error('denied'); },
     schedule: () => order.push('scheduled'),
@@ -167,4 +169,90 @@ test('Linux manual-install fallback never keeps a download that failed verificat
     downloadFile: async () => ({ sha256: 'b'.repeat(64), size: 10 }),
   }), /checksum verification/);
   assert.deepEqual(removed, ['/mock/update-dir']);
+});
+
+// Security review 11-22: the checksum was of the bytes as downloaded, and the completed-update report was awaited
+// (up to 1.5 s) before the installer started, so a file swapped in that window started unverified.
+const crypto = require('node:crypto');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+
+test('a Windows installer that changed after its checksum passed is not started', async () => {
+  const good = Buffer.from('the signed installer');
+  const sha256 = crypto.createHash('sha256').update(good).digest('hex');
+  const app = { isPackaged: true, getPath: () => os.tmpdir(), quit: () => {} };
+  const updater = loadUpdater(app);
+  let dest;
+  const started = [];
+  await assert.rejects(updater._test.installSelected({ ...update('1.2.3'), sha256, size: good.length }, null, {
+    platform: 'win32', app, schedule: () => {},
+    downloadFile: async (_url, destPath) => { dest = destPath; fs.writeFileSync(destPath, good); return { sha256 }; },
+    trackCompletedUpdate: async () => { fs.writeFileSync(dest, 'a different program'); },
+    spawnDetachedWithRetry: async (file) => { started.push(file); },
+  }), /changed after it was verified/);
+  assert.deepEqual(started, []);
+  assert.equal(fs.existsSync(path.dirname(dest)), false, 'the download folder is removed');
+});
+
+test('an unchanged Windows installer starts, and a retry checks it again first', async () => {
+  const good = Buffer.from('the signed installer');
+  const sha256 = crypto.createHash('sha256').update(good).digest('hex');
+  const app = { isPackaged: false, getPath: () => os.tmpdir(), quit: () => {} };
+  const updater = loadUpdater(app);
+  let dest;
+  const calls = [];
+  await updater._test.installSelected({ ...update('1.2.3'), sha256, size: good.length }, null, {
+    platform: 'win32', app, schedule: () => {},
+    downloadFile: async (_url, destPath) => { dest = destPath; fs.writeFileSync(destPath, good); return { sha256 }; },
+    spawnDetachedWithRetry: async (file, args, spawnImpl, delays, beforeRetry) => {
+      calls.push(file);
+      beforeRetry();                                   // a retry of the same, unchanged file passes
+      fs.writeFileSync(file, 'a different program');
+      assert.throws(beforeRetry, /changed after it was verified/);
+    },
+  });
+  assert.deepEqual(calls, [dest]);
+  assert.equal(updater._test.hashFileSync(dest), crypto.createHash('sha256').update('a different program').digest('hex'));
+  fs.rmSync(path.dirname(dest), { recursive: true, force: true });
+});
+
+test('a busy Windows installer is checked again before each retry', { skip: process.platform !== 'win32' }, async () => {
+  const updater = loadUpdater({ isPackaged: false, getPath: () => '/mock' });
+  const order = [];
+  const busy = () => {
+    const child = new (require('node:events').EventEmitter)();
+    queueMicrotask(() => child.emit('error', Object.assign(new Error('busy'), { code: 'EBUSY' })));
+    return child;
+  };
+  await assert.rejects(updater._test.spawnDetachedWithRetry('C:/x/update.exe', [], (...a) => {
+    order.push('spawn');
+    return busy(...a);
+  }, [0, 0], () => { order.push('check'); throw new Error('changed after it was verified'); }),
+  /changed after it was verified/);
+  assert.deepEqual(order, ['spawn', 'check']);
+});
+
+test('macOS does not open, and Linux does not install, an update that changed after its checksum', async () => {
+  const opened = [];
+  const app = { isPackaged: false, getPath: () => '/mock', releaseSingleInstanceLock: () => opened.push('release') };
+  const updater = loadUpdater(app);
+  const changed = () => 'c'.repeat(64);
+  await assert.rejects(updater._test.installSelected(update('1.2.3'), null, {
+    platform: 'darwin', fs: fakeFs(), app, hashFile: changed,
+    downloadFile: async () => ({ sha256: 'a'.repeat(64), size: 10 }),
+    shellOpenPath: async (file) => { opened.push(file); return ''; },
+  }), /changed after it was verified/);
+  const removed = [];
+  const renamed = [];
+  const fsLinux = { ...fakeFs(removed), renameSync: (from, to) => renamed.push([from, to]) };
+  await assert.rejects(updater._test.installSelected(update('1.2.3'), null, {
+    platform: 'linux', appImage: '/apps/Nucleus.AppImage', fs: fsLinux, app,
+    hashFile: (file) => (file.endsWith('.new') ? 'c'.repeat(64) : 'a'.repeat(64)),
+    downloadFile: async () => ({ sha256: 'a'.repeat(64), size: 10 }),
+    spawnDetachedOnce: async () => opened.push('spawn'),
+  }), /changed after it was verified/);
+  assert.deepEqual(opened, []);
+  assert.deepEqual(renamed, [], 'the app is not replaced');
+  assert.ok(removed.some((target) => target.endsWith('.Nucleus.AppImage.new')), 'the staged copy is removed');
 });

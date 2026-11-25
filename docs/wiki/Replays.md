@@ -3,7 +3,8 @@
 Open **Replays** in Tracker to browse every game Nucleus has indexed from your
 Slippi replay folder. Games are grouped by month, newest first. Use the
 character, opponent, stage, result, and singles/doubles filters to narrow the
-list.
+list. When an online replay's metadata has no names, Tracker reads player names and
+connect codes from the start of the game.
 
 Each row has:
 

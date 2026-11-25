@@ -3,7 +3,7 @@ import json
 import copy
 import re
 from flask import Blueprint, jsonify, request, Response, send_file, current_app
-from core import config, gates
+from core import config, gates, ui_channel
 from randall.assistant import approvals, engine, live_runs, main_model, recipes, store, tools
 from randall.website import website_posts
 from shared import mod_files
@@ -420,8 +420,24 @@ def website_like():
         return jsonify(error=str(exc)), 400
 
 
+def _window_only(error):
+    """A refusal for anything that is not the app's own window (core/ui_channel.py), or None."""
+    refusal = ui_channel.window_refusal(request.headers)
+    if refusal is None:
+        return None
+    code, status = refusal
+    return jsonify(error=error, code=code), status
+
+
 @assistant_bp.post('/chats/<chat_id>/approvals/<approval_id>')
 def approval_decide(chat_id, approval_id):
+    # The person's yes or no to what the assistant asked to do (download,
+    # import, organize, run a tool). Window only: anything else holding the
+    # backend token (the user's own AI over MCP, a script) could otherwise
+    # answer on the person's behalf.
+    refused = _window_only('Only the person at the Nucleus window can answer an approval.')
+    if refused:
+        return refused
     body = request.get_json(silent=True)
     # The choice is checked against what THIS approval offered (approvals.decide
     # does that, with the stored option ids). A hardcoded list here predated the

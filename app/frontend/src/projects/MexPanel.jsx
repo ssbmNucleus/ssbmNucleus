@@ -28,7 +28,7 @@ import { api } from '../shared/transport/api'
 import { setProjectGeneration } from '../shared/transport/projectGeneration'
 import { orderSavesPending, waitForOrderSaves } from './characters/orderSaves'
 
-const MexPanel = ({ active, vaultMetadata }) => {
+const MexPanel = ({ active, vaultMetadata, playEnabled = false }) => {
   const [mode, setMode] = useState('characters')
   const [mexStatus, setMexStatus] = useState(null)
   const [fighters, setFighters] = useState([])
@@ -470,6 +470,7 @@ const MexPanel = ({ active, vaultMetadata }) => {
             fighters={fighters}
             fightersStatus={fightersStatus}
             onReloadRoster={fetchFighters}
+            playEnabled={playEnabled}
             projectName={mexStatus?.project?.path?.split(/[/\\]/).slice(-2, -1)[0] || 'game'}
           />
         )}

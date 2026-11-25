@@ -364,7 +364,9 @@ def _import_archive(path, title, slippi_action='import_as_is', protocol_url=None
                           duplicate_action='skip', custom_title=title,
                           protocol_url=protocol_url, expected_url=expected_url,
                           budget=budget, source_filename=source_filename,
-                          mod_type_override=mod_type_override)
+                          mod_type_override=mod_type_override,
+                          origin=(f'the mod website ({expected_url}), downloaded by the assistant'
+                                  if expected_url else None))
 
 
 def _gate_subject(plan):

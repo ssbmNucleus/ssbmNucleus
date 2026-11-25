@@ -11,6 +11,21 @@ function vaultBackupName(now = new Date()) {
   return `SSBM-Nucleus-Vault-${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}.zip`;
 }
 
+// The folder 'Open project folder' shows for a project path: the path itself when it is a folder, else its parent
+// when that is a folder, else none. Never a file: shell.openPath on a file opens it with its program, and on an
+// .exe runs it, so a path such as C:\x\tool.exe\missing must not reach it as C:\x\tool.exe. Only an absolute
+// local path: a network one (\\host\share, //host/share) would be reached just by looking at it.
+function folderToOpen(projectPath, fsImpl = fs) {
+  if (!projectPath || typeof projectPath !== 'string' || !path.isAbsolute(projectPath)) return null;
+  if (/^[\\/]{2}/.test(projectPath)) return null;
+  const isFolder = (candidate) => {
+    try { return fsImpl.statSync(candidate).isDirectory(); } catch { return false; }
+  };
+  if (isFolder(projectPath)) return projectPath;
+  const parent = path.dirname(projectPath);
+  return parent !== projectPath && isFolder(parent) ? parent : null;
+}
+
 function registerFileIpc({ handleTrustedIpc, dialog, shell, ctx, links }) {
   handleTrustedIpc('open-project-dialog', async () => {
     const result = await dialog.showOpenDialog(ctx.mainWindow, {
@@ -118,12 +133,9 @@ function registerFileIpc({ handleTrustedIpc, dialog, shell, ctx, links }) {
     }
 
     try {
-      let targetPath = projectPath;
-
-      if (!fs.existsSync(targetPath)) {
-        targetPath = path.dirname(targetPath);
-      } else if (fs.statSync(targetPath).isFile()) {
-        targetPath = path.dirname(targetPath);
+      const targetPath = folderToOpen(projectPath);
+      if (!targetPath) {
+        return { success: false, error: 'The project folder is not there any more.' };
       }
 
       const errorMessage = await shell.openPath(targetPath);
@@ -142,4 +154,4 @@ function registerFileIpc({ handleTrustedIpc, dialog, shell, ctx, links }) {
   });
 }
 
-module.exports = { registerFileIpc, vaultBackupName };
+module.exports = { registerFileIpc, vaultBackupName, folderToOpen };

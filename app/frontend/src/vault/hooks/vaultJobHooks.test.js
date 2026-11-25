@@ -2,6 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { loadModule, hookHarness, deferred, flush } from '../../../../../tests/frontend/hookHarness.mjs'
 import * as outcome from '../../shared/jobs/jobOutcome.js'
+import * as shelfAdd from '../../shared/jobs/shelfAdd.js'
 
 function fixture(module, exportName, options = {}) {
   const h = hookHarness(), posts = [], gets = [], records = new Map(), finished = new Map()
@@ -14,7 +15,8 @@ function fixture(module, exportName, options = {}) {
   const loaded = loadModule(new URL(module, import.meta.url), {
     react: h.react, '../../shared/transport/api': { api }, '../../shared/jobs/jobOutcome': outcome,
     '../../shared/jobs/useJobs': { useJob: id => records.get(id) || null, useFinishedJobs: kind => finished.get(kind) || '' },
-    '../../shared/ui/appDialogs': { appConfirm: async () => true },
+    '../../shared/ui/appDialogs': { appConfirm: options.confirm || (async () => true) },
+    '../../shared/jobs/shelfAdd': shelfAdd,
     '../../shared/config/config.js': { API_URL: 'http://test/api/mex', backendMediaUrl: value => value },
     '../patches/patchDownload': { downloadPatchFile: async () => {} },
   }, {
@@ -171,4 +173,48 @@ test('bundle export completion refreshes the vault and bundle install receives t
   passed.openImportModal(); assert.deepEqual(modal, [true])
   finished = 'one'; render(); render(); assert.equal(refreshed, 1)
   finished = 'two,one'; render(); assert.equal(refreshed, 2); h.unmount()
+})
+
+test('Add to Unlocked names the Vault item by id only, follows its shelf_add job, and ignores an older answer', async () => {
+  const f = fixture('./useVaultShelfAdd.js', 'useVaultShelfAdd')
+  const old = f.render().handleAddBundleToPlay({ id: 'b', name: 'Bundle' })
+  const fresh = f.render().handleAddPatchToPlay({ id: 'p', name: 'Patch', path: 'C:\never\sent' })
+  f.posts[1].resolve({ job_id: 'new' }); await fresh
+  f.posts[0].resolve({ job_id: 'old' }); await old
+  assert.deepEqual(f.posts.map(p => [p.path, p.body]),
+    [['/api/play/shelf/add', { bundleId: 'b' }], ['/api/play/shelf/add', { patchId: 'p' }]])
+  f.records.set('old', { status: 'failed', error: 'old failure' })
+  f.records.set('new', { status: 'running', progress: 0.4, detail: 'Building ISO... 35%' })
+  let view = f.render()
+  assert.equal(view.addingId, 'p'); assert.equal(view.addPercent, 40); assert.equal(view.addMessage, 'Building ISO... 35%')
+  assert.equal(view.addError, null); assert.equal(view.addDone, false)
+  f.records.set('new', { status: 'done', result: { entryId: 'e', name: 'Patch' } })
+  view = f.render()
+  assert.equal(view.addDone, true); assert.equal(view.addDoneText, 'Patch is on your Unlocked shelf.')
+  const failing = f.render().handleAddPatchToPlay({ id: 'p', name: 'Patch' })
+  const refusal = Object.assign(new Error('Nucleus needs your Melee ISO to build this.'), { data: {} })
+  f.posts[2].reject(refusal); await failing
+  assert.equal(f.render().addError, 'Nucleus needs your Melee ISO to build this.')
+  f.render().dismissAdd(); assert.equal(f.render().addingId, null); f.h.unmount()
+})
+
+test('Add to Unlocked offers to replace a game of the same name, and keeping it ends quietly', async () => {
+  const asked = []
+  let answer = true
+  const f = fixture('./useVaultShelfAdd.js', 'useVaultShelfAdd',
+    { confirm: async (message, options) => { asked.push([message, options.confirmText]); return answer } })
+  const same = () => Object.assign(new Error('"Patch" is already on your Unlocked shelf.'),
+    { status: 409, data: { success: false, code: 'already_on_shelf', existing: { id: 'e', name: 'Patch' } } })
+  const replacing = f.render().handleAddPatchToPlay({ id: 'p', name: 'Patch' })
+  f.posts[0].reject(same()); await flush()
+  assert.deepEqual(f.posts.map(p => p.body), [{ patchId: 'p' }, { patchId: 'p', replace: 'e' }])
+  assert.equal(asked[0][1], 'Replace'); assert.match(asked[0][0], /^"Patch" is already on your Unlocked shelf/)
+  f.posts[1].resolve({ job_id: 'r' }); await replacing
+  f.records.set('r', { status: 'done', result: { entryId: 'e', name: 'Patch', replaced: true } })
+  assert.equal(f.render().addDoneText, 'Patch was replaced on your Unlocked shelf.')
+  answer = false
+  const keeping = f.render().handleAddPatchToPlay({ id: 'p', name: 'Patch' })
+  f.posts[2].reject(same()); await keeping
+  assert.equal(f.posts.length, 3); assert.equal(asked.length, 2)
+  assert.equal(f.render().addingId, null); assert.equal(f.render().addError, null); f.h.unmount()
 })

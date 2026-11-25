@@ -32,7 +32,8 @@ import threading
 from pathlib import Path
 
 from core import config
-from core.path_safety import is_network_path
+from core.child_env import child_environment
+from core.path_safety import NotLocalPath, is_network_path, local_path
 
 from . import content, window
 from .toolkit_schemas import TOOLS as HARNESS_TOOLS
@@ -172,9 +173,12 @@ def inspect(path, *, probe=True):
     report = {'path': str(path) if path else None, 'valid': False}
     if not path:
         return dict(report, reason='no folder is saved')
-    if is_network_path(path):
-        return dict(report, reason=f'{path} is a network folder; the toolkit must be a folder on this computer')
-    folder = Path(str(path)).expanduser()
+    try:
+        folder = Path(local_path(path, field='folder'))                # the request-path gate
+    except NotLocalPath as refused:
+        if refused.reason == 'network':
+            return dict(report, reason=f'{path} is a network folder; the toolkit must be a folder on this computer')
+        return dict(report, reason=f'{path} is not an absolute path')
     if not folder.is_absolute():
         return dict(report, reason=f'{folder} is not an absolute path')
     if not folder.is_dir():
@@ -228,12 +232,9 @@ def _missing_packages(stdout):
 
 def _environment():
     """The child's environment: this process's, without the app's own settings and secrets (every NUCLEUS_*:
-    data root, scratch, backend token) or a frozen Python's variables."""
-    env = {key: value for key, value in os.environ.items()
-           if not key.upper().startswith(('NUCLEUS_', '_PYI', '_MEI'))
-           and key.upper() not in ('PYTHONPATH', 'PYTHONHOME')}
-    env.update(PYTHONUNBUFFERED='1', PYTHONIOENCODING='utf-8')
-    return env
+    data root, scratch, backend token; credentials such as *_API_KEY) or a frozen Python's variables
+    (core/child_env.py)."""
+    return child_environment(python=True)
 
 
 class ChildGone(RuntimeError):
@@ -463,7 +464,10 @@ def _paths_in(value, out):
         for item in value:
             _paths_in(item, out)
     elif isinstance(value, str) and _PICTURE.search(value.strip()) and len(value) < 1024:
-        path = Path(value.strip())
+        try:
+            path = Path(local_path(value, field='picture'))   # never a share: is_file would connect to it
+        except NotLocalPath:
+            return
         if path.is_absolute() and path.is_file() and path not in out:
             out.append(path)
 

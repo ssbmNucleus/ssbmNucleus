@@ -254,6 +254,83 @@
   --accent-tint: rgba(255, 199, 0, 0.13); --accent-line: rgba(255, 199, 0, 0.45); --accent-glow: rgba(255, 199, 0, 0.35);
 }
 
+.export-option.accent-violet {
+  --accent: #b39dff; --accent-grad: linear-gradient(135deg, #b39dff, #7c6cf0);
+  --accent-tint: rgba(179, 157, 255, 0.13); --accent-line: rgba(179, 157, 255, 0.4); --accent-glow: rgba(179, 157, 255, 0.35);
+}
+
+/* Add to Play: the name and description the game gets on the shelf. */
+.shelf-option .form-group { margin-bottom: var(--space-3, 0.75rem); }
+.shelf-option .form-group input,
+.shelf-option .form-group textarea {
+  font-family: inherit;
+  font-size: var(--text-sm, 0.9rem);
+}
+.shelf-option .form-group textarea {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  background: var(--color-bg-surface, #283544);
+  border: 1px solid var(--color-border, #3d4f5c);
+  border-radius: 4px;
+  color: var(--color-text-primary, #f5f5f5);
+  resize: vertical;
+}
+.shelf-option .form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* The Melee Unlocked card's result: one line per outcome, under the description. */
+.melee-unlocked-result {
+  list-style: none;
+  margin: 0.4rem 0 0 0;
+  padding: 0;
+  font-size: var(--text-xs, 0.75rem);
+  line-height: var(--leading-snug, 1.4);
+  overflow-wrap: anywhere;
+}
+.melee-unlocked-result .mu-ok { color: var(--color-success, #2ed573); }
+.melee-unlocked-result .mu-warn { color: var(--color-warning, #ffa502); }
+.melee-unlocked-result .mu-error { color: var(--color-error, #ff6b6b); }
+
+/* Fighters the card cannot build yet: downloaded source to confirm, or no source to attach. */
+.mu-sources {
+  list-style: none;
+  margin: 0.4rem 0 0 0;
+  padding: 0;
+  font-size: var(--text-xs, 0.75rem);
+  line-height: var(--leading-snug, 1.4);
+  overflow-wrap: anywhere;
+}
+.mu-sources .mu-source {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.5rem;
+  margin-top: 0.25rem;
+}
+.mu-sources .mu-unconfirmed > span { color: var(--color-warning, #ffa502); }
+.mu-sources .mu-confirm {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--color-warning, #ffa502);
+  border-radius: 6px;
+}
+.mu-sources .mu-confirm p { flex-basis: 100%; margin: 0; }
+.btn-mu-source {
+  font-size: var(--text-xs, 0.75rem);
+  padding: 0.1rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-color, #444);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.btn-mu-source:disabled { opacity: 0.5; cursor: default; }
+
 .option-text {
   flex: 1;
   min-width: 0;
@@ -362,4 +439,24 @@
   color: var(--color-text-tertiary, #8896a4);
   font-family: 'Courier New', monospace;
   font-size: 0.95rem;
+}
+
+/* The Melee Unlocked card while its job runs: a thin bar and the fighter being built. */
+.melee-unlocked-progress { margin-top: 0.45rem; }
+.melee-unlocked-progress .mu-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+.melee-unlocked-progress .mu-bar-fill {
+  height: 100%;
+  background: var(--accent-grad, var(--accent));
+  transition: width 0.25s ease;
+}
+.melee-unlocked-progress .mu-detail {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--color-text-secondary, #b8c5d0);
+  font-size: var(--text-xs, 0.75rem);
 }

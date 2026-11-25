@@ -2,6 +2,27 @@
 
 All notable changes to SSBM Nucleus are documented here.
 
+## 0.10.0 — 2026-11-25
+
+### Unlocked on Windows
+
+- **SSBM Nucleus Unlocked** is a native Melee client based on Melee Unlocked by Hero88go.
+  Nucleus installs it the first time you use its card and keeps it up to date. You need your own
+  Melee 1.02 disc image and a processor with AVX2. The first client release is 0.1.0 and requires
+  SSBM Nucleus 0.10.0 or later.
+- The in-game mod manager lets you equip character and stage skins. In online games, opponents
+  see each other's skins. The game downloads them from ssbmnucleus.net and checks them before use.
+  Fighters, New Stages, Particles, and Menus are listed as coming soon.
+- Play Slippi ranked, unranked, and Direct, or join a doubles lobby. Direct has an **Items**
+  option that works when both players turn it on. Training Mode is built in.
+- The **Vanilla** card starts Melee with nothing changed. Unlocked is the first mode you see on a
+  new Windows install. Click the wordmark to switch modes.
+
+### Tracker
+
+- Tracker shows player names and connect codes from the start of an online game when the replay
+  metadata has none. It checks previously indexed games with missing names once.
+
 ## 0.9.2 — 2026-11-23
 
 ### Fixes

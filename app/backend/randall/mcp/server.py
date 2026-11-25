@@ -12,6 +12,8 @@ Methods: ``initialize``, ``ping``, ``tools/list``, ``tools/call``; a notificatio
   with ``job_status``, saved with ``save_build_iso``).
 * The creation toolkit gateway (toolkit.py): ``native_port`` and ``stage_workbench`` forwarded to a source
   checkout, ``connect_creation_toolkit`` and ``creation_toolkit_status``.
+* Problem reports (report_tools.py): ``report_problem`` assembles a report for the developer that only the user can
+  send, from the window; ``problem_report_status`` says whether they did. The call itself sends nothing.
 
 A call that is still running after a while answers with a job id (calls.py), so no request runs for minutes. A tool
 failure is an isError result with its message, never an HTTP error. No argument of any tool may name a network path
@@ -21,7 +23,7 @@ import logging
 
 from core.path_safety import is_network_path
 
-from . import build_tools, calls, content, model_jobs, randall_tools, toolkit
+from . import build_tools, calls, content, model_jobs, randall_tools, report_tools, toolkit
 
 SERVER_NAME = 'ssbm-nucleus'
 PROTOCOL = '2025-06-18'
@@ -35,7 +37,9 @@ INSTRUCTIONS = (
     'install_custom_stages, install_extra, the music playlists and export_build (an ISO). Tools that change things run '
     "as soon as they are called: your client's approval prompt is the user's approval, so describe the action "
     'first. A call that takes long answers with a job_id: poll job_status. Pictures in results are renders you can '
-    'look at. native_port and stage_workbench need the creation toolkit (creation_toolkit_status).')
+    'look at. native_port and stage_workbench need the creation toolkit (creation_toolkit_status). When something '
+    'in Nucleus goes wrong, report_problem writes a report the user can send to the developer from the Nucleus '
+    'window; the call itself sends nothing.')
 
 _log = logging.getLogger(__name__)
 
@@ -47,7 +51,7 @@ def _version():
 
 def tool_list():
     return (randall_tools.listed() + model_jobs.TOOLS + build_tools.TOOLS + toolkit.TOOLS
-            + toolkit.GATEWAY_TOOLS)
+            + toolkit.GATEWAY_TOOLS + report_tools.TOOLS)
 
 
 def _network_argument(value, key=''):
@@ -85,6 +89,8 @@ def call_tool(name, arguments, *, app):
         return randall_tools.game_status(arguments, app=app)   # a test_in_game play session: wait until it plays
     if name in model_jobs.NAMES:
         return model_jobs.call(name, arguments)          # quick: an import only starts its job here
+    if name in report_tools.NAMES:
+        return report_tools.call(name, arguments)        # assembles or reads a report here; never sends one
     if name == 'creation_toolkit_status':
         return toolkit.status(arguments)
     if name == 'connect_creation_toolkit':

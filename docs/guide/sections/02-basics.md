@@ -1,6 +1,11 @@
 # 2. The basics
 
-The tabs across the top are **Upload**, **Vault**, **Install**, and **Settings**.
+Click the wordmark in the top left to switch between Nucleus, Tracker, and Unlocked.
+Unlocked is available on Windows. Open its **Nucleus Unlocked** card to install the game
+client from the app. You need your own Melee 1.02 disc image and a processor with AVX2.
+The **Vanilla** card starts Melee with nothing changed.
+
+In Nucleus mode, the tabs across the top are **Upload**, **Vault**, **Install**, and **Settings**.
 
 ![The tabs across the top](../img/02-tabs.png)
 

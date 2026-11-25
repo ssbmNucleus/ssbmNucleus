@@ -1,4 +1,4 @@
-/* BrandWordmark.jsx: the header wordmark and its nucleus/stats mode toggle. */
+/* BrandWordmark.jsx: the header wordmark and its mode switch (Nucleus -> Tracker -> Play). */
 
 /* Header brand (logo + title) */
 .header-brand {
@@ -12,13 +12,15 @@
 }
 
 /* ─────────────────────────────────────────
-   BRAND MODE TOGGLE (nucleus <-> stats)
-   The whole logo + wordmark block is the click target. The word "Nucleus"
-   pulses (cyan in nucleus mode, green in stats mode) — "SSBM" stays plain.
-   This is a loud, obvious control, not an easter egg. The wordmark itself
-   never changes — one brand — but stats mode slides in a superscript
-   "stats" tag after the word as the accent floods green. (The internal
-   mode id / class suffix is still "nucleome".)
+   BRAND MODE SWITCH (nucleus -> tracker -> play)
+   The whole logo + wordmark block is the click target; each click goes to
+   the next mode. The word "Nucleus" pulses in its mode's accent (cyan in
+   nucleus mode, green in tracker mode, purple in play mode: the --color-play
+   tokens in index.css) — "SSBM" stays plain. This is a loud,
+   obvious control, not an easter egg. The wordmark itself never changes —
+   one brand — but tracker and play mode each slide in a superscript tag
+   ("tracker", "unlocked") after the word as the accent turns. (The internal
+   tracker mode id / class suffix is still "nucleome".)
    ───────────────────────────────────────── */
 
 .brand-toggle {
@@ -56,6 +58,10 @@
   filter: drop-shadow(0 0 8px rgba(56, 224, 124, 0.55));
 }
 
+.brand-toggle--play .brand-logo-image {
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--color-play-dark) 55%, transparent));
+}
+
 .brand-word {
   display: inline-flex;
   align-items: baseline;
@@ -69,6 +75,10 @@
   animation: brandGlowGreen 1.8s ease-in-out infinite;
 }
 
+.brand-toggle--play .brand-word {
+  animation: brandGlowPlay 1.8s ease-in-out infinite;
+}
+
 /* "Nucle" recolors with the mode so the whole word reads as one brand */
 .brand-toggle .vault-text {
   transition: color var(--duration-normal) var(--ease-out);
@@ -78,7 +88,11 @@
   color: var(--color-green);
 }
 
-/* The "us" accent: cyan in nucleus mode, green in stats mode. */
+.brand-toggle--play .vault-text {
+  color: var(--color-play);
+}
+
+/* The "us" accent: cyan in nucleus mode, green in tracker mode, purple in play mode. */
 .brand-suffix {
   color: var(--color-cyan-light);
   transition: color var(--duration-normal) var(--ease-out);
@@ -88,11 +102,16 @@
   color: var(--color-green-light);
 }
 
-/* Superscript "stats" tag: collapsed to zero width in nucleus mode so the
-   wordmark sits exactly where it always did, sliding open (width + fade +
-   drop) as stats mode arrives. Sized/raised like a superscript; the h1's
+.brand-toggle--play .brand-suffix {
+  color: var(--color-play-light);
+}
+
+/* Superscript mode tags ("tracker", "unlocked"): collapsed to zero width in
+   nucleus mode so the wordmark sits exactly where it always did, sliding open
+   (width + fade + drop) as their mode arrives; going from tracker to play, one
+   closes as the other opens. Sized/raised like a superscript; the h1's
    baseline flex keeps the word itself put. */
-.brand-stats-tag {
+.brand-mode-tag {
   display: inline-block;
   overflow: hidden;
   white-space: nowrap;
@@ -115,12 +134,23 @@
     transform var(--duration-normal) var(--ease-out);
 }
 
-.brand-toggle--nucleome .brand-stats-tag {
+.brand-play-tag {
+  color: var(--color-play-light);
+}
+
+.brand-toggle--nucleome .brand-stats-tag,
+.brand-toggle--play .brand-play-tag {
   /* reveal cap only (overflow:hidden slide) — "tracker" needs more room
      than the old "stats" tag; overshoot is harmless once fully open */
-  max-width: 6em;
+  max-width: 8em;   /* room for "unlocked", the longest tag */
   opacity: 1;
   transform: translateY(0);
+}
+
+/* A closed "play" tag adds no gap after the tracker tag's (which keeps the
+   spacing it always had, so a build without Play lays out as before). */
+.brand-play-tag[aria-hidden="true"] {
+  margin-left: 0;
 }
 
 @keyframes brandGlowCyan {
@@ -135,6 +165,24 @@
       0 0 10px rgba(165, 228, 243, 1),
       0 0 26px rgba(125, 211, 232, 0.9),
       0 0 48px rgba(125, 211, 232, 0.55);
+  }
+}
+
+/* Play's glow follows the --color-play tokens (index.css), so retuning them
+   retunes this too: the light core is the accent, the halo its saturated
+   -dark shade (a halo of the pale accent alone reads white, not purple). */
+@keyframes brandGlowPlay {
+  0%, 100% {
+    text-shadow:
+      0 0 6px color-mix(in srgb, var(--color-play) 95%, transparent),
+      0 0 16px color-mix(in srgb, var(--color-play-dark) 65%, transparent),
+      0 0 30px color-mix(in srgb, var(--color-play-dark) 35%, transparent);
+  }
+  50% {
+    text-shadow:
+      0 0 10px var(--color-play-light),
+      0 0 26px color-mix(in srgb, var(--color-play-dark) 90%, transparent),
+      0 0 48px color-mix(in srgb, var(--color-play-dark) 55%, transparent);
   }
 }
 

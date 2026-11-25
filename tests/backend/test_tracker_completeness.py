@@ -205,9 +205,16 @@ class DeepMineFailureTests(unittest.TestCase):
                 pass
 
         with mock.patch.object(indexer, "connect", return_value=KeepOpen()), \
-             mock.patch.object(deep_stats, "_candidates", return_value=[game]), \
-             mock.patch("tracker.stats.analyzer.analyze_game", side_effect=error):
-            deep_stats._mine(Job(), 2)
+             mock.patch.object(deep_stats, "_candidates", return_value=[game]):
+            if error is None:
+                deep_stats._mine(Job(), 2)
+            else:
+                # the mock analyzer cannot cross into the scan worker, so the
+                # pass runs inline (the switch tests use); its error handling
+                # is what is tested
+                with mock.patch.dict("os.environ", {"NUCLEUS_SCAN_INPROC": "1"}), \
+                     mock.patch("tracker.stats.analyzer.analyze_game", side_effect=error):
+                    deep_stats._mine(Job(), 2)
         return conn.execute("SELECT status FROM deep_rows").fetchall()
 
     def test_a_peppi_panic_marks_the_game_failed(self):
@@ -217,6 +224,30 @@ class DeepMineFailureTests(unittest.TestCase):
     def test_ctrl_c_is_not_swallowed_as_a_bad_replay(self):
         with self.assertRaises(KeyboardInterrupt):
             self._mine(KeyboardInterrupt())
+
+    # The analyzer is peppi_py, which a crafted replay can crash outright, so
+    # mining hands each game to the scan worker (tracker/store/scan_pool.py).
+    def _mine_through(self, run):
+        from tracker.store import scan_pool
+        with mock.patch.object(scan_pool, "run", side_effect=run) as worker:
+            rows = self._mine(None)
+        return worker, rows
+
+    def test_mining_runs_the_analyzer_in_the_scan_worker(self):
+        from tracker.stats.analyzer import analyze_game
+        worker, rows = self._mine_through(lambda fn, path: [{"slp_port": 1, "apm": 300}])
+        self.assertEqual(worker.call_args.args, (analyze_game, __file__))
+        self.assertEqual([tuple(r) for r in rows], [("complete",)])
+
+    def test_a_replay_that_crashed_the_worker_is_a_failed_row(self):
+        from tracker.store import scan_pool
+        _worker, rows = self._mine_through(scan_pool.ScanFailed("crashed the replay worker"))
+        self.assertEqual([tuple(r) for r in rows], [("failed",)])
+
+    def test_no_worker_stops_the_job_and_marks_nothing_failed(self):
+        from tracker.store import scan_pool
+        with self.assertRaises(scan_pool.WorkerUnavailable):
+            self._mine_through(scan_pool.WorkerUnavailable("could not start"))
 
 
 if __name__ == "__main__":

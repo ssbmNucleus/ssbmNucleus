@@ -69,6 +69,13 @@ At a high level, setup prepares:
   installs that finished setup before this feature existed pick it up
   automatically.
 
+## Playing in Unlocked on Windows
+
+On a new Windows install, Nucleus opens in **Unlocked**. Click the wordmark to switch modes.
+Open the **Nucleus Unlocked** card to install the game client. You need your own Melee 1.02 disc
+image and a processor with AVX2. The app keeps the client up to date. Choose the **Vanilla**
+card to play Melee with nothing changed.
+
 ## Finding Settings
 
 Settings keeps its existing cards in categories along the left: **General**,

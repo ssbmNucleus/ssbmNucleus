@@ -15,7 +15,9 @@ Last full rewrite: 2026-08-22; layout, the backend tables (§3), layering rules 
 | **Nucleus** (default) | `nucleus` | Melee mod manager: vault of costumes/stages/menus/codes, install into an m-ex project, build an ISO | everything under `/api/mex/*` |
 | **Tracker** (internal id `nucleome`) | `nucleome` | Slippi replay stats, combos, tournaments, cloud Vault (phone pairing + replay sync, shipped 0.7.2), and, from 0.7.3 to 0.8.15, Friends (removed in 0.8.16; the code is on the `archive/friends` tag); Randall (AI analyst) and Combo Video remain **gated off** in shipped builds | `/api/nucleome/*` → `backend/tracker/` |
 
-The user flips modes by clicking the header wordmark. Both modes are one React
+The user flips modes by clicking the header wordmark, which cycles Nucleus → Tracker →
+Play → Nucleus (`shared/ui/modeCycle.js`; Play only in development and Play test builds,
+so a release cycles Nucleus ↔ Tracker). The modes are one React
 app talking to one Flask process, launched by one Electron main process.
 
 ```
@@ -78,7 +80,7 @@ Folders mirror how the app works for a user, with the same areas as the frontend
 engines and routes several areas use. Each area keeps its HTTP routes in its own
 `routes/` package (§3.2). The backend runs with `backend/` on `sys.path`; the top-level
 packages are `core`, `vault`, `projects`, `upload`, `tracker`, `randall`, `shared`,
-`nucleus_api`, `devtools`, `file_retry` and `mexcli` (reorganised 2026-10-03; ids did not move:
+`nucleus_api`, `devtools`, `file_retry`, `mexcli` and `play` (reorganised 2026-10-03; ids did not move:
 every URL, blueprint name, socket event, env var, DB filename and storage path is the
 same). `tests/backend/test_backend_layout.py` pins the root files and the package list.
 About 259k lines of Python in all (the two big ones: `randall/` 80k and `shared/` 77k).
@@ -97,6 +99,7 @@ subpackages. Line counts are approximate (2026-10-03).
 | `file_retry/` | 0.1k | Retried file writes/swaps behind every vault and build write; must not import `core` |
 | `core/temporary_download.py` | 0.1k | Shared one-shot ZIP response ownership for vault backups and mod exports. Closes streams before unlinking, counts overlapping readers, protects replacement files, and finalizes abandoned Windows response iterables |
 | `core/` | 11.6k | Flat package of app-wide infrastructure. Config/paths (`config.py`), global singletons (`state.py`), `run_retention.py` (keeps only the newest N test-run dirs), `build_smoke.py` (the frozen exe's `--build-smoke-test` self-check), the vault index (`metadata.py` dispatching to the JSON file or to `vault/__init__.py`, the SQLite store, 335 lines; this `core/vault/` is not the top-level `vault/` package), gecko parsing, critical-op registry, build transaction/authorization/access, the safe archive/extract helpers, `stages.py` — the single registry of all 29 versus stages (codes, names, vault folders, dual-language roots, DAS vs replace mode) that every stage table derives from — `extra_types.py` — the 3.2k-line declarative catalog of every "extra" per character (mirrored by `frontend/src/shared/data/extraTypes.js`; data only) — and `extra_lookup.py` (the lookups over it: a character's extras including shared ones, one extra by id, the storage owner of a shared extra, unit parts) |
+| `play/` | 1k | Play, the launcher for Melee Unlocked (gate `play`, §7; unreleased): `shelf.py` (the shelf store in `<data>/play/`: built-in Nucleus Unlocked and Vanilla (Vanilla's picture is the disc's own banner, `adding.disc_banner`), added games with their own disc, plugins and cover, atomic `shelf.json`), `client.py` (the Melee Unlocked folder the user picks, verified before anything in it runs; always `melee_source.exe` or `melee_port.exe` inside it; its facts from `--print-info`, run as an argument list with a scrubbed environment and a 10 s limit, cached per program stamp in `client-info.json`; clients older than 1.0.6 refused; with no folder picked, the managed client), `client_feed.py` + `ed25519.py` + `managed.py` (the Nucleus game client Play installs and updates itself from the signed client feed into `<data>/nucleus-client/`, the `play_client_install` job; docs/dev/PLAY_CLIENT_FEED.md; the built-in games always run on the Source Port), `launch.py` (the command line from Melee Unlocked's launch contract, started detached and never owned: each game's own `--fighters-dir` or `none`, `--no-remember-iso`, `--no-dialogs`; `watch_replay`: a Tracker replay in the game's replay viewer, `--replay` with `SysPlayback`, only an indexed local `.slp` that passes slp_meta's shape checks, its recording kept in `data/_replay`; the `play_launch` watcher: exit codes said in words with the useful line from the game's console output, log or crash file, the game restarting itself; `running.json`, so a game still running after Nucleus restarts is watched again), `adding.py` (the `shelf_add` job: a finished export's ISO hard-linked or copied into a new entry, or a Vault patch or bundle decoded onto the user's disc into one (`xdelta.decode_patch`; a bundle's textures kept for the Dolphin target), hashed, a chosen picture, the Vault picture or the disc's banner as the cover; an added game of the same name is replaced only when asked, into a folder of its own swapped in by one `shelf.json` write, keeping the entry's id, saves, place and cover; no link back to the Vault; never builds fighter code), `routing.py` (which fighters an added game's MxDt.dat adds and whether each brings code, Melee Unlocked's own clone test; the engine a launch uses: the Source Port when every fighter with code has a plugin in the game's own fighters folder built for the client's plugin ABI (or is linked into the client), else the compatibility engine with the reason on the card; builds nothing), `routes/play.py` (`play_bp`) |
 | `nucleus_api/` | 4.7k | The in-process scripting facade the assistant's scripts call (`API.md` is its contract; modules `vault.py`, `game.py`, `builds.py`, `codes.py`, `menus.py`, `modfile.py`, `render.py`, `website.py`, `_workspace.py`, `gendocs.py`); `app.py` never imports it, the spec names its modules |
 | `assets/`, `data/` | data | `assets/` is tracked: `hud_vanilla/` (the two IfAll slot manifests only; the HUD, pause, series and stage-select pictures are derived from the user's own game by `menu_refs`, none ships), `texture_regions/`, `builtin/`, `vanilla_parts.json`. `data/` holds the seed files the spec ships (`any_climbers.ini`, `clone_engine.dat`, `texture_filename_table_seed.json`, `vanilla_geom_hashes.json`, `menus/compatibility_manifest.json`); those five are tracked so clean release checkouts can build, and anything else written there is git-ignored. Both resolve through `core.config.BACKEND_ASSETS_DIR` / `BACKEND_DATA_DIR` (`_MEIPASS/backend/...` when frozen) |
 | `devtools/` | 11k | **Not part of the app** (two lazy imports of `frameshot` aside, §3.6). CLI tools that drive the engines: `frameshot.py`, `effect_probe.py`, `extras_audit.py`, `extras_doctor.py`, `fps_batch.py`, `stress_build.py`, `texture_coverage.py`, `netrig.py`, `osdscan.py`, `slpdiff.py` (`tools/harness/harness_mcp.py` shells out to them); `compare_memory_input.py` compares the native input-backend parity captures `tools/ingame/verify_memory_input.py` makes; `research/fsm_crash_probe.py` is the solo-flow template |
@@ -123,7 +126,7 @@ subpackages. Line counts are approximate (2026-10-03).
 | Path | Lines | Role |
 |---|---:|---|
 | `projects/routes/` | 10k | Open/create a project, costumes in the open project, export, single-mod export, stage slots, music playlists, test in game, and the install halves of the custom character, custom stage, DAS, codes, bundle, xdelta, menu and extras blueprints (§3.2); `menus/` is a package of one module per menu kind |
-| `projects/install/` | 3.6k | Mods **into a project / playable ISO** (was `mod_install/`): `export_job.py` (the ISO export job: `run_export_job` is what the Build button's `export_bp` and Randall's delivery in `randall/delivery/deliver_steps.py` both run, one lock discipline and one set of pre-export heals; it runs as the `iso_export` job, whose record is the artifact the Save button's `copy_artifact_to` publishes), `fsm_patcher.py` (FSM bake into main.dol), `texture_pack.py` + `texture_filename_table.py` (Dolphin texture packs), `das.py` (DAS variant naming, archive member checks, the heals export runs on DAS folders), `das_loaders.py` (the DAS loader per stage; Stadium's is rebuilt from the user's own `GrPs.usd` with the shipped xdelta patch), `xdelta.py` (patch storage, xdelta3 resolver, Play worker, the cleanup of patch and bundle jobs' files), `test_build.py` (throwaway test ISO — not a test, hence `pytest.ini`) + `pristine_base.py` (the untouched vanilla project each test build copies), `required_codes.py` (the default-on Gecko codes every export carries, and the codes a user's new project starts with), `project_fighters.py` (the open project's fighter JSONs; which vanilla costume a row replaces), `test_inputs.py` (what a test-in-game build drives). The modpack-duel assembler is archived with the duel archive zip |
+| `projects/install/` | 3.6k | Mods **into a project / playable ISO** (was `mod_install/`): `export_job.py` (the ISO export job: `run_export_job` is what the Build button's `export_bp` and Randall's delivery in `randall/delivery/deliver_steps.py` both run, one lock discipline and one set of pre-export heals; it runs as the `iso_export` job, whose record is the artifact the Save button's `copy_artifact_to` publishes), `fsm_patcher.py` (FSM bake into main.dol), `texture_pack.py` + `texture_filename_table.py` (Dolphin texture packs), `das.py` (DAS variant naming, archive member checks, the heals export runs on DAS folders), `das_loaders.py` (the DAS loader per stage; Stadium's is rebuilt from the user's own `GrPs.usd` with the shipped xdelta patch), `xdelta.py` (patch storage, xdelta3 resolver, `decode_patch`: the one xdelta3 decode that Play in Dolphin for a patch and a bundle and Play's shelf add all run, Play worker, the cleanup of patch and bundle jobs' files), `test_build.py` (throwaway test ISO — not a test, hence `pytest.ini`) + `pristine_base.py` (the untouched vanilla project each test build copies), `required_codes.py` (the default-on Gecko codes every export carries, and the codes a user's new project starts with), `project_fighters.py` (the open project's fighter JSONs; which vanilla costume a row replaces), `test_inputs.py` (what a test-in-game build drives). The modpack-duel assembler is archived with the duel archive zip |
 | `projects/lload/` | 0.5k | L-load alternate fighters (tap L on the CSS to scroll a fighter's group): `groups.py` (the project's `nucleus_lload.json`, by fighter name), `layout.py` (tucked icons: each alternate's icon hidden behind its base, re-applied on every layout save), `code.py` + `code_words.py` (the per-project Gecko code; `gen_code.py` regenerates the words from `lload.s`), `export.py` (the export step, and the icon repair after `remove-fighter`). Design and evidence: `docs/dev/L_LOAD.md` |
 | `projects/nowplaying/` | 0.2k | Now Playing (the song name in the top-left corner at match start): `now_playing.s` (the clean-room Gecko code), `gen_code.py` (regenerates `code_words.py`), `code.py` (its name and hex). New projects get it through `projects/install/required_codes.py`. See `docs/dev/NOW_PLAYING.md` |
 
@@ -138,7 +141,7 @@ subpackages. Line counts are approximate (2026-10-03).
 | Path | Lines | Role |
 |---|---:|---|
 | `tracker/routes/` | 2.6k | Its two blueprints (§3.2): `nucleome.py` with the feature modules `replays`, `stats`, `combos`, `lite`, `watch`, `icons`, `ranks`, `cloud`, `share`; `combo_video.py`. The request helpers several feature modules share live in `nucleome.py`, including the cloud-token helpers (`_stored_token`, `_token_or_error`: the stored Patreon app token) that `cloud.py` and `share.py` both use |
-| `tracker/store/` | 2.1k | What every page reads: `indexer.py` (the replay index, `storage/nucleome.db`: schema, kv, scans, queries), `identity.py` (the player's Slippi codes and replay folder), the `.slp` readers `slp_meta.py` (header and final state, no dependencies) and `game_trace.py` (cached frame trace), `scan_pool.py` (the one worker process the library passes use), `slippi_rank.py` (rank cache), `games.py` (an indexed game's row and the id -> vanilla/Vault folder tables), `backup.py` (the store in a Vault backup: sanitized snapshot, restore and merge, sign-ins never carried) |
+| `tracker/store/` | 2.1k | What every page reads: `indexer.py` (the replay index, `storage/nucleome.db`: schema, kv, scans, queries; a file is re-parsed when its mtime/size changes, or once when an older parser wrote its row and `PARSE_BASIS` selects it), `identity.py` (the player's Slippi codes and replay folder), the `.slp` readers `slp_meta.py` (header and final state, no dependencies; names and codes from the metadata footer, else from GameStart) and `game_trace.py` (cached frame trace), `slp_guard.py` (the only way to peppi_py: a byte check, and a first parse in the worker for any file this process parses), `scan_pool.py` (the one worker process the library passes use; a call that crashes or hangs it is killed and its file quarantined, and nothing ever runs inline), `slippi_rank.py` (rank cache), `games.py` (an indexed game's row and the id -> vanilla/Vault folder tables), `backup.py` (the store in a Vault backup: sanitized snapshot, restore and merge, sign-ins never carried) |
 | `tracker/replays/` | 1.6k | Watch with mods: `watch_mods.py` (the `replay_watch` job: a stateless cosmetic ISO built by a headless worker backend, then played or recorded; its cleanup puts back what it changed), `dolphin_config.py` (the Launcher's playback Dolphin: paths, User dir, INI and Gecko overrides), `playback.py` (the running playback Dolphin: embed, pop-out, Stop, launch, per-game recording loop), `recording.py` (frame/audio dumps to mp4, the Discord-sized encode, the recordings folder) and `watch_options.py` (which Vault skins/stage variants fit a replay, playlist checks) |
 | `tracker/video/` | 3.5k | Replays without Dolphin. Lite: `viz_export.py` (the viz bundle), `stage_items.py`, `interactions.py` (conversions; the coach's single-game detectors too), `clip_render.py` + `anim_fetch.py` (renderer data and geometry), `clip_refs.py` (tool-issued clip refs), `sprites.py` (ISO-derived UI sprites). Combo Video: `combo_video/` (gated: `analyzer.py`, `sync.py` the scheduler, `assemble.py` the Dolphin final render, a `combo_video_render` job, `jobs.py` the song analysis, `store.py`) |
 | `tracker/stats/` | 1.5k | `aggregate.py` (metadata stats; was `stats.py`), `deep_stats.py` (frame-mining the player's own replays), `baseline_ranks.py` (per-stat rank mapping), and the vendored `analyzer.py` + `pack_math.py` (kept equal to `tools/rank-baselines` by `tests/backend/test_vendored_sync.py`) |
@@ -302,6 +305,12 @@ which `app.py` imports before registering `nucleome_bp`.
 | `wishes_bp` | `wishes.py` | 5 | `/api/mex/wishes` | Wishes and capability gaps: list, submit, decline, `capability_status` (logic in `randall/reports/wishes.py`, the public wish API, and its `wish_*` modules) |
 | `nucleome_bp` (Tracker's) | `coach.py` | 8 | `/api/nucleome/coach/*` | The Tracker coach (Analyst tab): saved chats, profile, status, the streamed turn (SSE); `NUCLEUS_RANDALL` gate on every route, engine in `randall/coach/` |
 
+**Play** (`play/routes/`, gate `play`)
+
+| Blueprint | File | Routes | URL root | Covers |
+|---|---|---:|---|---|
+| `play_bp` | `play.py` | 16 | `/api/play/*` | The shelf, adding a finished export or a Vault patch or bundle to it (a `shelf_add` job, with a chosen cover, or replacing the added game of the same name), a Tracker replay in Melee Unlocked's viewer, the Melee Unlocked folder, the Slippi account line, launching (a `play_launch` job), the game's settings window, data folder, rename/remove/cover. Everything that starts a program or changes the shelf needs the window's key (`core/ui_channel.py`) |
+
 **Shared** (`shared/routes/`)
 
 | Blueprint | File | Routes | URL root | Covers |
@@ -312,7 +321,7 @@ which `app.py` imports before registering `nucleome_bp`.
 | `viewer_bp` | `viewer.py` | 5 | `/api/viewer*` | The files the frontend-launched HSDRawViewer opens (`/viewer/paths*`) and the vanilla costume list |
 | `slippi_bp` | `slippi.py` | 6 | `/api/...` | Slippi/Dolphin paths, texture packs |
 | `account_bp` | `account.py` | 3 | `/api/account/discord*` | The Discord sign-in the backend holds (engine: `shared/account/`) |
-| `mcp_bp` | `mcp.py` | 3 | `/api/mcp`, `/api/mcp/account` | The MCP server for the user's own AI, and the window's Patreon token for its AI calls (memory only); the tools are `randall/mcp/` behind the `assistant` gate ([APP_MCP.md](APP_MCP.md)) |
+| `mcp_bp` | `mcp.py` | 9 | `/api/mcp`, `/api/mcp/account`, `/api/mcp/window`, `/api/mcp/window/confirmations`, `/api/mcp/window/problem-reports` | The MCP server for the user's own AI, and the window's Patreon token for its AI calls (memory only), its Slippi Dolphin folder, the MCP's questions for the person and the problem reports the AI wrote (sent by the person through the chat report submit), all window only (`core/ui_channel.py`); the tools are `randall/mcp/` behind the `assistant` gate ([APP_MCP.md](APP_MCP.md)) |
 
 Endpoint-level detail lives in [API_REFERENCE.md](API_REFERENCE.md).
 
@@ -492,6 +501,9 @@ running job of a dead backend process that the new list leaves out ends there as
 the newest 20 ended records per kind, and screens read it through `useJob(id)` /
 `useActiveJob(kind)` / `useLatestJob(kind)`;
 `jobOutcome(job)` turns an ended record into `{ ok, result | error }`.
+`shelfAdd.js` is the one Add to Play request, shared by the export panel and the Vault (a chosen
+cover sent as multipart; the question before replacing an added game of the same name), so
+neither imports `play/`.
 `InterruptedJobsNotice` (App.jsx) tells the user once about an interrupted job
 and its cleanup notes, then posts `/seen`.
 
@@ -504,11 +516,22 @@ candidates stay for import until dismissal); `vault_restore`; `iso_export` (crit
 `bundle_install`, `bundle_play`; `replay_watch`; `combo_video_render` (gated:
 owns the recorder settings it changes in the playback Dolphin, the Dolphin it
 runs and its throwaway cosmetic ISO and project); `first_run_setup`; `ingame`;
+`shelf_add` (gated: Play putting a finished export on its shelf; owns the entry folder it
+reserved until the entry is stored, and on a replace the old folder until it is removed);
 and, kept in memory (`keep=5`), `replay_scan`, `combo_scan`, `deep_stats`,
-`cloud_sync`, `cloud_autorun`. The helper processes a job runs (xdelta3, the
+`cloud_sync`, `cloud_autorun`, and (`keep=10`, gated) `play_launch`, which watches a game Play started: `extra.phase` 'launching' then 'running' with `extra.pid`, the result how it closed. Kept in memory only, so `<data>/play/running.json` names the game it watches (pid, start time, program); at startup `play/launch.py reattach` watches that game again in a new job when all three still match a live process. The helper processes a job runs (xdelta3, the
 MexCLI export and setup's ISO extraction, the headless build worker) are tied
 to the backend by `core/child_procs.py`, so a crash cannot leave one writing files the
-next start has already recovered. A job writes only files named by its own id
+next start has already recovered. Every helper also starts without Nucleus's settings and
+secrets (`core/child_env.py`: every `NUCLEUS_*`, the backend token and window key among them,
+credentials such as `*_API_KEY` and `*_TOKEN`, the app's `PYTHONPATH`), because it reads files
+Nucleus did not make: `core.config.get_subprocess_args()`, which every MexCLI, HSDRaw,
+Blender, xdelta and ffmpeg call passes, carries that environment, and the launches that do not
+use it (Dolphin, rigswap, Play's games, the creation toolkit, "show in folder") pass
+`child_environment()` themselves. `test_helper_environment.py` fails on a new `subprocess`
+call that does neither. Two are given something back on purpose: rigswap its OpenRouter key,
+and the build worker, which is this backend again, Nucleus's settings with a token of its own
+(never the window's key). A job writes only files named by its own id
 and owns its temporary folders and partial files, so a failed, cancelled or
 interrupted job leaves none behind and one attempt's result is never another's.
 The Export screen's pipeline (`projects/export/exportPipeline.js`) follows each
@@ -565,8 +588,10 @@ no HTTP client library.** `vite.config.js` proxies `/api`, `/storage`,
 
 ### 4.1 Shell and navigation
 
-`frontend/src/App.jsx` owns: app mode (`nucleus` | `nucleome`, persisted in
-`localStorage`, themed via `<html data-mode>`), active tab (plain state, all
+`frontend/src/App.jsx` owns: app mode (`nucleus` | `nucleome` | `play`, the last
+only where Play is built in; persisted in `localStorage`, themed via `<html data-mode>`:
+`index.css` re-points the colour tokens per mode, Tracker to green and Play to the
+`--color-play*` purple tokens), active tab (plain state, all
 panels stay mounted and are hidden with `.app-panel--hidden`), vault
 `metadata` + `onRefresh`, setup gate, download queue.
 
@@ -699,6 +724,7 @@ the file itself, or a lazy chunk can be pulled into another.
 | `projects/menus/` | 9 | The CSS/SSS layout editors opened from `MenuMode` (`CssLayoutEditor`, `SssLayoutEditor`, canvas, icon properties, `cssGridLayout.js`) |
 | `projects/codes/` | 6 | Gecko codes manager and its paste modal |
 | `projects/export/` | 8 | Export: `IsoBuilder`, `ExportHome` (with `ExportHome.css`; most of what `IsoBuilder.css` still holds styles screens the builder no longer renders), export reconciliation, the xdelta Build/Create modals |
+| `play/` | — | Play mode (id `play`, shown to the player as "Unlocked": the wordmark reads "SSBM Nucleus Unlocked", `shared/ui/modeCycle.js` `MODE_NAMES`; a first run with no remembered mode opens on it, `startingMode`; gated, `PLAY_ENABLED`; reached only through `import.meta.glob` in `App.jsx`): `PlayApp`, `PlayTabs`, `PlayButton`, the shelf grid and cards (`playCards.js` is the pure entry-to-card-state map), the Melee Unlocked folder setting, `play.css` |
 | `upload/` | 6 | Upload tab: `UploadPage`, post preview, upload catalog, `publish.js` |
 | `tracker/` | 3 | Tracker mode shell: `NucleomeApp.jsx` (lazy pages; the `import.meta.env.DEV` fold for Combo Video and the coach), `NucleomeTabs.jsx`, `nucleome.css` |
 | `tracker/replays/` | 14 (+`data/` 1) | Replays page (`ReplayRow`, `MonthPager`) and playback: Watch Lite (`WatchLiteModal`, `WatchLiteClip`, renderer `litePaint.js` with the stage inference in `liteStageInference.js`, `meleeRender.js`, `meleeStages.js` with the baked `data/meleeMovers.json`, `meleeReadout.js`), the Watch/playlist mods modals (`WatchModsModal`, `PlaylistModsModal`, the shared `WatchPlayback` with `useWatchJob`; `watchJob.js` is the pure view of the `replay_watch` job) |
@@ -903,6 +929,7 @@ See [STORAGE_LOCATION.md](STORAGE_LOCATION.md) for boundaries and recovery.
 |---|---|---|---|
 | Combo Video | `NUCLEUS_COMBO_VIDEO=0` | `COMBO_VIDEO_ENABLED` (DEV only) | tab removed, chunk elided via `import.meta.env.DEV` fold |
 | Randall / Analyst | `NUCLEUS_RANDALL=0` | `RANDALL_ENABLED` (DEV only) | same |
+| Unlocked (gate `play`) | `NUCLEUS_PLAY=1` in Windows stable packages since 0.10.0 (`releaseFeatures=play`) and in Play test packages (`previewFeatures=play`). `NUCLEUS_PLAY=0` otherwise | `PLAY_ENABLED` in dev or with `VITE_PLAY_PREVIEW=1`. `build.bat` sets it when `ship_guard.py gate play` passes | When closed, the wordmark skips Unlocked, exports omit "Add to shelf", the bundle omits `PlayApp` and `/api/play/*` returns 404 |
 | Nucleus assistant (Randall's chat + the app MCP) | `NUCLEUS_ASSISTANT` (shipped 0.9.0 — no longer forced off; the variable stays as the kill switch) | `ASSISTANT_ENABLED` (DEV, or `VITE_ASSISTANT_PREVIEW=1`, which every build script sets when `ship_guard.py gate assistant` passes) | On in every package. To hold it back for a build, set `packaged_off=True` in `core/gates.py` and put it back in `main.js`'s list: the spec, the stage (Blender, rigswap), the frontend flag and the frozen smoke all follow, and a `previewFeatures: ["assistant"]` package opens it again |
 | Build commit (assistant) | `NUCLEUS_BUILD_COMMIT=0` | — | A prepared menu + code change can still be inspected and authorized; `nucleus_api.builds.commit_change` and `/api/mex/builds/changes/<id>/approve` refuse outright (`outcome=build_commit_disabled`) rather than half-applying. **Stays off in a preview package too** |
 | Delivery to the game (assistant) | `NUCLEUS_DELIVERY=0` | — | `randall/delivery/deliver.py` refuses with a sentence; delivery rebuilds and overwrites the file someone boots, so it is closed until the path is exercised on real builds. **Stays off in a preview package too** |
@@ -924,11 +951,13 @@ once, in `backend/core/build_smoke.py` `_GATED_PACKAGES`: the assistant is
 the build-change approval route (`projects/routes/menus/build_changes.py`);
 the Tracker coach (gate `randall`) is `randall.coach` and `randall.routes.coach`,
 inside the assistant's package; Combo Video is `tracker.video.combo_video` and
-`tracker.routes.combo_video`. A stable 0.9.0 build carries the assistant and
-leaves out the coach and Combo Video.
-`tools/build/mex_backend.spec` excludes them unless `ship_guard.gate_ships` says
-the gate ships (not `packaged_off`, or a preview build's `NUCLEUS_PREVIEW_FEATURES`), and fails if any
-still reached the bundle; the frozen `--build-smoke-test` re-checks from inside
+`tracker.routes.combo_video`; Unlocked is `play`. Stable builds carry the assistant and
+leave out the coach and Combo Video. Since 0.10.0 they also carry Unlocked on Windows.
+`PLAY_IN_STABLE` enables this through `releaseFeatures=play` in the packaged manifest.
+[PLAY_CLIENT_FEED.md](PLAY_CLIENT_FEED.md#play-in-stable-builds) describes the wiring.
+`tools/build/mex_backend.spec` includes gated packages when `ship_guard.gate_ships` says
+they ship and fails if any excluded packages
+reach the bundle; the frozen `--build-smoke-test` re-checks from inside
 the exe; `ship_guard` refuses a stage whose `frontend/dist` still has a closed
 gate's chunk, or lacks a shipping gate's chunk (`GATED_FRONTEND_CHUNKS`). `app.py` imports and registers a gated
 blueprint only while its gate is open, so a closed gate's routes 404 by not
@@ -961,7 +990,7 @@ gate cannot be smuggled in beside them:
 | --- | --- |
 | `NUCLEUS_APP_VERSION` | the spawning app's version, for diagnostics and bug reports |
 | `NUCLEUS_BACKEND_TOKEN` | authenticates the app's private backend process. **Printed to the backend's stdout at startup**, which is how the test harness picks it up — so holding it does not mean being the app's window |
-| `NUCLEUS_UI_APPROVAL_KEY` | a second, per-run secret that does. Never printed and never served: Electron hands it, with the backend token, to the app's own page over IPC (`renderer:secrets`, a synchronous call from `preload.js` → `window.electron.uiApprovalKey`; never the renderer's command line, which other local users can read on Linux) and to the backend's environment. `POST /api/mex/builds/changes/<id>/approve` and the MCP's window questions (`/api/mcp/window/confirmations`, `core/ui_channel.py`) require it, because those decisions are made by a person in the window and not by anything that can reach the port. With it unconfigured that endpoint refuses outright |
+| `NUCLEUS_UI_APPROVAL_KEY` | a second, per-run secret that does. Never printed and never served: Electron hands it, with the backend token, to the app's own page over IPC (`renderer:secrets`, a synchronous call from `preload.js` → `window.electron.uiApprovalKey`; never the renderer's command line, which other local users can read on Linux) and to the backend's environment. `core/ui_channel.window_refusal` checks it on: `POST /api/mex/builds/changes/<id>/approve`; the MCP's window questions (`/api/mcp/window/confirmations`); `POST /api/mcp/window` and `POST /api/mcp/account` (what MCP calls run and whose usage they spend); `POST /api/assistant/chats/<id>/approvals/<approval_id>`; `POST /api/mex/chat-reports/submit`; the MCP problem reports waiting for the person (`/api/mcp/window/problem-reports`); Play's writes (`/api/play/*`); and the Melee Unlocked export. Those are decisions a person makes in the window, not anything that can reach the port (the user's own AI over MCP holds the backend token too). The frontend attaches it in `shared/transport/api.js` (`WINDOW_ONLY`). With it unconfigured those endpoints refuse outright (503) |
 
 **Patreon is not a release gate, and it no longer gates much.**
 Everything shipped on the desktop is free — Replays, Combos, Stats, Watch Lite,

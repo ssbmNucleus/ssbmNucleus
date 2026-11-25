@@ -5,7 +5,7 @@
     "To bump: publish a new tag on the fork, update `tag` and every sha256 here (from the release's SHA256SUMS.txt)."
   ],
   "repo": "ssbmNucleus/HSDLib",
-  "tag": "nucleus-v0.9.2",
+  "tag": "nucleus-v0.10.0",
   "platforms": {
     "win-x64": {
       "asset": "hsdrawviewer-win-x64.zip",

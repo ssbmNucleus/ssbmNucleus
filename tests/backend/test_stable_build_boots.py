@@ -3,8 +3,9 @@
 Since 0.8.16 an installer does not carry the code of a closed gate at all
 (tools/build/mex_backend.spec, RELEASE GATES). Since 0.9.0 a stable build
 carries the assistant (Randall's chat, its tools and the app MCP) and still
-leaves out Combo Video and the Tracker coach (randall.coach); a preview build is
-the same. A build can still hold the assistant back (core/gates.py packaged_off),
+leaves out Combo Video and the Tracker coach (randall.coach). Since 0.10.0
+Windows stable builds also carry Play. A build can still hold the assistant back
+(core/gates.py packaged_off),
 and then carries none of randall, nucleus_api, shared.aiengine or
 shared.modellab. core/build_smoke.py names the packages per gate; this test
 imports app.py with exactly those packages made unimportable and the packaged
@@ -48,7 +49,8 @@ print('RULES ' + json.dumps({'rules': rules, 'blueprints': sorted(app.app.bluepr
 
 #: What each packaged build carries, spelled out (not derived from gates.py).
 BUILDS = {
-    'stable': {'preview': False, 'ships': {'assistant'}},
+    'stable-unix': {'preview': False, 'ships': {'assistant'}},
+    'stable-windows': {'preview': False, 'ships': {'assistant', 'play'}, 'release': 'play'},
     'preview': {'preview': True, 'ships': {'assistant'}},
     # The assistant held back for a build: its code left out and its gate closed.
     'assistant-held': {'preview': False, 'ships': set(), 'env': {'NUCLEUS_ASSISTANT': '0'}},
@@ -61,7 +63,7 @@ def _boot(tmp_path, build):
                if feature not in shipped for p in packages]
     env = {k: v for k, v in os.environ.items()
            if not k.startswith('NUCLEUS_') and k not in ('PYTHONPATH',)}
-    env.update(gates.policy_env(preview=BUILDS[build]['preview']))
+    env.update(gates.policy_env(preview=BUILDS[build]['preview'], release=BUILDS[build].get('release')))
     env.update(BUILDS[build].get('env', {}))
     data = tmp_path / 'data'
     data.mkdir()
@@ -99,6 +101,7 @@ def test_packaged_backend_boots_without_the_left_out_packages(tmp_path, build):
     assert 'combo_video' not in blueprints
     assert not _has(rules, '/combo-video')
     assert not _has(rules, '/coach')
+    assert bool(_has(rules, '/api/play/')) == ('play' in BUILDS[build]['ships'])
 
     # The assistant and the build-change approval card it drives: every package since 0.9.0,
     # unless the build holds the assistant back.

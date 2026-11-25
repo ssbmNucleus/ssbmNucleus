@@ -40,20 +40,22 @@ _BUILD_SMOKE_MODEL_IMPORT_MODULES = (
 # (ship_guard.gate_ships: the gate is not packaged_off, or the build asks for it as
 # a preview feature with NUCLEUS_PREVIEW_FEATURES, the same variable the spec reads
 # in the same build), and the frozen smoke below proves it from inside the shipped
-# exe. Since 0.9.0 the assistant ships by default; Combo Video and the Tracker
-# coach (gate "randall", which lives inside the assistant's package) do not.
+# exe. Since 0.9.0 the assistant ships by default; Combo Video, the Tracker
+# coach (gate "randall", which lives inside the assistant's package) and Play do not.
 _GATED_PACKAGES = {
     "assistant": ("randall", "nucleus_api", "shared.aiengine", "shared.modellab",
                   # the approval card for a change the assistant proposed
                   "projects.routes.menus.build_changes"),
     "combo_video": ("tracker.video.combo_video", "tracker.routes.combo_video"),
     "randall": ("randall.coach", "randall.routes.coach"),
+    "play": ("play",),
 }
 
 
 def _feature_ships(name):
     """Whether gated feature `name` is in this build: always in a dev checkout;
-    in a frozen build when its gate is not packaged_off or the build asked for it
+    in a frozen build when its gate is not packaged_off, stable builds open it
+    (gates.release_features: Play once PLAY_IN_STABLE), or the build asked for it
     as a preview feature. The same rule as tools/build/ship_guard.gate_ships, which
     decided what the spec put in this exe."""
     if not getattr(sys, "frozen", False):
@@ -61,8 +63,8 @@ def _feature_ships(name):
     wanted = {f.strip().lower() for f in os.environ.get("NUCLEUS_PREVIEW_FEATURES", "").split(",")}
     if name in wanted:
         return True
-    from core.gates import GATES
-    return not GATES[name].packaged_off
+    from core.gates import GATES, release_features
+    return not GATES[name].packaged_off or name in release_features()
 
 
 def _bundled_modules():

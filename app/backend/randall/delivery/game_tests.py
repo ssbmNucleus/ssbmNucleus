@@ -20,12 +20,16 @@ _lock = threading.RLock()
 
 
 def settings(value):
+    """The in-game test's two paths, each empty or a path on this computer (core/path_safety.local_path): an
+    ISO or Dolphin folder named as a share or an NT-namespace path (\\??\\UNC\\host\\...) is refused before
+    anything opens it. Raises ValueError (NotLocalPath is one)."""
+    from core.path_safety import local_path
     value = {} if value is None else value
     if not isinstance(value, dict) or set(value) - {'vanillaIsoPath', 'slippiDolphinPath'}:
         raise ValueError('Invalid in-game test settings.')
     if any(not isinstance(v, str) or len(v) > 4096 or '\x00' in v for v in value.values()):
         raise ValueError('Invalid in-game test path.')
-    return dict(value)
+    return {key: local_path(v, field=key) if v.strip() else v for key, v in value.items()}
 
 
 def _record_path(session_id):

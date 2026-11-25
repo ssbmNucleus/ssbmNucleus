@@ -5,6 +5,7 @@ behind and one attempt's outcome is never read as another's."""
 import configparser
 import io
 import json
+import os
 import tempfile
 import zipfile
 from pathlib import Path
@@ -472,6 +473,85 @@ def test_a_bundle_play_that_cannot_turn_on_hd_textures_fails_before_launching(en
     assert record['status'] == 'failed'
     assert 'HD textures' in record['error']
     assert launched == []
+
+
+# ---- a crafted bundle: every member is checked before any is read or written (vault/catalog/bundles.py)
+
+def _no_such_drive():
+    """A drive letter this computer does not have: should the check ever stop working, the drive-relative name
+    fails to open instead of writing onto a real drive."""
+    return next((f'{letter}:' for letter in 'QRSTUVWXYZ' if not os.path.exists(f'{letter}:/')), 'Q:')
+
+
+@pytest.mark.parametrize('texture', [f'{_no_such_drive()}evil.png', 'ok.png:hidden.png', '../../escape.png',
+                                     'CON.png'], ids=['drive', 'stream', 'dotdot', 'device'])
+def test_a_bundle_play_refuses_a_texture_name_that_leaves_its_folder(env, launched, texture):
+    """Before, textures/D:evil.png was written to D:evil.png (the current folder of drive D:) and
+    textures/ok.png:hidden.png into an alternate data stream of ok.png."""
+    _store_bundle(env, textures=('tex1.png', texture))
+    record = _play_bundle(env)
+    assert record['status'] == 'failed' and 'Invalid bundle' in record['error'], record
+    assert launched == [] and env.xdelta.runs == []
+    assert not (env.user / 'Load').exists() and list(env.isos.iterdir()) == []
+
+
+def test_a_bundle_play_or_install_refuses_an_oversized_texture_or_manifest(env, launched, monkeypatch):
+    from vault.catalog import bundles as catalog
+    _store_bundle(env)
+    monkeypatch.setattr(catalog, 'TEXTURE_MAX_BYTES', 2)        # each texture here is 3 bytes
+    record = _play_bundle(env)
+    assert record['status'] == 'failed' and 'textures/tex1.png is larger than' in record['error'], record
+    assert _job(env, _install(env))['status'] == 'failed'
+    monkeypatch.setattr(catalog, 'TEXTURE_MAX_BYTES', 1024)
+    monkeypatch.setattr(catalog, 'MANIFEST_MAX_BYTES', 8)
+    record = _play_bundle(env)
+    assert record['status'] == 'failed' and 'manifest.json is larger than' in record['error'], record
+    assert launched == [] and env.xdelta.runs == [] and not (env.user / 'Load').exists()
+
+
+def test_bundle_import_checks_every_member_and_leaves_out_an_oversized_image(tmp_path, monkeypatch):
+    from vault.catalog import bundles as catalog
+    store = tmp_path / 'store'
+    store.mkdir()
+    saved = []
+    monkeypatch.setattr(catalog, 'BUNDLE_PATH', store)
+    monkeypatch.setattr(catalog, 'load_bundle_metadata', lambda: [])
+    monkeypatch.setattr(catalog, 'save_bundle_metadata', saved.append)
+
+    def bundle(name, **members):
+        path = tmp_path / f'{name}.ssbm'
+        with zipfile.ZipFile(path, 'w') as archive:
+            archive.writestr('manifest.json', json.dumps({'name': name, 'build_name': 'b'}))
+            for member, data in members.items():
+                archive.writestr(member.replace('__', '/'), data)
+        return path
+
+    with pytest.raises(ValueError, match='Invalid bundle'):
+        catalog.import_bundle_file(bundle('bad', **{'textures__a.png:s.png': b'x'}), 'bad')
+    assert list(store.iterdir()) == [] and saved == []
+
+    monkeypatch.setattr(catalog, 'IMAGE_MAX_BYTES', 4)
+    result = catalog.import_bundle_file(bundle('ok', **{'textures__t.png': b'png', 'image.png': b'12345678'}), 'ok')
+    assert [p.suffix for p in store.iterdir()] == ['.ssbm'], 'the bundle, without its oversized image'
+    assert saved[0][0]['id'] == result['bundle_id'] and saved[0][0]['texture_count'] == 1
+
+    monkeypatch.setattr(catalog, 'MANIFEST_MAX_BYTES', 8)
+    with pytest.raises(ValueError, match='manifest.json is larger than'):
+        catalog.import_bundle_file(bundle('big'), 'big')
+
+
+def test_bundle_preview_reads_the_manifest_within_its_cap(env, monkeypatch):
+    from vault.catalog import bundles as catalog
+    _store_bundle(env)
+    data = (env.bundles / 'b1.ssbm').read_bytes()
+
+    def preview():
+        return env.client.post('/api/mex/bundle/preview', data={'file': (io.BytesIO(data), 'b1.ssbm')},
+                               content_type='multipart/form-data')
+    assert preview().get_json()['manifest']['build_name'] == 'build_b1'
+    monkeypatch.setattr(catalog, 'MANIFEST_MAX_BYTES', 8)
+    refused = preview()
+    assert refused.status_code == 400 and 'manifest.json is larger than' in refused.get_json()['error']
 
 
 def test_patch_play_is_a_job_that_fails_with_the_build_error_or_launches(env, launched):

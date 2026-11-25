@@ -113,6 +113,7 @@ Planning contracts and inventories (check approval status and dated baseline):
   `app/backend/core/gates.py` and `app/electron/main.js` cite (the 0.9.0 preview is the worked example)
 - `L_LOAD.md` — how ACE 2.0's L-press alternate fighters work, and the proposed Nucleus design: L scrolls a list, tucked icons (core proven in game on scratch ISOs; not built into the app)
 - `NOW_PLAYING.md` — the song name at match start: how ACE's `bgm_display` plugin does it, the clean-room Gecko code new projects start with, and how they get it
+- `PLAY_CLIENT_FEED.md` — the signed feed Play installs the game client, Nucleus Unlocked, from: its schema and trust, where the client installs, the owner's publish steps, and the one switch that puts Play in stable builds
 
 Research / point-in-time (not maintained; check dates before trusting):
 

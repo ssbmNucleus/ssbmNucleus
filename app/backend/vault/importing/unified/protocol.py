@@ -25,11 +25,29 @@ def parse_import_link(url):
             'effect_type': values.get('effect_type')}
 
 
+def describe_import(*, origin=None, protocol_url=None, filename=None):
+    """Where an import came from, as the Melee Unlocked export's confirmation shows it for fighter C that came
+    in the package (projects/install/fighter_source.py). Only informational: such C is untrusted wherever it
+    came from."""
+    if origin:
+        return origin
+    if protocol_url:
+        try:
+            return f"a nucleus://import link to {parse_import_link(protocol_url)['url']}"
+        except ValueError:
+            return 'a nucleus://import link'
+    return f'the file {filename}' if filename else None
+
+
 def import_handoff(path, filename, *, protocol_url=None, expected_url=None,
                    slippi_action=None, duplicate_action=None, custom_title=None,
                    mod_type=None, effect_type=None, character=None, budget=None,
-                   source_filename=None, mod_type_override=None):
+                   source_filename=None, mod_type_override=None, origin=None):
     """Normalize the downloaded/uploaded object, then run the import cascade.
+
+    `origin` says where the object came from (the route: the download URL the window fetched, or a file
+    from this computer; Randall: the mod website post). Fighter C in a package is recorded with it, as
+    untrusted (projects/install/fighter_source.py).
 
     This used to call `_import_single_archive` directly, which meant an
     approved chat download of a real raw `Halo3CSS.dat`, an image, or a
@@ -61,8 +79,10 @@ def import_handoff(path, filename, *, protocol_url=None, expected_url=None,
         hints['effect_type'] = effect_type
     if character:
         hints['character'] = character
+    from projects.install.fighter_source import import_origin
+    where = describe_import(origin=origin, protocol_url=protocol_url, filename=source_filename or filename)
     with normalized_upload(path, filename, source_filename=source_filename,
-                           budget=budget) as upload:
+                           budget=budget) as upload, import_origin(where):
         return _import_single_archive(upload.path, upload.filename,
                                       slippi_action=slippi_action,
                                       duplicate_action=duplicate_action,

@@ -251,11 +251,17 @@ def _choice(arguments, key, allowed, default):
 
 
 def _file(value, key='path'):
-    from core.path_safety import refuse_network_path
+    from core.path_safety import NotLocalPath, local_path
     if not isinstance(value, str) or not value.strip():
         raise ValueError(f'{key} must be an absolute file path.')
-    refuse_network_path(value, field=key)      # before anything opens it (an SMB open offers the user's hash)
-    path = Path(value.strip()).expanduser()
+    # The request-path gate, before anything opens it: an SMB open offers the user's hash, and \??\UNC\...
+    # reaches a share without looking absolute.
+    try:
+        path = Path(local_path(value, field=key))
+    except NotLocalPath as refused:
+        if refused.reason == 'network':
+            raise
+        raise ValueError(f'{key} must be an absolute path: {value.strip()}')
     if not path.is_absolute():
         raise ValueError(f'{key} must be an absolute path: {path}')
     if not path.is_file():
@@ -918,8 +924,14 @@ def save_build_iso(arguments, app):
         raise ValueError(f"That export did not finish ({record.get('status')}): "
                          f"{record.get('error') or 'no ISO was made'}. Run export_build again.")
     filename = (record.get('result') or {}).get('filename') or (record.get('params') or {}).get('filename')
-    from core.path_safety import refuse_network_path
-    target = Path(refuse_network_path(_text(arguments, 'destination', limit=1000), field='destination')).expanduser()
+    from core.path_safety import NotLocalPath, local_path
+    destination = _text(arguments, 'destination', limit=1000)
+    try:
+        target = Path(local_path(destination, field='destination'))
+    except NotLocalPath as refused:
+        if refused.reason == 'network':
+            raise
+        raise ValueError(f'destination must be an absolute path: {destination}')
     if not target.is_absolute():
         raise ValueError(f'destination must be an absolute path: {target}')
     if target.is_dir():

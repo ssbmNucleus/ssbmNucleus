@@ -62,6 +62,14 @@ GATES: dict[str, Gate] = {
         env='NUCLEUS_RANDALL', packaged_off=True,
         covers='Randall / the Analyst tab (/api/nucleome/coach/*)',
         ui='RANDALL_ENABLED in config/features.js (DEV-only fold)'),
+    'play': Gate(
+        env='NUCLEUS_PLAY', packaged_off=True,
+        covers='Unlocked, the mode for the Nucleus game client: its '
+               'shelf of games, the client it installs from the signed client feed and the '
+               'export page\'s "Add to shelf" (/api/play/*). Packaged into a Play test build '
+               '(NUCLEUS_PREVIEW_FEATURES=play) and into Windows stable builds since 0.10.0',
+        ui='PLAY_ENABLED in config/features.js (DEV-only fold; VITE_PLAY_PREVIEW, which '
+           'build.bat sets exactly when ship_guard.gate_ships("play") says so)'),
     'vault': Gate(
         env='NUCLEUS_VAULT', packaged_off=False,
         covers='cloud vault: phone pairing, replay push, AND the launch '
@@ -154,6 +162,27 @@ def present(name: str) -> bool:
     return all(_on_disk(package) for package in _GATED_PACKAGES.get(name, ()))
 
 
+#: THE switch that puts Play in stable (release) builds. It is the only edit that
+#: ships Play: ship_guard.gate_ships('play') follows it (build.bat then builds the
+#: Play frontend, VITE_PLAY_PREVIEW, and mex_backend.spec freezes the play package),
+#: build.bat writes releaseFeatures=play into the packaged manifest
+#: (`ship_guard.py gate play --stable`), and electron/main.js opens NUCLEUS_PLAY for
+#: a package whose manifest says so. The gate stays packaged_off, so main.js keeps
+#: closing it in every package that does not. Windows builds only: the game client
+#: Play installs (play/managed.py) is Windows-only, and build-linux.sh and
+#: build-macos.sh, which write no releaseFeatures, then leave Play out whole.
+#: On since 0.10.0 (docs/dev/PLAY_CLIENT_FEED.md).
+PLAY_IN_STABLE = True
+
+
+def release_features(platform=None) -> set[str]:
+    """The packaged_off features a stable build of `platform` (default: this
+    machine, the build host) opens all the same. build.bat writes them into the
+    packaged manifest as `releaseFeatures`; main.js reads them like previewFeatures."""
+    platform = sys.platform if platform is None else platform
+    return {'play'} if PLAY_IN_STABLE and platform == 'win32' else set()
+
+
 def packaged_off_env() -> list[str]:
     """The variables a packaged build sets to '0'. Mirrored by electron/main.js."""
     return [g.env for g in GATES.values() if g.packaged_off]
@@ -164,26 +193,51 @@ def delivery_enabled() -> bool:
     return enabled('delivery')
 
 
-#: The gates a preview package leaves OPEN. Everything else marked
-#: `packaged_off` stays '0' — a preview opens the assistant surface, not the
-#: write paths behind it. Since 0.9.0 the assistant is not packaged_off, so
-#: this changes nothing until it is held back again; then a preview build
-#: (NUCLEUS_PREVIEW_FEATURES=assistant) opens it as before.
+#: The gates a preview package may leave OPEN, each with the preview feature
+#: that opens it (`NUCLEUS_PREVIEW_FEATURES=<feature>,...`, the build.bat
+#: selector, written into the packaged manifest as `previewFeatures`).
+#: Everything else marked `packaged_off` stays '0' in every package, preview
+#: included — a preview opens a surface, not the write paths behind it.
+#: Since 0.9.0 the assistant is not packaged_off, so its entry changes nothing
+#: until it is held back again; then `assistant` opens it as before.
+#: `play` opens Play (the Melee Unlocked launcher) for a local test build;
+#: build.bat refuses it unless the build's version carries a prerelease tag,
+#: so it cannot ride into a release (docs/dev/PREVIEW-0.9.0.md, "Play test builds").
 # The Tracker coach (NUCLEUS_RANDALL) stays off in every package, preview
 # included: an assistant preview opens the assistant chat only (owner, 2026-10-04).
-PREVIEW_OPEN_GATES = ('NUCLEUS_ASSISTANT',)
+PREVIEW_OPENS = {
+    'NUCLEUS_ASSISTANT': 'assistant',
+    'NUCLEUS_PLAY': 'play',
+}
+PREVIEW_OPEN_GATES = tuple(PREVIEW_OPENS)
 
 
-def policy_env(preview: bool) -> dict[str, str]:
+def preview_features(value) -> set[str]:
+    """The feature names in a packaged manifest's `previewFeatures` (build.bat writes
+    a comma-separated string; a list is accepted too). Mirrors electron/main.js."""
+    if isinstance(value, str):
+        value = value.split(',')
+    if not isinstance(value, (list, tuple, set, frozenset)):
+        return set()
+    return {f.strip().lower() for f in value if isinstance(f, str) and f.strip()}
+
+
+def policy_env(preview: bool = False, features=None, release=None) -> dict[str, str]:
     """Exactly what a PACKAGED build puts in the backend's environment.
 
-    `preview` is `package.json previewFeatures?.includes('assistant')` — the
-    flag build.bat writes into the packaged manifest from
-    `NUCLEUS_PREVIEW_FEATURES=assistant`. The result is the whole contract:
-    electron/main.js must produce this mapping and nothing else, and
-    `tests/backend/test_preview_policy.py` asserts both halves agree.
+    `features` is the packaged manifest's `previewFeatures` — what build.bat
+    writes there from `NUCLEUS_PREVIEW_FEATURES`. `preview=True` with no
+    `features` is the 0.9.0 assistant preview (`previewFeatures=assistant`).
+    `release` is its `releaseFeatures` — what build.bat writes there from
+    `release_features()` (nothing while PLAY_IN_STABLE is False).
+    The result is the whole contract: electron/main.js must produce this
+    mapping and nothing else, and `tests/backend/test_preview_policy.py`
+    asserts both halves agree.
     """
-    return {env: ('1' if preview and env in PREVIEW_OPEN_GATES else '0')
+    if features is None:
+        features = ('assistant',) if preview else ()
+    wanted = preview_features(features) | preview_features(release or ())
+    return {env: ('1' if PREVIEW_OPENS.get(env) in wanted else '0')
             for env in packaged_off_env()}
 
 
@@ -206,6 +260,6 @@ def policy_log_line() -> str:
     """
     interesting = [GATES['assistant'].env, GATES['randall'].env,
                    GATES['build_commit'].env, GATES['delivery'].env,
-                   GATES['wish_submit'].env]
+                   GATES['wish_submit'].env, GATES['play'].env]
     live = policy_summary()
     return ' '.join(f'{env}={live[env]}' for env in interesting)

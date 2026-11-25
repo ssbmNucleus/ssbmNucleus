@@ -24,7 +24,7 @@
 
   "rigswap": {
     "repo": "https://github.com/ssbmNucleus/rigswap.git",
-    "commit": "5152589bbe3bc1344663a73af06d1ed6c0fa9666",
+    "commit": "nucleus-v0.10.0",
     "package": "rigswap",
     "entry": "rigswap.plugins.melee.costume",
     "source_kept": ["rigswap/load/convert.py", "rigswap/load/materials.py"]

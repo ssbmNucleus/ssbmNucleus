@@ -74,6 +74,11 @@ export function useDownloadQueue() {
       if (download.effectType) {
         formData.append('effect_type', download.effectType)
       }
+      // Where it came from: recorded with any fighter C in the package, which the
+      // Melee Unlocked export then asks about before building it.
+      if (download.url) {
+        formData.append('source_url', download.url)
+      }
 
       // Call the import API
       const importResult = await api.post('/import/file', formData)
@@ -99,7 +104,8 @@ export function useDownloadQueue() {
           downloadName: download.name,
           downloadTitle: download.title,
           downloadType: download.type,
-          downloadEffectType: download.effectType
+          downloadEffectType: download.effectType,
+          downloadUrl: download.url
         })
         setPhase(DOWNLOAD_PHASES.COMPLETE)
         return
@@ -114,7 +120,8 @@ export function useDownloadQueue() {
           downloadName: download.name,
           downloadTitle: download.title,
           downloadType: download.type,
-          downloadEffectType: download.effectType
+          downloadEffectType: download.effectType,
+          downloadUrl: download.url
         })
         setPhase(DOWNLOAD_PHASES.COMPLETE)
         return
@@ -226,6 +233,9 @@ export function useDownloadQueue() {
       if (result.downloadEffectType) {
         formData.append('effect_type', result.downloadEffectType)
       }
+      if (result.downloadUrl) {
+        formData.append('source_url', result.downloadUrl)
+      }
 
       // Include duplicate_action if we already made that choice
       if (result.duplicateAction) {
@@ -256,6 +266,7 @@ export function useDownloadQueue() {
           downloadTitle: result.downloadTitle,
           downloadType: result.downloadType,
           downloadEffectType: result.downloadEffectType,
+          downloadUrl: result.downloadUrl,
           // Preserve slippi action for when we retry with duplicate action
           slippiAction: action
         })
@@ -298,6 +309,9 @@ export function useDownloadQueue() {
       if (result.downloadEffectType) {
         formData.append('effect_type', result.downloadEffectType)
       }
+      if (result.downloadUrl) {
+        formData.append('source_url', result.downloadUrl)
+      }
 
       // Include slippi_action if we already made that choice (skin was both unsafe AND duplicate)
       if (result.slippiAction) {
@@ -329,6 +343,7 @@ export function useDownloadQueue() {
           downloadTitle: result.downloadTitle,
           downloadType: result.downloadType,
           downloadEffectType: result.downloadEffectType,
+          downloadUrl: result.downloadUrl,
           // Preserve duplicate action for when we retry with slippi action
           duplicateAction: action
         })

@@ -13,13 +13,18 @@ from pathlib import Path
 
 
 def get_subprocess_args():
-    """Get platform-specific args to hide subprocess windows on Windows."""
+    """Popen arguments for a helper program (MexCLI, HSDRaw, Blender, xdelta, ffmpeg, ...): no console window on
+    Windows, and an environment without Nucleus's own settings and secrets (core/child_env.py), because a helper
+    reads files Nucleus did not make and must not be able to drive the backend. A caller that builds the child's
+    environment itself overrides it: ``**{**get_subprocess_args(), 'env': env}``."""
+    from core.child_env import child_environment
+    args = {'env': child_environment()}
     if os.name == 'nt':
         startupinfo = subprocess.STARTUPINFO()
         startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
         startupinfo.wShowWindow = subprocess.SW_HIDE
-        return {'startupinfo': startupinfo, 'creationflags': subprocess.CREATE_NO_WINDOW}
-    return {}
+        args.update(startupinfo=startupinfo, creationflags=subprocess.CREATE_NO_WINDOW)
+    return args
 
 
 # Project root detection

@@ -67,6 +67,38 @@
   --gradient-purple: linear-gradient(135deg, #5314c4 0%, #36026e 100%);
   --gradient-purple-hover: linear-gradient(135deg, #6d35d9 0%, #4c14a8 100%);
 
+  /* Play purple - Play mode's colour, as green is Tracker's. EVERY Play colour
+     is in this block (the [data-mode="play"] block below only points at it), so
+     retuning Play's hue means editing these hex values and nothing else.
+     Each one is the purple twin (HSL hue ~270) of the Tracker value named beside
+     it, with the same WCAG luminance, so text contrast is Tracker's or better:
+     a surface never lighter, a text or accent colour never darker. Surfaces
+     keep the green's HSL saturation too. The accents are as saturated as sRGB
+     allows at the green's luminance (a light purple cannot be as vivid as a
+     light green); the -dark shade is the vivid one, so the glows use it.
+     shared/ui/modeTheme.test.js checks the contrast against Tracker's. */
+  --color-play: #d8b7ff;              /* --color-green */
+  --color-play-light: #e1caff;        /* --color-green-light */
+  --color-play-dark: #c287ff;         /* --color-green-dark */
+  --color-play-muted: color-mix(in srgb, var(--color-play) 15%, transparent);
+  --gradient-play: linear-gradient(135deg, var(--color-play) 0%, var(--color-play-dark) 100%);
+  --glow-play: 0 0 20px color-mix(in srgb, var(--color-play-dark) 30%, transparent),
+    0 0 40px color-mix(in srgb, var(--color-play-dark) 10%, transparent);
+  --glow-play-sm: 0 0 10px color-mix(in srgb, var(--color-play-dark) 25%, transparent);
+  --glow-play-intense: 0 0 30px color-mix(in srgb, var(--color-play-dark) 50%, transparent),
+    0 0 60px color-mix(in srgb, var(--color-play-dark) 20%, transparent);
+  /* Play's surfaces and text tints: "deep plum", Tracker's deep forest in purple */
+  --color-play-bg-deep: #190b28;      /* #06150c */
+  --color-play-bg-base: #200f31;      /* #081b10 */
+  --color-play-bg-elevated: #2b1b3b;  /* #12271a */
+  --color-play-bg-surface: #39264c;   /* #1a3424 */
+  --color-play-bg-hover: #533b6b;     /* #2b4d38, also the border */
+  --color-play-border-subtle: #412d55; /* #203c2a */
+  --color-play-text-secondary: #c3bdc8; /* #b6c2ba */
+  --color-play-text-tertiary: #96909d;  /* #87958c */
+  --color-play-text-muted: #6d6575;     /* #5c6b62 */
+  --color-play-text-disabled: #595160;  /* #4a574f */
+
   /* Accent aliases (for compatibility) */
   --color-accent: var(--color-cyan);
   --color-accent-hover: var(--color-cyan-light);
@@ -326,6 +358,56 @@
 [data-mode="nucleome"] .backup-button,
 [data-mode="nucleome"] .account-signin {
   color: var(--color-text-primary);
+}
+
+/* ============================================
+   PLAY MODE (gated: PLAY_ENABLED)
+   Set as data-mode="play" on <html> when the wordmark switches to Play, which
+   only development and Play test builds can do (App.jsx: MODE_CYCLE and
+   readStoredMode leave 'play' out of every other build, so this block never
+   matches there). The same treatment as nucleOME above, in purple: the
+   backgrounds, borders and text tints, and the cyan family (accent, links,
+   focus rings, input focus, scrollbar hover, selection, the header's accent
+   line) all take the Play purple tokens defined in :root. The colours live
+   there, not here: retune them in that one block.
+   Gold stays gold. It is already Play's own signature (its Play buttons, a
+   running game, the active tab) and reads well on purple, so unlike nucleOME
+   the gold button faces keep their dark text.
+   ============================================ */
+
+[data-mode="play"] {
+  /* brand accent */
+  --color-accent: var(--color-play);
+  --color-accent-hover: var(--color-play-light);
+  --color-border-focus: var(--color-play);
+
+  /* background layers */
+  --color-bg-deep: var(--color-play-bg-deep);
+  --color-bg-base: var(--color-play-bg-base);
+  --color-bg-primary: var(--color-play-bg-base);
+  --color-bg-elevated: var(--color-play-bg-elevated);
+  --color-bg-surface: var(--color-play-bg-surface);
+  --color-bg-hover: var(--color-play-bg-hover);
+
+  /* borders */
+  --color-border: var(--color-play-bg-hover);
+  --color-border-subtle: var(--color-play-border-subtle);
+
+  /* text hierarchy: same lightness, purple undertone */
+  --color-text-secondary: var(--color-play-text-secondary);
+  --color-text-tertiary: var(--color-play-text-tertiary);
+  --color-text-muted: var(--color-play-text-muted);
+  --color-text-disabled: var(--color-play-text-disabled);
+
+  /* cyan family follows purple so direct var(--color-cyan) users flood too */
+  --color-cyan: var(--color-play);
+  --color-cyan-light: var(--color-play-light);
+  --color-cyan-dark: var(--color-play-dark);
+  --color-cyan-muted: var(--color-play-muted);
+  --gradient-cyan: var(--gradient-play);
+  --glow-cyan: var(--glow-play);
+  --glow-cyan-sm: var(--glow-play-sm);
+  --glow-cyan-intense: var(--glow-play-intense);
 }
 
 /* ============================================

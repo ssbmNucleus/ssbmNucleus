@@ -24,11 +24,12 @@ with a clear JSON-RPC error.
 | Creation toolkit gateway | `randall/mcp/toolkit.py`, `toolkit_schemas.py` | `native_port` and `stage_workbench`, forwarded to a source checkout (below). |
 | Vault refresh | `randall/mcp/window.py` (`vault_changed`), `randall_tools.call`, `build_tools.call`, `app/frontend/src/randall/assistant/mcpImport.js` (`useMcpVaultChanged`) | Any other tool whose reply says `vault_changed` (a Stage Lab or Skin Lab save, a website download, an imported file) emits `mcp_vault_changed` on Socket.IO, and App.jsx reads the vault again, as after the same tool in Randall's chat. Before 0.9.0 only model imports did, so a stage the AI saved showed after a window reload. |
 | Window questions | `randall/mcp/window.py` (`confirm`), `GET`/`POST /api/mcp/window/confirmations[/<id>]`, `app/frontend/src/randall/assistant/mcpAccount.js` (`createMcpConfirmWatcher`) | A question only the person in the app may answer (below: connecting a creation toolkit). The backend posts it, emits `mcp_confirm` on Socket.IO and waits; App.jsx shows it with `appConfirm` (Allow / Deny) and sends the answer. Both routes need the window-only key `X-Nucleus-UI-Key` (`core/ui_channel.py`, the same check as the build-change approval card), so the AI client, holding only the backend token, can neither read nor answer one. |
-| Network paths | `core/path_safety.py` (`is_network_path`), `server.call_tool` | No argument of any tool may be a network path (`\\host\share`, `\\host@SSL\...`, `\\?\UNC\...`, `\\.\...`, `//host/...`, `file://host/...`): `call_tool` refuses it before the tool runs, since opening one offers the user's NTLM hash to that host and running a program from one runs the host's code. `attach_file`, `import_to_vault`, `import_model`, `save_build_iso`, the toolkit folder (also a saved one) and the window's Dolphin folder check it again themselves. A mapped drive letter is allowed. |
+| Network paths | `core/path_safety.py` (`is_network_path`, `local_path`), `server.call_tool` | No argument of any tool may be a network path (`\\host\share`, `\\host@SSL\...`, `\\?\UNC\...`, `\\.\...`, the NT namespace `\??\...`, `//host/...`, `file://host/...`, with either slash): `call_tool` refuses it before the tool runs, since opening one offers the user's NTLM hash to that host and running a program from one runs the host's code. `attach_file`, `import_to_vault`, `import_model`, `save_build_iso`, `test_in_game`'s ISO and Dolphin paths, the toolkit folder (also a saved one, and the pictures its results name) and the window's Dolphin folder go through the request-path gate `local_path` themselves: a drive-letter absolute path (a POSIX absolute path off Windows), nothing relative. A mapped drive letter is allowed. The HTTP routes use the same gate: `app.py` refuses a request whose JSON, form or query string has a path key (`path_safety.REQUEST_PATH_KEYS`: `slippiPath`, `vanillaIsoPath`, `isoPath`, `kitPath`, `gccBin`, `destination`, ...) that fails it, with 400 `not_a_local_path`. |
 | Discovery file | `app/electron/mcp/discovery.js` | `<userData>/mcp-endpoint.json` = `{"url":"http://127.0.0.1:<port>/api/mcp","token":"<backend token>","pid":<main pid>}`, written by `main.js` once the backend is up, removed on quit (by the process that wrote it). userData is per user. `NUCLEUS_MCP_DISCOVERY` moves it (tests). |
 | Relay | `app/electron/mcp/relay.js` | `SSBM Nucleus.exe --mcp`, handled at the top of `main.js` before the single-instance lock, windows and updater. The Electron process only finds the discovery file and runs `relay.js` again as a plain Node process (`ELECTRON_RUN_AS_NODE=1`, stdio inherited), then exits with it: on Windows the Electron browser process cannot read stdin (its `process.stdin` ends at once). The relay is a stdio MCP server: newline JSON-RPC in, POSTed with the token, one JSON line out; notifications get nothing back. No app running (no file, or its pid is dead): it starts the same exe without `--mcp` (on Linux the AppImage file, not the relay's own mount: `shell/stable-executable.js`), detached, and waits up to 90 s for the file; if none comes every request gets `-32002` "SSBM Nucleus is not running ... Open SSBM Nucleus". Connection refused or 401 (the app restarted): it finds the new endpoint. Console output goes to stderr; only JSON-RPC reaches stdout. Exits when stdin closes. `NUCLEUS_MCP_NO_LAUNCH=1` turns the auto-start off. |
 | AI usage | `randall/mcp/credits.py`, `POST /api/mcp/account`, `app/frontend/src/randall/assistant/mcpAccount.js` | Whose usage AI calls spend: the signed-in person's, as in the chat (below). |
 | Settings card | `app/frontend/src/settings/McpSection.jsx` (+ `mcpCommands.js`) | Settings > AI > "Connect your own AI (MCP)", only when `ASSISTANT_ENABLED`. Copyable commands from `window.electron.getMcpLaunch()` (`mcp:launch` in `electron/ipc/system.js`: the app's own executable, plus the app folder in a checkout). On Linux that is the AppImage file (`$APPIMAGE`), never `process.execPath`, which inside an AppImage is its `/tmp/.mount_*` FUSE mount and is gone when the app quits (`electron/shell/stable-executable.js`); a macOS `.app` gives the binary inside the bundle. |
+| Problem reports | `randall/mcp/report_tools.py`, `randall/reports/problem_report.py`, `GET /api/mcp/window/problem-reports`, `POST .../<id>/review`, `POST .../<id>/discard`, `app/frontend/src/randall/assistant/McpProblemReports.jsx`, `problemReport.js` | `report_problem` assembles a report for the developer on this computer and sends nothing; the person reads it in the window, ticks what goes, and sends it through "Report this chat"'s own submit, or discards it (below). |
 | Frozen build | `tools/build/mex_backend.spec` | `collect_submodules('randall.mcp')` under `ASSISTANT_SHIPS`. Nothing imports `tools/`. |
 
 ## Connecting
@@ -74,7 +75,7 @@ userData, stderr empty).
 
 ## Tools
 
-`tools/list` gives 58 tools (annotations in brackets: RO read-only, D destructive, W open world).
+`tools/list` gives 60 tools (annotations in brackets: RO read-only, D destructive, W open world).
 
 Randall's: `search_vault` [RO], `inspect_mod` [RO], `present_vault_skins` [RO], `search_docs` [RO],
 `search_website_mods` [RO W], `inspect_website_mod` [RO W], `download_website_mod` [W, approval],
@@ -91,7 +92,8 @@ every stage code: what the chat's stage picker gives it; `search_vault` is costu
 [RO] (a picture of a running `test_in_game` play session's own Dolphin window, by its session_id: the chat
 shows that session in its panel instead), `native_port`,
 `stage_workbench`, `toolkit_tools` [RO], `toolkit_call` [W], `connect_creation_toolkit`, `creation_toolkit_status`
-[RO].
+[RO], `report_problem` (a report the user sends from the window, below; the call sends nothing),
+`problem_report_status` [RO].
 
 Collection and builds (MCP-only, below): `import_to_vault`, `search_vault_mods` [RO], `install_stage_skin` [D],
 `install_custom_characters` [D], `install_custom_stages` [D], `install_extra` [D], `inspect_project_stages` [RO],
@@ -104,7 +106,8 @@ MCP-only arguments for what the chat takes from the window: `choice` on `downloa
 `import_as_is`) and `slippi` on `download_website_mod`; `vanilla_iso_path` on `test_in_game` (defaults to the
 one the backend knows). The Dolphin `test_in_game` starts is never an argument (security review 11-19, M1): it is
 the folder set in Settings, which the window mirrors to `POST /api/mcp/window {"slippi_dolphin_path": ...}` at
-launch and when Settings changes it (a network path is refused), else Slippi Launcher's own `netplay` folder
+launch and when Settings changes it (a network path is refused; the route needs the window-only key, so the AI
+client cannot name a folder itself), else Slippi Launcher's own `netplay` folder
 (`randall/mcp/window.py`). `test_in_game`
 notes say the game opens in its own Dolphin window, not "the panel on the right". A few descriptions get an `[MCP]` note:
 `stage_lab_open` lists the legal stage codes, and `stage_lab` says how to read identify's `area` (largest
@@ -287,7 +290,9 @@ one of them: its asks are answered by the client AI (Jobs above), so it needs no
 - The window holds the Patreon app token. `App.jsx` (`randall/assistant/mcpAccount.js`) sends it to
   `POST /api/mcp/account {"token": ...}` at launch and on every entitlement change: a link sends the new token, a
   sign-out (including the automatic one on `invalid_token`) sends `null`. The backend keeps it in memory only
-  (never on disk, in a log or in an answer); quitting ends it.
+  (never on disk, in a log or in an answer); quitting ends it. The route needs the window-only key
+  `X-Nucleus-UI-Key` (`core/ui_channel.py`): the AI client holds the backend token too, and could otherwise
+  sign the backend out or hand it someone else's token.
 - Before each AI call the backend asks the website's `ai-entitlement` function with that token, as the chat does
   before each turn, and applies `access.js` `assistantAccess` rule for rule: active with usage left and a key ->
   that key, for this call only; used up (with the free refill or monthly reset date), paused, not a member, not
@@ -299,6 +304,53 @@ one of them: its asks are answered by the client AI (Jobs above), so it needs no
   ... Searching, the vault, builds and the labs still work without it."
 - A chat turn's own caps (images per turn) have no MCP equivalent: there are no turns. Each call is bounded by its
   arguments (`generate_material` takes at most 4 prompts), and the provider key's own limit still applies.
+
+### Problem reports
+
+`report_problem {title, markdown, job_id?, import_id?, chat_id?, model?, effort?}` lets the user's AI write a
+problem report for the developer. **Nothing is sent by the call.** It names what the report is about by id only: an
+`mcp_model_import` job (`job_id`), a model import's folder under the imports root (`import_id`, a result's
+`project`; a job's own project is found from the job) and a Randall chat (`chat_id`). Any other argument, a path in
+an id (a slash, a backslash, a drive letter, `~`, `..`) and a model name or effort shaped like a path are refused
+before anything is read; a network path is refused by `call_tool` as for every tool. An id that names nothing is
+refused too, and nothing is made.
+
+Nucleus assembles the package itself (`randall/reports/problem_report.py`) in
+`<storage>/assistant/problem_reports/<id>/`:
+
+- always: `report.md` (the markdown, at most 200 KB, refused over that) and `metadata.json` (title, the ids, the AI's
+  model and effort as it gave them, versions: Nucleus, Python, the OS and the model import tools' state, the job's
+  timings, and the error output: the job's error, the importer's failure fields and the last 40 lines of its log);
+- optional, each a checkbox in the window: the import's records (the job record, `workflow/job.json`,
+  `rigswap/result.json`, `randall.jsonl`, the newest part of `workflow/job.log`), the newest part of Nucleus's own
+  log (`mex_api_<date>.log`), the chat's transcript (as "Report this chat" renders it, without costs), the import's
+  preview pictures (at most 8) and the source model file (the job's `source` or the import's `download`; not ticked
+  at first; a disc image, a non-model file or a file of the user's game, `chat_report_files.excluded_reason`, is
+  never collected).
+
+Every text part is scrubbed with the chat report's scrubber (home-folder user names, tokens, OpenRouter keys,
+credential-looking environment values) before it is written, and every part is copied in and hashed when the report
+is made, so what the window shows is what goes. Caps: one attachment 24 MB, all of them 40 MB (the worker takes
+64 MB); a part past either is listed by name and size and never copied or sent. At most 3 reports wait at once and
+6 are made per hour; one nobody sends within 3 days expires, and an ended one is forgotten a day later.
+
+The call answers `{report_id, status: "waiting_for_user", sent: false, note, attachments: [{name, label, kind,
+bytes, optional, include, too_large}]}`; the note starts "Waiting for you to confirm in Nucleus". The window hears
+`mcp_problem_report` on Socket.IO (and reads the list when it connects) and shows the oldest waiting report
+(`McpProblemReports.jsx`): the title, which AI wrote it, the markdown, every attachment with its size and a checkbox
+for each optional one, the chat report's consent line, and Send and Discard. Send posts the ticked names to `POST
+/api/mcp/window/problem-reports/<id>/review`, which freezes them into one ZIP with a `report.json` summary (what is
+in it, what was left out and why) through `chat_report.freeze` (an approval hash over the worker meta and the
+manifest, as "Report this chat" does), then posts `{submission_id, approval_hash, consent: true}` to `POST
+/api/mex/chat-reports/submit`: the same submit, worker, transport, lease and retry rules. The worker files it as a
+chat report (`kind: "chat"`, `chat.surface: "mcp"`, which it shows as unknown; the worker is not changed) with the
+description `AI problem report: <title>` and the AI's model. Discard deletes the copies and sends nothing. The
+three window routes and the submit route need the window-only key, so the AI client, holding only the backend
+token, can neither read the waiting reports nor send or discard one.
+
+`problem_report_status {report_id, wait_seconds?}` [RO] answers `waiting_for_user`, `sent` (with the first 8
+characters of the worker's id as `reference`), `discarded` or `expired`; with `wait_seconds` (at most 50) it waits
+for the person to decide.
 
 ### Images
 
@@ -401,6 +453,13 @@ opens the public repo's `tools/creation/SETUP.md` (its `CREATION_TOOLKIT_GUIDE` 
 - `tests/electron/mcp-relay.test.js`: forwarding, notifications, parse errors, starting the app and waiting, giving
   up, 401 and refused-connection recovery, 404, and the discovery file.
 - `app/frontend/src/settings/mcpCommands.test.js`: the commands the card shows.
+- `tests/backend/test_mcp_problem_reports.py`: the call assembles a scrubbed report and sends nothing (the network
+  recorded); a token-only caller can neither list, freeze, discard nor submit; paths, unknown arguments and ids
+  that name nothing are refused and make nothing; the markdown and title caps, the waiting and per-hour limits, and
+  attachments over the per-file and total caps listed and never sent; Send through the real chat report submit
+  with `requests` mocked (the worker meta, the ZIP's members, the ticked source model, nothing of the home folder);
+  Discard; `problem_report_status` waiting for the decision and an old report expiring; a chat by its id.
+  `app/frontend/src/randall/assistant/problemReport.test.js`: the review as drawn and the send flow.
 - `app/frontend/src/randall/assistant/mcpAccount.test.js`: the window's question watcher (each question once, a
   failed dialog is a no); `app/frontend/src/shared/transport/api.test.js`: only the question routes get the key.
 - AI usage: in `test_app_mcp.py`, no sign-in gives the sign-in message and sends nothing, the window's token bills

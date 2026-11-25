@@ -160,7 +160,7 @@ def test_no_blueprint_reads_a_gate_env_directly():
 def test_viewer_flags_documented_in_the_table():
     """The gates the viewer decides on its own must name their UI half."""
     features = FEATURES_JS.read_text(encoding="utf-8")
-    for name in ("combo_video", "randall"):
+    for name in ("combo_video", "randall", "play"):
         flag = gates.GATES[name].ui.split()[0]
         assert flag in features, f"{flag} (gates.py {name}.ui) missing from features.js"
 

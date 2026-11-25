@@ -10,7 +10,8 @@ All of it goes to your phone too — see [Nucleus on your phone](#nucleus-on-you
 
 ## Replays
 
-Search your games by character, opponent, stage and result, then click one.
+Search your games by character, opponent, stage and result, then click one. For online games
+with no player names in the replay metadata, Tracker reads names and connect codes from the start of the game.
 
 ![The Replays list](../img/08-replays.png)
 

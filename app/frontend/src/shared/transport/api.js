@@ -76,15 +76,35 @@ export function authenticatedFetch(url, init = {}) {
   // The open project this window is showing (projectGeneration.js).
   const generation = getProjectGeneration()
   if (generation !== null && !headers.has('X-Nucleus-Project')) headers.set('X-Nucleus-Project', String(generation))
-  // The endpoints that record a person's decision made in this window (the
-  // build-change approval card, the MCP's questions for the window), so they
-  // know it came from here, not from anything holding the shared backend token.
-  if (UI_APPROVAL_KEY && (String(url).includes('/builds/changes/')
-      || String(url).includes('/api/mcp/window/confirmations'))) {
+  // The endpoints only this window may call send its own key, so the backend
+  // knows a person here did it, not anything else holding the shared backend
+  // token (the user's own AI over MCP, a script): see WINDOW_ONLY.
+  const write = (init.method || 'GET').toUpperCase() !== 'GET'
+  if (UI_APPROVAL_KEY && WINDOW_ONLY.some(route => route(String(url), write))) {
     headers.set('X-Nucleus-UI-Key', UI_APPROVAL_KEY)
   }
   return fetch(url, { ...init, headers })
 }
+
+// (url, write) -> true for a request that carries the window's key. Each
+// backend route checks it with core/ui_channel.window_refusal.
+const WINDOW_ONLY = [
+  // the build-change approval card
+  url => url.includes('/builds/changes/'),
+  // what the window tells MCP calls (its Slippi Dolphin folder), and the
+  // questions an MCP call asks the person here
+  url => url.includes('/api/mcp/window'),
+  // the window's sign-in, whose usage MCP AI calls spend
+  (url, write) => write && url.includes('/api/mcp/account'),
+  // Play: start a game, choose the folder it runs from, change the shelf
+  (url, write) => write && url.includes('/api/play/'),
+  // the Melee Unlocked export: compiles fighter C and runs the kit's Python
+  (url, write) => write && url.includes('/melee-unlocked/'),
+  // the person's yes or no to what the assistant asked to do
+  (url, write) => write && /\/api\/assistant\/chats\/[^/?#]+\/approvals\/[^/?#]+(?:[?#]|$)/.test(url),
+  // sending a chat report: the conversation leaves this computer
+  (url, write) => write && url.includes('/chat-reports/submit'),
+]
 
 async function request(path, { method = 'GET', body, headers, signal, query } = {}) {
   const url = withQuery(apiUrl(path), query)

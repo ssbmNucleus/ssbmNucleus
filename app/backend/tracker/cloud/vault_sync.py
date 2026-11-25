@@ -232,10 +232,24 @@ def derive_blob(path):
 # the spawn re-import to a single copy.
 #
 # derive_blob itself never raises (BaseException guard, corrupt .slp -> None),
-# so it is safe to hand straight to the pool.
+# so it is safe to hand straight to the pool. A replay that crashes or hangs
+# the worker (ScanFailed; the pool quarantines it) is refused like a corrupt
+# one, None; WorkerUnavailable is not the file's fault and stops the sync.
 def _derive_offprocess(path):
     from ..store import scan_pool
-    return scan_pool.run(derive_blob, path)
+    try:
+        return scan_pool.run(derive_blob, path)
+    except scan_pool.ScanFailed:
+        return None
+
+
+def _derived(job):
+    """A burst job's derive: None when the file crashed or hung a worker."""
+    from ..store import scan_pool
+    try:
+        return job.result()
+    except scan_pool.ScanFailed:
+        return None
 
 
 # The pending upload-claim limiter (meleeWebsite migration
@@ -295,7 +309,7 @@ def _derive_ahead(items, workers, window):
                 if not pending:
                     return
                 i, item, job = pending.popleft()
-                yield i, item, job if job is _MISSING else job.result()
+                yield i, item, job if job is _MISSING else _derived(job)
         finally:
             for _i, _item, job in pending:
                 if job is not _MISSING:
@@ -694,7 +708,8 @@ def dry_run(limit=200):
         for it in items:
             if not os.path.exists(it["path"]):
                 continue
-            body = derive_blob(it["path"])
+            # in the worker like a real sync: never peppi in this process
+            body = _derive_offprocess(it["path"])
             if body is None:
                 continue
             total += len(body)

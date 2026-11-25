@@ -272,8 +272,14 @@ def _start(args, label):
 def import_model(arguments):
     from randall.model_import.chat import import_job
     _unknown(arguments, ('source', 'fighter', 'name', 'untextured'))
-    from core.path_safety import refuse_network_path
-    source = Path(refuse_network_path(_text(arguments, 'source', required=True), field='source')).expanduser()
+    from core.path_safety import NotLocalPath, local_path
+    text = _text(arguments, 'source', required=True)
+    try:
+        source = Path(local_path(text, field='source'))
+    except NotLocalPath as refused:
+        if refused.reason == 'network':
+            raise
+        raise ValueError(f'source must be an absolute path: {text}')
     if not source.is_absolute():
         raise ValueError(f'source must be an absolute path: {source}')
     if not source.is_file():

@@ -33,6 +33,17 @@ def _supported_upload(filename):
     return Path(filename or '').suffix.lower() in _UPLOAD_EXTS
 
 
+def _upload_origin(source_url, files):
+    """Where an upload came from, for the record kept with any fighter C in it (projects/install/fighter_source.py):
+    the URL the window downloaded it from (a nucleus://import link; the frontend sends `source_url`), else a
+    file from this computer. Informational only: fighter C from a package is untrusted either way."""
+    url = (source_url or '').strip()
+    if url.lower().startswith(('https://', 'http://')):
+        return f'a download from {url[:300]}'
+    names = ', '.join(Path(f.filename).name for f in files[:3])
+    return f'the file {names}, imported from this computer'
+
+
 def _batch_upload_name(files):
     """A name for the temp archive that packs several loose uploads: their
     common stem ('digit' for digit0..digit9) or the first file's stem."""
@@ -161,7 +172,8 @@ def import_file():
                 custom_title=custom_title,
                 mod_type=mod_type,
                 effect_type=effect_type,
-                character=character)
+                character=character,
+                origin=_upload_origin(request.form.get('source_url'), files))
             return jsonify(payload), status
         except ValueError as e:
             return jsonify({'success': False, 'error': _client_error(e)}), 400

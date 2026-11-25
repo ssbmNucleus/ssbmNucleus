@@ -35,6 +35,7 @@ import wave
 from pathlib import Path
 
 from core.build_transaction import project_file
+from core.child_env import child_environment
 
 NARRATOR_SSM = 'nr_name.ssm'
 DEFAULT_CALL = 540000        # m-ex's "no name-call" placeholder
@@ -123,7 +124,8 @@ def narrator_scripts(project_dir) -> dict[int, int]:
 
 
 def _decode(mexcli, ssm: Path, index: int, dest: Path, run=None) -> bool:
-    run = run or (lambda *a: subprocess.run([str(x) for x in a], capture_output=True, text=True))
+    run = run or (lambda *a: subprocess.run([str(x) for x in a], capture_output=True, text=True,
+                                            env=child_environment()))
     result = run(mexcli, 'ssm-to-wav', ssm, index, dest)
     return getattr(result, 'returncode', 1) == 0 and dest.exists()
 

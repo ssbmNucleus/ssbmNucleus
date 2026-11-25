@@ -11,9 +11,13 @@ request with one JSON-RPC error that says so, instead of a 404 the relay could o
 report as "something went wrong". The tools themselves live in randall/mcp, which a
 stable build does not carry, so it is imported only behind the gate.
 
-POST /api/mcp/account is the window's half of who pays for MCP AI calls (randall/mcp/credits.py).
-/api/mcp/window/confirmations are the questions an MCP call asks the person in the window (randall/mcp/window.py);
-only the window can read or answer them (its own key, core/ui_channel.py).
+POST /api/mcp/account is the window's half of who pays for MCP AI calls (randall/mcp/credits.py), and
+POST /api/mcp/window what the window tells MCP calls (randall/mcp/window.py). /api/mcp/window/confirmations are the
+questions an MCP call asks the person in the window. /api/mcp/window/problem-reports are the problem reports the
+user's AI wrote with report_problem (randall/reports/problem_report.py), waiting for the person to send or discard
+them; sending is the chat report's own submit (POST /api/mex/chat-reports/submit). Only the window can send or answer
+any of these (its own key, core/ui_channel.py): the MCP client holds the backend token too, and must not choose whose
+account pays, which folder counts as the user's Slippi Dolphin, or what leaves the computer.
 """
 from flask import Blueprint, Response, current_app, jsonify, request
 
@@ -53,6 +57,9 @@ def mcp_account():
     (randall/mcp/credits.py): {"token": "<token>"} after a link and at launch, {"token": null} on sign-out. Kept in
     memory only; never answered back, written or logged."""
     if gates.enabled('assistant'):
+        refused = _window_only('Only the Nucleus window can set the account MCP calls use.')
+        if refused:
+            return refused
         from randall.mcp import credits
         body = request.get_json(silent=True)
         if not isinstance(body, dict) or set(body) != {'token'}:
@@ -70,6 +77,9 @@ def mcp_window():
     """What the window knows that MCP calls need (randall/mcp/window.py): {"slippi_dolphin_path": "<folder>" or
     null}, at launch and when Settings changes it. Kept in memory only."""
     if gates.enabled('assistant'):
+        refused = _window_only('Only the Nucleus window can tell MCP calls where Slippi Dolphin is.')
+        if refused:
+            return refused
         from randall.mcp import window
         body = request.get_json(silent=True)
         if not isinstance(body, dict) or set(body) != {'slippi_dolphin_path'}:
@@ -82,14 +92,14 @@ def mcp_window():
     return jsonify(error='Not available in this build.'), 404
 
 
-def _window_only():
+def _window_only(error='Only the Nucleus window can answer this.'):
     """A refusal for anything that is not the app's window (core/ui_channel.py), or None."""
     from core import ui_channel
     refusal = ui_channel.window_refusal(request.headers)
     if refusal is None:
         return None
     code, status = refusal
-    return jsonify(error='Only the Nucleus window can answer this.', code=code), status
+    return jsonify(error=error, code=code), status
 
 
 @mcp_bp.route('/api/mcp/window/confirmations', methods=['GET'])
@@ -118,6 +128,62 @@ def mcp_confirmation_answer(confirmation_id):
         from randall.mcp import window
         if not window.answer(confirmation_id, body['allowed']):
             return jsonify(error='That question is no longer open.'), 404
+        return jsonify(ok=True)
+    return jsonify(error='Not available in this build.'), 404
+
+
+@mcp_bp.route('/api/mcp/window/problem-reports', methods=['GET'])
+def mcp_problem_reports():
+    """The problem reports the user's AI wrote, waiting for the person: {"pending": [{id, title, markdown,
+    created_at, reported_by, refs, attachments: [{name, label, kind, bytes, optional, include, too_large}]}]}."""
+    if gates.enabled('assistant'):
+        refused = _window_only('Only the Nucleus window can read the reports waiting for you.')
+        if refused:
+            return refused
+        from randall.reports import problem_report
+        return jsonify(pending=problem_report.pending())
+    return jsonify(error='Not available in this build.'), 404
+
+
+_PROBLEM_REPORT_STATUS = {'unknown_report': 404, 'report_sent': 409, 'report_discarded': 409, 'report_expired': 409,
+                          'unknown_attachment': 400, 'bad_include': 400, 'app_version_unknown': 400,
+                          'bundle_changed': 409, 'bundle_missing': 409}
+
+
+@mcp_bp.route('/api/mcp/window/problem-reports/<report_id>/review', methods=['POST'])
+def mcp_problem_report_review(report_id):
+    """Send, step one: {"include": [names of the optional parts the person ticked], "app_version"?} freezes the
+    report as a chat report submission and answers {submission_id, approval_hash, manifest, meta}. Nothing is sent
+    here; the window then posts those to /api/mex/chat-reports/submit with consent."""
+    if gates.enabled('assistant'):
+        refused = _window_only('Only the Nucleus window can send a report.')
+        if refused:
+            return refused
+        body = request.get_json(silent=True)
+        if not isinstance(body, dict) or not set(body) <= {'include', 'app_version'}                 or not isinstance(body.get('include'), list):
+            return jsonify(error='Send {"include": [<attachment names>], "app_version": <version>}.'), 400
+        from randall.reports import chat_report, problem_report
+        try:
+            frozen = problem_report.review(report_id, include=body['include'],
+                                           app_version=str(body.get('app_version') or ''))
+        except chat_report.ReportError as exc:
+            return jsonify(error=str(exc)), _PROBLEM_REPORT_STATUS.get(str(exc), 400)
+        return jsonify(success=True, **frozen)
+    return jsonify(error='Not available in this build.'), 404
+
+
+@mcp_bp.route('/api/mcp/window/problem-reports/<report_id>/discard', methods=['POST'])
+def mcp_problem_report_discard(report_id):
+    """Discard: nothing is sent and the report's parts are deleted. 404 for an unknown report, 409 for an ended one."""
+    if gates.enabled('assistant'):
+        refused = _window_only('Only the Nucleus window can discard a report.')
+        if refused:
+            return refused
+        from randall.reports import chat_report, problem_report
+        try:
+            problem_report.discard(report_id)
+        except chat_report.ReportError as exc:
+            return jsonify(error=str(exc)), _PROBLEM_REPORT_STATUS.get(str(exc), 400)
         return jsonify(ok=True)
     return jsonify(error='Not available in this build.'), 404
 

@@ -45,3 +45,55 @@ test('the suggested name is the local date', () => {
   assert.equal(vaultBackupName(new Date(2026, 10, 20, 23, 59)), 'SSBM-Nucleus-Vault-2026-11-20.zip');
   assert.equal(vaultBackupName(new Date(2027, 0, 5, 0, 1)), 'SSBM-Nucleus-Vault-2027-01-05.zip');
 });
+
+// 'Open project folder' (security review 11-22): a path that does not exist opened its parent whatever that was, and
+// shell.openPath on a file runs it, so C:\x\tool.exe\missing ran C:\x\tool.exe.
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+const { folderToOpen } = require('../../app/electron/ipc/files');
+const UNC = String.raw`\\host\share\project.mexproj`;
+
+function folderSetup() {
+  const handlers = {};
+  const opened = [];
+  registerFileIpc({
+    handleTrustedIpc: (channel, fn) => { handlers[channel] = fn; },
+    dialog: {},
+    shell: { openPath: async (target) => { opened.push(target); return ''; } },
+    ctx: { mainWindow: {} },
+    links: {},
+  });
+  return { open: (p) => handlers['open-project-folder']({}, p), opened };
+}
+
+test('Open project folder opens a folder, or the folder a project file or missing file is in', async (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'nucleus-open-folder-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const project = path.join(root, 'project.mexproj');
+  fs.writeFileSync(project, '{}');
+  const f = folderSetup();
+  assert.deepEqual(await f.open(root), { success: true, path: root });
+  assert.deepEqual(await f.open(project), { success: true, path: root });
+  assert.deepEqual(await f.open(path.join(root, 'gone.mexproj')), { success: true, path: root });
+  assert.deepEqual(f.opened, [root, root, root]);
+});
+
+test('Open project folder never hands a file to the shell, nor a relative or network path', async (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'nucleus-open-folder-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const tool = path.join(root, 'tool.exe');
+  fs.writeFileSync(tool, 'MZ');
+  const f = folderSetup();
+  for (const asked of [path.join(tool, 'missing'), path.join(root, 'no', 'such', 'project.mexproj'),
+    'relative/project.mexproj', UNC, '//host/share/project.mexproj', '', 42]) {
+    const reply = await f.open(asked);
+    assert.equal(reply.success, false, String(asked));
+  }
+  assert.deepEqual(f.opened, []);
+  const looked = [];
+  const recording = { statSync: (p) => { looked.push(p); throw new Error('no'); } };
+  assert.equal(folderToOpen(UNC, recording), null);
+  assert.equal(folderToOpen('//host/share/p.mexproj', recording), null);
+  assert.deepEqual(looked, [], 'a network path is not even looked at');
+});

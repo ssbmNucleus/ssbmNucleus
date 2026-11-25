@@ -403,7 +403,10 @@ def test_bundle_workers_share_xdelta_resolver():
     import inspect
     source = inspect.getsource(project_bundles)
     assert 'def _resolve_xdelta_exe' not in source
-    assert source.count('require_xdelta_exe()') == 3
+    # export and install run xdelta3 themselves; play decodes through the shared decode_patch.
+    assert source.count('require_xdelta_exe()') == 2
+    assert source.count('decode_patch(') == 1
+    assert 'require_xdelta_exe()' in inspect.getsource(xdelta_tools.decode_patch)
 
 
 def test_other_python_xdelta_callers_use_required_resolver():

@@ -19,6 +19,11 @@
 logs/
 user_settings.json
 
+# app/play: Play's shelf, its games' discs and saves (backend play/shelf.py play_root)
+/play/
+# app/nucleus-client: the game client Play installs from its feed (backend play/managed.py)
+/nucleus-client/
+
 
 # Build outputs: build.bat / build_mac.sh / electron-builder / release scripts
 /build/

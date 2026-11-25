@@ -16,6 +16,8 @@ function monthLabel(ym) {
 }
 import IconSelect from '../../shared/ui/IconSelect'
 import WatchModsModal from './WatchModsModal'
+import { useMuReplay } from './useMuReplay'
+import { PLAY_ENABLED } from '../../shared/config/features'
 import PlaylistModsModal from './PlaylistModsModal'
 import WatchLiteModal from './WatchLiteModal'
 import ReplayRow from './ReplayRow'
@@ -80,6 +82,8 @@ export default function ReplaysPage() {
   const [addOpen, setAddOpen] = useState(false)
   const [codeDraft, setCodeDraft] = useState('')
   const [watchModsGame, setWatchModsGame] = useState(null)
+  // Play builds: "Watch in Nucleus Unlocked" on each row (null when Play is off).
+  const muReplay = useMuReplay(PLAY_ENABLED)
   const [liteGame, setLiteGame] = useState(null)
   const [rootDraft, setRootDraft] = useState(null) // null = untouched, show detected root
   const [scanError, setScanError] = useState(null)
@@ -696,7 +700,7 @@ export default function ReplaysPage() {
                     <ReplayRow key={g.id} g={g} i={i} ranks={ranks} stocks={stocks}
                                instant={Boolean(md?.paged)}
                                selected={selected.has(g.id)} onSelect={toggleSelect}
-                               onWatch={setWatchModsGame} onLite={setLiteGame} />
+                               onWatch={setWatchModsGame} onLite={setLiteGame} muReplay={muReplay} />
                   ))}
                   {mo.count > PAGE_SIZE && (
                     <MonthPager

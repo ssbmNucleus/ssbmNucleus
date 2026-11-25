@@ -9,6 +9,7 @@ import subprocess
 import time
 
 from core.config import OUTPUT_PATH
+from core.child_env import child_environment
 from core.media_tools import get_ffmpeg
 
 from .dolphin_config import _playback_user_dir
@@ -188,7 +189,7 @@ def _run_encode(cmd):
     """An encoder failure must reach the recording job, not a silent AVI."""
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=1800,
-                                creationflags=_NO_WINDOW())
+                                creationflags=_NO_WINDOW(), env=child_environment())
     except subprocess.TimeoutExpired as exc:
         raise RuntimeError("Recording encoder timed out. Try a shorter recording.") from exc
     except OSError as exc:

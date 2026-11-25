@@ -326,7 +326,10 @@ def load_trace(path):
 
 
 def _parse(path):
-    from peppi_py import read_slippi
+    # through the guard: a crafted .slp can kill the process peppi runs in
+    # (slp_guard.py); a refused file is UnsafeReplay, an Exception like any
+    # other unparseable one
+    from .slp_guard import read_slippi
     try:
         game = read_slippi(path)
     except Exception:

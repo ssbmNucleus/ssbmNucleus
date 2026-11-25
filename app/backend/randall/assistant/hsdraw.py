@@ -8,6 +8,7 @@ from pathlib import Path
 
 import file_retry
 from core import config
+from core.child_env import child_environment
 from shared import mod_files as files
 from .stage_scene import SCENE_OPERATIONS, run_scene
 
@@ -89,7 +90,7 @@ def _run(argv, directory):
     with tempfile.TemporaryFile() as log:
         try:
             result = subprocess.run([str(exe), *map(str, argv)], cwd=directory,
-                stdin=subprocess.DEVNULL, stdout=log, stderr=log, timeout=120,
+                stdin=subprocess.DEVNULL, stdout=log, stderr=log, timeout=120, env=child_environment(),
                 creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
         except subprocess.TimeoutExpired as exc:
             raise ValueError('HSDRaw timed out. The original file was not changed.') from exc

@@ -22,6 +22,9 @@ from randall.assistant import approvals, tools
 from randall.website import website, website_posts
 from tests.backend import website_site
 from tests.backend.website_site import media
+from tests.backend.window_key import WINDOW, as_the_window  # noqa: F401
+
+pytestmark = pytest.mark.usefixtures('as_the_window')
 from vault.importing.unified.detection import dat_root_symbols, detect_content_type
 from vault.importing.unified.normalize import (
     GECKO_REFUSAL, describe_import_target, normalized_upload, safe_member_name, sniff_format)
@@ -325,11 +328,11 @@ def test_the_menu_choice_completes_through_the_real_http_endpoints(post, monkeyp
 
         # 2. an id nobody offered is a bad request, not a missing approval
         route = f'/api/assistant/chats/{run.chat_id}/approvals/{approval["id"]}'
-        refused = client.post(route, json={'decision': 'approve', 'choice': 'all'})
+        refused = client.post(route, headers=WINDOW, json={'decision': 'approve', 'choice': 'all'})
         assert refused.status_code == 400
 
         # 3. the offered id goes through, and reaches the importer as the hint
-        accepted = client.post(route, json={'decision': 'approve', 'choice': 'css_background'})
+        accepted = client.post(route, headers=WINDOW, json={'decision': 'approve', 'choice': 'css_background'})
         assert accepted.status_code == 200, accepted.get_json()
         list(live_runs.stream(run))
         assert seen == ['css_background']

@@ -1,12 +1,14 @@
 /**
  * PlayOverlay - progress / error / launched card for the vault "Play"
  * action. Rendered by StorageViewer while a play is in flight.
- * Styles live in StorageViewer.css (.play-overlay ...).
+ * Styles live in patches/PatchesGrid.css (.play-overlay, .vault-play-card ...).
  */
-export default function PlayOverlay({ playPercent, playMessage, playError, playLaunched, dismissPlay }) {
+export default function PlayOverlay({
+  playPercent, playMessage, playError, playLaunched, dismissPlay, doneText = 'Launched — switch to Dolphin!',
+}) {
   return (
     <div className="play-overlay" onClick={(playError || playLaunched) ? dismissPlay : undefined}>
-      <div className="play-card" onClick={(e) => e.stopPropagation()}>
+      <div className="vault-play-card" onClick={(e) => e.stopPropagation()}>
         {playError ? (
           <>
             <div className="play-icon error">âœ•</div>
@@ -15,7 +17,10 @@ export default function PlayOverlay({ playPercent, playMessage, playError, playL
           </>
         ) : playLaunched ? (
           <>
-            <p className="play-card-msg">Launched — switch to Dolphin!</p>
+            <p className="play-card-msg">{doneText}</p>
+            {doneText !== 'Launched — switch to Dolphin!' && (
+              <button className="btn-secondary" onClick={dismissPlay}>Close</button>
+            )}
           </>
         ) : (
           <>

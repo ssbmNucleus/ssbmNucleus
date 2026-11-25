@@ -179,15 +179,28 @@ def gate_ships(name: str) -> bool:
     wanted = {f.strip().lower() for f in os.environ.get("NUCLEUS_PREVIEW_FEATURES", "").split(",")}
     if name.lower() in wanted:
         return True
+    gates = _gates_table()
+    gate = gates.GATES.get(name)
+    if gate is None:
+        raise SystemExit(f"ship_rules.json names an unknown gate: {name}")
+    return not gate.packaged_off or gate_ships_in_stable(name)
+
+
+def _gates_table():
     import importlib.util
     spec = importlib.util.spec_from_file_location(
         "nucleus_release_gates", PROJECT_ROOT / "backend" / "core" / "gates.py")
     gates = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(gates)
-    gate = gates.GATES.get(name)
-    if gate is None:
-        raise SystemExit(f"ship_rules.json names an unknown gate: {name}")
-    return not gate.packaged_off
+    return gates
+
+
+def gate_ships_in_stable(name: str) -> bool:
+    """True when packaged_off gate `name` is opened in stable builds of this platform all
+    the same (gates.release_features: Play once PLAY_IN_STABLE is True, Windows only).
+    build.bat then writes it into the packaged manifest as releaseFeatures, which
+    electron/main.js reads."""
+    return name.lower() in _gates_table().release_features()
 
 
 #: The lazy frontend chunk each gated surface builds into (Vite names a chunk
@@ -200,6 +213,7 @@ GATED_FRONTEND_CHUNKS = {
     "assistant": ("AssistantPanel",),
     "randall": ("CoachPage",),
     "combo_video": ("ComboVideoPage",),
+    "play": ("PlayApp",),
 }
 
 
@@ -421,6 +435,10 @@ def cmd_scrub(args) -> int:
 def cmd_gate(args) -> int:
     """Exit 0 when release gate `args.name` ships in this build, 1 when it is left out.
     The build scripts use it to build the frontend half of the gate the same way."""
+    if getattr(args, "stable", False):
+        ships = gate_ships_in_stable(args.name)
+        print(f"Release gate {args.name}: {'opened' if ships else 'not opened'} by releaseFeatures in this build")
+        return 0 if ships else 1
     ships = gate_ships(args.name)
     print(f"Release gate {args.name}: {'ships' if ships else 'left out'} in this build")
     return 0 if ships else 1
@@ -864,6 +882,9 @@ def main(argv=None) -> int:
 
     p = sub.add_parser("gate", help="exit 0 if a release gate ships in this build, 1 if not")
     p.add_argument("name", help="a gate name from app/backend/core/gates.py, e.g. assistant")
+    p.add_argument("--stable", action="store_true",
+                   help="exit 0 only if the gate is packaged_off but opened in stable builds all the "
+                        "same (gates.release_features; build.bat writes it as releaseFeatures)")
     p.set_defaults(func=cmd_gate)
 
     p = sub.add_parser("scan", help="categorised inventory + release gate")

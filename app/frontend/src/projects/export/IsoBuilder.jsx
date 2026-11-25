@@ -4,6 +4,8 @@ import { API_URL, backendMediaUrl } from '../../shared/config/config'
 import { api } from '../../shared/transport/api'
 import { useJob } from '../../shared/jobs/useJobs'
 import { jobPercent } from '../../shared/jobs/jobOutcome'
+import { askBeforeShelfAdd, startShelfAdd } from '../../shared/jobs/shelfAdd'
+import { appConfirm } from '../../shared/ui/appDialogs'
 import { downloadPatchFile } from '../../vault/patches/patchDownload'
 import { getProgressMessage } from '../../shared/ui/progressText';
 import ProgressPanel from '../../shared/ui/ProgressPanel';
@@ -18,6 +20,7 @@ import './IsoBuilder.css';
 //   iso    : build ISO -> done
 //   patch  : build ISO -> xdelta patch -> done
 //   bundle : build texture-pack ISO -> auto-apply HD textures -> .ssbm in vault
+//   shelf  : build ISO -> onto Play's shelf (only offered when Play is on)
 // Each step is a backend job; the panel follows that job's record in the job
 // store (core/jobs.py, shared/jobs) and starts the next step when it is done.
 //
@@ -27,9 +30,15 @@ const STEP_TEXT = {
   patch: { title: 'Creating patch…', message: 'Comparing ISOs…' },
   textures: { title: 'Applying HD texture pack…', message: 'Computing portrait names…' },
   package: { title: 'Packaging bundle…', message: 'Building patch + bundle…' },
+  shelf: { title: 'Adding to your Unlocked shelf…', message: 'Adding the disc…' },
 };
 
-const IsoBuilder = ({ onClose, projectName = 'game', fighters, fightersStatus, onReloadRoster }) => {
+// Ask the app to switch to Play (App.jsx listens while Play is on).
+const OPEN_PLAY_EVENT = 'nucleus:open-play';
+
+// playEnabled: Play is on in this build (App.jsx passes PLAY_ENABLED down through MexPanel; this
+// file does not import shared/config/features.js, so it also bundles without Vite's import.meta.env).
+const IsoBuilder = ({ onClose, projectName = 'game', fighters, fightersStatus, onReloadRoster, playEnabled = false }) => {
   const getDefaultName = () => {
     const now = new Date();
     const date = now.toISOString().slice(0, 10);
@@ -51,6 +60,12 @@ const IsoBuilder = ({ onClose, projectName = 'game', fighters, fightersStatus, o
   const [patchCompression, setPatchCompression] = useState(1.0);
   const [patchColorSmash, setPatchColorSmash] = useState(false);
   const [patchAdvancedOpen, setPatchAdvancedOpen] = useState(false);
+  // Add to Play: the game's name, description and cover picture (a File, or null for the
+  // disc's banner) on the shelf.
+  const [shelfName, setShelfName] = useState(projectName === 'game' ? '' : projectName);
+  const [shelfDescription, setShelfDescription] = useState('');
+  const [shelfCover, setShelfCover] = useState(null);
+  const [shelfOpen, setShelfOpen] = useState(false);
 
   // ISO save-to-disk state (Electron native-dialog path)
   const [saveState, setSaveState] = useState('idle'); // idle | saving | saved | error
@@ -123,6 +138,16 @@ const IsoBuilder = ({ onClose, projectName = 'game', fighters, fightersStatus, o
       formData.append('exportedIsoPath', next.exported.path);
       if (next.textures?.texturePackPath) formData.append('texturePackPath', next.textures.texturePackPath);
       startStep(next, () => api.post('/bundle/export', formData), 'Failed to create bundle');
+    } else if (playEnabled && next.step === 'shelf') {
+      // An added game of the same name was offered for replacing before the build
+      // (onAddToShelf); startShelfAdd asks again only if one turned up since.
+      startStep(next, () => startShelfAdd({
+        artifactId: next.exported.artifactId,
+        name: next.shelfInfo?.name || next.filename.replace(/\.iso$/i, ''),
+        description: next.shelfInfo?.description || '',
+        replace: next.shelfInfo?.replace || null,
+      }, { cover: next.shelfInfo?.cover || null, post: api.post, confirm: appConfirm }),
+      'Failed to add the game to your Unlocked shelf');
     }
   };
 
@@ -156,13 +181,13 @@ const IsoBuilder = ({ onClose, projectName = 'game', fighters, fightersStatus, o
   }, []);
 
   // ---- kick off a pipeline ----
-  const runExport = ({ act, useTexturePack, compression = 1.0, colorSmash = false }) => {
+  const runExport = ({ act, useTexturePack, compression = 1.0, colorSmash = false, shelfInfo = null }) => {
     playSound('start');
     setError(null);
     setSaveState('idle');
     setSavedPath(null);
     setSaveError(null);
-    const next = { action: act, step: 'export', jobId: null, filename, useTexturePack };
+    const next = { action: act, step: 'export', jobId: null, filename, useTexturePack, shelfInfo };
     setCurrentRun(next);
     setPhase('working');
     startStep(next, () => api.post('/export/start', {
@@ -177,6 +202,21 @@ const IsoBuilder = ({ onClose, projectName = 'game', fighters, fightersStatus, o
   const onExportIso = () => runExport({ act: 'iso', useTexturePack: false, compression: isoCompression, colorSmash: isoColorSmash });
   const onExportPatch = () => runExport({ act: 'patch', useTexturePack: false, compression: patchCompression, colorSmash: patchColorSmash });
   const onAddBundle = () => runExport({ act: 'bundle', useTexturePack: true });
+  // Ask about a game of the same name before the build, not after it.
+  const onAddToShelf = async () => {
+    const name = shelfName.trim() || filename.replace(/\.iso$/i, '');
+    const plan = await askBeforeShelfAdd(name, { cover: shelfCover, get: api.get, confirm: appConfirm });
+    if (!plan.go) return;
+    runExport({
+      act: 'shelf', useTexturePack: false, compression: isoCompression, colorSmash: isoColorSmash,
+      shelfInfo: { name, description: shelfDescription.trim(), cover: shelfCover, replace: plan.replace },
+    });
+  };
+
+  const openPlay = () => {
+    window.dispatchEvent(new CustomEvent(OPEN_PLAY_EVENT));
+    onClose();
+  };
 
   // working panel: the step's own text until its job reports
   const stepText = STEP_TEXT[run?.step] || STEP_TEXT.export;
@@ -257,6 +297,25 @@ const IsoBuilder = ({ onClose, projectName = 'game', fighters, fightersStatus, o
   const renderDone = () => {
     const patchResult = run?.patch;
     const bundleResult = run?.bundle;
+    const shelfResult = run?.shelf;
+    if (playEnabled && action === 'shelf' && shelfResult) {
+      return (
+        <div className="export-complete">
+          <div className="success-icon">✓</div>
+          <h3>On Your Unlocked Shelf</h3>
+          {renderExportWarnings()}
+          <p className="subtle-line">
+            “{shelfResult.name}”
+            {shelfResult.replaced ? ' · replaced the old version' : ''}
+            {shelfResult.how === 'linked' ? ' · no extra disk space used' : ' · its own copy of the disc'}
+          </p>
+          <div className="complete-actions">
+            <button className="btn-download" onClick={openPlay}>Open in Unlocked</button>
+            <button className="btn-secondary" onClick={handleClose}>Done</button>
+          </div>
+        </div>
+      );
+    }
     if (action === 'patch' && patchResult) {
       return (
         <div className="export-complete">
@@ -365,6 +424,13 @@ const IsoBuilder = ({ onClose, projectName = 'game', fighters, fightersStatus, o
               onExportIso={onExportIso}
               onExportPatch={onExportPatch}
               onAddBundle={onAddBundle}
+              shelf={playEnabled ? {
+                name: shelfName, setName: setShelfName,
+                description: shelfDescription, setDescription: setShelfDescription,
+                cover: shelfCover, setCover: setShelfCover,
+                open: shelfOpen, setOpen: setShelfOpen,
+              } : null}
+              onAddToShelf={onAddToShelf}
             />
             </>
           )}

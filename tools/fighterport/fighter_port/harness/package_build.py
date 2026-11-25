@@ -234,6 +234,12 @@ def assemble(donor_bytes):
     from fighter_port.port_receipt import package_members
     members.update(package_members(port_report, name))
     members['fighter.json'] = json.dumps(fighter, indent=2).encode()
+    # The port's own C travels in the package (code/): the Vault keeps it with the fighter, and
+    # the Melee Unlocked export builds the fighter's plugin from it
+    # (app/backend/projects/install/melee_unlocked.py).
+    if (work / 'code').is_dir():
+        for src in sorted((work / 'code').glob('*.c')):
+            members['code/' + src.name] = src.read_bytes()
     output = io.BytesIO()
     with zipfile.ZipFile(output, 'w', zipfile.ZIP_DEFLATED) as z:
         for n, data in members.items():

@@ -51,7 +51,7 @@ and revalidation rules.
 | GET | `/api/assistant/chats/<id>` | Transcript with tool receipts, `task` (the chat's declared task, or null), `active_run_id`, `reply_run_id`, and `download_run_ids`, plus durable `pending_inputs`. Assistant messages have stable `id` and `run_kind` (`reply` or `download`); active runs share the latest transcript. |
 | DELETE | `/api/assistant/chats/<id>` | Delete local transcript; 409 if active; does not undo vault edits |
 | POST | `/api/assistant/chat` | `{chat_id?, input_id?, message, context?: {page, character, stage, selection, files, editor, task, fighter}, api_key?: string, account_token?: string}` → SSE `started`, `turn_progress`, `delta`, `tool_start`, `tool_result`, `approval_requested`, `approval_update`, `inputs_changed`, `turn_done`, `input_applied`, `done`; heartbeat comments. `started` includes `message_id` for the reply. `input_id` resumes a stored input using its server-owned content/context and fresh credentials. `turn_done` settles a reply before the same worker delivers the next input; `input_applied` carries `users`, the new assistant `message`, and remaining `pending_inputs`. Only `done` closes the stream. Tool receipts include `started_at`, `completed_at`, and `elapsed_ms`. IDs and tool results originate on the server. Invalid body/missing key: 400; another provider reply: 409. A direct download may run concurrently. `files` accepts up to eight file IDs/descriptors and is resolved to server metadata; `editor` is descriptive skin/texture context, never execution authority. `task` declares the chat's task (an id from `/status` `tasks` with `available: true`); any other value, `stage_import` included, is dropped silently (the chat is an ordinary chat), and only the task on the chat's first user message counts (a later one is ignored). `fighter` is the fighter picked for a model import: kept as the roster's own name (any case; long-name aliases such as `Captain Falcon` accepted, at most 40 characters), dropped silently when it is not one of `import_fighters`. A recolor's starting costume travels as ONE entry in `selection`: `{id, character, name}` for a vault costume, or `{character, vanilla: true, color, name}` for a stock one (no `id`); the backend opens it directly only when `selection` has exactly one entry. A stage recolor's starting stage travels the same way, as ONE `selection` entry of kind `stage`: `{kind: "stage", stage: "GrNBa", id: "<variant id>", name}` for a vault stage variant (the `id` the Vault's `GET /api/mex/das/storage/variants` serves; its archive `<storage>/das/<folder>/<id>.zip` must exist) or `{kind: "stage", stage: "GrNBa", vanilla: true, name}` for the stock stage (no `id`). `stage` is a `recolor_stages` code (its vault `folder` is accepted and rewritten to the code); `name` is a label, trimmed to 120 characters (the stage's own name when missing). The blueprint keeps such an entry with exactly these keys or drops it (an unsupported stage, a malformed or missing variant, both shapes at once); every entry without `kind: "stage"` passes untouched. In a `recolor_stage` chat's first turn with exactly one such entry, code opens it with `stage_lab_open` before any model round. Each reply's `routing` carries `declared_task` (always; null when none) and `task_mismatch` (`'model_import'` or absent): it fires only when a model-only file (`.glb`, `.gltf`, `.obj`, `.fbx`, `.dae`, `.smd`; never a `.zip`) is attached to THIS message, not yet imported and asked about, in a declared chat that is not a model import. The words of a message never set it. |
-| POST | `/api/assistant/chats/<id>/approvals/<approval_id>` | `{decision: "approve" or "deny", choice?: "default", "all", "fix", or "import_as_is"}`; choice must match an option offered by that approval. Variant reviews offer default/all; a post-download `slippi_review: true` approval offers fix/import_as_is before vault writes. Same decision and choice are idempotent; malformed body 400, unknown ID 404, conflicting/expired decision 409. Requests expire after 15 minutes. Arbitrary arguments and legacy `allow_changes` are rejected. |
+| POST | `/api/assistant/chats/<id>/approvals/<approval_id>` | `{decision: "approve" or "deny", choice?: "default", "all", "fix", or "import_as_is"}`; choice must match an option offered by that approval. Variant reviews offer default/all; a post-download `slippi_review: true` approval offers fix/import_as_is before vault writes. Same decision and choice are idempotent; malformed body 400, unknown ID 404, conflicting/expired decision 409. Requests expire after 15 minutes. Arbitrary arguments and legacy `allow_changes` are rejected. Window only: needs the window-only key `X-Nucleus-UI-Key` (`core/ui_channel.py`); without it 403 `not_the_app_window`, a request marked as an agent's 403 `automation_caller`, no key configured 503 `ui_approval_channel_unavailable`. |
 | POST | `/api/assistant/runs/<id>/cancel` | Cooperatively stop after any already-running tool; completed results persist |
 | POST | `/api/assistant/chats/<id>/inputs` | `{id: UUID hex, message, context?, mode?: "queue" or "steer"}` adds a durable input. Same ID retries are idempotent, including after delivery. Same context whitelist/attachment resolution as chat; no credentials accepted. Maximum 20 inputs. Returns `pending_inputs` and `reply_run_id`. |
 | PATCH / DELETE | `/api/assistant/chats/<id>/inputs/<input_id>` | PATCH accepts `message` and/or `mode`; DELETE removes the pending input. Already delivered/removed: 409. |
@@ -124,7 +124,8 @@ provider limits, errors and cooperative cancellation still apply.
 | codes_bp | Gecko codes (vault library + project sync) | 7 |
 | chat_reports_bp | "Report this chat" for Randall (review + submit) | 2 |
 | jobs_bp | Background jobs (`core/jobs.py`): list, get, cancel, mark seen | 4 |
-| mcp_bp | `POST /api/mcp`: MCP JSON-RPC for the user's own AI; `POST /api/mcp/account`: the window's Patreon token for its AI calls ([APP_MCP.md](APP_MCP.md)) | 3 |
+| play_bp | Play, the Melee Unlocked launcher (gate `play`; `play/routes/play.py`) | 16 |
+| mcp_bp | `POST /api/mcp`: MCP JSON-RPC for the user's own AI; `POST /api/mcp/account`: the window's Patreon token for its AI calls; `POST /api/mcp/window`: the window's Slippi Dolphin folder for `test_in_game`; `GET`/`POST /api/mcp/window/confirmations[/<id>]`: the questions an MCP call asks the person; `GET /api/mcp/window/problem-reports`, `POST .../<id>/review` (`{include, app_version}` -> a frozen chat report submission, sent by `POST /api/mex/chat-reports/submit`) and `POST .../<id>/discard`: the problem reports the user's AI wrote with `report_problem`. All window only (`X-Nucleus-UI-Key`, `core/ui_channel.py`), so the AI client cannot set, answer, read or send them ([APP_MCP.md](APP_MCP.md)) | 9 |
 
 ---
 
@@ -631,6 +632,260 @@ a critical operation while streaming. Startup cleanup removes old managed
 artifacts; restarting the backend requires a new export.
 
 ---
+
+## Melee Unlocked Blueprint
+
+Fighter plugins for Melee Unlocked's Source Port (`projects/routes/melee_unlocked.py`, engine
+`projects/install/melee_unlocked.py`). The Source Port runs the game natively, so a custom fighter's
+compiled PowerPC cannot run there: it loads `<name>.mufighter` from a `fighters` folder beside its game
+library instead, built from the fighter's MexTK C. That C lives in the Vault at
+`custom_characters/<slug>/code/` (`*.c`, `*.h`, optional `native.edits`). A fighter zip with a `code/`
+folder brings it in on import, and the fighter-port tool's packages carry one.
+
+A plugin is native code the game runs, so the export builds only source a person vouched for
+(`projects/install/fighter_source.py`): source **attached** in the window (`POST .../source/{slug}`), or
+imported source the user **confirmed** in the window for that fighter (`POST .../source/{slug}/confirm`).
+Source that came in a package (a website download, a `nucleus://import` link, a zip from disk) is recorded
+as **untrusted** with where it came from and when; source with no record (from before the records) is
+untrusted too. The records live in `fighter_source_trust.json` beside `custom_characters/`, out of reach of
+anything a package carries, and each is bound to the sha256 of the source, checked again on the bytes staged
+for the kit: source that changed after it was confirmed is untrusted again. Untrusted fighters are listed as
+not built, with the reason. The manifest the kit reads is checked too: a fighter name with a control
+character or line break, or a data file that is not `PlXx.dat`/`PlXx.usd`, fails that fighter.
+
+The export needs a fighter plugin kit (made by Melee Unlocked's `tools/mexft/mexft_kit.py`) and a
+MinGW-w64 GCC; the frontend keeps both folders in `localStorage` (`melee_unlocked_kit_path`,
+`melee_unlocked_gcc_bin`) and sends them in the body. The kit's Python tools run in a child process
+that is the backend program itself in its `--mu-kit` mode (`projects/install/mu_kit_runner.py`), so
+the installed app needs no Python of its own: the child gets no backend token, no window key and no
+other `NUCLEUS_*` setting (`core/child_env.py`), and is stopped with the compiler it started after 10
+minutes per fighter.
+
+Every route but the fighter list needs the window's own key, `X-Nucleus-UI-Key` (`core/ui_channel.py`):
+403 without it or from an agent, 503 when the backend has no key to check. Every folder (`kitPath`,
+`gccBin`, `destination`, `folder`) must be a drive-letter path on this computer (`core/path_safety.py`
+`local_path`): a share, a device path or the NT namespace is a 400.
+
+### GET /api/mex/melee-unlocked/fighters
+The open project's custom fighters, by whether a plugin can be built.
+
+**Response:** `{ success, buildable: [{name, slug, plugin}], unconfirmed: [{name, slug, plugin, origin,
+recordedAt, sha256, reason, confirmText}], withoutSource: [{name, slug, plugin}] }`. `unconfirmed` are the
+fighters whose source came in a package and was not confirmed; `confirmText` is the question the window
+asks (it names the fighter and the origin) and `sha256` the source it is about.
+
+### POST /api/mex/melee-unlocked/export
+Start a `melee_unlocked_export` job that builds the plugins into `<destination>/fighters/`. A fighter
+that fails to compile is reported and does not stop the others. Nothing in the project or an exported
+ISO changes.
+
+**Body:** `{ "destination": "C:/out", "kitPath": "...", "gccBin": "..." }`
+
+**Response:** `{ success, job_id }`. Follow the job at `GET /api/jobs/{job_id}` or its `job` events:
+`progress` and `detail` ("Building Shulk (3 of 15)") per fighter, and the result
+`{ abi, folder, built: [{name, slug, file, path, size}], failed: [{name, slug, error}], unconfirmed: [{name, slug,
+origin, reason, ...}], withoutSource: [{name, slug}] }`.
+400 with `error` when the kit or compiler folder is missing or wrong (checked before the job starts);
+409 with the running job's `job_id` when an export is already running.
+
+### POST /api/mex/melee-unlocked/verify
+Check the two folders. **Body:** `{ kitPath, gccBin }` (either may be empty).
+
+**Response:** `{ success, kit: {valid, abi | error}, compiler: {valid, error} }`.
+
+### POST /api/mex/melee-unlocked/source/{slug}
+The attach action: copy the C in a folder (or its `code` subfolder) into that Vault character, replacing what
+was there, recorded as attached by the user (built without a question). **Body:** `{ "folder": "..." }`.
+**Response:** `{ success, files }`.
+
+### POST /api/mex/melee-unlocked/source/{slug}/confirm
+Allow the export to build that character's imported source. **Body:** `{ "sha256": "..." }`, the digest the
+window showed with the question (`unconfirmed[].sha256`). **Response:** `{ success, source: {state:
+'confirmed', sha256, origin, recordedAt, confirmedAt} }`; 409 `source_changed` when the source is no longer
+the one shown (nothing is confirmed).
+
+### DELETE /api/mex/melee-unlocked/source/{slug}
+Remove the character's stored source and its record.
+
+## Play Blueprint
+
+Play, the launcher for Melee Unlocked (`play/routes/play.py`; engines `play/shelf.py`, `play/client.py`,
+`play/launch.py`). Gated: `NUCLEUS_PLAY=0` (every packaged build, for now, except a local Play test build: docs/dev/PREVIEW-0.9.0.md "Play test builds") and the routes do not exist.
+Windows only for now: elsewhere the shelf answers `platform.supported: false` and nothing starts.
+
+Every `{id}` is an entry id looked up on the shelf: `retail` and `vanilla` (the built-in games) or a
+12-character id the shelf generated. No route builds a path from a request string. Every route that is
+not a GET (it starts a program, changes the saved Melee Unlocked folder or changes the shelf) needs the
+window's own key, `X-Nucleus-UI-Key` (`core/ui_channel.py`): 403 without it or from an agent, 503 when
+this process has no key to check.
+
+### GET /api/play/shelf
+**Response:** `{ success, entries: [entry], platform: {supported, message}, client: {set, valid, error,
+folder, version, engines: {source, compat}, ...}` (the `/api/play/client` fields below)`, retailIso: {set,
+missing}, gameSettings: {exists, seededAt, canSeed}, running: id | null }`. `retailIso.missing` is the path the
+Melee ISO was recorded at when that file is gone (the cards name it), else null. `gameSettings` is Play's one shared
+`port-settings.ini`: whether it exists, when it was copied from the Melee Unlocked folder's own one (the first
+game, the settings window or a replay copies that file in once, `shelf.seed_game_settings`, and never again,
+even if Play's is deleted), and `canSeed`, whether the next start will. An entry is
+`{ id, name, description, builtin, removable, hasCover, disc: {kind: retail|owned, size?, sha256?},
+targets: {mu: {available, reason?}, dolphin: {...}}, defaultTarget, lastTarget?, engine: source|compat,
+engineReason?, engineChoice: auto|source|compat, options: {vanilla?, engine?}, origin?, createdAt?,
+fighters?: [{name, file, code: none|own|unknown, why}] }`; never a path. `fighters` are the ones an
+added game's m-ex disc adds, read when it was added (`play/routing.py`: no `ftFunction` symbol and every
+MxDt function in the retail code means no code of its own). `engine` is the one a launch would use now:
+the Source Port unless a fighter with code has no plugin of its name in the game's own fighters folder
+(`games/<id>/fighters`; the Melee Unlocked folder's own `fighters` never counts), then the compatibility
+engine, with `engineReason` saying which; or what `engineChoice` forces. When the client's facts are
+known, a plugin counts only if its `mu_fighter_plugin` record (`MUFT`, format, 16-byte ABI id in the
+`.mufighter` COFF object) matches the client's `pluginFormat` and `pluginAbi` (one built for another
+version is named as such in `engineReason`), and a fighter in the client's `linkedFighters` needs none.
+
+### GET /api/play/client · POST /api/play/client · POST /api/play/client/verify
+The Melee Unlocked folder every game starts from. **Body:** `{ "folder": "C:\\Games\\MeleeUnlocked" }`.
+It must be a drive-letter path on this computer (no share, `\\?\`, `\\.\` or `\??\` path) holding
+`melee_source.exe`, `melee_game.dll` and `Sys\`, and not overlap Play's own data folder. POST saves it
+(`""` forgets it; 400 with `error` when it is not one), `/verify` only checks it:
+`{ success, valid, error, folder, version, engines, engine, cpuBaseline, cpuSupported, pluginFormat,
+pluginAbi, linkedFighters, features: {fighters_dir, no_remember_iso, no_crash_dialog, no_dialogs},
+playback }`. The facts come from `melee_source.exe --print-info` (`play/client.py` `read_info`): run
+as an argument list, never through a shell, with Nucleus's settings and secrets out of its environment,
+no window, in Play's own `data/_info` folder, and ended after 10 seconds; only a program whose file
+names `--print-info` is started (the compatibility engine never is). The answer is cached in
+`<data>/play/client-info.json` under the program's size and modification time, so it runs again only
+when the program changes (a failure is kept for five minutes). A folder whose client lacks
+`fighters_dir` or `no_dialogs` (older than 1.0.6) is refused as too old. `cpuSupported: false` (no
+AVX2) stops every Melee Unlocked launch with that sentence; Dolphin still plays. `playback` is whether
+the folder has `SysPlayback\` (replays from Tracker).
+
+### GET /api/play/account
+The Slippi account the games sign in with, from the netplay `user.json`: `{ success, signedIn,
+displayName, connectCode }` (nothing else from that file).
+
+### POST /api/play/launch/{id}
+Start a `play_launch` job. **Body:** `{ target?: "mu" | "dolphin", slippiPath? }` (target defaults to
+the entry's last one; `slippiPath` is the Slippi Dolphin folder, for the Dolphin target). The program is
+always `melee_source.exe` (or `melee_port.exe` for the compatibility engine) inside the saved folder,
+started detached with the command line of Melee Unlocked's launch contract and without Nucleus's own
+environment variables (`MELEE_FIGHTER_PLUGINS` is never set or inherited). Every launch passes
+`--fighters-dir`: the game's own `games/<id>/fighters` when it has one, else `none` (the built-in Nucleus Unlocked
+and Vanilla always `none`), plus `--no-remember-iso` and `--no-dialogs`; a program that predates those
+options (the compatibility engine of a 1.0.6 install) does not get them. The built-in Nucleus Unlocked and Vanilla
+both pass `--replay-dir` the folder Tracker indexes (`launch.tracker_replay_folder`: the replay folder
+chosen in Tracker when it still exists, else the Slippi Launcher's `rootSlpPath`, else `Documents\Slippi`;
+when that folder does not exist, the game's own `data/<id>/Replays`), so their games show up in Tracker;
+Nucleus also passes `--user-dir` the netplay Dolphin's `User/Slippi`
+(the user's Slippi account), Vanilla its own `data/vanilla/User/Slippi`. An added game keeps both in its
+own data folder. The game's console output goes to `melee_port_console.txt` in its data folder. **Response:** `{ success, job_id }`; 400 with a sentence
+saying what to set up first; 404 for an id not on the shelf; 409 with `job_id` while a game (or the
+settings window) runs. The job's `extra.phase` is `launching` then `running` (with `extra.pid`, updated
+when the game restarts itself); its result is `{ outcome: quit | disc_error | refused | cpu | fatal |
+crashed | stopped | started, exitCode, message, detail, crashed, relaunched }`. Exit codes: 0 and 4
+`quit`, 1 `disc_error`, 2 `refused`, 3 `cpu` (no AVX2), 70 `fatal`, an exception code `crashed`; a crash
+file newer than the launch also means `crashed`. `message` says it in words with `detail`, the useful
+line from the game's console output, log or crash file, and for a fatal error or crash the folder the
+log is in.
+
+**Across a restart of Nucleus:** while a game (or the settings window, or a replay) runs, the job keeps
+`<data>/play/running.json`: the session (`entryId`, or `replay` / `settingsWindow`) and the process's
+`pid`, start time (`created`) and program (`exe`), read from the live process and rewritten when the game
+restarts itself; it is removed when the watch ends. At startup (`app.py`, after the job recovery,
+`launch.reattach`) a record whose pid is a live process with the same start time and the same program
+starts a new `play_launch` job watching it (`params: {entryId, target: mu, reattached: true}`, phase
+`running` at once), so the shelf shows that game running and the usual end handling follows; any
+mismatch (a pid Windows gave to another program, the game gone, the entry removed, a malformed record,
+not Windows) drops the record and starts nothing. The folders the job reads the log and crash file from
+come from the session, never from the record. Its result carries `reattached: true`. Not recovered: the
+restarts counted before Nucleus closed, a game that ended while Nucleus was closed (nothing is reported),
+and the exit code of one that ended in the moment between two looks (`exitCode: null`, read as a quit).
+Dolphin is never watched, before or after a restart.
+
+### POST /api/play/settings-window
+The game's own settings window, on the shared settings file (a `play_launch` job with
+`params.settingsWindow`; the first start copies the Melee Unlocked folder's own settings in, once). 409 while a
+game runs.
+
+### GET /api/play/replay · POST /api/play/replay
+"Watch in Melee Unlocked" for a Tracker replay row. GET (no key needed) answers `{ success, available,
+reason }`: whether a replay could start now (the saved folder verified, its processor supported, a
+`SysPlayback\` folder in it, the user's Melee ISO set) and, when not, the sentence saying why. POST
+(window only) **Body:** `{ path }`: the replay, which must be one Tracker indexed (the rule
+`/api/nucleome/replays/watch` uses), on this computer (the request-path gate: no share or device path),
+a `.slp` file, and within `slp_meta.peppi_refusal`'s size and shape checks (slp_guard's first step).
+Starts a `play_launch` job (`params: {entryId: null, replay: true, file}`) running `melee_source.exe
+--iso <disc> --replay <file> --sys-dir <folder>\SysPlayback` with no installed fighters
+(`--fighters-dir none`), `--no-remember-iso`, `--no-dialogs`, the shared settings file and shader
+cache, and its log, console output and saves in Play's `data/_replay`. The viewer records what it
+shows: `--replay-dir` is `data/_replay/Replays`, whose `.slp` files are cleared before each replay, so
+nothing is added to the user's Slippi replay folder or to Tracker. **Response:** `{ success, job_id }`;
+400 with the reason (not set up, no SysPlayback, not a replay file, refused by the shape checks, not
+on this computer); 404 for a path Tracker has not indexed; 409 while a game runs. The result is the
+usual one, read as a replay: exit 0 or 4 `quit`, 1 "could not open the replay", a crash with the crash
+file's first line.
+
+### POST /api/play/reveal/{id}
+Open the entry's data folder (saves, `melee_port.log`, crash files) in the file manager.
+
+### POST /api/play/shelf/add
+Put a finished ISO export on the shelf (a `shelf_add` job, `play/adding.py`). **Body:** `{ artifactId,
+name?, description? }`: `artifactId` is the export job's id (`/export/start`); the ISO's path comes from
+that job's record and must be in `output/artifacts`. The disc is hard-linked into the entry's folder
+(copied when that is not possible; 507 in the job's error when the drive is too full), hashed, and its
+banner becomes the cover, and the fighters the disc adds are checked for code of their own (which
+decides the engine). No fighter code is built. **Response:** `{ success, job_id }`; 404 when the
+export is not finished (or Nucleus restarted since), 400 for a texture-pack build or a disc that is not
+GALE01, 409 while another add runs. The job's result is `{ entryId, how: linked | copied, name }`; until
+the entry is stored the job owns its folder, which a failure, a Cancel or a restart removes.
+
+**Cover:** sent as multipart instead of JSON (the same fields as form fields) with a `cover` picture,
+it becomes the cover: 413 over 8 MB, 400 for one that does not decode (PNG, JPEG, GIF or WebP, at most
+6000 x 6000), scaled to 1024 px at most and written re-encoded as PNG inside the entry's own folder (a
+folder that resolves outside `games/` through a link is refused). The picture is bytes in the request,
+never a path. Without one: the Vault item's picture, else the disc's banner, else the shelf's plain card.
+
+**Same game:** an added game whose stored name matches `name` (ignoring case; the built-in Nucleus Unlocked and
+Vanilla never match) makes the add answer 409 `{ code: "already_on_shelf", existing: {id, name} }` before
+any work starts. `replace: <that id>` in the body replaces it instead: the new build goes into a folder of
+its own beside the old one, and one write of `shelf.json` swaps the entry over to it (the entry records
+`files`, the folder its game files are in), then the old folder is removed. Kept: the entry's id (so its
+saves and memory card in `data/<id>`), name, description (unless a new non-empty one is given), engine
+choice, last target (while still offered), place on the shelf, its `fighters` folder (copied across) and
+its cover (unless a new one is given). 400 replacing a built-in game, 404 for an id not on the shelf, 409
+while that game runs (asked when the add starts and again just before the swap; a launch planned before
+the swap is refused with "Press Play again"). A failed, cancelled or interrupted replace leaves the old
+entry exactly as it was. The result adds `replaced: true`.
+
+### GET /api/play/shelf/same?name=
+The added game an add called `name` would replace: `{ success, existing: {id, name, running} | null }`
+(the export page asks before it builds, so the question comes before the wait). No key needed.
+
+**From the Vault:** `{ patchId | bundleId, name?, description? }` (exactly one of `artifactId`,
+`patchId`, `bundleId`; 400 otherwise) puts a Vault patch or bundle on the shelf. The id is looked up in
+the Vault's own index (404 when it is not there or its file is gone); the file's path is made from the
+indexed id, never the request. Needs the user's Melee ISO (400 without it); the job checks it is the
+unmodified disc, then decodes the patch onto it straight into the entry's folder with the same decode
+as Play in Dolphin (`projects/install/xdelta.decode_patch`; Cancel ends xdelta3), refuses a result
+that is not GALE01, hashes it and reads its fighters. The Vault item's name, description and picture
+(as the cover, else the disc's banner) are copied. A bundle goes through the Vault's bundle checks
+(`check_bundle`: every member's name and size before any is read; 400 for one that fails) and its
+`textures/*.png` are kept in the entry's `textures` folder; the Dolphin target loads them into Slippi's
+`Load/Textures/GALE01/ssbm-nucleus/<build_name>` and turns HD textures on, as Play in Dolphin does for
+the bundle. `how` is `built`; `origin` is `{kind: patch | bundle, name}`. The entry keeps no link to
+the Vault: editing or deleting the Vault item later changes nothing on the shelf. An entry from a bundle
+shows `textures: <count>`.
+
+### PATCH /api/play/shelf/{id} · DELETE /api/play/shelf/{id}
+Rename or describe an added game (**Body:** `{ name?, description?, engine?: auto | source | compat }`,
+name and description stored as plain text; `engine` is the engine choice in its menu) or remove it with
+its disc and saves. 400 for the built-in games; 409 removing a game that is running.
+
+### GET /api/play/shelf/{id}/cover · POST /api/play/shelf/{id}/cover
+An added game's cover (PNG). POST takes multipart `cover` (8 MB at most); it is decoded, scaled to
+1024 px at most and stored re-encoded as PNG; anything that does not decode is refused. GET for the
+built-in `vanilla` is the banner of the user's own disc at its own 96x32 (the page scales it by whole pixels;
+`play/adding.py disc_banner`: read from the disc
+the first time it is asked for, kept as `<data>/play/disc-banner-<stamp>.png`, 404 when there is no disc
+or no banner); the shelf says `hasCover: true` for it whenever Nucleus knows the disc. The built-in
+`retail` (named Nucleus Unlocked) has no cover: the Play page draws its picture.
 
 ## Storage Costumes Blueprint
 
@@ -1447,6 +1702,12 @@ before the upload, so a retry after a lost reply goes into the same report.
 **Body:** `{ "submission_id": "...", "approval_hash": "...", "consent": true }`
 (`consent` must be the boolean `true`).
 
+Window only: the consent is the person's, so the send needs the window-only key
+`X-Nucleus-UI-Key` (`core/ui_channel.py`). An MCP client or a script holding the
+backend token gets 403 `not_the_app_window` (`automation_caller` for a request
+marked as an agent's), and 503 `ui_approval_channel_unavailable` when the
+backend has no key. Step 1 (review) needs only the backend token; it sends nothing.
+
 **Response:** `{success: true, state: "sent", id, notified, confirmed, size}` —
 `confirmed: false` means an earlier upload of this report reached the server
 and only its reply was lost. A repeated click returns the stored receipt
@@ -1743,6 +2004,14 @@ Build the bundle's ISO (if missing), load its texture pack, and launch it in the
 texture copy, HD-texture setting or launch fails the job. `result` is
 `{ iso_path, texture_count }`.
 
+Before anything is read or written, every member of the bundle is checked
+(`vault/catalog/bundles.check_bundle`, the `core.safe_extract` preflight): a
+name with a drive, an alternate data stream (`:`), `..`, a device name or a
+collision fails the job with `Invalid bundle: ...`, as do a manifest.json over
+1 MB, a texture over 128 MB, an unsafe compression ratio, more than 20,000
+members or 8 GB in all. The texture pack is the PNGs directly in `textures/`,
+each loaded under its own file name. Install and import apply the same check.
+
 ### POST /api/mex/bundle/delete/{bundle_id}
 Delete bundle.
 
@@ -1799,10 +2068,12 @@ extraction folder and the partial ISO. `result` is `{ name, iso_path,
 texture_count }`.
 
 ### POST /api/mex/bundle/import
-Import .ssbm bundle (multipart form).
+Import .ssbm bundle (multipart form). The bundle is checked as for play (above)
+before it is stored; an `image.png` over 32 MB is left out, not the bundle.
 
 ### POST /api/mex/bundle/preview
-Preview bundle without importing.
+Preview bundle without importing. Reads manifest.json only, within 1 MB (400
+`Invalid bundle: ...` otherwise).
 
 ---
 

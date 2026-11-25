@@ -138,6 +138,12 @@ if "$VENV_PYTHON" "$SCRIPT_DIR/ship_guard.py" gate assistant; then
 else
     unset VITE_ASSISTANT_PREVIEW
 fi
+# Play (the Melee Unlocked launcher, Windows only) is packaged_off: its UI is built
+# in only for a Play test build (NUCLEUS_PREVIEW_FEATURES=play). See build.bat.
+unset VITE_PLAY_PREVIEW
+if "$VENV_PYTHON" "$SCRIPT_DIR/ship_guard.py" gate play; then
+    export VITE_PLAY_PREVIEW=1
+fi
 npm run build || { echo -e "${RED}vite build failed${NC}"; exit 1; }
 cd "$PROJECT_ROOT"
 echo -e "${GREEN}✓ frontend built${NC}"

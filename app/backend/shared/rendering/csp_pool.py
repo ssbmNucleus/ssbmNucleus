@@ -36,6 +36,7 @@ import queue
 import subprocess
 
 from core.child_procs import own
+from core.child_env import child_environment
 from core.deadline_lines import DeadlineLineReader
 import threading
 import time
@@ -94,7 +95,7 @@ class _Worker:
             self.proc = own(subprocess.Popen(
                 [self.exe, "--csp-server"],
                 stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                text=True, bufsize=1, creationflags=flags,
+                text=True, bufsize=1, creationflags=flags, env=child_environment(),
             ))
         self._reader = DeadlineLineReader(self.proc.stdout)
         deadline = time.monotonic() + _READY_TIMEOUT

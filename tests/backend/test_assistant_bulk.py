@@ -7,6 +7,9 @@ from randall.website import website, website_bulk, website_posts
 from tests.backend import website_site
 from tests.backend.website_site import media
 from tests.backend.test_assistant_website import catalog
+from tests.backend.window_key import WINDOW, as_the_window  # noqa: F401
+
+pytestmark = pytest.mark.usefixtures('as_the_window')
 from flask import Flask
 from randall.routes.assistant_bp import assistant_bp
 
@@ -58,7 +61,7 @@ def test_direct_batch_api_one_keyless_approval(vault, batch, monkeypatch, decisi
         endpoint = f"/api/assistant/chats/{run.chat_id}/approvals/{approval['id']}"
         assert client.get(endpoint + '/files?choice=all').status_code == 200
         body = {'decision': decision, **({'choice': 'fix'} if decision == 'approve' else {})}
-        assert client.post(endpoint, json=body).status_code == 200
+        assert client.post(endpoint, headers=WINDOW, json=body).status_code == 200
         events = list(live_runs.stream(run))
         assert not any('approval_requested' in e for e in events)
         assert imported == ([123, 124] if decision == 'approve' else [])

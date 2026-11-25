@@ -337,14 +337,24 @@ def launch_real(slippi_path, iso_path):
     controller (unlike DolphinBoot, which is the isolated test harness). Detached
     so the game keeps running independently of the backend. Returns the exe used."""
     exe, _ = resolve_dolphin(slippi_path)
-    args = [str(exe), "-e", str(iso_path)]
+    start_detached([str(exe), "-e", str(iso_path)], cwd=str(Path(exe).parent))
+    return exe
+
+
+def start_detached(args, *, cwd, env=None, **popen_kwargs):
+    """Start a game someone plays: an argument list (never a shell), detached from
+    the backend so it survives backend churn, with its own window visible (no
+    CREATE_NO_WINDOW). Never owned by core.child_procs: a game that restarts
+    itself starts a new copy and exits, and a kill-on-close job would take the
+    copy down with Nucleus. Returns the Popen. `env` is the whole environment
+    (None: the backend's without Nucleus's settings and secrets, core/child_env.py)."""
+    if env is None:
+        from core.child_env import child_environment
+        env = child_environment()
     creationflags = 0
     if os.name == "nt":
-        # Detach from the backend so the game survives backend churn, but keep
-        # the Dolphin window visible -- do NOT use CREATE_NO_WINDOW here.
         creationflags = getattr(subprocess, "DETACHED_PROCESS", 0)
-    subprocess.Popen(args, cwd=str(Path(exe).parent), creationflags=creationflags)
-    return exe
+    return subprocess.Popen(list(args), cwd=cwd, env=env, creationflags=creationflags, **popen_kwargs)
 
 
 # --------------------------------------------------------------------------- #
@@ -1017,9 +1027,10 @@ class DolphinBoot:
         self.check_cancelled()
         args = [self.exe, "-u", str(self.user_dir), "-b", "-e", self.iso_path]
         self.log(f"launching: {args}")
+        from core.child_env import child_environment
         self.proc = subprocess.Popen(
             args, cwd=os.path.dirname(self.exe),
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=child_environment(),
         )
         self._arm_deadline()
         on_launch = ON_LAUNCH.get()

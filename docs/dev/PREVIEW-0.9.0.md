@@ -43,7 +43,7 @@ round trip and the in-game check are tools: their findings come back as
 | `NUCLEUS_DELIVERY` | `0` | Delivering a finished change into the build someone boots (`randall/delivery/deliver.py`). Delivery rebuilds and **overwrites** that file. Closed means refused with a sentence, never a partial success that reads like one. |
 | `NUCLEUS_WISH_SUBMIT` | `0` | Sending a recorded wish to the developer. Wishes are still classified, recorded and counted **locally** — that backlog is the point. What is closed is anything leaving the machine, and anything *claiming* something left it. |
 
-Also `0`, by the ordinary packaged-off gate list: `NUCLEUS_COMBO_VIDEO`.
+`NUCLEUS_COMBO_VIDEO` stays `0`. `NUCLEUS_PLAY` defaults to `0` and opens when the packaged manifest names `play` in `releaseFeatures` or `previewFeatures`.
 
 > **The assistant's model-import tools have no gate.** The release policy
 > above, not a gate, governs what a model-generated save may claim.
@@ -90,20 +90,61 @@ NUCLEUS_PREVIEW_FEATURES=assistant          (the build selector, set by hand)
        ├─ ship_guard.py gate assistant → VITE_ASSISTANT_PREVIEW=1 → the frontend bundle builds the tab
        └─ --config.extraMetadata.previewFeatures=assistant
             └─ the PACKAGED package.json    (the tree's manifest stays clean)
-                 └─ electron/main.js: previewFeatures?.includes('assistant')
-                      └─ backendEnv ← core.gates.policy_env(preview=true)
+                 └─ electron/main.js: 'assistant' in previewFeatures (PREVIEW_OPENS)
+                      └─ backendEnv ← core.gates.policy_env(features='assistant')
 ```
 
 `package.json` in the working tree must **never** carry `previewFeatures`: it is
 written into the packaged manifest only, so a shared checkout cannot turn the
 next release build into a preview. `test_preview_policy.py` asserts that.
 
-At startup the backend logs one line, and a bug report carries it:
+At startup the backend logs one line, and a bug report carries it. For a build without Unlocked, the line includes the following values.
 
 ```
 Feature switches: NUCLEUS_ASSISTANT=1 \
-  NUCLEUS_RANDALL=0 NUCLEUS_BUILD_COMMIT=0 NUCLEUS_DELIVERY=0 NUCLEUS_WISH_SUBMIT=0
+  NUCLEUS_RANDALL=0 NUCLEUS_BUILD_COMMIT=0 NUCLEUS_DELIVERY=0 NUCLEUS_WISH_SUBMIT=0 NUCLEUS_PLAY=0
 ```
+
+### Play test builds
+
+Unlocked (gate `play`) ships in Windows stable packages starting with 0.10.0. `PLAY_IN_STABLE`
+makes `build.bat` write `releaseFeatures=play`, and Electron opens `NUCLEUS_PLAY` from the
+packaged manifest. See [Play in stable builds](PLAY_CLIENT_FEED.md#play-in-stable-builds).
+To make a **local, unsigned test build**, use the same selector the assistant previews used.
+
+```powershell
+$env:NUCLEUS_PREVIEW_FEATURES = 'play'                  # or 'assistant,play'
+$env:NUCLEUS_BUILD_VERSION    = '0.10.1-play-preview.1' # a prerelease tag is REQUIRED
+$env:NUCLEUS_ALLOW_UNSIGNED   = '1'
+tools\build\build_logged.bat < NUL
+```
+
+```
+NUCLEUS_PREVIEW_FEATURES=play     (set by hand; whole names, comma-separated)
+  └─ tools/build/build.bat
+       ├─ refuses unless NUCLEUS_BUILD_VERSION has a prerelease tag   (before any stage)
+       ├─ ship_guard.py gate play → VITE_PLAY_PREVIEW=1 → features.js PLAY_ENABLED,
+       │    Play mode (the wordmark's third mode) and the PlayApp chunk are in the bundle
+       ├─ mex_backend.spec / the frozen smoke: the play package is frozen in
+       └─ --config.extraMetadata.previewFeatures=play
+            └─ electron/main.js: 'play' in previewFeatures → NUCLEUS_PLAY=1 for this package
+```
+
+Every other gate keeps its packaged value (`policy_env(features='play')` opens
+`NUCLEUS_PLAY` and nothing else). Why it cannot reach a release by accident:
+
+* The release stage (`ci.py stage`) packages the tree's plain `X.Y.Z`, so a stray
+  `NUCLEUS_PREVIEW_FEATURES=play` in the shell makes `build.bat` refuse before the
+  first stage. Nothing in the tree turns it on: `previewFeatures` is never in a
+  committed `package.json`, and `build.bat` clears `VITE_PLAY_PREVIEW` before it asks the gate.
+* `ship_guard.py` refuses a bundle with a `PlayApp` chunk when Play does not ship,
+  and one without it when it does.
+* The package counts as a test build (`previewFeatures`, prerelease version). With
+  no `NUCLEUS_PREVIEW_CHANNEL` it reads only the public update manifest, so it is
+  offered the next stable release once that is newer than its own version.
+
+A test build installs as the same app (same app id, install folder and data
+folder) as the released Nucleus, over it.
 
 ---
 

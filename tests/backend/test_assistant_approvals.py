@@ -6,6 +6,9 @@ from flask import Flask
 from randall.assistant import approvals, engine, live_runs, store, tools
 from core import metadata
 from tests.backend.test_assistant import seed
+from tests.backend.window_key import UI_KEY, WINDOW, as_the_window  # noqa: F401
+
+pytestmark = pytest.mark.usefixtures('as_the_window')
 
 ARGS = {'character': 'Marth', 'skin_ids': ['a', 'b'], 'folder_name': 'Favorites'}
 
@@ -93,7 +96,7 @@ def test_stale_selection_rejects_even_approved_action(vault, pending):
     assert '_assistant_actions' not in vault.read()
 
 
-def test_reload_and_scoped_decision_endpoint(vault, pending):
+def test_reload_and_scoped_decision_endpoint(vault, pending, monkeypatch):
     from randall.routes.assistant_bp import assistant_bp
     run, approval = pending
     stream = live_runs.stream(run)
@@ -105,12 +108,23 @@ def test_reload_and_scoped_decision_endpoint(vault, pending):
     assert chat['active_run_id'] == run.id
     assert chat['messages'][-1]['tools'][0]['approval']['id'] == approval['id']
     route = f'/api/assistant/chats/{run.chat_id}/approvals/{approval["id"]}'
-    assert client.post(route, json={'decision': 'approve', 'arguments': {'folder_name': 'Injected'}}).status_code == 400
-    assert client.post(route.replace(run.chat_id, 'b' * 32), json={'decision': 'approve'}).status_code == 404
-    assert '_assistant_actions' not in vault.read()
-    assert client.post(route, json={'decision': 'approve'}).status_code == 200
+    assert client.post(route, headers=WINDOW, json={'decision': 'approve', 'arguments': {'folder_name': 'Injected'}}).status_code == 400
+    assert client.post(route.replace(run.chat_id, 'b' * 32), headers=WINDOW, json={'decision': 'approve'}).status_code == 404
+    # Only the person at the window answers: the user's own AI over MCP, or a script, holds the backend token too
+    # but not the window's key, and an agent's request says it is one.
+    callers = (({}, 403, 'not_the_app_window'), ({'X-Nucleus-UI-Key': 'guess'}, 403, 'not_the_app_window'),
+               (dict(WINDOW, **{'X-Nucleus-Agent': '1'}), 403, 'automation_caller'))
+    for headers, status, code in callers:
+        refused = client.post(route, headers=headers, json={'decision': 'approve'})
+        assert (refused.status_code, refused.get_json()['code']) == (status, code), headers
+    monkeypatch.delenv('NUCLEUS_UI_APPROVAL_KEY')                     # no key handed over: fail closed
+    refused = client.post(route, headers=WINDOW, json={'decision': 'approve'})
+    assert (refused.status_code, refused.get_json()['code']) == (503, 'ui_approval_channel_unavailable')
+    monkeypatch.setenv('NUCLEUS_UI_APPROVAL_KEY', UI_KEY)
+    assert '_assistant_actions' not in vault.read()                   # none of those moved anything
+    assert client.post(route, headers=WINDOW, json={'decision': 'approve'}).status_code == 200
     finish(run)
-    assert client.post(route, json={'decision': 'approve'}).status_code == 200
+    assert client.post(route, headers=WINDOW, json={'decision': 'approve'}).status_code == 200
 
 
 def test_grants_bound_to_exact_call_and_single_use(vault):

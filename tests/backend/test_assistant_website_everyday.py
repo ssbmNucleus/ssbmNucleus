@@ -24,6 +24,9 @@ from tests.backend import website_site
 from tests.backend.website_site import media
 from randall.routes.assistant_bp import assistant_bp
 from core import gates
+from tests.backend.window_key import WINDOW, as_the_window  # noqa: F401
+
+pytestmark = pytest.mark.usefixtures('as_the_window')
 
 
 def _zip(members):
@@ -79,7 +82,7 @@ def _finish(run, client, approval, choice=None):
     if choice is not None:
         body['choice'] = choice
     route = f'/api/assistant/chats/{run.chat_id}/approvals/{approval["id"]}'
-    response = client.post(route, json=body)
+    response = client.post(route, headers=WINDOW, json=body)
     assert response.status_code == 200, response.get_json()
     list(live_runs.stream(run))
     from randall.assistant import store
@@ -335,7 +338,7 @@ def test_an_unsafe_costume_asks_before_fixing_and_the_answer_reaches_the_import(
     try:
         first = _approval(run)
         route = f'/api/assistant/chats/{run.chat_id}/approvals/{first["id"]}'
-        assert client.post(route, json={'decision': 'approve'}).status_code == 200
+        assert client.post(route, headers=WINDOW, json={'decision': 'approve'}).status_code == 200
         safety = _approval(run)
         assert safety['slippi_review'] and safety['default_choice'] == 'fix'
         assert [option['id'] for option in safety['choices']] == ['fix', 'import_as_is']

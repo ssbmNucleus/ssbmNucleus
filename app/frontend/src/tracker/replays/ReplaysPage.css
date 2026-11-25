@@ -748,6 +748,15 @@
   color: var(--color-gold-light) !important;
 }
 
+.replay-watchmu-wrap {
+  display: inline-flex;
+}
+
+.replay-watchmu:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
 /* numbered pages inside an open month */
 .replays-pager {
   align-self: center;

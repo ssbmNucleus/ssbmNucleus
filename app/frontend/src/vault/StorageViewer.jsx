@@ -44,6 +44,8 @@ import { useFileImport } from './import/useFileImport'
 import { useVaultLists } from './hooks/useVaultLists'
 import { useVaultPatches } from './hooks/useVaultPatches'
 import { useVaultPlay } from './hooks/useVaultPlay'
+import { useVaultShelfAdd } from './hooks/useVaultShelfAdd'
+import { PLAY_ENABLED } from '../shared/config/features'
 import { useVaultContextMenu } from './hooks/useVaultContextMenu'
 import { useVaultItemEditing } from './hooks/useVaultItemEditing'
 import { playSound, playHoverSound } from '../shared/audio/sounds'
@@ -120,6 +122,13 @@ export default function StorageViewer({ metadata, onRefresh, onSkinCreatorChange
     handlePlayPatch,
     dismissPlay
   } = useVaultPlay()
+
+  // "Add to Play" (Play builds only): a patch or bundle built onto the user's disc as a
+  // game of its own on the Play shelf (a shelf_add job the hook follows).
+  const {
+    addingId, addPercent, addMessage, addError, addDone, addDoneText,
+    handleAddPatchToPlay, handleAddBundleToPlay, dismissAdd,
+  } = useVaultShelfAdd()
 
   // Custom stages state (sub-page within stages mode)
   const [showCustomStages, setShowCustomStages] = useState(false)
@@ -787,6 +796,10 @@ export default function StorageViewer({ metadata, onRefresh, onSkinCreatorChange
           onPlayPatch={handlePlayPatch}
           playingId={playingId}
           playPercent={playPercent}
+          onAddPatchToPlay={PLAY_ENABLED ? handleAddPatchToPlay : null}
+          onAddBundleToPlay={PLAY_ENABLED ? handleAddBundleToPlay : null}
+          addingId={addingId}
+          addPercent={addPercent}
         />
       ) : (
         <VaultMenusView
@@ -887,6 +900,17 @@ export default function StorageViewer({ metadata, onRefresh, onSkinCreatorChange
           playError={playError}
           playLaunched={playLaunched}
           dismissPlay={dismissPlay}
+        />
+      )}
+
+      {addingId && !playingId && (
+        <PlayOverlay
+          playPercent={addPercent}
+          playMessage={addMessage}
+          playError={addError}
+          playLaunched={addDone}
+          dismissPlay={dismissAdd}
+          doneText={addDoneText || 'It is on your Unlocked shelf.'}
         />
       )}
 

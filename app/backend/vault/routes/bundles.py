@@ -16,7 +16,7 @@ import logging
 from flask import Blueprint, request, jsonify, send_file
 
 from vault.catalog.bundles import BUNDLE_PATH, load_bundle_metadata, save_bundle_metadata
-from vault.catalog.bundles import import_bundle_file
+from vault.catalog.bundles import import_bundle_file, read_manifest
 
 logger = logging.getLogger(__name__)
 
@@ -277,8 +277,10 @@ def preview_bundle():
                         'error': 'Invalid bundle: manifest.json not found'
                     }), 400
 
-                with zf.open('manifest.json') as mf:
-                    manifest = json.load(mf)
+                try:
+                    manifest = read_manifest(zf)
+                except ValueError as e:
+                    return jsonify({'success': False, 'error': f'Invalid bundle: {e}'}), 400
 
                 # Check for patch.xdelta
                 has_patch = 'patch.xdelta' in zf.namelist()

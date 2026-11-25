@@ -153,6 +153,7 @@ def active_mining():
 
 
 def _mine(job, character):
+    from ..store import scan_pool
     from .analyzer import analyze_game
     started = time.time()
     # Inside the job: a database that cannot open fails the job.
@@ -165,7 +166,10 @@ def _mine(job, character):
         for i, g in enumerate(todo):
             try:
                 if os.path.exists(g["path"]):
-                    rows = analyze_game(g["path"])
+                    # in the scan worker, never this process: peppi_py dies on
+                    # some crafted replays (tracker/store/slp_guard.py). A file
+                    # that crashed or hung it is ScanFailed, a failed row below.
+                    rows = scan_pool.run(analyze_game, g["path"])
                     # game_players.port is the 1-based slippi port — match on
                     # the row's slp_port, never on the ports-array index
                     mine = next((r for r in rows
@@ -193,6 +197,8 @@ def _mine(job, character):
                         (g["id"], g["my_char"], ANALYZER_VERSION,
                          g["start_at"], json.dumps(mine), g["mtime"], g["size"],
                          g["my_code"], "complete"))
+            except scan_pool.WorkerUnavailable:
+                raise      # no worker: not this game's fault, stop the job
             except BaseException as e:
                 # incl. pyo3 PanicException from peppi (BaseException-derived,
                 # not importable, so matched by name); anything else re-raises

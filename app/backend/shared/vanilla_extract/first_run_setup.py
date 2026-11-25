@@ -30,6 +30,7 @@ from typing import Callable, Optional
 import file_retry
 from core.child_procs import own
 from core.config import HSDRAW_EXE, STORAGE_PATH, get_subprocess_args
+from core.child_env import child_environment
 
 logger = logging.getLogger(__name__)
 
@@ -1489,7 +1490,8 @@ class FirstRunSetup:
                 cmd,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
-                text=True
+                text=True,
+                env=child_environment(),
             ))
 
             # Monitor folder size in background thread for progress

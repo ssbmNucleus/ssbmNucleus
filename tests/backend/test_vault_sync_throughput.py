@@ -45,7 +45,6 @@ def _items(tmp_path, names):
 
 def test_burst_runs_in_other_processes_and_shuts_down(monkeypatch):
     monkeypatch.delenv("NUCLEUS_SCAN_INPROC", raising=False)
-    monkeypatch.setattr(scan_pool, "_broken", False)
     with scan_pool.burst(2) as pool:
         jobs = [pool.submit(os.getpid) for _ in range(6)]
         pids = {job.result() for job in jobs}

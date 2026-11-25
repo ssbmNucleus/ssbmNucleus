@@ -1,10 +1,16 @@
+import { useRef, useState } from 'react'
 import './ExportHome.css'
+import MeleeUnlockedCard from './MeleeUnlockedCard'
+import { COVER_TYPES, coverProblem } from '../../shared/jobs/shelfAdd'
 
 /**
  * Minimalist export home — three one-shot actions:
  *   Export ISO    : build a ready-to-play ISO.
  *   Export Patch  : build the ISO, then make a small .xdelta patch (one click).
  *   Add Bundle    : texture-pack ISO + auto HD portraits + patch -> .ssbm vault.
+ * and one that builds no ISO: Melee Unlocked (MeleeUnlockedCard.jsx), fighter
+ * plugins for the project's custom fighters. With Play on (a `shelf` prop), a fifth:
+ *   Add to Play   : build the ISO, then put it on Play's shelf (a shelf_add job).
  *
  * Export ISO and Export Patch each carry their OWN Advanced tab (CSP compression
  * + Color Smash) scoped to that export. Bundles always ship full-res textures.
@@ -102,6 +108,71 @@ const ExportOption = ({ accent, title, desc, button, onClick, disabled, reason }
   </div>
 );
 
+// Add to Play: the ISO export, then the game onto Play's shelf with a name, a
+// description (plain text; the shelf trims and caps them) and, if one is chosen, a cover
+// picture (else the disc's banner is used). A picture is checked when it is chosen
+// (shared/jobs/shelfAdd.js coverProblem), not after the build.
+const ShelfOption = ({ shelf, onClick }) => {
+  const coverRef = useRef(null);
+  const [coverError, setCoverError] = useState(null);
+  const chooseCover = (event) => {
+    const file = event.target.files?.[0] || null;
+    event.target.value = '';
+    if (!file) return;
+    const problem = coverProblem(file);
+    setCoverError(problem);
+    if (!problem) shelf.setCover(file);
+  };
+  return (
+    <div className="export-option accent-violet has-advanced shelf-option">
+      <div className="export-option-main">
+        <div className="option-text">
+          <h3>Add to Unlocked</h3>
+          <p>Build the ISO and put it on your Unlocked shelf, ready to play in Melee Unlocked or Dolphin.</p>
+        </div>
+        <button className="btn-option" onClick={onClick}>Add</button>
+      </div>
+      <div className="card-advanced">
+        <button className="advanced-toggle" onClick={() => shelf.setOpen(!shelf.open)}>
+          <span className="toggle-arrow">{shelf.open ? '▼' : '▶'}</span>
+          Name, description and cover
+        </button>
+        {shelf.open && (
+          <div className="advanced-content">
+            <div className="form-group">
+              <label htmlFor="shelf-name">Name on the shelf</label>
+              <input id="shelf-name" type="text" maxLength={80} value={shelf.name}
+                onChange={(e) => shelf.setName(e.target.value)} />
+            </div>
+            <div className="form-group">
+              <label htmlFor="shelf-description">Description</label>
+              <textarea id="shelf-description" rows={2} maxLength={1000} value={shelf.description}
+                onChange={(e) => shelf.setDescription(e.target.value)} />
+            </div>
+            <div className="form-group">
+              <label>Cover picture</label>
+              <input ref={coverRef} type="file" accept={COVER_TYPES} hidden onChange={chooseCover} />
+              <p>
+                {shelf.cover ? shelf.cover.name : "None chosen: the disc's banner is used."}{' '}
+                <button className="btn-mu-source" onClick={() => coverRef.current?.click()}>Choose...</button>
+                {shelf.cover && (
+                  <>
+                    {' '}
+                    <button className="btn-mu-source" onClick={() => { shelf.setCover(null); setCoverError(null); }}>
+                      Use the banner
+                    </button>
+                  </>
+                )}
+              </p>
+              {coverError && <p className="option-reason" role="alert">{coverError}</p>}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const ExportHome = ({
   name,
   setName,
@@ -113,6 +184,8 @@ const ExportHome = ({
   onExportIso,
   onExportPatch,
   onAddBundle,
+  shelf = null,
+  onAddToShelf,
 }) => {
   const hasVanilla = !!vanillaPath;
   const hasSlippi = !!slippiPath;
@@ -171,6 +244,8 @@ const ExportHome = ({
           adv={patch}
           recommendedCompression={recommendedCompression}
         />
+        {shelf && <ShelfOption shelf={shelf} onClick={onAddToShelf} />}
+        <MeleeUnlockedCard />
       </div>
     </div>
   );

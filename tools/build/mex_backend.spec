@@ -379,6 +379,10 @@ hiddenimports += ['devtools.frameshot', 'devtools.effect_probe',
                   'devtools.extras_doctor', 'devtools.fps_batch', 'shared.rendering.datprobe']
 hiddenimports += collect_submodules('shared.ingame')
 hiddenimports += ['psutil']
+# The Melee Unlocked export runs a fighter plugin kit's own Python tools in a child that is
+# this program in its --mu-kit mode (app.py, projects/install/mu_kit_runner.py; started by
+# projects/install/melee_unlocked.py): the runner and the standard modules those tools import.
+hiddenimports += ['projects.install.mu_kit_runner', 'runpy', 'glob', 'struct', 'argparse', 'contextlib']
 # The assistant (backend/randall, the nucleus_api facade it scripts, and the AI
 # plumbing in shared/aiengine) ships only when its gate does; see RELEASE GATES.
 if ASSISTANT_SHIPS:

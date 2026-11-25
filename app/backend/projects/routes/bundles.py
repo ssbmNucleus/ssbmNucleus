@@ -33,8 +33,9 @@ from core.child_procs import own
 from core.config import OUTPUT_PATH, get_subprocess_args
 from core.safe_archive import safe_extract_zip
 from shared.ingame.boot import parse_dolphin_ini_iso_path, slippi_user_dir
-from projects.install.xdelta import clean_job_files, require_xdelta_exe
-from vault.catalog.bundles import BUNDLE_PATH, _append_bundle, _bundle_build_name
+from projects.install.xdelta import building_progress, clean_job_files, decode_patch, require_xdelta_exe
+from vault.catalog.bundles import (BUNDLE_PATH, _append_bundle, _bundle_build_name, check_bundle, read_manifest,
+                                   texture_members)
 from vault.routes.bundles import bundles_bp
 
 logger = logging.getLogger(__name__)
@@ -99,6 +100,33 @@ def set_dolphin_texture_settings(slippi_path, dump_textures=False, hires_texture
         raise RuntimeError(f"Could not turn on HD textures in Dolphin ({gfx_ini}): {e}") from e
 
     logger.info(f"Updated GFX.ini: DumpTextures={dump_textures}, HiresTextures={hires_textures}")
+
+
+def load_texture_pack(slippi_path, build_name, files):
+    """Make one texture pack the one Dolphin loads for Nucleus: clear Slippi's
+    Load/Textures/GALE01/ssbm-nucleus, write `files` ((file name, opener) pairs, each
+    name a plain checked file name, the opener returning a binary stream) into its
+    `build_name` folder, and turn HD textures on. Bundle play here and Play's Dolphin
+    target for a game added from a bundle (play/launch.py) both use it."""
+    load_root = slippi_user_dir(slippi_path) / 'Load' / 'Textures' / 'GALE01' / 'ssbm-nucleus'
+    if load_root.exists():
+        for item in load_root.iterdir():
+            if item.is_dir():
+                shutil.rmtree(item, ignore_errors=True)
+            else:
+                try:
+                    item.unlink()
+                except OSError:
+                    pass
+    dest = load_root / build_name
+    dest.mkdir(parents=True, exist_ok=True)
+    count = 0
+    for file_name, opener in files:
+        with opener() as src, open(dest / file_name, 'wb') as dst:
+            shutil.copyfileobj(src, dst)
+        count += 1
+    set_dolphin_texture_settings(slippi_path, dump_textures=False, hires_textures=True)
+    return count
 
 
 def run_bundle_export(job, name, description, build_name, vanilla_iso_path, exported_iso_path, texture_pack_path, image_path=None):
@@ -271,6 +299,10 @@ def run_bundle_install(job, bundle_path, slippi_path, vanilla_iso_path):
     job.own('temp', str(temp_dir))
 
     with zipfile.ZipFile(bundle_path, 'r') as zf:
+        try:
+            check_bundle(zf)
+        except ValueError as e:
+            raise RuntimeError(f'Invalid bundle: {e}') from e
         safe_extract_zip(zf, temp_dir)
 
     # 2. Validate manifest.json and patch.xdelta exist
@@ -401,10 +433,14 @@ def run_bundle_play(job, bundle_id, slippi_path, vanilla_iso_path):
 
     job.progress(0.05, 'Reading bundle...')
     with zipfile.ZipFile(bundle_path, 'r') as zf:
-        names = zf.namelist()
-        if 'manifest.json' not in names:
-            raise RuntimeError('Invalid bundle: manifest.json missing')
-        manifest = json.loads(zf.read('manifest.json'))
+        # Every member's name and size is checked before any is read or written (vault/catalog/bundles.py).
+        try:
+            names = check_bundle(zf)
+            if 'manifest.json' not in names:
+                raise RuntimeError('Invalid bundle: manifest.json missing')
+            manifest = read_manifest(zf)
+        except ValueError as e:
+            raise RuntimeError(f'Invalid bundle: {e}') from e
         build_name = _bundle_build_name(manifest)
         mod_name = manifest.get('name', 'Imported Mod')
 
@@ -429,47 +465,18 @@ def run_bundle_play(job, bundle_id, slippi_path, vanilla_iso_path):
             staging_path = iso_path.with_name(
                 f'{iso_path.stem}.{uuid.uuid4().hex}.part.iso')
             job.own('staging', str(staging_path))
-            cmd = [str(require_xdelta_exe()), '-d', '-f', '-s', str(vanilla_iso_path),
-                   str(temp_dir / 'patch.xdelta'), str(staging_path)]
-            proc = own(subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, **get_subprocess_args()))
-            expected = Path(vanilla_iso_path).stat().st_size
-            last = 0
-            while proc.poll() is None:
-                time.sleep(0.3)
-                try:
-                    if staging_path.exists():
-                        p = min(int(staging_path.stat().st_size / expected * 55) + 10, 65)
-                        if p != last:
-                            job.progress(p / 100, f'Building ISO... {p - 10}%'); last = p
-                except Exception:
-                    pass
-            out, errout = proc.communicate()
-            if proc.returncode != 0:
-                msg = (errout or out or b'').decode(errors='replace') or 'xdelta error'
-                raise RuntimeError(f'Failed to build ISO: {msg}')
+            decode_patch(vanilla_iso_path, temp_dir / 'patch.xdelta', staging_path,
+                         progress=building_progress(job.progress, start=10, span=55))
             _publish_bundle_artifact(
                 staging_path, iso_path, marker_path, bundle_id, digest)
             job.release('staging')
 
         # 2. Texture pack: clear ours, then load THIS bundle's portraits.
         job.progress(0.75, 'Loading texture pack...')
-        load_root = slippi_user_dir(slippi_path) / 'Load' / 'Textures' / 'GALE01' / 'ssbm-nucleus'
-        if load_root.exists():
-            for item in load_root.iterdir():
-                if item.is_dir():
-                    shutil.rmtree(item, ignore_errors=True)
-                else:
-                    try:
-                        item.unlink()
-                    except OSError:
-                        pass
-        dest = load_root / build_name
-        dest.mkdir(parents=True, exist_ok=True)
-        tex_members = [n for n in names if n.startswith('textures/') and n.lower().endswith('.png')]
-        for n in tex_members:
-            with zf.open(n) as src, open(dest / Path(n).name, 'wb') as dst:
-                shutil.copyfileobj(src, dst)
-        set_dolphin_texture_settings(slippi_path, dump_textures=False, hires_textures=True)
+        # Only textures/<name>.png, as checked: a plain file name, never a drive, a stream or a folder.
+        tex_members = texture_members(names)
+        load_texture_pack(slippi_path, build_name,
+                          ((file_name, lambda n=n: zf.open(n)) for n, file_name in tex_members.items()))
 
     # 3. Launch the user's real Slippi Dolphin on the ISO.
     job.progress(0.95, 'Launching Slippi...')

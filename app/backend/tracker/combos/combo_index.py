@@ -37,7 +37,7 @@ import struct
 
 from core import jobs
 from ..store.pass_progress import PassProgress
-from ..store.slp_meta import (HEADER, RAW_START, CMD_POST_FRAME,
+from ..store.slp_meta import (HEADER, RAW_START, CMD_POST_FRAME, MAX_SLP_BYTES,
                        _parse_payload_sizes, SlpParseError)
 
 logger = logging.getLogger(__name__)
@@ -101,6 +101,8 @@ def _read_post_frames(path):
     players. Rollback re-writes of a frame overwrite the earlier values (last
     wins, matching slippi-js)."""
     size = os.path.getsize(path)
+    if size > MAX_SLP_BYTES:
+        raise SlpParseError("file too large for a replay")
     with open(path, "rb") as f:
         head = f.read(4096)
         if not head.startswith(HEADER):
@@ -134,8 +136,8 @@ def _read_post_frames(path):
     while pos < end:
         cmd = data[pos]
         sz = sizes.get(cmd)
-        if sz is None:
-            break  # unknown event = can't safely skip; keep what we have
+        if not sz:
+            break  # unknown (or empty) event = can't safely skip; keep what we have
         if cmd == CMD_POST_FRAME and pos + 1 + sz <= end:
             base = pos + 1
             if not data[base + PF_FOLLOWER]:  # ignore Nana
@@ -406,8 +408,12 @@ def _scan(job):
                     ports = [p["port"] for p in json.loads(game["players"] or "[]")]
                     # the frame walk is the expensive part -- off-process, so
                     # a full re-extraction cannot make the app unresponsive
-                    extracted, error = scan_pool.run(
-                        extract_for_scan, game["path"], ports)
+                    try:
+                        extracted, error = scan_pool.run(
+                            extract_for_scan, game["path"], ports)
+                    except scan_pool.ScanFailed as e:
+                        # crashed or hung the worker: failed, and quarantined
+                        extracted, error = None, str(e)
                     if error:
                         logger.debug("combos: %s: %s", game["path"], error)
                         stamp(game)
@@ -415,6 +421,8 @@ def _scan(job):
                     else:
                         _store_game_combos(conn, game, extracted)
                         progress.add(found=sum(len(c["moves"]) >= 4 for c in extracted))
+            except scan_pool.WorkerUnavailable:
+                raise          # no worker: not this game's fault, stop the pass
             except Exception:  # never let one weird row kill the scan
                 stamp(game)
                 progress.add(failed=1)

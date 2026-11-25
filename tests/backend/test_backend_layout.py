@@ -57,14 +57,16 @@ def test_packages_exist():
                 "randall/assistant", "randall/assistant/tasks", "randall/recolor", "randall/model_import/chat",
                 "randall/website", "randall/delivery", "randall/reports", "randall/coach",
                 "shared/rendering", "shared/modellab", "shared/ingame", "shared/aiengine",
-                "shared/vanilla_extract", "shared/diagnostics", "nucleus_api", "devtools", "file_retry", "mexcli"):
+                "shared/vanilla_extract", "shared/diagnostics", "nucleus_api", "devtools", "file_retry", "mexcli",
+                "play", "play/routes"):
         if pkg in LEFT_OUT_OF_PUBLIC and not present(LEFT_OUT_OF_PUBLIC[pkg]):
             continue
         assert (BACKEND / pkg / "__init__.py").is_file(), pkg
 
 
 #: Packages the public source drop leaves out, and the gate each belongs to (core/build_smoke.py).
-LEFT_OUT_OF_PUBLIC = {"tracker/video/combo_video": "combo_video", "randall/coach": "randall"}
+LEFT_OUT_OF_PUBLIC = {"tracker/video/combo_video": "combo_video", "randall/coach": "randall",
+                      "play": "play", "play/routes": "play"}
 
 
 def test_pre_reorganisation_packages_are_gone():

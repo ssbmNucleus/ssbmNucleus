@@ -4,8 +4,9 @@
  * Bundles and patches are rendered as portrait cover cards: a cover image is
  * shown letterboxed over a blurred backdrop (so any aspect ratio looks good),
  * and cards with no cover get a gradient monogram placeholder. Each card carries
- * a primary Play action, a hover-reveal edit button, and (patches) a secondary
- * "build & download ISO" action.
+ * a primary Play action, a hover-reveal edit button, (patches) a secondary
+ * "build & download ISO" action, and, where Play is on, "Add to Play": the patch
+ * built onto the user's disc as a game of its own on the Play shelf.
  */
 
 import { useState } from 'react'
@@ -24,6 +25,9 @@ function CoverCard({
   secondaryLabel,
   secondaryTitle,
   onSecondary,
+  onAddToPlay,
+  adding,
+  addPercent,
 }) {
   const [imgError, setImgError] = useState(false)
   const showImg = imageUrl && !imgError
@@ -84,6 +88,17 @@ function CoverCard({
             </button>
           )}
         </div>
+        {onAddToPlay && (
+          <button
+            className="cover-secondary cover-shelf"
+            onMouseEnter={playHoverSound}
+            onClick={() => { playSound('start'); onAddToPlay() }}
+            disabled={adding}
+            title="Build it onto your Melee disc and put it on your Unlocked shelf, as a game of its own"
+          >
+            {adding ? `Adding... ${addPercent}%` : '+ Add to Unlocked'}
+          </button>
+        )}
       </div>
     </div>
   )
@@ -100,6 +115,10 @@ export default function PatchesGrid({
   onPlayPatch,
   playingId = null,
   playPercent = 0,
+  onAddBundleToPlay = null,
+  onAddPatchToPlay = null,
+  addingId = null,
+  addPercent = 0,
 }) {
   const fmtMb = (mb, bytes) => {
     const v = typeof mb === 'number' ? mb : (bytes ? bytes / (1024 * 1024) : 0)
@@ -123,6 +142,9 @@ export default function PatchesGrid({
                 playPercent={playPercent}
                 onPlay={() => onPlayBundle?.(bundle)}
                 onEdit={() => onEditBundle(bundle)}
+                onAddToPlay={onAddBundleToPlay ? () => onAddBundleToPlay(bundle) : null}
+                adding={addingId === bundle.id}
+                addPercent={addPercent}
               />
             ))}
           </div>
@@ -145,6 +167,9 @@ export default function PatchesGrid({
             secondaryLabel="Export ISO"
             secondaryTitle="Build & download the ISO file"
             onSecondary={() => onBuildIso(patch)}
+            onAddToPlay={onAddPatchToPlay ? () => onAddPatchToPlay(patch) : null}
+            adding={addingId === patch.id}
+            addPercent={addPercent}
           />
         ))}
 

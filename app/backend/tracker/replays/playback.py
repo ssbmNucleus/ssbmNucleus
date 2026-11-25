@@ -280,9 +280,10 @@ def _write_comm(entries):
 def _launch_playback(dolphin, comm_path, iso_path, job=None):
     """Start playback Dolphin, register it for embed/Stop and as the job's,
     and fail loudly if it dies during startup. Returns the process."""
+    from core.child_env import child_environment
     proc = subprocess.Popen([dolphin, "-i", comm_path, "-b", "-e", iso_path],
                             stdout=subprocess.DEVNULL,
-                            stderr=subprocess.PIPE)
+                            stderr=subprocess.PIPE, env=child_environment())
     _track(job, proc, dolphin)
     tail = _drain_stderr(proc)
     proc.stderr_tail = tail     # for _crash_message once it has played

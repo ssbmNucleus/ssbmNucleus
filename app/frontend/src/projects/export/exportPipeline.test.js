@@ -94,3 +94,16 @@ test('a late export start cannot revive a closed or replaced run; missing ids fa
   assert.deepEqual(acceptStepStart(run, run, { job_id: 'step' }), { ...run, jobId: 'step' })
   assert.equal(run.jobId, null)
 })
+
+test('add to shelf: the export, then the shelf job with the export as its artifact', () => {
+  assert.equal(nextStep('shelf', 'export'), 'shelf')
+  assert.equal(nextStep('shelf', 'shelf'), null)
+  assert.equal(stepMeta('shelf', 'shelf'), 'Step 2 of 2')
+  const run = { action: 'shelf', step: 'export', jobId: 'build_s' }
+  const { next } = advance(run, done('build_s', { path: 's.iso' }))
+  assert.equal(next.step, 'shelf')
+  assert.equal(next.exported.artifactId, 'build_s')
+  const { done: finished } = advance({ ...next, jobId: 'add_1' }, done('add_1', { entryId: 'a1b2c3d4e5f6', how: 'linked' }))
+  assert.deepEqual(finished.shelf, { entryId: 'a1b2c3d4e5f6', how: 'linked' })
+  assert.equal(finished.exported.path, 's.iso')
+})

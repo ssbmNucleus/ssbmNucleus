@@ -168,6 +168,15 @@ def test_record_ignores_non_melee_file(tmp_path, monkeypatch):
 def test_known_none_when_iso_moved(tmp_path, recorded_iso):
     recorded_iso.unlink()
     assert vanilla_refs.known_vanilla_iso() is None
+    # The record still says where it was (Play names it on its cards).
+    assert vanilla_refs.recorded_vanilla_iso() == recorded_iso
+
+
+def test_recorded_none_without_a_record(tmp_path, monkeypatch):
+    monkeypatch.setattr(vanilla_refs, "ISO_RECORD_PATH", tmp_path / "no-record.json")
+    assert vanilla_refs.recorded_vanilla_iso() is None
+    (tmp_path / "no-record.json").write_text("{not json", encoding="utf-8")
+    assert vanilla_refs.recorded_vanilla_iso() is None
 
 
 # ---------------------------------------------------------------------------

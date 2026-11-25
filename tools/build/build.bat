@@ -78,6 +78,25 @@ if defined PREVIEW_VERSION_INVALID (
     exit /b 1
 )
 
+REM Play test builds (docs/dev/PREVIEW-0.9.0.md, "Play test builds"): Play, the
+REM unfinished Melee Unlocked launcher, is packaged only when asked for by name,
+REM NUCLEUS_PREVIEW_FEATURES=play (comma-separate other features). It is for
+REM local test builds, so it also needs a prerelease NUCLEUS_BUILD_VERSION
+REM (0.9.2-play-preview.1): the release stage (ci.py) packages the tree's plain
+REM version, so a stray NUCLEUS_PREVIEW_FEATURES=play fails here, not in a release.
+REM Kept flat on purpose, like the checks above.
+set "PLAY_PREVIEW="
+if defined NUCLEUS_PREVIEW_FEATURES powershell.exe -NoProfile -Command "if (@($env:NUCLEUS_PREVIEW_FEATURES -split ',' | ForEach-Object { $_.Trim().ToLowerInvariant() }) -contains 'play') { exit 0 } else { exit 1 }" && set "PLAY_PREVIEW=1"
+set "PLAY_VERSION_INVALID="
+if defined PLAY_PREVIEW powershell.exe -NoProfile -Command "if ($env:NUCLEUS_BUILD_VERSION -cmatch '\A(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)-(0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(\.(0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*\z') { exit 0 } else { exit 1 }" || set "PLAY_VERSION_INVALID=1"
+if defined PLAY_VERSION_INVALID (
+    echo ERROR: NUCLEUS_PREVIEW_FEATURES=play makes a Play TEST build, which needs
+    echo        NUCLEUS_BUILD_VERSION with a prerelease tag, e.g. 0.9.2-play-preview.1.
+    if not defined NUCLEUS_BUILD_NONINTERACTIVE pause
+    exit /b 1
+)
+if defined PLAY_PREVIEW echo Play test build: Play ^(the Melee Unlocked launcher^) will be packaged ON, as %NUCLEUS_BUILD_VERSION%.
+
 REM Use the project venv explicitly. The system 'python' on PATH may be a
 REM different interpreter without our deps installed (Flask, etc.), which
 REM produces an exe that crashes at startup with ModuleNotFoundError.
@@ -265,6 +284,24 @@ if errorlevel 1 (
     exit /b 1
 )
 :rigswap_done
+REM Play (the Nucleus game client's launcher) follows its gate the same way. It is
+REM packaged_off, so `ship_guard.py gate play` passes only for a Play test build
+REM (NUCLEUS_PREVIEW_FEATURES=play, version checked at the top) or once
+REM backend/core/gates.py PLAY_IN_STABLE is True; then
+REM VITE_PLAY_PREVIEW builds Play mode (the wordmark's third mode) and the PlayApp chunk into the bundle
+REM (frontend/src/shared/config/features.js), mex_backend.spec freezes the play
+REM package, and main.js sets NUCLEUS_PLAY=1 for this package. In every other
+REM build it is cleared here and the ship guard refuses a PlayApp chunk.
+set "VITE_PLAY_PREVIEW="
+"%VENV_PYTHON%" "%~dp0ship_guard.py" gate play
+if not errorlevel 1 set "VITE_PLAY_PREVIEW=1"
+REM Play in a stable build (`gate play --stable`: PLAY_IN_STABLE is True): the
+REM packaged manifest gets releaseFeatures=play (stage 5), which main.js reads.
+set "PLAY_STABLE="
+"%VENV_PYTHON%" "%~dp0ship_guard.py" gate play --stable
+if not errorlevel 1 set "PLAY_STABLE=1"
+if defined VITE_PLAY_PREVIEW echo Play is ENABLED in this build ^(frontend bundle, backend package, NUCLEUS_PLAY=1^).
+if not defined VITE_PLAY_PREVIEW echo Play is LEFT OUT of this build ^(its release gate is closed^).
 if not exist "%PROJECT_ROOT%\frontend" (
     echo ERROR: Cannot find frontend directory at %PROJECT_ROOT%\frontend
     if not defined NUCLEUS_BUILD_NONINTERACTIVE pause
@@ -350,18 +387,25 @@ if defined NUCLEUS_BUILD_VERSION echo Packaging as version %NUCLEUS_BUILD_VERSIO
 
 REM The electron half of NUCLEUS_PREVIEW_FEATURES (see stage 4). Written into
 REM the PACKAGED package.json only, so the tree's manifests stay release-clean;
-REM main.js reads previewFeatures?.includes('assistant') and keeps
-REM NUCLEUS_ASSISTANT on for that package alone (the Tracker coach stays off).
+REM main.js reads the feature names in previewFeatures and opens NUCLEUS_ASSISTANT
+REM ('assistant') or NUCLEUS_PLAY ('play') for that package alone (the Tracker
+REM coach and the write paths stay off).
 set "PREVIEW_FEATURES_OVERRIDE="
 if defined NUCLEUS_PREVIEW_FEATURES set "PREVIEW_FEATURES_OVERRIDE=--config.extraMetadata.previewFeatures=%NUCLEUS_PREVIEW_FEATURES%"
 if defined NUCLEUS_PREVIEW_FEATURES echo Packaging with preview features: %NUCLEUS_PREVIEW_FEATURES%
+
+REM The packaged_off gates a stable build opens all the same (gates.py
+REM release_features, asked in stage 4): Play once PLAY_IN_STABLE is True.
+set "RELEASE_FEATURES_OVERRIDE="
+if defined PLAY_STABLE set "RELEASE_FEATURES_OVERRIDE=--config.extraMetadata.releaseFeatures=play"
+if defined PLAY_STABLE echo Packaging with release features: play
 
 REM The secret preview update channel (validated at the top). Never echoed.
 set "PREVIEW_CHANNEL_OVERRIDE="
 if defined NUCLEUS_PREVIEW_CHANNEL set "PREVIEW_CHANNEL_OVERRIDE=--config.extraMetadata.previewChannel=%NUCLEUS_PREVIEW_CHANNEL%"
 if defined NUCLEUS_PREVIEW_CHANNEL echo Packaging with the secret preview update channel.
 
-call "%PROJECT_ROOT%\node_modules\.bin\electron-builder.cmd" --win --projectDir "%PACKAGE_STAGE%" "--config.directories.output=%PACKAGE_OUTPUT%" "--config.electronVersion=%ELECTRON_VERSION%" %SIGNING_OVERRIDE% %VERSION_OVERRIDE% %PREVIEW_FEATURES_OVERRIDE% %PREVIEW_CHANNEL_OVERRIDE%
+call "%PROJECT_ROOT%\node_modules\.bin\electron-builder.cmd" --win --projectDir "%PACKAGE_STAGE%" "--config.directories.output=%PACKAGE_OUTPUT%" "--config.electronVersion=%ELECTRON_VERSION%" %SIGNING_OVERRIDE% %VERSION_OVERRIDE% %PREVIEW_FEATURES_OVERRIDE% %RELEASE_FEATURES_OVERRIDE% %PREVIEW_CHANNEL_OVERRIDE%
 if %errorlevel% neq 0 (
     echo ERROR: Electron packaging failed
     if not defined NUCLEUS_BUILD_NONINTERACTIVE pause

@@ -1,0 +1,59 @@
+/* An AI's problem report waiting in the window: the "Report this chat" card (ChatReportModal.css), plus the
+   report itself and its attachment list. */
+
+.problem-report-modal { max-width: 640px; }
+
+.problem-report-heading {
+  margin: 0;
+  font-size: var(--text-md, var(--text-sm));
+  font-weight: 600;
+  color: var(--color-text-primary);
+  overflow-wrap: anywhere;
+}
+
+.problem-report-markdown {
+  max-height: 280px;
+  margin: 0;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: var(--color-bg-deep);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--color-text-primary);
+}
+
+.problem-report-parts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-height: 200px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.problem-report-part {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+}
+
+.problem-report-part code {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}
+
+.problem-report-part-name { overflow-wrap: anywhere; }
+
+.problem-report-part-size {
+  flex-shrink: 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+}

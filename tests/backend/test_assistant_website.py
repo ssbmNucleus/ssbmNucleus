@@ -11,6 +11,9 @@ from randall.assistant import approvals, tools
 from randall.website import website, website_posts, website_search
 from tests.backend import website_site
 from tests.backend.website_site import counted, media
+from tests.backend.window_key import WINDOW, as_the_window  # noqa: F401
+
+pytestmark = pytest.mark.usefixtures('as_the_window')
 
 
 def _zip_payload(members=(('PlMsBu.dat', b'\x00'),)):
@@ -541,9 +544,9 @@ def test_download_variant_choice_is_bound_and_replay_safe(catalog, vault, monkey
         app = Flask(__name__); app.register_blueprint(assistant_bp)
         client = app.test_client()
         route = f'/api/assistant/chats/{run.chat_id}/approvals/{approval["id"]}'
-        assert client.post(route, json={'decision': 'approve', 'choice': 'arbitrary'}).status_code == 400
-        assert client.post(route, json={'decision': 'approve'}).status_code != 200
-        assert client.post(route, json={'decision': 'approve', 'choice': choice}).status_code == 200
+        assert client.post(route, headers=WINDOW, json={'decision': 'approve', 'choice': 'arbitrary'}).status_code == 400
+        assert client.post(route, headers=WINDOW, json={'decision': 'approve'}).status_code != 200
+        assert client.post(route, headers=WINDOW, json={'decision': 'approve', 'choice': choice}).status_code == 200
         list(live_runs.stream(run))
         # Both scopes were fetched to build the card; the approved one was
         # imported from its held bytes, so nothing was fetched again.
@@ -551,8 +554,8 @@ def test_download_variant_choice_is_bound_and_replay_safe(catalog, vault, monkey
         receipt = store.get(run.chat_id)['messages'][-1]['tools'][0]
         assert receipt['approval']['choice'] == choice
         assert receipt['status'] == 'done'
-        assert client.post(route, json={'decision': 'approve', 'choice': choice}).status_code == 200
-        assert client.post(route, json={'decision': 'approve', 'choice': 'all' if choice == 'default' else 'default'}).status_code == 409
+        assert client.post(route, headers=WINDOW, json={'decision': 'approve', 'choice': choice}).status_code == 200
+        assert client.post(route, headers=WINDOW, json={'decision': 'approve', 'choice': 'all' if choice == 'default' else 'default'}).status_code == 409
         assert len(urls) == 2
     finally:
         live_runs.cancel(run.id)

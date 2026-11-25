@@ -206,11 +206,16 @@ def listed():
 
 def _attach(arguments):
     from pathlib import Path
-    from core.path_safety import refuse_network_path
+    from core.path_safety import NotLocalPath, local_path
     from shared import mod_files
     if set(arguments) != {'path'} or not isinstance(arguments['path'], str):
         raise ValueError("Invalid tool arguments. attach_file takes exactly 'path'.")
-    path = Path(refuse_network_path(arguments['path'], field='path').strip()).expanduser()
+    try:
+        path = Path(local_path(arguments['path'], field='path'))
+    except NotLocalPath as refused:
+        if refused.reason == 'network':
+            raise
+        raise ValueError(f"path must be an absolute path: {arguments['path'].strip()}")
     if not path.is_absolute():
         raise ValueError(f'path must be an absolute path: {path}')
     if not path.is_file():

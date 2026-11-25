@@ -96,7 +96,7 @@ function PlayerSide({ player, rank, side, stocks }) {
 
 // One replay row: result badge, the versus block, stage, time, Watch.
 // `instant` skips the staggered entrance (page swaps within a month).
-export default function ReplayRow({ g, i, ranks, stocks, onWatch, onLite, instant, selected, onSelect }) {
+export default function ReplayRow({ g, i, ranks, stocks, onWatch, onLite, instant, selected, onSelect, muReplay = null }) {
   const me = g.players.find((p) => p.port === g.user_port)
   const opps = g.players.filter((p) => p.port !== g.user_port)
   const gs = stocks[g.id] || {}
@@ -171,6 +171,17 @@ export default function ReplayRow({ g, i, ranks, stocks, onWatch, onLite, instan
                 title="Watch in-app — with skins, recording, and more">
           ▶ Watch
         </button>
+        {/* Play builds: the game's own replay viewer (useMuReplay). Unavailable says why. */}
+        {muReplay && (
+          <span className="replay-watchmu-wrap"
+                title={muReplay.available ? 'Watch in Nucleus Unlocked: opens the game\'s replay viewer' : muReplay.reason}>
+            <button className="replay-watchmods replay-watchmu" onMouseEnter={playHoverSound}
+                    disabled={!muReplay.available} aria-label="Watch in Nucleus Unlocked"
+                    onClick={() => { playSound('boop'); muReplay.watch(g) }}>
+              ▶ MU
+            </button>
+          </span>
+        )}
       </div>
     </div>
   )

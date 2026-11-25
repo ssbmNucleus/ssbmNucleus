@@ -957,21 +957,7 @@ def prepare(surface, conversation_id, *, note='', contact='', app_version, budge
                 # Which files the conversation referred to when this was frozen:
                 # Send reuses these files only while that is unchanged.
                 'files_references': files_references(surface, chat)}
-    digest = approval_hash(meta, manifest)
-    submission_id = uuid.uuid4().hex
-    path = _root() / f'{submission_id}.zip'
-    path.write_bytes(bundle)
-    now = time.time()
-    conn = _connect()
-    try:
-        _prune(conn, now)
-        conn.execute('INSERT INTO chat_report_submissions (submission_id,surface,conversation_id,'
-                     'approval_hash,bundle_sha256,bundle_path,meta,manifest,state,created_at,updated_at) '
-                     'VALUES (?,?,?,?,?,?,?,?,?,?,?)',
-                     (submission_id, surface, conversation_id, digest, manifest['bundle']['sha256'],
-                      str(path), json.dumps(meta), json.dumps(manifest), 'frozen', now, now))
-    finally:
-        conn.close()
+    submission_id, digest = freeze(surface, conversation_id, bundle=bundle, meta=meta, manifest=manifest)
     # The frozen transcript.md with each reply's cost left out: the same scrubbed conversation and note.
     transcript = scrub_text(transcript_markdown(conversation, report['note'], costs=False))
     return {
@@ -989,6 +975,32 @@ def prepare(surface, conversation_id, *, note='', contact='', app_version, budge
         'truncated': bool(report['truncated']),
         'turn_running': conversation['turn_running'],
     }
+
+
+def freeze(surface, conversation_id, *, bundle, meta, manifest):
+    """Write one frozen submission, its ZIP and its row, and return (submission_id, approval_hash).
+
+    Nothing is sent: `submit()` sends exactly these bytes once the approval hash
+    comes back with `consent: true`. "Report this chat" (`prepare`) and an AI's
+    problem report (`problem_report.review`) both freeze here, so both go through
+    the same submit, worker, lease and retry rules. `manifest['bundle']['sha256']`
+    must be the ZIP's."""
+    digest = approval_hash(meta, manifest)
+    submission_id = uuid.uuid4().hex
+    path = _root() / f'{submission_id}.zip'
+    path.write_bytes(bundle)
+    now = time.time()
+    conn = _connect()
+    try:
+        _prune(conn, now)
+        conn.execute('INSERT INTO chat_report_submissions (submission_id,surface,conversation_id,'
+                     'approval_hash,bundle_sha256,bundle_path,meta,manifest,state,created_at,updated_at) '
+                     'VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+                     (submission_id, surface, conversation_id, digest, manifest['bundle']['sha256'],
+                      str(path), json.dumps(meta), json.dumps(manifest), 'frozen', now, now))
+    finally:
+        conn.close()
+    return submission_id, digest
 
 
 def _files_view(summary, include_files):

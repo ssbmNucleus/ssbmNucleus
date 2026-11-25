@@ -62,8 +62,15 @@ def guarded_app():
     return app
 
 
+# The window's own key (core/ui_channel.py): what the app's window sends with what only it may do, and the
+# MCP client (holding the backend token only) does not have.
+UI_KEY = 'window-only-key'
+WINDOW = {'X-Nucleus-Token': TOKEN, 'X-Nucleus-UI-Key': UI_KEY}
+
+
 @pytest.fixture
 def client(vault, tmp_path, monkeypatch):
+    monkeypatch.setenv('NUCLEUS_UI_APPROVAL_KEY', UI_KEY)
     monkeypatch.setattr(jobs, '_root_override', tmp_path / 'jobs')
     monkeypatch.setattr(config, 'LOGS_PATH', tmp_path / 'logs')
     monkeypatch.delenv('NUCLEUS_ASSISTANT', raising=False)
@@ -731,8 +738,9 @@ def test_the_documented_tool_count_is_the_served_one(client):
 # ------------------------------------------------------------------ whose AI usage MCP calls spend
 
 def account(client, token, header=TOKEN):
+    """The window hands over its token (the backend token and the window's own key)."""
     return client.post('/api/mcp/account', json={'token': token},
-                       headers={'X-Nucleus-Token': header} if header else {})
+                       headers={'X-Nucleus-Token': header, 'X-Nucleus-UI-Key': UI_KEY} if header else {})
 
 
 def sign_in(client, monkeypatch, entitlement):
@@ -835,7 +843,7 @@ def test_the_account_route_is_guarded_and_checks_what_it_is_sent(client, monkeyp
     assert account(client, 'patreon-app-token', header=None).status_code == 401
     assert credits.signed_in() is False
     for body in ({}, {'token': 'a', 'extra': 1}, {'token': 5}, {'token': 'has space'}, {'token': 'x' * 5000}):
-        response = client.post('/api/mcp/account', json=body, headers={'X-Nucleus-Token': TOKEN})
+        response = client.post('/api/mcp/account', json=body, headers=WINDOW)
         assert response.status_code == 400, body
     assert credits.signed_in() is False
     monkeypatch.setenv('NUCLEUS_ASSISTANT', '0')
@@ -850,14 +858,13 @@ def test_test_in_game_takes_the_settings_dolphin_folder_then_slippi_launchers(cl
     assert randall_tools._game_settings({})['slippiDolphinPath'] == ''
     monkeypatch.setattr(window, 'launcher_dolphin', lambda: str(tmp_path / 'netplay'))
     assert randall_tools._game_settings({})['slippiDolphinPath'] == str(tmp_path / 'netplay')
-    sent = client.post('/api/mcp/window', json={'slippi_dolphin_path': 'D:/Slippi'},
-                       headers={'X-Nucleus-Token': TOKEN})
+    sent = client.post('/api/mcp/window', json={'slippi_dolphin_path': 'D:/Slippi'}, headers=WINDOW)
     assert sent.status_code == 200
     assert randall_tools._game_settings({})['slippiDolphinPath'] == 'D:/Slippi'
     refused = call(client, 'test_in_game', {'action': 'status', 'slippi_dolphin_path': 'E:/Other'})
     assert refused['isError'] is True                                    # the AI cannot name another Dolphin
     assert randall_tools._game_settings({})['slippiDolphinPath'] == 'D:/Slippi'
-    client.post('/api/mcp/window', json={'slippi_dolphin_path': None}, headers={'X-Nucleus-Token': TOKEN})
+    client.post('/api/mcp/window', json={'slippi_dolphin_path': None}, headers=WINDOW)
     assert randall_tools._game_settings({})['slippiDolphinPath'] == str(tmp_path / 'netplay')
 
 
@@ -865,10 +872,28 @@ def test_the_window_route_is_guarded_and_checks_what_it_is_sent(client, monkeypa
     assert client.post('/api/mcp/window', json={'slippi_dolphin_path': 'D:/x'}).status_code == 401
     for body in ({}, {'slippi_dolphin_path': 5}, {'slippi_dolphin_path': 'x' * 2000}, {'slippi_dolphin_path': 'a', 'b': 1},
                  {'slippi_dolphin_path': r'\\evil\share'}, {'slippi_dolphin_path': '//evil/share'}):
-        assert client.post('/api/mcp/window', json=body, headers={'X-Nucleus-Token': TOKEN}).status_code == 400, body
+        assert client.post('/api/mcp/window', json=body, headers=WINDOW).status_code == 400, body
     monkeypatch.setenv('NUCLEUS_ASSISTANT', '0')
-    assert client.post('/api/mcp/window', json={'slippi_dolphin_path': 'D:/x'},
-                       headers={'X-Nucleus-Token': TOKEN}).status_code == 404
+    assert client.post('/api/mcp/window', json={'slippi_dolphin_path': 'D:/x'}, headers=WINDOW).status_code == 404
+
+
+def test_only_the_window_sets_whose_account_and_which_dolphin_mcp_calls_use(client, monkeypatch):
+    """The MCP client holds the backend token too. Before, it could hand the backend any Patreon token (whose
+    usage its calls then spent) and name any folder as the user's Slippi Dolphin, which test_in_game then ran."""
+    token = {'X-Nucleus-Token': TOKEN}
+    sent = {'/api/mcp/account': {'token': 'someone-elses-token'}, '/api/mcp/window': {'slippi_dolphin_path': 'C:/UnapprovedSlippi'}}
+    for url, body in sent.items():
+        refused = client.post(url, json=body, headers=token)
+        assert refused.status_code == 403 and refused.get_json()['code'] == 'not_the_app_window', url
+        agent = client.post(url, json=body, headers=dict(WINDOW, **{'X-Nucleus-Agent': '1'}))
+        assert agent.status_code == 403 and agent.get_json()['code'] == 'automation_caller', url
+        wrong = client.post(url, json=body, headers=dict(token, **{'X-Nucleus-UI-Key': 'guess'}))
+        assert wrong.status_code == 403, url
+    assert credits.signed_in() is False
+    assert randall_tools._game_settings({})['slippiDolphinPath'] != 'C:/UnapprovedSlippi'
+    monkeypatch.delenv('NUCLEUS_UI_APPROVAL_KEY')
+    for url, body in sent.items():
+        assert client.post(url, json=body, headers=WINDOW).status_code == 503, url     # no key: fail closed
 
 
 def test_play_notes_say_its_own_window_over_mcp():
@@ -1115,7 +1140,9 @@ def test_this_checkout_is_a_toolkit_that_answers_stage_workbench_guide(client, a
 # ------------------------------------------------------------------ security review 11-19, M1
 
 NETWORK_PATHS = (r'\\attacker\share\kit', r'\\attacker@SSL\DavWWWRoot\kit', r'\\?\UNC\attacker\share\kit',
-                 '//attacker/share/kit', 'file://attacker/share/kit.zip')
+                 '//attacker/share/kit', 'file://attacker/share/kit.zip',
+                 # the NT namespace: not absolute to pathlib, but CreateFileW opens the share (review 11-22)
+                 r'\??\UNC\attacker@SSL\DavWWWRoot\kit', '/??/UNC/attacker/share/kit')
 
 
 def _kit(tmp_path, source=FAKE_HARNESS):

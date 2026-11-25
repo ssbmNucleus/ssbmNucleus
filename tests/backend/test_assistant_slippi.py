@@ -9,6 +9,9 @@ import pytest
 from randall.assistant import approvals, engine, live_runs, store, tools
 from randall.website import website, website_safety
 from tests.backend.test_assistant_website import catalog
+from tests.backend.window_key import WINDOW, as_the_window  # noqa: F401
+
+pytestmark = pytest.mark.usefixtures('as_the_window')
 
 
 @pytest.fixture
@@ -73,7 +76,7 @@ def test_download_pauses_before_import_for_exact_safety_choice(vault, unsafe_dow
             from randall.routes.assistant_bp import assistant_bp
             app = Flask(__name__); app.register_blueprint(assistant_bp)
             response = app.test_client().post(f"/api/assistant/chats/{run.chat_id}/approvals/{safety['id']}",
-                                             json={'decision': 'approve', 'choice': decision})
+                                             headers=WINDOW, json={'decision': 'approve', 'choice': decision})
             assert response.status_code == 200, response.get_json()
         elif decision == 'cancel':
             live_runs.cancel(run.id)

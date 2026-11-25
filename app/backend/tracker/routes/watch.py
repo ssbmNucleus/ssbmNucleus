@@ -13,6 +13,7 @@ import sys
 from flask import jsonify, request, send_file
 
 from core.metadata import load_metadata
+from core.child_env import child_environment
 from tracker.replays import dolphin_config, playback, recording, watch_mods
 from tracker.replays.watch_options import (_resolve_clip_entries, _resolve_skin_costume,
                                            _resolve_stage_selection, _skins_for_fighter,
@@ -363,7 +364,7 @@ def reveal_recording():
     if not (norm.startswith(rec_dir + os.sep) and os.path.exists(norm)):
         return jsonify({"error": "unknown recording"}), 404
     if sys.platform == "win32":
-        subprocess.Popen(["explorer", "/select,", norm])
+        subprocess.Popen(["explorer", "/select,", norm], env=child_environment())
     else:
-        subprocess.Popen(["xdg-open", os.path.dirname(norm)])
+        subprocess.Popen(["xdg-open", os.path.dirname(norm)], env=child_environment())
     return jsonify({"ok": True})

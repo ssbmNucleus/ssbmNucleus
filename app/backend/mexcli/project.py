@@ -32,6 +32,16 @@ MEXCLI_STDOUT_LEFTOVER_LINES = 200
 on_spawn = None
 
 
+def _helper_environment():
+    """What MexCLI is started with: the backend's environment without Nucleus's settings and secrets, because
+    MexCLI reads imported files. The same rule as core/child_env.child_environment, written out here because
+    this module cannot import core (test_helper_environment holds the two to the same answer)."""
+    return {key: value for key, value in os.environ.items()
+            if not key.upper().startswith(('NUCLEUS_', '_PYI', '_MEI'))
+            and not key.upper().endswith(('_API_KEY', '_TOKEN', '_SECRET', '_SECRET_KEY', '_PASSWORD'))
+            and key.upper() not in ('PYTHONPATH', 'PYTHONHOME')}
+
+
 def _upgrade_nucleus_codes(project_path) -> None:
     """Move a project's Now Playing entry off an earlier version of the code
     (projects/nowplaying/upgrade.py) before MexCLI compiles files/codes.ini into
@@ -182,6 +192,7 @@ class MexManager:
                 text=True,
                 check=False,
                 cwd=str(self.project_path.parent),
+                env=_helper_environment(),
                 creationflags=creation_flags
             )
 
@@ -684,6 +695,7 @@ class MexManager:
                 stderr=subprocess.PIPE,
                 text=True,
                 cwd=str(self.project_path.parent),
+                env=_helper_environment(),
                 bufsize=1,  # Line buffered
                 creationflags=creation_flags
             )
@@ -858,6 +870,7 @@ class MexManager:
                 input=stdin_data,
                 check=False,
                 cwd=str(self.project_path.parent),
+                env=_helper_environment(),
                 creationflags=creation_flags,
                 timeout=120
             )

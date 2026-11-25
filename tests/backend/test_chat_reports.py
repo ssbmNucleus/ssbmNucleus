@@ -20,6 +20,9 @@ from randall.reports import chat_report
 from randall.routes import chat_reports as chat_reports_module
 from shared.diagnostics import bug_report
 from randall.reports import report_transport
+from tests.backend.window_key import WINDOW, as_the_window  # noqa: F401
+
+pytestmark = pytest.mark.usefixtures('as_the_window')
 
 OPENROUTER_KEY = 'sk-or-v1-' + '0123456789abcdef' * 4
 CUSTOM_SECRET = 'zz-custom-provider-credential-9f8e7d6c'
@@ -124,7 +127,7 @@ def review(client, surface='mods', conversation_id='c' * 32, **extra):
 def send(client, snapshot, **extra):
     body = {'submission_id': snapshot['submission_id'], 'approval_hash': snapshot['approval_hash'],
             'consent': True, **extra}
-    return client.post('/api/mex/chat-reports/submit', json=body)
+    return client.post('/api/mex/chat-reports/submit', headers=WINDOW, json=body)
 
 
 def members(blob):
@@ -278,6 +281,22 @@ def test_the_default_budget_is_the_bug_report_zip_budget():
 
 
 # --- review / submit ----------------------------------------------------------
+
+def test_only_the_person_at_the_window_can_send_a_report(client, transport):
+    """The user's own AI over MCP, or a script, holds the backend token too. Before, it could review a chat and
+    then send it to the developer with consent=True; now the send needs the window's own key."""
+    snapshot = review(client).get_json()
+    body = {'submission_id': snapshot['submission_id'], 'approval_hash': snapshot['approval_hash'], 'consent': True}
+    callers = (({}, 'not_the_app_window'), ({'X-Nucleus-UI-Key': 'guess'}, 'not_the_app_window'),
+               (dict(WINDOW, **{'X-Nucleus-Agent': '1'}), 'automation_caller'))
+    for headers, code in callers:
+        refused = client.post('/api/mex/chat-reports/submit', headers=headers, json=body)
+        assert refused.status_code == 403 and refused.get_json()['code'] == code, headers
+        assert refused.get_json()['success'] is False
+    assert transport.creates == [] and transport.uploads == []
+    assert send(client, snapshot).status_code == 200           # the window's own send still goes
+    assert len(transport.uploads) == 1
+
 
 def test_review_sends_nothing_and_describes_the_contents(client, transport):
     body = review(client).get_json()

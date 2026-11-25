@@ -87,7 +87,8 @@ def compile_dir(src_dir, entry: str = DEFAULT_ENTRY, mextk_dir=None) -> bytes:
         out = Path(tmp) / "ftFunction.dat"
         cmd = [str(mextk / "MexTK.exe"), "-ff", "-i", f"src/{entry}", "-s", FTFUNCTION_SYMBOL,
                "-o", str(out), "-ow", "-q"]
-        r = subprocess.run(cmd, cwd=tmp, capture_output=True, text=True)
+        from core.child_env import child_environment
+        r = subprocess.run(cmd, cwd=tmp, capture_output=True, text=True, env=child_environment())
         log = _strip_noise((r.stdout or "") + (r.stderr or ""))
         if r.returncode != 0 or not out.is_file():
             raise BuildError("MexTK compile failed:\n" + log, log)

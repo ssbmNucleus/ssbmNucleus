@@ -1,9 +1,10 @@
 /**
- * exportPipeline.js — the export builder's three one-shot pipelines, as data.
+ * exportPipeline.js — the export builder's one-shot pipelines, as data.
  *
  *   iso    : export
  *   patch  : export -> patch      (xdelta patch into the Patches library)
  *   bundle : export -> textures -> package   (texture-pack ISO, HD portraits, .ssbm)
+ *   shelf  : export -> shelf      (the ISO onto Play's shelf; only offered when Play is on)
  *
  * Every step is one backend job (core/jobs.py). A run follows only the job its
  * current step started (`run.jobId`), so a job from an earlier run, or one this
@@ -15,10 +16,11 @@ export const PIPELINES = {
   iso: ['export'],
   patch: ['export', 'patch'],
   bundle: ['export', 'textures', 'package'],
+  shelf: ['export', 'shelf'],
 }
 
 // Where each step's result is kept on the run.
-const RESULT_KEY = { export: 'exported', patch: 'patch', textures: 'textures', package: 'bundle' }
+const RESULT_KEY = { export: 'exported', patch: 'patch', textures: 'textures', package: 'bundle', shelf: 'shelf' }
 
 export function nextStep(action, step) {
   const steps = PIPELINES[action] || []

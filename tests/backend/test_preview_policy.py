@@ -2,9 +2,8 @@
 
 `tests/backend/test_gates.py` covers the gate table. This covers the contract that
 matters on the second PC: what a packaged preview build actually puts in the
-backend's environment. Since 0.9.0 the assistant ships in every package, so a
-preview package's policy is the stable one; the preview opt-in is kept for a
-build that holds the assistant back again.
+backend's environment. The assistant ships in every package since 0.9.0.
+Since 0.10.0 the Windows stable manifest opens Play through releaseFeatures.
 
 The review (`backend/artifacts/harness-experiment-20260922/ASTRA-INTEGRATION.md`)
 names four switches by hand. They are asserted literally here on purpose — a
@@ -13,6 +12,7 @@ pass no matter what that table said.
 """
 from tests.paths import APP
 import re
+import shutil
 import sys
 from pathlib import Path
 
@@ -80,8 +80,7 @@ def test_every_package_has_the_assistant_since_0_9_0():
         assert "NUCLEUS_ASSISTANT" not in gates.policy_env(preview=preview)
 
 
-def test_a_preview_package_opens_nothing_a_stable_one_keeps_shut():
-    """With the assistant shipped, a preview package's policy is the stable one."""
+def test_the_original_assistant_preview_preserves_the_default_policy():
     assert gates.preview_policy_env() == gates.policy_env(preview=False)
     open_gates = {k for k, v in gates.preview_policy_env().items() if v == "1"}
     assert open_gates == set()
@@ -96,7 +95,7 @@ def test_a_held_back_assistant_is_opened_by_a_preview_package_alone(monkeypatch)
     assert open_gates == {"NUCLEUS_ASSISTANT"}
 
 
-def test_a_non_preview_package_is_strict_everywhere():
+def test_a_package_without_feature_metadata_closes_packaged_off_gates():
     env = gates.policy_env(preview=False)
     assert set(env.values()) == {"0"}
     # The Tracker coach and Combo Video stay off in every package.
@@ -124,15 +123,122 @@ def test_startup_log_line_names_the_switches_a_preview_moves(monkeypatch):
 # electron/main.js is the injector — it must agree with the table
 # --------------------------------------------------------------------------
 
+#: What a packaged manifest's previewFeatures can hold, and what each opens.
+FEATURE_CASES = [None, "", "assistant", "play", "assistant,play", " Play ", "display",
+                 "playground", ["play"], ["assistant", "play"], 7]
+
+
+def _main_js_preview_opens(src):
+    block = re.search(r"const PREVIEW_OPENS = \{(.*?)\};", src, re.S)
+    assert block, "PREVIEW_OPENS not found in electron/main.js"
+    return dict(re.findall(r"(NUCLEUS_[A-Z_]+): '([a-z_]+)'", block.group(1)))
+
+
 def test_the_injected_environment_is_exactly_policy_env():
     """Reconstruct what main.js produces and compare it to the one table."""
     src = MAIN_JS.read_text(encoding="utf-8")
     block = re.search(r"const PACKAGED_OFF_GATES = \[(.*?)\];", src, re.S)
     packaged_off = re.findall(r"'(NUCLEUS_[A-Z_]+)'", block.group(1))
-    for preview in (True, False):
-        built = {g: ("1" if preview and g == "NUCLEUS_ASSISTANT" else "0")
-                 for g in packaged_off}
-        assert built == gates.policy_env(preview=preview), f"preview={preview}"
+    opens = _main_js_preview_opens(src)
+    assert opens == gates.PREVIEW_OPENS
+    assert "const previewFeatures = packagedPreviewFeatures(packaged.previewFeatures);" in src
+    assert "const releaseFeatures = packagedPreviewFeatures(packaged.releaseFeatures);" in src
+    assert "const feature = PREVIEW_OPENS[gate];" in src
+    assert ("backendEnv[gate] = previewFeatures.has(feature) || releaseFeatures.has(feature) "
+            "? '1' : '0';") in src
+    for features in FEATURE_CASES:
+        for release in (None, "", "play", ["play"], "display"):
+            wanted = gates.preview_features(features) | gates.preview_features(release or ())
+            built = {g: ("1" if opens.get(g) in wanted else "0") for g in packaged_off}
+            assert built == gates.policy_env(features=features, release=release), \
+                f"previewFeatures={features!r} releaseFeatures={release!r}"
+    # The 0.9.0 spelling: preview=True is previewFeatures=assistant.
+    assert gates.policy_env(preview=True) == gates.policy_env(features="assistant")
+    assert gates.policy_env(preview=False) == gates.policy_env(features=None)
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="needs node to run main.js's parser")
+def test_main_js_reads_previewFeatures_the_way_gates_py_does():
+    """Run main.js's own packagedPreviewFeatures on every case: whole names only."""
+    import json
+    import subprocess
+    src = MAIN_JS.read_text(encoding="utf-8")
+    fn = re.search(r"function packagedPreviewFeatures\(value\) \{.*?\n\}", src, re.S)
+    assert fn, "packagedPreviewFeatures not found in electron/main.js"
+    cases = [c for c in FEATURE_CASES if c is not None]
+    script = (fn.group(0) + "\nconst cases = " + json.dumps(cases) + ";\n"
+              "process.stdout.write(JSON.stringify(cases.map((c) => [...packagedPreviewFeatures(c)].sort())));")
+    out = subprocess.run(["node", "-e", script], capture_output=True, text=True, timeout=60, check=True)
+    for case, got in zip(cases, json.loads(out.stdout)):
+        assert set(got) == gates.preview_features(case), case
+
+
+def test_play_opens_only_in_a_package_that_asks_for_it_by_name():
+    assert gates.GATES["play"].packaged_off is True
+    assert gates.policy_env(features="play")["NUCLEUS_PLAY"] == "1"
+    assert gates.policy_env(features="assistant,play")["NUCLEUS_PLAY"] == "1"
+    for features in (None, "", "assistant", "display", "playground", "play-preview"):
+        assert gates.policy_env(features=features)["NUCLEUS_PLAY"] == "0", features
+    assert gates.policy_env(preview=True)["NUCLEUS_PLAY"] == "0"
+    # A Play test build opens Play and nothing else: the coach and the write paths stay shut.
+    open_gates = {k for k, v in gates.policy_env(features="assistant,play").items() if v == "1"}
+    assert open_gates == {"NUCLEUS_PLAY"}
+    for key, value in REVIEW_PREVIEW_POLICY.items():
+        assert gates.policy_env(features="play")[key] == value
+
+
+# --------------------------------------------------------------------------
+# Play in stable builds
+# --------------------------------------------------------------------------
+
+def test_the_release_opens_play_on_windows_only():
+    assert gates.PLAY_IN_STABLE is True
+    assert gates.GATES["play"].packaged_off is True
+    assert gates.release_features("win32") == {"play"}
+    assert gates.release_features("linux") == set() and gates.release_features("darwin") == set()
+    # A stable Windows package then opens Play and nothing else.
+    env = gates.policy_env(release=gates.release_features("win32"))
+    assert {k for k, v in env.items() if v == "1"} == {"NUCLEUS_PLAY"}
+    for key, value in REVIEW_PREVIEW_POLICY.items():
+        assert env[key] == value
+
+
+def test_holding_play_back_reaches_every_layer(monkeypatch):
+    """The packaging checks and frozen smoke also follow the switch when it closes."""
+    sys.path.insert(0, str(NUCLEUS.parent / "tools" / "build"))
+    try:
+        import ship_guard
+    finally:
+        sys.path.pop(0)
+    monkeypatch.delenv("NUCLEUS_PREVIEW_FEATURES", raising=False)
+    assert ship_guard.gate_ships_in_stable("play") is (sys.platform == "win32")
+    real = ship_guard._gates_table
+
+    def held_back():
+        table = real()
+        table.PLAY_IN_STABLE = False
+        return table
+
+    monkeypatch.setattr(ship_guard, "_gates_table", held_back)
+    assert ship_guard.gate_ships("play") is False
+    assert ship_guard.gate_ships_in_stable("play") is False
+
+    from core import build_smoke
+    monkeypatch.setattr(sys, "frozen", True, raising=False)
+    monkeypatch.setattr(gates, "PLAY_IN_STABLE", False)
+    assert build_smoke._feature_ships("play") is False
+
+
+def test_build_bat_writes_releaseFeatures_only_for_the_stable_switch():
+    src = BUILD_BAT.read_text(encoding="utf-8", errors="replace")
+    assert 'set "PLAY_STABLE="' in src
+    assert src.index('set "PLAY_STABLE="') < src.index('ship_guard.py" gate play --stable')
+    assert src.index('ship_guard.py" gate play --stable') < src.index("npm run build")
+    assert ('if defined PLAY_STABLE set "RELEASE_FEATURES_OVERRIDE='
+            '--config.extraMetadata.releaseFeatures=play"') in src
+    assert "%RELEASE_FEATURES_OVERRIDE%" in src
+    import json
+    assert "releaseFeatures" not in json.loads((NUCLEUS / "package.json").read_text(encoding="utf-8"))
 
 
 # --------------------------------------------------------------------------
@@ -147,6 +253,68 @@ def test_build_bat_still_drives_the_preview_through_previewFeatures():
     assert "VITE_ASSISTANT_PREVIEW=1" in src
     assert 'ship_guard.py" gate assistant' in src
     assert "--config.extraMetadata.previewFeatures=" in src
+
+
+def test_build_bat_builds_play_when_the_gate_ships():
+    """The frontend flag follows the ship guard. Prerelease validation runs before the build."""
+    src = BUILD_BAT.read_text(encoding="utf-8", errors="replace")
+    assert 'set "VITE_PLAY_PREVIEW="' in src
+    assert src.index('set "VITE_PLAY_PREVIEW="') < src.index('ship_guard.py" gate play')
+    assert "VITE_PLAY_PREVIEW=1" in src
+    assert src.index('ship_guard.py" gate play') < src.index("npm run build")
+    assert src.index("PLAY_VERSION_INVALID") < src.index("[1/5]")
+
+
+def test_the_play_flag_is_dev_or_set_by_the_windows_build():
+    """Play is on in dev or when build.bat sets VITE_PLAY_PREVIEW=1."""
+    text = (NUCLEUS / "frontend" / "src" / "shared" / "config" / "features.js").read_text(encoding="utf-8")
+    assert "const PLAY_PREVIEW = import.meta.env.VITE_PLAY_PREVIEW === '1'" in text
+    expr = re.search(r"export const PLAY_ENABLED = (.+?)\n\n|export const PLAY_ENABLED = (.+)$", text, re.S)
+    expr = (expr.group(1) or expr.group(2)) if expr else ""
+    assert expr.startswith("(import.meta.env.DEV || PLAY_PREVIEW) && !SHIP_GATES"), expr
+    app = (NUCLEUS / "frontend" / "src" / "App.jsx").read_text(encoding="utf-8")
+    assert ("const loadPlay = (import.meta.env.DEV || import.meta.env.VITE_PLAY_PREVIEW === '1') "
+            "&& PLAY_ENABLED") in app
+
+
+def _play_gate_bat(tmp_path):
+    """build.bat's Play test build check, run on its own, followed by a PASSED marker."""
+    lines = BUILD_BAT.read_text(encoding="utf-8").splitlines()
+    start = lines.index('set "PLAY_PREVIEW="')
+    end = next(i for i in range(start, len(lines)) if lines[i].startswith("if defined PLAY_PREVIEW echo"))
+    script = ["@echo off", "set NUCLEUS_BUILD_NONINTERACTIVE=1", *lines[start:end + 1], "echo PASSED"]
+    path = tmp_path / "play_gate.bat"
+    path.write_text("\r\n".join(script) + "\r\n", encoding="utf-8")
+    return path
+
+
+@pytest.mark.skipif(sys.platform != "win32", reason="runs build.bat's cmd/PowerShell checks")
+@pytest.mark.parametrize("features, version, ok", [
+    ("play", "0.9.2-play-preview.1", True),
+    ("assistant, Play", "0.9.2-play-preview.1", True),
+    ("", "", True),                              # a release build
+    ("assistant", "0.9.1", True),                # not a Play build: no version rule here
+    ("display", "0.9.1", True),                  # whole names only
+    ("play", "", False),                         # the release stage's plain tree version
+    ("play", "0.9.1", False),
+    ("assistant,play", "0.9.1", False),
+    ("play", "0.9.2-play-preview.1\n", False),
+])
+def test_build_bat_play_gate_really_refuses(tmp_path, features, version, ok):
+    import os
+    import subprocess
+    env = {k: v for k, v in os.environ.items()
+           if k not in ("NUCLEUS_PREVIEW_FEATURES", "NUCLEUS_PREVIEW_CHANNEL", "NUCLEUS_BUILD_VERSION")}
+    for key, value in (("NUCLEUS_PREVIEW_FEATURES", features), ("NUCLEUS_BUILD_VERSION", version)):
+        if value:
+            env[key] = value
+    result = subprocess.run(["cmd", "/c", str(_play_gate_bat(tmp_path))],
+                            capture_output=True, text=True, env=env, timeout=120)
+    if ok:
+        assert result.returncode == 0 and "PASSED" in result.stdout, result.stdout
+    else:
+        assert result.returncode == 1, result.stdout
+        assert "PASSED" not in result.stdout and "ERROR:" in result.stdout, result.stdout
 
 
 def test_build_bat_bakes_the_secret_preview_channel_only_into_preview_builds():
@@ -249,4 +417,5 @@ def test_build_bat_anchors_are_newline_proof():
     src = BUILD_BAT.read_text(encoding="utf-8", errors="replace")
     gate = src[src.index("if defined NUCLEUS_PREVIEW_CHANNEL if not"):src.index("[1/5]")]
     assert "-cmatch '^" not in gate and "$')" not in gate
-    assert gate.count("-cmatch '\\A") == 2 and gate.count("\\z')") == 2
+    # The preview channel's two checks and the Play test build's version check.
+    assert gate.count("-cmatch '\\A") == 3 and gate.count("\\z')") == 3

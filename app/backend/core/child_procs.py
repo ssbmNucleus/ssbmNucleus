@@ -12,6 +12,8 @@ log files and a cwd inside the repo. Nothing tied them to their parent.
     worker_watchdog(ppid)   ProcessPoolExecutor initializer: the worker exits
                             when its parent dies (use with os.getpid())
     sweep()                 terminate every owned child (runs at atexit)
+    own_group(), stop_tree(proc)   end one child and what it started (a
+                            timeout), by its PID or its own process group
 
 How the tie works:
   Windows  a Job Object with JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE. The only handle
@@ -214,6 +216,33 @@ def sweep(grace=2.0):
                 p.kill()
             except Exception:
                 pass
+
+
+def own_group():
+    """Popen arguments for a child whose whole tree :func:`stop_tree` may have to end: on macOS and Linux it
+    leads a session of its own (so its process group is its tree); Windows ends the tree by the child's PID."""
+    return {} if os.name == "nt" else {"start_new_session": True}
+
+
+def stop_tree(proc):
+    """End ``proc`` and everything it started, by its own PID (Windows ``taskkill /PID <pid> /T /F``) or its own
+    process group (started with :func:`own_group`). Never by image name. Safe on a child that has already ended."""
+    if proc.poll() is not None:
+        return
+    try:
+        if os.name == "nt":
+            import subprocess
+            subprocess.run(["taskkill", "/PID", str(proc.pid), "/T", "/F"], capture_output=True, timeout=30,
+                           creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+        else:
+            import signal
+            os.killpg(proc.pid, signal.SIGKILL)
+    except Exception as e:  # noqa: BLE001 - the kill below still runs
+        logger.warning("child_procs: could not stop the tree of pid %s: %s", proc.pid, e)
+    try:
+        proc.kill()
+    except Exception:
+        pass
 
 
 def owned_pids():

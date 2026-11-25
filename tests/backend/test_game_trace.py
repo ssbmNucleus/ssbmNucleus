@@ -536,7 +536,11 @@ def test_unparseable_input_returns_none_and_caches_nothing(tmp_path, kind):
 def test_failed_parse_is_retried_once_the_file_is_complete(tmp_path, parse_spy):
     """A failed parse is not negatively cached: the finished file loads."""
     full = build_slp(clean_frames(-123, 60))
-    p = write(tmp_path, "g.slp", full[:len(full) // 2])
+    # still being written: raw length 0 and the last event cut, which peppi
+    # refuses (a file cut short of its declared raw length never reaches
+    # peppi at all: slp_meta.peppi_refusal)
+    body = full[len(HEADER) + 4:-len(b"U\x08metadata{}}")]
+    p = write(tmp_path, "g.slp", HEADER + struct.pack(">i", 0) + body[:len(body) // 2 - 3])
     assert load_trace(p) is None
     assert load_trace(p) is None
     assert len(parse_spy) == 2                         # retried, not cached

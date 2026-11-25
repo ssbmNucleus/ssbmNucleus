@@ -122,6 +122,58 @@ def require_xdelta_exe():
         'the bundled tool is missing and xdelta3 is not on PATH')
 
 
+def building_progress(report, *, start, span):
+    """A decode_patch progress callback saying 'Building ISO... N%' through `report(fraction,
+    detail)` as whole percents from `start` to `start + span`, each step once."""
+    last = [None]
+
+    def progress(fraction):
+        p = min(int(fraction * span) + start, start + span)
+        if p != last[0]:
+            last[0] = p
+            report(p / 100, f'Building ISO... {p - start}%')
+    return progress
+
+
+def decode_patch(source_iso, patch, output, *, progress=None, should_stop=None):
+    """Build `output` from the vanilla disc `source_iso` and an xdelta `patch`
+    (xdelta3 -d -f -s), the one decode every "build this patch" path uses: Play in
+    Dolphin for a patch and a bundle, and adding one to Play's shelf (play/adding.py).
+
+    xdelta3 is resolved by require_xdelta_exe, run from an argument list and owned
+    (core/child_procs.py), so it ends with Nucleus. `progress(fraction)` hears how much
+    of the output is written (its size against the source disc's, 0..1);
+    `should_stop()` true ends xdelta3 through its own handle and raises
+    core.jobs.Cancelled. The caller owns `output` and removes it on failure.
+    Raises RuntimeError saying what xdelta3 printed when the build fails."""
+    cmd = [str(require_xdelta_exe()), '-d', '-f', '-s', str(source_iso), str(patch), str(output)]
+    proc = own(subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, **get_subprocess_args()))
+    expected = max(Path(source_iso).stat().st_size, 1)
+    output = Path(output)
+    try:
+        while proc.poll() is None:
+            if should_stop is not None and should_stop():
+                from core import jobs
+                proc.kill()
+                proc.wait(timeout=10)
+                raise jobs.Cancelled()
+            time.sleep(0.3)
+            if progress is not None:
+                try:
+                    if output.exists():
+                        progress(min(output.stat().st_size / expected, 1.0))
+                except OSError:
+                    pass
+        out, errout = proc.communicate()
+    finally:
+        if proc.poll() is None:
+            proc.kill()
+            proc.wait(timeout=10)
+    if proc.returncode != 0:
+        msg = (errout or out or b'').decode(errors='replace') or 'xdelta error'
+        raise RuntimeError(f'Failed to build ISO: {msg}')
+
+
 def run_xdelta_play(patch_id, patch_name, slippi_path, vanilla_iso_path, job=None):
     """'Play' on a patch: build the ISO into the user's Dolphin ISO folder if it's
     missing, then boot it in the user's REAL Slippi Dolphin (no texture pack).
@@ -152,24 +204,8 @@ def run_xdelta_play(patch_id, patch_name, slippi_path, vanilla_iso_path, job=Non
         if job is not None:
             job.own('staging', str(staging_path))
         try:
-            cmd = [str(require_xdelta_exe()), '-d', '-f', '-s', str(vanilla_iso_path),
-                   str(xdelta_path), str(staging_path)]
-            proc = own(subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, **get_subprocess_args()))
-            expected = Path(vanilla_iso_path).stat().st_size
-            last = 0
-            while proc.poll() is None:
-                time.sleep(0.3)
-                try:
-                    if staging_path.exists():
-                        p = min(int(staging_path.stat().st_size / expected * 80) + 10, 90)
-                        if p != last:
-                            report(p / 100, f'Building ISO... {p - 10}%'); last = p
-                except Exception:
-                    pass
-            out, errout = proc.communicate()
-            if proc.returncode != 0:
-                msg = (errout or out or b'').decode(errors='replace') or 'xdelta error'
-                raise RuntimeError(f'Failed to build ISO: {msg}')
+            decode_patch(vanilla_iso_path, xdelta_path, staging_path,
+                         progress=building_progress(report, start=10, span=80))
             _publish_xdelta_artifact(
                 staging_path, iso_path, marker_path, patch_id, digest)
         finally:

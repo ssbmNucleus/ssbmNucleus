@@ -20,7 +20,8 @@ An unmodified **NTSC 1.02** ISO. Every build starts from it, and Nucleus never c
 
 Used to test and launch builds. Detected automatically in most cases.
 
-Setup then extracts what it needs from the ISO and drops you on the **Vault** tab.
+Setup extracts what it needs from the ISO. On a new Windows install, the app opens in **Unlocked**.
+On macOS and Linux it opens on the **Vault** tab.
 
 ![Setup extracting data](../img/01-setup-progress.png)
 

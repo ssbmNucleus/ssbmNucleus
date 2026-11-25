@@ -55,12 +55,53 @@ test('project identity and backend credentials never accompany another origin', 
   f.replies[0].resolve(json({})); await pending
 })
 
-test('the MCP window questions carry the window-only key', async () => {
+test("the MCP window questions, the window's MCP settings and its MCP account carry the window-only key", async () => {
   const f = fixture()
   const answered = f.authenticatedFetch('http://127.0.0.1:5000/api/mcp/window/confirmations/abc', { method: 'POST' })
-  const other = f.authenticatedFetch('http://127.0.0.1:5000/api/mcp/window')
-  assert.equal(f.calls[0].init.headers.get('X-Nucleus-UI-Key'), 'test-ui')
-  assert.equal(f.calls[1].init.headers.has('X-Nucleus-UI-Key'), false)
+  const listed = f.api.get('/api/mcp/window/confirmations')
+  const told = f.api.post('/api/mcp/window', { slippi_dolphin_path: null })
+  const account = f.api.post('/api/mcp/account', { token: null })
+  const rpc = f.authenticatedFetch('http://127.0.0.1:5000/api/mcp', { method: 'POST' })
+  assert.deepEqual(f.calls.map(c => c.init.headers.get('X-Nucleus-UI-Key')),
+    ['test-ui', 'test-ui', 'test-ui', 'test-ui', null])     // the MCP endpoint itself is the AI's, not the window's
   for (const reply of f.replies) reply.resolve(json({}))
-  await Promise.all([answered, other])
+  await Promise.all([answered, listed, told, account, rpc])
+})
+
+test("an answer to the assistant's approval and a chat report's send carry the window-only key", async () => {
+  const f = fixture()
+  const chat = 'a'.repeat(32), approval = 'b'.repeat(32)
+  const decided = f.api.post(`/api/assistant/chats/${chat}/approvals/${approval}`, { decision: 'approve' })
+  const files = f.api.get(`/api/assistant/chats/${chat}/approvals/${approval}/files`, { query: { choice: 'all' } })
+  const sent = f.api.post('/chat-reports/submit', { submission_id: 's', approval_hash: 'h', consent: true })
+  const reviewed = f.api.post('/chat-reports/review', { surface: 'assistant', conversation_id: chat })
+  const chatted = f.api.post(`/api/assistant/chats/${chat}/messages`, { text: 'hi' })
+  assert.deepEqual(f.calls.map(c => c.init.headers.get('X-Nucleus-UI-Key')),
+    ['test-ui', null, 'test-ui', null, null])
+  for (const reply of f.replies) reply.resolve(json({}))
+  await Promise.all([decided, files, sent, reviewed, chatted])
+})
+
+test("Play's writes carry the window-only key, its reads do not", async () => {
+  const f = fixture()
+  const launch = f.authenticatedFetch('http://127.0.0.1:5000/api/play/launch/retail', { method: 'POST' })
+  const remove = f.authenticatedFetch('http://127.0.0.1:5000/api/play/shelf/abc', { method: 'delete' })
+  const shelf = f.authenticatedFetch('http://127.0.0.1:5000/api/play/shelf')
+  assert.equal(f.calls[0].init.headers.get('X-Nucleus-UI-Key'), 'test-ui')
+  assert.equal(f.calls[1].init.headers.get('X-Nucleus-UI-Key'), 'test-ui')
+  assert.equal(f.calls[2].init.headers.has('X-Nucleus-UI-Key'), false)
+  for (const reply of f.replies) reply.resolve(json({}))
+  await Promise.all([launch, remove, shelf])
+})
+
+test("the Melee Unlocked export's writes carry the window-only key, its list does not", async () => {
+  const f = fixture()
+  const exported = f.api.post('/melee-unlocked/export', { destination: 'C:/out', kitPath: 'C:/kit', gccBin: 'C:/gcc/bin' })
+  const verified = f.api.post('/melee-unlocked/verify', { kitPath: 'C:/kit', gccBin: '' })
+  const listed = f.api.get('/melee-unlocked/fighters')
+  assert.equal(f.calls[0].init.headers.get('X-Nucleus-UI-Key'), 'test-ui')
+  assert.equal(f.calls[1].init.headers.get('X-Nucleus-UI-Key'), 'test-ui')
+  assert.equal(f.calls[2].init.headers.has('X-Nucleus-UI-Key'), false)
+  for (const reply of f.replies) reply.resolve(json({ success: true }))
+  await Promise.all([exported, verified, listed])
 })

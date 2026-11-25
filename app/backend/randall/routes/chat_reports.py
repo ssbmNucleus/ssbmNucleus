@@ -18,7 +18,10 @@ blueprint uses too), so there is one report pipeline and one set of worker limit
            to look at a new preview first.
     POST /api/mex/chat-reports/submit   {submission_id, approval_hash, consent: true}
         -> sends exactly the frozen bytes. 426 update_required / 429
-           rate_limited pass through from the worker.
+           rate_limited pass through from the worker. Window only (the
+           window's own key, core/ui_channel.py): the consent is the person's,
+           and anything else holding the backend token could otherwise send a
+           conversation off the machine in their name.
 
 Reports are anonymous: no Discord bearer is attached.
 """
@@ -27,6 +30,7 @@ import os
 
 from flask import Blueprint, jsonify, request
 
+from core import ui_channel
 from randall.reports import chat_report
 
 logger = logging.getLogger(__name__)
@@ -68,6 +72,11 @@ def review_chat_report():
 
 @chat_reports_bp.route('/api/mex/chat-reports/submit', methods=['POST'])
 def submit_chat_report():
+    refusal = ui_channel.window_refusal(request.headers)
+    if refusal is not None:
+        code, status = refusal
+        return jsonify({'success': False, 'error': 'Only the person at the Nucleus window can send a report.',
+                        'code': code}), status
     body = request.get_json(silent=True) or {}
     submission_id = str(body.get('submission_id') or '').strip()
     approval = str(body.get('approval_hash') or '').strip()

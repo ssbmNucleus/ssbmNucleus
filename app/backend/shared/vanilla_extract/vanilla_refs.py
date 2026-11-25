@@ -75,6 +75,16 @@ def record_vanilla_iso(iso_path) -> None:
         logger.debug(f"[vanilla_refs] could not record vanilla ISO {iso_path}: {e}")
 
 
+def recorded_vanilla_iso() -> Path | None:
+    """The recorded vanilla ISO path even when the file is no longer there (moved, renamed, a
+    drive not connected), or None if none was ever recorded. known_vanilla_iso for one to use."""
+    try:
+        data = json.loads(ISO_RECORD_PATH.read_text(encoding="utf-8"))
+        return Path(data["path"])
+    except Exception:
+        return None
+
+
 def known_vanilla_iso() -> Path | None:
     """The recorded vanilla ISO path, or None if never recorded / since moved."""
     try:
